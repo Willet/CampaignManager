@@ -1,0 +1,16 @@
+- import controllers._
+-@ var body: String = "foobar"
+-@ val title: String = ""
+-@ var contextPath: String = ""
+
+!!!
+%html
+  %head
+    %meta{"http-equiv" => "Content-Type", :content => "text/html", :charset => "UTF-8"}
+    %link{"href" => {contextPath+"/images/favicon.ico"}, :rel => "shortcut icon"}
+    %link{:rel => "stylesheet", :type => "text/css", :href => {routes.Assets.at("stylesheets/app.css")}}
+    %script{:type => "text/javascript", :src => {routes.Assets.at("javascripts/app.js")}}
+    %title =title
+%body
+  %div#contentwrap
+    -unescape(body)
