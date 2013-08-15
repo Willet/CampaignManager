@@ -1,16 +1,29 @@
 - import controllers._
 -@ var body: String = "foobar"
--@ val title: String = ""
+-@ val title: String = "Willet - Campaign Manager"
 -@ var contextPath: String = ""
 
 !!!
-%html
+/[if IE 8] <html class="no-js lt-ie9" lang="en">
+/ [if gt IE 8]><!
+%html.no-js{:lang => "en"}
+  / <![endif]
   %head
-    %meta{"http-equiv" => "Content-Type", :content => "text/html", :charset => "UTF-8"}
-    %link{"href" => {contextPath+"/images/favicon.ico"}, :rel => "shortcut icon"}
-    %link{:rel => "stylesheet", :type => "text/css", :href => {routes.Assets.at("stylesheets/app.css")}}
-    %script{:type => "text/javascript", :src => {routes.Assets.at("javascripts/app.js")}}
-    %title =title
-%body
-  %div#contentwrap
-    -unescape(body)
+    %meta{:charset => "utf-8"}/
+    %meta{:content => "width=device-width", :name => "viewport"}/
+    %title = title
+    %link{:href => {routes.Assets.at("stylesheets/normalize.css")}, :rel => "stylesheet"}/
+    %link{:href => {routes.Assets.at("stylesheets/foundation.css")}, :rel => "stylesheet"}/
+    %link{:href => {routes.Assets.at("stylesheets/app.css")}, :rel => "stylesheet"}/
+    %script{:src => {routes.Assets.at("javascripts/vendor/custom.modernizr.js")}}
+  %body
+    %header
+      = render("layouts/_nav.scaml")
+    #container
+      - unescape(body)
+    %footer
+    %script{:src => {routes.Assets.at("javascripts/vendor/custom.modernizr.js")}}
+    %script{:src => {routes.Assets.at("javascripts/foundation/foundation.topbar.js")}}
+    %script{:src => "//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"}
+    :javascript
+      $(document).foundation();
