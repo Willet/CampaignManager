@@ -1,6 +1,6 @@
 - import controllers._
--@ var body: String = "foobar"
--@ val title: String = "Willet - Campaign Manager"
+-@ var body: String = "Page Not Found"
+-@ val title: String = "Second Funnel"
 -@ var contextPath: String = ""
 
 !!!
@@ -15,7 +15,19 @@
     %link{:href => {routes.Assets.at("stylesheets/normalize.css")}, :rel => "stylesheet"}/
     %link{:href => {routes.Assets.at("stylesheets/foundation.css")}, :rel => "stylesheet"}/
     %link{:href => {routes.Assets.at("stylesheets/app.css")}, :rel => "stylesheet"}/
+    %link{:rel => "shortcut icon", :href => {routes.Assets.at("images/favicon.ico")}}
+
+    %script{:src => "//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"}
+    %script{:src => {routes.Assets.at("javascripts/underscore.js")}}
     %script{:src => {routes.Assets.at("javascripts/vendor/custom.modernizr.js")}}
+    %script{:src => {routes.Assets.at("javascripts/backbone-min.js")}}
+    %script{:src => {routes.Assets.at("javascripts/backbone.marionette.js")}}
+    %script{:src => {routes.Assets.at("javascripts/handlebars.js")}}
+
+    :javascript
+      var JST = {};
+    %script{:src => {routes.Assets.at("templates/templates.pre.min.js")}}
+    %script{:src => {routes.Assets.at("javascripts/app.js")}}
   %body
     %header
       = render("layouts/_nav.scaml")
@@ -23,7 +35,7 @@
       - unescape(body)
     %footer
     %script{:src => {routes.Assets.at("javascripts/vendor/custom.modernizr.js")}}
-    %script{:src => {routes.Assets.at("javascripts/foundation/foundation.topbar.js")}}
-    %script{:src => "//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"}
-    :javascript
+    -#:javascript
       $(document).foundation();
+    :javascript
+      $().ready(function() { window.SecondFunnelApp.start(); });
