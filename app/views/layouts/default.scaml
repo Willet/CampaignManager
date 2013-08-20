@@ -17,25 +17,13 @@
     %link{:href => {routes.Assets.at("stylesheets/app.css")}, :rel => "stylesheet"}/
     %link{:rel => "shortcut icon", :href => {routes.Assets.at("images/favicon.ico")}}
 
-    %script{:src => "//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"}
-    %script{:src => {routes.Assets.at("javascripts/underscore.js")}}
-    %script{:src => {routes.Assets.at("javascripts/vendor/custom.modernizr.js")}}
-    %script{:src => {routes.Assets.at("javascripts/backbone-min.js")}}
-    %script{:src => {routes.Assets.at("javascripts/backbone.marionette.js")}}
-    %script{:src => {routes.Assets.at("javascripts/handlebars.js")}}
-
     :javascript
       var JST = {};
-    %script{:src => {routes.Assets.at("templates/templates.pre.min.js")}}
-    %script{:src => {routes.Assets.at("javascripts/app.js")}}
+    %script{:src => {routes.Assets.at("javascripts/vendor/custom.modernizr.js")}}
+    %script{'data-main'=> {routes.Assets.at("javascripts/init.js")}, :src => {routes.Assets.at("javascripts/require.js")}}
   %body
     %header
       = render("layouts/_nav.scaml")
     #container
       - unescape(body)
     %footer
-    %script{:src => {routes.Assets.at("javascripts/vendor/custom.modernizr.js")}}
-    -#:javascript
-      $(document).foundation();
-    :javascript
-      $().ready(function() { window.SecondFunnelApp.start(); });
