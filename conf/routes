@@ -13,12 +13,17 @@ POST    /api/stores              controllers.Stores.add
 GET     /api/stores/:id/edit     controllers.Stores.edit(id:Long)
 POST    /api/stores/:id          controllers.Stores.update(id:Long)
 
+GET     /api/stores/:store_id/content  controllers.Content.index(store_id:Long)
+GET     /api/stores/:store_id/content/:id  controllers.Content.show(store_id:Long, id:Long)
+
 #
 # Products
 #
 
 POST    /api/products             controllers.Products.add
 POST    /api/products/:id         controllers.Products.update(id:Long)
+
+GET     /api/*file                controllers.Application.notFound(file)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

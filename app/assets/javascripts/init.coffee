@@ -8,11 +8,12 @@ requirejs.config(
 
   paths:
     backbone: 'backbone-min'
-    underscore: 'underscore'
+    underscore: 'lib/underscore'
     jquery: '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min'
-    marionette: 'backbone.marionette'
+    marionette: 'lib/backbone.marionette'
     handlebars: 'handlebars'
     templates: '../templates/templates.pre.min'
+    backbonerelational: 'backbone.relational'
   shim:
     jquery:
       exports: 'jQuery'
@@ -32,12 +33,15 @@ requirejs.config(
     templates:
       deps: ['handlebars']
       exports: 'JST'
+    backbonerelational:
+      deps: ['backbone']
+      exports: 'Backbone.Relational'
 )
 
-require ["secondfunnel", "app","marionette","jquery", "templates"], (SecondFunnel, App, Marionette, $, JST) ->
+require ["secondfunnel", "app", "marionette", "jquery", "underscore", "templates"], (SecondFunnel, App, Marionette, $, _, JST) ->
 
   # Setup rendering to use JST given the template name
-  Marionette.Renderer.render = (template, data) -> return JST[template](data)
+  Marionette.Renderer.render = (template, data) -> return JST[_.result(t: template, 't')](data)
 
   # Globally capture clicks. If they are internal and not in the pass
   # through list, route them through Backbone's navigate method.

@@ -13,4 +13,8 @@ object Application extends Controller {
     Ok(Scalate("main.scaml").render())
   }
 
+  def notFound(file: String) = Action {
+    NotFound("")
+  }
+
 }

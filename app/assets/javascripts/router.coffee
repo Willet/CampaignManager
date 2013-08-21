@@ -4,8 +4,10 @@ define ["marionette", "controller"], (Marionette, Controller) ->
 
     appRoutes:
       "": "root"
-      "products": "productIndex"
-      "products/:id": "productShow"
+      ":store_id/products": "productIndex"
+      ":store_id/products/:id": "productShow"
+      ":store_id/content": "contentIndex"
+      ":store_id/content/:id": "contentShow"
 
     # standard not controller routes (call function in this router)
     routes: {}
