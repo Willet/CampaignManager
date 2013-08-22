@@ -14,7 +14,11 @@ object ApplicationBuild extends Build with EmberJsKeys {
     // Add your project dependencies here,
     jdbc,
     anorm,
-    "org.fusesource.scalate" %% "scalate-core" % "1.6.1"
+    "org.fusesource.scalate" %% "scalate-core" % "1.6.1",
+    "mysql" % "mysql-connector-java" % "5.1.18",
+    "com.typesafe.slick" %% "slick" % "1.0.1",
+    "com.typesafe.play" %% "play-slick" % "0.4.0",
+    "com.github.tototoshi" %% "slick-joda-mapper" % "0.3.0"
   )
 
 

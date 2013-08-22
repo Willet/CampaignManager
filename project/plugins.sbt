@@ -12,6 +12,9 @@ resolvers += "Sonatype OSS Releases" at "https://oss.sonatype.org/content/reposi
 // Add your local publishes
 resolvers += Resolver.file("Local repo", file("/Users/ariedler/.ivy2/local"))(Resolver.ivyStylePatterns)
 
+// Resolvers
+resolvers += "CodaHale" at "http://repo.codahale.com"
+
 // Use the Play sbt plugin for Play projects
 addSbtPlugin("play" % "sbt-plugin" % "2.1.3")
 

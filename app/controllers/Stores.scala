@@ -1,16 +1,24 @@
 package controllers
 
 import play.api._
+import play.api.libs.json._
 import play.api.mvc._
+import play.api.Play.current
+import java.sql.Timestamp
+
+import models.Store
+import models.Stores._
+import models.{Stores => StoresTable}
 
 object Stores extends Controller {
 
   def index = Action {
-    Ok(Scalate("stores/index.scaml").render())
+    val stores = StoresTable.all
+    Ok(Json.toJson(Map("stores" -> stores))).as(JSON)
   }
 
   def show(id: Long) = Action {
-    Ok(Scalate("stores/show.scaml").render())
+    Ok
   }
 
   def add = Action {
