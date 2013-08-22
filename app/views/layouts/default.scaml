@@ -23,7 +23,6 @@
     %script{'data-main'=> {routes.Assets.at("javascripts/init.js")}, :src => {routes.Assets.at("javascripts/require.js")}}
   %body
     %header
-      = render("layouts/_nav.scaml")
     #container
       - unescape(body)
     %footer

@@ -1,5 +1,5 @@
 define ["marionette"], (Marionette) ->
-  class ProductView extends Marionette.ItemView
+  class Index extends Marionette.ItemView
 
     template: "products_index"
 
@@ -8,3 +8,18 @@ define ["marionette"], (Marionette) ->
     onRender: (opts) ->
 
     onShow: (opts) ->
+
+  class Show extends Marionette.ItemView
+
+    template: "products_show"
+
+    initialize: (opts) ->
+
+    onRender: (opts) ->
+
+    onShow: (opts) ->
+
+  {
+    Index: Index
+    Show: Show
+  }

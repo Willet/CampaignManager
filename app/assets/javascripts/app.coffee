@@ -7,7 +7,9 @@ define ['secondfunnel', 'marionette', 'backbone', 'jquery', 'router', 'controlle
       SecondFunnel.router.trigger('404')
   )
   app.addRegions(
+    header: "header"
     main: "#container"
+    footer: "footer"
   )
   SecondFunnel.app = app
   app

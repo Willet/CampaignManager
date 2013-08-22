@@ -1,0 +1,48 @@
+<nav class='top-bar'>
+  <ul class='title-area'>
+    <li class='name'>
+      <h1>
+        <a href='/'>
+          <img src='/assets/images/logo.png'>
+        </a>
+      </h1>
+    </li>
+    <li class='toggle-topbar menu-icon'>
+      <a href='#'>
+        <span>Menu</span>
+      </a>
+    </li>
+  </ul>
+  <section class='top-bar-section'>
+    {{#if store}}
+      <ul class='left'>
+        <li class='divider'></li>
+        <li class='active'>
+          <a href='/{{store.id}}/content'>Content/Assets</a>
+        </li>
+        <li class='divider'></li>
+        <li class='active'>
+          <a href='/{{store.id}}/products'>Products</a>
+        </li>
+        <li class='divider'></li>
+        <li>
+          <a href='/{{store.id}}/themes'>Theme Manager</a>
+        </li>
+        <li class='divider'></li>
+        <li>
+          <a href='/{{store.id}}/analytics'>Analytics</a>
+        </li>
+        <li class='divider'></li>
+      </ul>
+    {{/if}}
+    <ul class='right'>
+      <li class='divider hide-for-small'></li>
+      <li>
+        <a href='#'>Account</a>
+      </li>
+      <li>
+        <a href='/logout'>Logout</a>
+      </li>
+    </ul>
+  </section>
+</nav>
