@@ -53,6 +53,14 @@ object Stores extends Table[Store]("assets_store") {
       Query(Stores).list
     }
   }
+  def find(id: Long) = {
+    database.withSession {
+      val query = for {
+        s <- Stores if s.id === id
+      } yield s
+      query.firstOption
+    }
+  }
 }
 
 /*

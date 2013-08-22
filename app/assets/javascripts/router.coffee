@@ -3,7 +3,8 @@ define ["marionette", "controller"], (Marionette, Controller) ->
     controller: new Controller()
 
     appRoutes:
-      "": "root"
+      "": "storeIndex"
+      ":store_id": "storeShow"
       ":store_id/products": "productIndex"
       ":store_id/products/:id": "productShow"
       ":store_id/content": "contentIndex"

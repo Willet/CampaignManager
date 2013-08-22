@@ -18,7 +18,8 @@ object Stores extends Controller {
   }
 
   def show(id: Long) = Action {
-    Ok
+    val store = StoresTable.find(id)
+    Ok(Json.toJson(store)).as(JSON)
   }
 
   def add = Action {

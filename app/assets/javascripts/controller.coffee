@@ -4,8 +4,10 @@ define [
     "views/main",
     "views/products",
     "views/content",
-    "models/content"
-  ], (SecondFunnel, Marionette, Main, Products, ContentViews, ContentModels) ->
+    "views/stores",
+    "models/content",
+    "models/stores"
+  ], (SecondFunnel, Marionette, Main, Products, ContentViews, StoreViews, ContentModels, StoreModels) ->
     # Controller
     class Controller extends Marionette.Controller
 
@@ -19,6 +21,18 @@ define [
 
       productShow: (store_id, content_id) ->
         SecondFunnel.app.main.show(new Products.Show())
+
+      storeIndex: ->
+        collection = new StoreModels.Collection()
+        collection.fetch(success: ->
+          SecondFunnel.app.main.show(new StoreViews.Index(model: collection))
+        )
+
+      storeShow: (store_id)->
+        model = new StoreModels.Model(id: store_id)
+        model.fetch(success: ->
+          SecondFunnel.app.main.show(new StoreViews.Show(model: model))
+        )
 
       contentIndex: (store_id) ->
         collection = new ContentModels.Collection()
