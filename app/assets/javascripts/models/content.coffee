@@ -5,6 +5,18 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
     url: (opts) ->
       "/api/stores/#{@get('store_id')}/content/#{@get('id') || ''}"
 
+    reject: ->
+      @save(
+        active: false
+        approved: false
+      )
+
+    approve: ->
+      @save(
+        active: true
+        approved: true
+      )
+
   Model.setup()
 
   class Collection extends Backbone.Collection

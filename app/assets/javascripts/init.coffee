@@ -36,12 +36,18 @@ requirejs.config(
     backbonerelational:
       deps: ['backbone']
       exports: 'Backbone.Relational'
+    swag:
+      deps: ['handlebars']
+      exports: 'Swag'
 )
 
-require ["secondfunnel", "app", "marionette", "jquery", "underscore", "templates"], (SecondFunnel, App, Marionette, $, _, JST) ->
+require ["secondfunnel", "app", "marionette", "handlebars", "swag", "jquery", "underscore", "templates"], (SecondFunnel, App, Marionette, Handlebars, Swag, $, _, JST) ->
 
   # Setup rendering to use JST given the template name
   Marionette.Renderer.render = (template, data) -> return JST[_.result(t: template, 't')](data)
+
+  # Add additonal handlebars helpers
+  Swag.registerHelpers(Handlebars)
 
   # Globally capture clicks. If they are internal and not in the pass
   # through list, route them through Backbone's navigate method.

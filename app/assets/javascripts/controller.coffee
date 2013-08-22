@@ -33,7 +33,7 @@ define [
       storeShow: (store_id)->
         model = StoreModels.Model.findOrCreate(id: store_id)
         SecondFunnel.app.header.show(new Views.Main.Nav(model: model))
-        model.fetch(success: ->
+        model.fetch(complete: ->
           SecondFunnel.app.main.show(new Views.Stores.Show(model: model))
         )
 
@@ -49,8 +49,8 @@ define [
       contentShow: (store_id, content_id) ->
         model = StoreModels.Model.findOrCreate(id: store_id)
         SecondFunnel.app.header.show(new Views.Main.Nav(model: model))
-        model = new ContentModels.Model(id: content_id, store_id: store_id)
-        model.fetch(success: ->
+        model = ContentModels.Model.findOrCreate(id: content_id, store_id: store_id)
+        model.fetch(complete: ->
           SecondFunnel.app.main.show(new Views.Content.Show(model: model))
         )
 
