@@ -53,43 +53,13 @@ object Stores extends Table[Store]("assets_store") {
       Query(Stores).list
     }
   }
-  def find(id: Long) = {
+  def find(id: Long) : Option[Store] = {
     database.withSession {
       val query = for {
-        s <- Stores if s.id === id
+        s <- Query(Stores) if s.id === id
       } yield s
       query.firstOption
     }
   }
 }
 
-/*
-case class Store(
-  id: Long,
-  created: Option[Timestamp],
-  last_modified: Option[DateTime],
-  name: Option[String],
-  description: Option[String],
-  slug: Option[String],
-  theme_id: Option[Long],
-  mobile_id: Option[Long],
-  public_base_url: Option[String]) {
-  }
-
-//object Stores extends Table[(Long,Timestamp,DateTime,String,String,String,Long,Long,String)]("assets_store") {
-object Stores extends Table[Store]("assets_store") {
-  def id = column[Long]("id", O.PrimaryKey)
-  def created = column[Option[Timestamp]]("created")
-  def last_modified = column[Option[DateTime]]("last_modified")
-  def name = column[Option[String]]("name")
-  def description = column[Option[String]]("description")
-  def slug = column[Option[String]]("slug")
-  def theme_id = column[Option[Long]]("theme_id")
-  def mobile_id = column[Option[Long]]("mobile_id")
-  def public_base_url = column[Option[String]]("public_base_url")
-
-  def * = id.? ~ created ~ last_modified ~ name ~ description ~ slug ~ theme_id ~ mobile_id ~ public_base_url <> Store.apply _
-
-
-}
-*/
