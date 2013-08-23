@@ -1,6 +1,15 @@
-<h2>Store</h2>
+<h2>Product</h2>
 <a href="/{{store-id}}/products/{{id}}">
   {{name}} ({{price}})
   </a>
 <h2>Description</h2>
   {{description}}
+
+<h2>Content</h2>
+  <ul>
+  {{#each content-ids}}
+  <li>
+    <a href="/{{store-id}}/content/{{id}}">{{name}}</a>
+  </li>
+  {{/each}}
+  </ul>

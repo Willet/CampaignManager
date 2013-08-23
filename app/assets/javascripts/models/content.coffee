@@ -20,7 +20,13 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
   Model.setup()
 
   class Collection extends Backbone.Collection
+    initialize: (models, opts) ->
+      @hasmodel = opts['model'] if opts
     url: (opts) ->
+      # TODO: this is a hack because relational calls this
+      #       to check if multi-function
+      @store_id = @hasmodel?.get?('store_id') || @store_id
+      _.each(opts, (m) => m.set("store_id", @store_id))
       "/api/stores/#{@store_id}/content"
     parse: (data) ->
       data['content']

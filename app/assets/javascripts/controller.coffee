@@ -43,8 +43,10 @@ define [
         SecondFunnel.app.header.show(new Views.Main.Nav(model: model))
 
         model = Models.Products.Model.findOrCreate(id: product_id, store_id: store_id)
-        model.fetch(complete: ->
-          SecondFunnel.app.main.show(new Views.Products.Show(model: model))
+        model.fetch(complete: -> # grumble grumble
+          model.fetchRelated("content-ids", complete: -> # TODO: grumble grumble
+            SecondFunnel.app.main.show(new Views.Products.Show(model: model))
+          )
         )
 
       storeIndex: ->

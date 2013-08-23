@@ -11,6 +11,7 @@ requirejs.config(
     underscore: 'lib/underscore'
     jquery: '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min'
     marionette: 'lib/backbone.marionette'
+    backboneassociations: 'backbone-associations-min'
     handlebars: 'handlebars'
     templates: '../templates/templates.pre.min'
     backbonerelational: 'backbone.relational'
@@ -36,6 +37,8 @@ requirejs.config(
     backbonerelational:
       deps: ['backbone']
       exports: 'Backbone.Relational'
+    backboneassociations:
+      deps: ['backbone']
     swag:
       deps: ['handlebars']
       exports: 'Swag'

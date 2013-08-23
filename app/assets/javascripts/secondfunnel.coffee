@@ -1,3 +1,3 @@
 define [], ->
-  SecondFunnel =
+  window.SecondFunnel =
     Views: {}

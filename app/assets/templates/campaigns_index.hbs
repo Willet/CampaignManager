@@ -1,0 +1,14 @@
+<div class="list">
+  <h2>Campaigns</h2>
+  <ul>
+    {{#each this}}
+    <li>
+      <a href="/{{id}}">
+        {{name}} ({{slug}})
+      </a>
+    </li>
+    {{else}}
+    (None)
+    {{/each}}
+  </ul>
+</div>
