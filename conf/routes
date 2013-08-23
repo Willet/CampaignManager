@@ -36,16 +36,16 @@ GET     /api/stores/:id          controllers.Stores.show(id:Long)
 #GET     /api/stores/:id/edit     controllers.Stores.edit(id:Long)
 #POST    /api/stores/:id          controllers.Stores.update(id:Long)
 
-GET     /api/stores/:store_id/content  controllers.Content.index(store_id:Long)
-GET     /api/stores/:store_id/content/:id  controllers.Content.show(store_id:Long, id:Long)
+GET     /api/stores/:store_id/content       controllers.Content.index(store_id:Long)
+GET     /api/stores/:store_id/content/:id   controllers.Content.show(store_id:Long, id:Long)
 
-#
-# Products
-#
+GET     /api/stores/:store_id/products        controllers.Products.index(store_id:Long)
+GET     /api/stores/:store_id/products/:id    controllers.Products.show(store_id:Long, id:Long)
 
-POST    /api/products             controllers.Products.add
-POST    /api/products/:id         controllers.Products.update(id:Long)
+GET     /api/stores/:store_id/campaigns       controllers.Campaigns.index(store_id:Long)
+GET     /api/stores/:store_id/campaigns/:id   controllers.Campaigns.show(store_id:Long, id:Long)
 
+# Not Found for any route that is not valid under the API
 GET     /api/*file                controllers.Application.notFound(file)
 
 # Map static resources from the /public folder to the /assets URL path

@@ -1,1 +1,17 @@
-Product Index Page
+<h2>Products</h2>
+<ul>
+{{#each this}}
+<li>
+  <a href="/{{store-id}}/products/{{id}}">{{name}}</a>
+  {{price}}
+  {{description}}
+  <a href="{{url}}">{{url}}</a>
+  {{keywords}}
+  {{available}}
+  {{category-ids}}
+  {{formatDate created "%Y-%m-%d"}}
+</li>
+{{else}}
+(None)
+{{/each}}
+</ul>

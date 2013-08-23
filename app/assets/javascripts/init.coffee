@@ -43,6 +43,18 @@ requirejs.config(
 
 require ["secondfunnel", "app", "marionette", "handlebars", "swag", "jquery", "underscore", "templates"], (SecondFunnel, App, Marionette, Handlebars, Swag, $, _, JST) ->
 
+  # Handle Unauthorized (Redirect to login, etc...)
+  redirectToLogin = ->
+    locationhref = "/login"
+    if (location.hash && location.hash.length > 0)
+      locationhref += "?r=" + location.hash.substring(1)
+    location.href = locationhref
+  $(document).ajaxError((event, xhr) ->
+    if (xhr.status == 401)
+      redirectToLogin()
+  )
+
+
   # Setup rendering to use JST given the template name
   Marionette.Renderer.render = (template, data) -> return JST[_.result(t: template, 't')](data)
 
