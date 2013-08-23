@@ -10,31 +10,18 @@ import models.Store
 import models.Stores._
 import models.{Stores => StoresTable}
 
-object Stores extends Controller {
+import securesocial.core.SecureSocial
 
-  def index = Action {
+object Stores extends Controller with SecureSocial {
+
+  def index = SecuredAction(ajaxCall = true) { implicit request =>
     val stores = StoresTable.all
     Ok(Json.toJson(Map("stores" -> stores))).as(JSON)
   }
 
-  def show(id: Long) = Action {
+  def show(id: Long) = SecuredAction(ajaxCall = true) { implicit request =>
     val store = StoresTable.find(id)
     Ok(Json.toJson(store)).as(JSON)
-  }
-
-  def add = Action {
-    // TODO: implement
-    Ok
-  }
-
-  def edit(id: Long) = Action {
-    // TODO: implement
-    Ok(Scalate("stores/new.scaml").render())
-  }
-
-  def update(id: Long) = Action {
-    // TODO: implement
-    Ok
   }
 
 }

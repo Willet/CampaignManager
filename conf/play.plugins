@@ -1,0 +1,8 @@
+9994:securesocial.core.DefaultAuthenticatorStore
+9995:securesocial.core.DefaultIdGenerator
+9996:securesocial.core.providers.utils.DefaultPasswordValidator
+9997:securesocial.controllers.DefaultTemplatesPlugin
+9998:authentication.MyUserService
+10000:securesocial.core.providers.UsernamePasswordProvider
+10001:authentication.PBKDF2PasswordHasher
+10001:authentication.UnsecureHasher

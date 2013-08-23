@@ -12,6 +12,9 @@ resolvers += "Sonatype OSS Releases" at "https://oss.sonatype.org/content/reposi
 // Add your local publishes
 resolvers += Resolver.file("Local repo", file("/Users/ariedler/.ivy2/local"))(Resolver.ivyStylePatterns)
 
+// SBT
+resolvers += Resolver.url("sbt-plugin-snapshots", url("http://repo.scala-sbt.org/scalasbt/sbt-plugin-releases/"))(Resolver.ivyStylePatterns)
+
 // Resolvers
 resolvers += "CodaHale" at "http://repo.codahale.com"
 
