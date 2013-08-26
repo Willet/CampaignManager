@@ -1,26 +1,106 @@
 <div id="content_show">
-  <h2>Id</h2>
-  {{id}}
-  <h2>Name</h2>
-  {{name}}
-  <h2>Title</h2>
-  {{title}}
-  <h2>Caption</h2>
-  {{caption}}
-  <h2>Active</h2>
-  {{active}}
-  <h2>Created</h2>
-  {{formatDate created "%d/%m/%Y"}}
-  <h2>Description</h2>
-  {{description}}
-  <h2>Remote URL</h2>
-  {{remote_url}}
-  <h2>Source URL</h2>
-  {{source_url}}
-  <h2>Original Url</h2>
-  {{original_url}}
-  <h2>Related Products</h2>
-  {{product-ids}}
-  <h2>Store</h2>
-  {{store-id}}
+  <h2>Content</h2>
+  <form>
+    <div class="row">
+      <div class="large-4 small-12 columns">
+        <div class="row center text-center">
+          <img src="http://placehold.it/175x175">
+        </div>
+        <div class="row text-center">
+          <dl>
+            <dt>Created</dt>
+            <dd>{{formatDate created "%d/%m/%Y"}}</dd>
+            <dt>Status</dt>
+            <dd>
+              {{#if active}}
+              {{#if approved}}
+                Approved
+                <button class="js-reject tiny button alert">Reject</button>
+              {{else}}
+                Awaiting Decision
+                <button class="js-approve tiny button success">Approve</button>
+                <button class="js-reject tiny button alert">Reject</button>
+              {{/if}}
+              {{else}}
+              Rejected
+              {{/if}}
+            </dd>
+          </dl>
+        </div>
+      </div>
+      <div class="large-8 small-10 columns">
+        <div class="row">
+          <div class="small-1 columns">
+            <label for="name" class="right inline">Name</label>
+          </div>
+          <div class="small-11 columns">
+            <input name="name" type="text" value="{{name}}">
+          </div>
+        </div>
+        <div class="row">
+          <div class="small-1 columns">
+            <label for="title" class="right inline">Title</label>
+          </div>
+          <div class="small-11 columns">
+            <input name="title" type="text" value="{{title}}">
+          </div>
+        </div>
+        <div class="row">
+          <div class="small-1 columns">
+            <label for="caption" class="right inline">Caption</label>
+          </div>
+          <div class="small-11 columns">
+            <input name="caption" type="text" value="{{caption}}">
+          </div>
+        </div>
+        <div class="row">
+          <div class="small-1 columns">
+            <label for="description" class="right inline">Description</label>
+          </div>
+          <div class="small-11 columns">
+            <input name="description" type="text" value="{{description}}">
+          </div>
+        </div>
+        <div class="row">
+          <div class="small-1 columns">
+            <label for="original_url" class="right inline">Original Url</label>
+          </div>
+          <div class="small-11 columns">
+            {{original_url}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="small-1 columns">
+            <label for="source_url" class="right inline">Source Url</label>
+          </div>
+          <div class="small-11 columns">
+            {{source_url}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="small-1 columns">
+            <label for="remote_url" class="right inline">Remote Url</label>
+          </div>
+          <div class="small-11 columns">
+            {{remote_url}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="small-8 right columns"/>
+      <div class="small-4 right columns text-center">
+        <button class="js-save small" type="submit">Save Changes</button>
+      </div>
+    </div>
+  </form>
+  <h3>Related Products</h3>
+  {{#each product-ids}}
+  <div class="row">
+    <div class="small-2 text-center">
+      <a href="/{{store-id}}/products/{{id}}"><img src="http://placehold.it/100x100&text=Product {{this}}"></a><br />
+      {{name}}
+    </div>
+  </div>
+  {{/each}}
 </div>

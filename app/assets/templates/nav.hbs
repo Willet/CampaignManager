@@ -3,7 +3,7 @@
     <li class='name'>
       <h1>
         <a href='/'>
-          <img src='/assets/images/logo.png'>
+          <div class="logo"/>
         </a>
       </h1>
     </li>
@@ -25,16 +25,17 @@
           <a href='/{{store.id}}/products'>Products</a>
         </li>
         <li class='divider'></li>
-        <li>
+        <li class='active'>
           <a href='/{{store.id}}/themes'>Theme Manager</a>
         </li>
         <li class='divider'></li>
-        <li>
+        <li class='active'>
           <a href='/{{store.id}}/analytics'>Analytics</a>
         </li>
         <li class='divider'></li>
       </ul>
     {{/if}}
+    {{#if 0}}
     <ul class='right'>
       <li class='divider hide-for-small'></li>
       <li>
@@ -44,5 +45,12 @@
         <a href='/logout'>Logout</a>
       </li>
     </ul>
+    {{/if}}
   </section>
 </nav>
+{{#if store}}
+<span class="bread-crumbs">
+  <a href="/">Stores</a> &#0187; <a href="/{{store.id}}">{{store.name}}</a>
+</span>
+{{/if}}
+

@@ -82,7 +82,7 @@ $topbar-sticky-class: ".sticky" !default;
 
   .top-bar {
     overflow: hidden;
-    height: $topbar-height;
+    min-height: $topbar-height;
     line-height: $topbar-height;
     position: relative;
     background: $topbar-bg;
@@ -501,8 +501,8 @@ $topbar-sticky-class: ".sticky" !default;
         }
       }
     }
-    
-    // Degrade gracefully when Javascript is disabled. Displays dropdown and changes 
+
+    // Degrade gracefully when Javascript is disabled. Displays dropdown and changes
     // background & text color on hover.
     .no-js .top-bar-section {
 	  ul li {
@@ -517,8 +517,8 @@ $topbar-sticky-class: ".sticky" !default;
           background: $topbar-link-bg-active;
           color: $topbar-link-color-active;
         }
-      }    
-      
+      }
+
 	  .has-dropdown {
         &:hover {
           & > .dropdown {
@@ -526,7 +526,7 @@ $topbar-sticky-class: ".sticky" !default;
           }
         }
 	  }
-	}    
+	}
   }
 
 }

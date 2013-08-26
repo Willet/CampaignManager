@@ -1,7 +1,16 @@
 define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
 
   class Model extends Backbone.RelationalModel
-    relations: []
+    relations: [
+      {
+        collectionType: "Models.Products.Collection"
+        collectionKey: false
+        collectionOptions: (model) -> { model: model }
+        key: 'product-ids'
+        relatedModel: "Models.Products.Model"
+        type: Backbone.HasMany
+      }
+    ]
     url: (opts) ->
       "/api/stores/#{@get('store_id')}/content/#{@get('id') || ''}"
 
@@ -30,6 +39,9 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
       "/api/stores/#{@store_id}/content"
     parse: (data) ->
       data['content']
+    comparator: (model) ->
+      # auto-sort by id on grabbing the collection
+      model.get("id")
 
   return {
     Model: Model

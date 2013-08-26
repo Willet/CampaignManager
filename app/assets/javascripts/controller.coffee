@@ -47,6 +47,7 @@ define [
           model.fetchRelated("content-ids", complete: -> # TODO: grumble grumble
             SecondFunnel.app.main.show(new Views.Products.Show(model: model))
           )
+          SecondFunnel.app.main.show(new Views.Products.Show(model: model))
         )
 
       storeIndex: ->
@@ -77,6 +78,7 @@ define [
         SecondFunnel.app.header.show(new Views.Main.Nav(model: model))
         model = Models.Content.Model.findOrCreate(id: content_id, store_id: store_id)
         model.fetch(complete: ->
+          model.fetchRelated("product-ids")
           SecondFunnel.app.main.show(new Views.Content.Show(model: model))
         )
 

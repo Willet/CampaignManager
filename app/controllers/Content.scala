@@ -10,29 +10,39 @@ import play.api.libs.ws.Response
 
 object Content extends Controller {
 
+  val apiHeaders = ("ApiKey","secretword")
+
+  def relayResponse(response: Response) = {
+    if (response.status == 200)
+      Ok(response.json)
+    else
+      Status(response.status)(response.body)
+  }
+
   def index(store_id: Long) = Action {
     val request = WS.url("http://contentgraph-test.elasticbeanstalk.com/graph/store/" + store_id + "/content")
     Async {
-      request.withHeaders(("ApiKey","secretword")).get()
-        .map { response: Response =>
-          if (response.status != 200)
-            Status(response.status)(response.body)
-          else
-            Ok(response.json)
-        }
+      request.withHeaders(apiHeaders)
+        .get()
+        .map(relayResponse)
     }
   }
 
   def show(store_id: Long, id: Long) = Action {
     val request = WS.url("http://contentgraph-test.elasticbeanstalk.com/graph/store/" + store_id + "/content/" + id)
     Async {
-      request.withHeaders(("ApiKey","secretword")).get()
-        .map { response: Response =>
-          if (response.status != 200)
-            Status(response.status)(response.body)
-          else
-            Ok(response.json)
-        }
+      request.withHeaders(apiHeaders)
+        .get()
+        .map(relayResponse)
+    }
+  }
+
+  def update(store_id: Long, id: Long) = Action { implicit request =>
+    val cg_request = WS.url("http://contentgraph-test.elasticbeanstalk.com/graph/store/" + store_id + "/content/" + id)
+    Async {
+      cg_request.withHeaders(apiHeaders)
+        .put((request.body.asJson getOrElse "").toString)
+        .map(relayResponse)
     }
   }
 

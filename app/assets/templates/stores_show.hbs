@@ -1,8 +1,15 @@
-<h2>Store</h2>
-  <a href="/{{id}}">
-  {{name}} ({{slug}})
-  </a>
-{{#if description}}
-<h2>Description</h2>
-  {{description}}
-{{/if}}
+<h3>Store: <span class="title">{{name}} ({{slug}})</span></h3>
+<ul>
+  <li>
+    <a href="/{{id}}/content">Asset Manager</a><br />
+  </li>
+  <li>
+<a href="/{{id}}/products">Product Manager</a><br />
+  </li>
+  <li>
+<a href="/{{id}}/themes">Theme Manager</a><br />
+  </li>
+  <li>
+<a href="/{{id}}/analytics">Analytics</a><br />
+  </li>
+</ul>

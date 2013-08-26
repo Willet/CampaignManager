@@ -38,6 +38,7 @@ GET     /api/stores/:id          controllers.Stores.show(id:Long)
 
 GET     /api/stores/:store_id/content       controllers.Content.index(store_id:Long)
 GET     /api/stores/:store_id/content/:id   controllers.Content.show(store_id:Long, id:Long)
+PUT     /api/stores/:store_id/content/:id   controllers.Content.update(store_id:Long, id:Long)
 
 GET     /api/stores/:store_id/products        controllers.Products.index(store_id:Long)
 GET     /api/stores/:store_id/products/:id    controllers.Products.show(store_id:Long, id:Long)

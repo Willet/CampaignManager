@@ -14,11 +14,27 @@ define ["marionette", "models/content"], (Marionette, Content) ->
 
     template: "content_show"
 
+    events:
+      "click .js-save": "saveContent"
+      "click .js-approve": "approveContent"
+      "click .js-reject": "rejectContent"
+
     initialize: (opts) ->
 
     onRender: (opts) ->
 
     onShow: (opts) ->
+
+    rejectContent: (event) ->
+      @model.reject()
+
+    approveContent: (event) ->
+      @model.approve()
+
+    saveContent: (event) ->
+      data = @$('form').serializeObject()
+      @model.save(data)
+      false
 
   # declare exports
   return {
