@@ -4,7 +4,11 @@
     <div class="row">
       <div class="large-4 small-12 columns">
         <div class="row center text-center">
-          <img src="http://placehold.it/175x175">
+          {{#if remote-url}}
+          <img src="{{images.medium.url}}"/>
+          {{else}}
+          <img src="http://placehold.it/175x175"/>
+          {{/if}}
         </div>
         <div class="row text-center">
           <dl>
@@ -14,11 +18,11 @@
             <dd>
               {{#if active}}
               {{#if approved}}
-                Approved
+                Approved<br/>
                 <button class="js-reject tiny button alert">Reject</button>
               {{else}}
-                Awaiting Decision
-                <button class="js-approve tiny button success">Approve</button>
+              Awaiting Decision <br /><br />
+                <button class="js-approve tiny button success">Approve</button><br/>
                 <button class="js-reject tiny button alert">Reject</button>
               {{/if}}
               {{else}}
@@ -50,7 +54,7 @@
             <label for="caption" class="right inline">Caption</label>
           </div>
           <div class="small-11 columns">
-            <input name="caption" type="text" value="{{caption}}">
+            <textarea name="caption" type="text">{{caption}}</textarea>
           </div>
         </div>
         <div class="row">
@@ -58,31 +62,23 @@
             <label for="description" class="right inline">Description</label>
           </div>
           <div class="small-11 columns">
-            <input name="description" type="text" value="{{description}}">
+            <textarea name="description" type="text">{{description}}</textarea>
           </div>
         </div>
         <div class="row">
           <div class="small-1 columns">
-            <label for="original_url" class="right inline">Original Url</label>
+            <label for="original-url" class="right inline">Origin</label>
           </div>
           <div class="small-11 columns">
-            {{original_url}}
+            <small><a href="{{original-url}}">{{original-url}}</a></small>
           </div>
         </div>
         <div class="row">
           <div class="small-1 columns">
-            <label for="source_url" class="right inline">Source Url</label>
+            <label for="source-url" class="right inline">Source</label>
           </div>
           <div class="small-11 columns">
-            {{source_url}}
-          </div>
-        </div>
-        <div class="row">
-          <div class="small-1 columns">
-            <label for="remote_url" class="right inline">Remote Url</label>
-          </div>
-          <div class="small-11 columns">
-            {{remote_url}}
+            <small><a href="{{source-url}}">{{source-url}}</a></small>
           </div>
         </div>
       </div>

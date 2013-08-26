@@ -3,7 +3,7 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
   class Model extends Backbone.RelationalModel
     relations: []
     url: (opts) ->
-      "/api/stores/#{@get('store_id')}/campaigns/#{@get('id') || ''}"
+      "/api/stores/#{@get('store-id')}/campaigns/#{@get('id') || ''}"
 
   Model.setup()
 

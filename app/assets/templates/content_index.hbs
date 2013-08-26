@@ -1,14 +1,30 @@
 <div class="list">
   <h2>Content</h2>
-  <ul>
   {{#each this}}
-  <li>
+  <div class="row box">
     <a href="/{{store-id}}/content/{{id}}">
-      {{title}} {{name}}
+      <div class="large-4 columns">
+        <div class="row center text-center">
+          {{#if remote-url}}
+          <img src="{{images.compact.url}}"/>
+          {{else}}
+          <img src="http://placehold.it/160x160"/>
+          {{/if}}
+        </div>
+      </div>
+      <div class="large-8 columns">
+        <dl>
+          <dt>Title</dt>
+          <dd>{{title}}</dd>
+          <dt>Description</dt>
+          <dd>{{description}}</dd>
+          <dt>Caption</dt>
+          <dd>{{caption}}</dd>
+        </dl>
+      </div>
     </a>
-  </li>
+  </div>
   {{else}}
   (None)
   {{/each}}
-  </ul>
 </div>

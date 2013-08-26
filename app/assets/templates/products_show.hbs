@@ -1,15 +1,94 @@
 <h2>Product</h2>
-<a href="/{{store-id}}/products/{{id}}">
-  {{name}} ({{price}})
-  </a>
-<h2>Description</h2>
-  {{description}}
-
-<h2>Content</h2>
-  <ul>
-  {{#each content-ids}}
-  <li>
-    <a href="/{{store-id}}/content/{{id}}">{{name}}</a>
-  </li>
-  {{/each}}
-  </ul>
+<form>
+  <div class="row">
+    <div class="large-4 small-12 columns">
+      <div class="row center text-center">
+        {{#if default-image-id}}
+          <img src="http://placehold.it/175x175&text={{title}}">
+        {{else}}
+          <img src="http://placehold.it/175x175">
+        {{/if}}
+        <!-- default image id: {{default-image-id}} -->
+      </div>
+      <div class="row text-center">
+        <dl>
+          <dt>Created</dt>
+          <dd>{{formatDate created "%d/%m/%Y"}}</dd>
+          <dt>Available</dt>
+          <dd>
+            {{#if available}}
+            Yes
+            {{else}}
+            No
+            {{/if}}
+          </dd>
+        </dl>
+      </div>
+    </div>
+    <div class="large-8 small-10 columns">
+      <div class="row">
+        <div class="small-1 columns">
+          <label for="name" class="right inline">Name</label>
+        </div>
+        <div class="small-11 columns">
+          <input name="name" type="text" value="{{name}}">
+        </div>
+      </div>
+      <div class="row">
+        <div class="small-1 columns">
+          <label for="description" class="right inline">Description</label>
+        </div>
+        <div class="small-11 columns">
+          <input name="description" type="text" value="{{description}}">
+        </div>
+      </div>
+      <div class="row">
+        <div class="small-1 columns">
+          <label for="price" class="right inline">Price</label>
+        </div>
+        <div class="small-11 columns">
+          <input name="price" type="text" value="{{price}}">
+        </div>
+      </div>
+      <div class="row">
+        <div class="small-1 columns">
+          <label for="keywords" class="right inline">Keywords</label>
+        </div>
+        <div class="small-11 columns">
+          <input name="keywords" type="text" value="{{keywords}}">
+        </div>
+      </div>
+      <div class="row">
+        <div class="small-1 columns">
+          <label for="url" class="right inline">Url</label>
+        </div>
+        <div class="small-11 columns">
+          {{url}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="small-1 columns">
+          <label for="suggested-urls" class="right inline">Suggested Urls</label>
+        </div>
+        <div class="small-11 columns">
+          {{suggested-urls}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-8 right columns"/>
+    <div class="small-4 right columns text-center">
+      <button class="js-save small" type="submit">Save Changes</button>
+    </div>
+  </div>
+</form>
+<h3>Product Images/Assets/Content</h3>
+{{#each content-ids}}
+<div class="row">
+  <div class="small-2 text-center">
+    <a href="/{{store-id}}/content/{{id}}"><img src="http://placehold.it/100x100&text={{title}}"></a><br />
+    {{title}}
+  </div>
+</div>
+{{/each}}

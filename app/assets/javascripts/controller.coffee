@@ -22,15 +22,16 @@ define [
         )
 
       campaignShow: (store_id, id) ->
-        model = Models.Campaigns.Model.findOrCreate(id: id, store_id: store_id)
+        model = Models.Campaigns.Model.findOrCreate(id: id, "store-id": store_id)
         SecondFunnel.app.header.show(new Views.Main.Nav(model: model))
         model.fetch(complete: ->
           SecondFunnel.app.main.show(new Views.Campaigns.Show(model: model))
         )
 
       productIndex: (store_id) ->
-        model = Models.Store.Model.findOrCreate(id: store_id)
-        SecondFunnel.app.header.show(new Views.Main.Nav(model: model))
+        store = Models.Store.Model.findOrCreate(id: store_id)
+        store.fetch()
+        SecondFunnel.app.header.show(new Views.Main.Nav(model: store))
 
         collection = new Models.Products.Collection()
         collection.store_id = store_id
@@ -39,14 +40,14 @@ define [
         )
 
       productShow: (store_id, product_id) ->
-        model = Models.Store.Model.findOrCreate(id: store_id)
-        SecondFunnel.app.header.show(new Views.Main.Nav(model: model))
+        store = Models.Store.Model.findOrCreate(id: store_id)
+        store.fetch()
+        SecondFunnel.app.header.show(new Views.Main.Nav(model: store))
 
-        model = Models.Products.Model.findOrCreate(id: product_id, store_id: store_id)
+        model = Models.Products.Model.findOrCreate(id: product_id, "store-id": store_id)
         model.fetch(complete: -> # grumble grumble
-          model.fetchRelated("content-ids", complete: -> # TODO: grumble grumble
-            SecondFunnel.app.main.show(new Views.Products.Show(model: model))
-          )
+          model.fetchRelated("default-image-id")
+          model.fetchRelated("content-ids")
           SecondFunnel.app.main.show(new Views.Products.Show(model: model))
         )
 
@@ -74,9 +75,11 @@ define [
         )
 
       contentShow: (store_id, content_id) ->
-        model = Models.Store.Model.findOrCreate(id: store_id)
-        SecondFunnel.app.header.show(new Views.Main.Nav(model: model))
-        model = Models.Content.Model.findOrCreate(id: content_id, store_id: store_id)
+        store = Models.Store.Model.findOrCreate(id: store_id)
+        store.fetch()
+        SecondFunnel.app.header.show(new Views.Main.Nav(model: store))
+
+        model = Models.Content.Model.findOrCreate(id: content_id, "store-id": store_id)
         model.fetch(complete: ->
           model.fetchRelated("product-ids")
           SecondFunnel.app.main.show(new Views.Content.Show(model: model))

@@ -2,7 +2,11 @@ define ["marionette", "models/content"], (Marionette, Content) ->
 
   class Index extends Marionette.Layout
 
+    id: 'content-index'
+
     template: "content_index"
+
+    serializeData: -> @model.viewJSON()
 
     initialize: (opts) ->
 
@@ -18,6 +22,8 @@ define ["marionette", "models/content"], (Marionette, Content) ->
       "click .js-save": "saveContent"
       "click .js-approve": "approveContent"
       "click .js-reject": "rejectContent"
+
+    serializeData: -> @model.viewJSON()
 
     initialize: (opts) ->
 
