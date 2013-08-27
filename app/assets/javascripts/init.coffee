@@ -82,6 +82,7 @@ require ["secondfunnel", "app", "marionette", "handlebars", "swag", "jquery", "u
 
       # Instruct Backbone to trigger routing events
       SecondFunnel.router.navigate url, { trigger: true }
+      document.body.scrollTop = 0
 
       return false
 

@@ -9,31 +9,30 @@ import play.api.libs.ws.Response
 
 object Campaigns extends Controller {
 
+  val apiHeaders = ("ApiKey","secretword")
+
+  def relayResponse(response: Response) = {
+    if (response.status == 200)
+      Ok(response.json)
+    else
+      Status(response.status)(response.body)
+  }
+
   def index(store_id:Long)  = Action {
     val request = WS.url("http://contentgraph-test.elasticbeanstalk.com/graph/store/" + store_id + "/campaign/")
     Async {
-      request.withHeaders(("ApiKey","secretword")).get()
-        .map { response: Response =>
-          println(response.body)
-          println(response.status)
-          if (response.status != 200)
-            NotFound
-          else
-            Ok(response.json)
-        }
+      request.withHeaders(apiHeaders)
+        .get()
+        .map(relayResponse)
     }
   }
 
   def show(store_id:Long, id: Long) = Action {
     val request = WS.url("http://contentgraph-test.elasticbeanstalk.com/graph/store/" + store_id + "/campaign/" + id)
     Async {
-      request.withHeaders(("ApiKey","secretword")).get()
-        .map { response: Response =>
-          if (response.status != 200)
-            NotFound("")
-          else
-            Ok(response.json)
-        }
+      request.withHeaders(apiHeaders)
+        .get()
+        .map(relayResponse)
     }
   }
 
