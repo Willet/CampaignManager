@@ -1,17 +1,28 @@
-<h2>Products</h2>
-<ul>
-{{#each this}}
-<li>
-  <a href="/{{store-id}}/products/{{id}}">{{name}}</a>
-  {{price}}
-  {{description}}
-  <a href="{{url}}">{{url}}</a>
-  {{keywords}}
-  {{available}}
-  {{category-ids}}
-  {{formatDate created "%Y-%m-%d"}}
-</li>
-{{else}}
-(None)
-{{/each}}
-</ul>
+<div class="list">
+  <h2>Products</h2>
+  {{#each this}}
+  <div class="row box">
+    <a href="/{{store-id}}/products/{{id}}">
+      <div class="large-4 columns">
+        <div class="row center text-center">
+          {{#if default-image-id}}
+          <img src="{{default-image-id.images.compact.url}}"/>
+          {{else}}
+          <img src="http://placehold.it/160x160"/>
+          {{/if}}
+        </div>
+      </div>
+      <div class="large-8 columns">
+        <dl>
+          <dt>Name</dt>
+          <dd>{{name}}</dd>
+          <dt>Description</dt>
+          <dd>{{{description}}}</dd>
+        </dl>
+      </div>
+    </a>
+  </div>
+  {{else}}
+  (None)
+  {{/each}}
+</div>

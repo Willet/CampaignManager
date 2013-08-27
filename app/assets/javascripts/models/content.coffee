@@ -12,6 +12,10 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
         includeInJSON: Backbone.Model.prototype.idAttribute
       }
     ]
+    initialize: (opts, relatedOptions) ->
+      if relatedOptions['store-id']
+        @set('store-id', relatedOptions['store-id'])
+
     url: (opts) ->
       "/api/stores/#{@get('store-id')}/content/#{@get('id') || ''}"
 
@@ -30,7 +34,10 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
     viewJSON: ->
       json = @toJSON()
       json['product-ids'] = @get('product-ids').toJSON()
-      if @get('remote-url')
+      if @get('original-url') && /youtube/i.test(@get('original-url'))
+        json['video'] = true
+        json['video-embed-url'] = @get('original-url').replace(/watch\?v=/, 'embed/')
+      else if @get('remote-url')
         json['images'] = {
           pico:
             width: 16

@@ -2,12 +2,16 @@
   <h2>Content</h2>
   <form>
     <div class="row">
-      <div class="large-4 small-12 columns">
+      <div class="large-6 small-12 columns">
         <div class="row center text-center">
-          {{#if remote-url}}
-          <img src="{{images.medium.url}}"/>
+          {{#if video}}
+            <iframe width="320" height="240" src="{{video-embed-url}}" frameborder="0" allowfullscreen></iframe>
           {{else}}
-          <img src="http://placehold.it/175x175"/>
+            {{#if remote-url}}
+            <img src="{{images.medium.url}}"/>
+            {{else}}
+            <img src="http://placehold.it/175x175"/>
+            {{/if}}
           {{/if}}
         </div>
         <div class="row text-center">
@@ -32,7 +36,7 @@
           </dl>
         </div>
       </div>
-      <div class="large-8 small-10 columns">
+      <div class="large-6 small-10 columns">
         <div class="row">
           <div class="small-1 columns">
             <label for="name" class="right inline">Name</label>
@@ -91,12 +95,15 @@
     </div>
   </form>
   <h3>Related Products</h3>
-  {{#each product-ids}}
   <div class="row">
-    <div class="small-2 text-center">
-      <a href="/{{store-id}}/products/{{id}}"><img src="http://placehold.it/100x100&text=Product {{this}}"></a><br />
+  {{#each product-ids}}
+    <div class="small-2 text-center columns">
+      <a href="/{{store-id}}/products/{{id}}">
+        {{default-image-id.images}}
+        <img src="{{default-image-id.images.compact.url}}"/>
+      </a><br />
       {{name}}
     </div>
-  </div>
   {{/each}}
+  </div>
 </div>

@@ -14,6 +14,7 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
       {
         key: 'default-image-id'
         relatedModel: "Models.Content.Model"
+        collectionOptions: (model) -> { model: model }
         type: Backbone.HasOne
         includeInJSON: Backbone.Model.prototype.idAttribute
       }
@@ -25,6 +26,7 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
       json['content-ids'] = @get('content-ids')?.viewJSON()
       json['default-image-id'] = @get('default-image-id')?.viewJSON()
       json
+
 
   Model.setup()
 
@@ -43,6 +45,8 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
     comparator: (model) ->
       # auto-sort by id on grabbing the collection
       model.get("id")
+    viewJSON: ->
+      @collect((m) -> m.viewJSON())
 
   return {
     Model: Model

@@ -30,24 +30,37 @@ define [
 
       productIndex: (store_id) ->
         store = Models.Store.Model.findOrCreate(id: store_id)
-        store.fetch()
-        SecondFunnel.app.header.show(new Views.Main.Nav(model: store))
-
         collection = new Models.Products.Collection()
         collection.store_id = store_id
-        collection.fetch(success: ->
+
+        $.when(
+          store.fetch(),
+          collection.fetch()
+        ).then(->
+          $.when.apply(@,
+            collection.collect(
+              (model) -> $.when.apply(@, model.fetchRelated("default-image-id", "store-id": store_id))
+            )
+          )
+        ).done(->
+          SecondFunnel.app.header.show(new Views.Main.Nav(model: store))
           SecondFunnel.app.main.show(new Views.Products.Index(model: collection))
         )
 
       productShow: (store_id, product_id) ->
         store = Models.Store.Model.findOrCreate(id: store_id)
-        store.fetch()
-        SecondFunnel.app.header.show(new Views.Main.Nav(model: store))
 
         model = Models.Products.Model.findOrCreate(id: product_id, "store-id": store_id)
-        model.fetch(complete: -> # grumble grumble
-          model.fetchRelated("default-image-id")
-          model.fetchRelated("content-ids")
+        $.when(
+          store.fetch(),
+          model.fetch()
+        ).then(->
+          $.when(
+            $.when.apply(@, model.fetchRelated("default-image-id","store-id": store_id)),
+            $.when.apply(@, model.fetchRelated("content-ids"))
+          )
+        ).done(->
+          SecondFunnel.app.header.show(new Views.Main.Nav(model: store))
           SecondFunnel.app.main.show(new Views.Products.Show(model: model))
         )
 
@@ -76,12 +89,23 @@ define [
 
       contentShow: (store_id, content_id) ->
         store = Models.Store.Model.findOrCreate(id: store_id)
-        store.fetch()
-        SecondFunnel.app.header.show(new Views.Main.Nav(model: store))
 
         model = Models.Content.Model.findOrCreate(id: content_id, "store-id": store_id)
-        model.fetch(complete: ->
-          model.fetchRelated("product-ids")
+        model.set("store-id", store_id)
+
+        $.when(
+          store.fetch(),
+          model.fetch()
+        ).then(->
+          $.when.apply(@, model.fetchRelated("product-ids"))
+        ).then(->
+          $.when.apply(@,
+            model.get("product-ids").collect((m) =>
+              $.when.apply(@, m.fetchRelated("default-image-id", "store-id": store_id))
+            )
+          )
+        ).done(=>
+          SecondFunnel.app.header.show(new Views.Main.Nav(model: store))
           SecondFunnel.app.main.show(new Views.Content.Show(model: model))
         )
 

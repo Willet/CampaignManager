@@ -3,6 +3,8 @@ define ["marionette"], (Marionette) ->
 
     template: "products_index"
 
+    serializeData: -> @model.viewJSON()
+
     initialize: (opts) ->
 
     onRender: (opts) ->
