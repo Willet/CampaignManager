@@ -3,14 +3,14 @@ define [
   "backbonerelational",
   "models/products",
   "models/content",
-  "models/campaigns",
+  "models/pages",
   "models/stores"
-], (Backbone, BackboneRelation, Products, Content, Campaigns, Stores) ->
+], (Backbone, BackboneRelation, Products, Content, Pages, Stores) ->
   Backbone.Relational.store.addModelScope(window)
   window.Models = {
     Products: Products
     Content: Content
-    Campaigns: Campaigns
+    Pages: Pages
     Store: Stores
   }
 

@@ -10,19 +10,19 @@
   <section class='side-nav'>
     {{#if store}}
       <ul class='left'>
-        <li class='active'>
-          <a href='/{{store.id}}/campaigns'>Campaigns <i class="icon-general-globe"></i></a>
+        <li {{#is page 'pages'}}class='active'{{/is}}>
+          <a href='/{{store.id}}/pages'>Pages <i class="icon-general-page"></i></a>
         </li>
         <li class="divider" />
-        <li>
-          <a href='/{{store.id}}/content'>Content <i class="icon-general-page"></i></a>
+        <li {{#is page 'content'}}class='active'{{/is}}>
+          <a href='/{{store.id}}/content'>Content <i class="icon-general-photo"></i></a>
         </li>
         <li class="divider" />
-        <li>
+        <li {{#is page 'analytics'}}class='active'{{/is}}>
           <a href='/{{store.id}}/analytics'>Analytics <i class="icon-general-graph"></i></a>
         </li>
         <li class="divider" />
-        <li>
+        <li {{#is page 'settings'}}class='active'{{/is}}>
           <a href='/{{store.id}}/settings'>Settings <i class="icon-general-settings"></i></a>
         </li>
         <li class="divider" />

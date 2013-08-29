@@ -31,14 +31,13 @@ define ["marionette"], ->
     template: "nav"
 
     initialize: (opts) ->
+      @model.on("change", => @render())
 
     serializeData: ->
-      if @model
-        {
-          store: @model.toJSON?()
-        }
-      else
-        {}
+      json = {}
+      json['store'] = @model.get('store').toJSON() if @model.get('store')
+      json['page'] = @model.get('page')
+      json
 
     onRender: (opts) ->
 
@@ -47,6 +46,17 @@ define ["marionette"], ->
   class TitleBar extends Marionette.ItemView
 
     template: "title_bar"
+
+    initialize: (opts) ->
+      @model.on("change", => @render())
+
+    onRender: (opts) ->
+
+    onShow: (opts) ->
+
+  class NotFound extends Marionette.ItemView
+
+    template: "404"
 
     initialize: (opts) ->
 
@@ -59,4 +69,5 @@ define ["marionette"], ->
     Nav: Nav
     TitleBar: TitleBar
     Loading: Loading
+    NotFound: NotFound
   }

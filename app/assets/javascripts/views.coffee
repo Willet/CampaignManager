@@ -2,14 +2,14 @@ define [
   "views/main",
   "views/products",
   "views/content",
-  "views/campaigns",
+  "views/pages",
   "views/stores"
-], (Main, Products, Content, Campaigns, Stores) ->
+], (Main, Products, Content, Pages, Stores) ->
   SecondFunnel.Views = {
     Main: Main
     Products: Products
     Content: Content
-    Campaigns: Campaigns
+    Pages: Pages
     Stores: Stores
   }
 

@@ -1,8 +1,8 @@
-define ["marionette", "models/campaigns"], (Marionette, Campaigns) ->
+define ["marionette", "models/pages"], (Marionette, Pages) ->
 
   class Index extends Marionette.Layout
 
-    template: "campaigns_index"
+    template: "pages_index"
 
     initialize: (opts) ->
 
@@ -12,7 +12,7 @@ define ["marionette", "models/campaigns"], (Marionette, Campaigns) ->
 
   class Show extends Marionette.Layout
 
-    template: "campaigns_show"
+    template: "pages_show"
 
     initialize: (opts) ->
 
