@@ -13,19 +13,32 @@ define [
         SecondFunnel.app.main.show(new Views.Main.Index())
 
       campaignIndex: (store_id) ->
-        model = Models.Campaigns.Model.findOrCreate(id: store_id)
-        SecondFunnel.app.header.show(new Views.Main.Nav(model: model))
+        store = Models.Store.Model.findOrCreate(id: store_id)
+
+        # TODO: currently listing products (instead of campaigns/pages)
         collection = new Models.Products.Collection()
         collection.store_id = store_id
-        collection.fetch(success: ->
+        $.when(
+          store.fetch(),
+          collection.fetch()
+        ).done(->
+          SecondFunnel.app.header.show(new Views.Main.Nav(model: store))
           SecondFunnel.app.main.show(new Views.Campaigns.Index(model: collection))
+          SecondFunnel.app.titlebar.currentView.model.set(title: "Campaigns")
+          SecondFunnel.app.titlebar.currentView.render()
         )
 
       campaignShow: (store_id, id) ->
+        store = Models.Store.Model.findOrCreate(id: store_id)
         model = Models.Campaigns.Model.findOrCreate(id: id, "store-id": store_id)
-        SecondFunnel.app.header.show(new Views.Main.Nav(model: model))
-        model.fetch(complete: ->
+        $.when(
+          store.fetch(),
+          model.fetch()
+        ).done(->
+          SecondFunnel.app.header.show(new Views.Main.Nav(model: store))
           SecondFunnel.app.main.show(new Views.Campaigns.Show(model: model))
+          SecondFunnel.app.titlebar.currentView.model.set(title: "Campaign: #{model.get('name')}")
+          SecondFunnel.app.titlebar.currentView.render()
         )
 
       productIndex: (store_id) ->
@@ -62,6 +75,8 @@ define [
         ).done(->
           SecondFunnel.app.header.show(new Views.Main.Nav(model: store))
           SecondFunnel.app.main.show(new Views.Products.Show(model: model))
+          SecondFunnel.app.titlebar.currentView.model.set(title: "Product: #{model.get("name")}")
+          SecondFunnel.app.titlebar.currentView.render()
         )
 
       storeIndex: ->
@@ -72,19 +87,27 @@ define [
         )
 
       storeShow: (store_id)->
-        model = Models.Store.Model.findOrCreate(id: store_id)
-        SecondFunnel.app.header.show(new Views.Main.Nav(model: model))
-        model.fetch(complete: ->
-          SecondFunnel.app.main.show(new Views.Stores.Show(model: model))
-        )
+        @campaignIndex(store_id)
+        #model = Models.Store.Model.findOrCreate(id: store_id)
+        #SecondFunnel.app.header.show(new Views.Main.Nav(model: model))
+        #model.fetch(complete: ->
+        #  SecondFunnel.app.main.show(new Views.Stores.Show(model: model))
+        #  SecondFunnel.app.titlebar.currentView.model.set({title: model.get("name")})
+        #  SecondFunnel.app.titlebar.currentView.render()
+        #)
 
       contentIndex: (store_id) ->
-        model = Models.Store.Model.findOrCreate(id: store_id)
-        SecondFunnel.app.header.show(new Views.Main.Nav(model: model))
+        store = Models.Store.Model.findOrCreate(id: store_id)
         collection = new Models.Content.Collection()
         collection.store_id = store_id
-        collection.fetch(success: ->
+        $.when(
+          store.fetch(),
+          collection.fetch()
+        ).done(->
           SecondFunnel.app.main.show(new Views.Content.Index(model: collection))
+          SecondFunnel.app.header.show(new Views.Main.Nav(model: store))
+          SecondFunnel.app.titlebar.currentView.model.set({title: "Content"})
+          SecondFunnel.app.titlebar.currentView.render()
         )
 
       contentShow: (store_id, content_id) ->
@@ -107,5 +130,7 @@ define [
         ).done(=>
           SecondFunnel.app.header.show(new Views.Main.Nav(model: store))
           SecondFunnel.app.main.show(new Views.Content.Show(model: model))
+          SecondFunnel.app.titlebar.currentView.model.set(title: "Content: #{model.get("title") || ""}")
+          SecondFunnel.app.titlebar.currentView.render()
         )
 

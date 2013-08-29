@@ -1,4 +1,53 @@
-define ["marionette", "models/content"], (Marionette, Content) ->
+define ["marionette", "backboneprojections", "models/content", "tag_it"], (Marionette, BackboneProjections, Content, TagIt) ->
+
+  class SelectInfoBar extends Marionette.ItemView
+    # model is selected collection
+    template: "content_selectbar"
+
+    serializeData: ->
+      return {
+        size: @model.length
+        models: @model.collect((m) -> m.viewJSON())
+      }
+
+    initialize: (opts) ->
+      # TODO: if no items selected don't show
+      @model.on("add", (=> @render()), @)
+      @model.on("remove", (=> @render()), @)
+
+    onShow: ->
+      # TODO: move into regionLayout on App (custom)
+      $('#main').addClass("info-bar")
+
+    onClose: ->
+      # TODO: move into regionLayout on App (custom)
+      $('#main').removeClass("info-bar")
+
+  class GridItem extends Marionette.ItemView
+
+    events:
+      "click .item": "selectItem"
+      "click a": "stopPropagation"
+
+    stopPropagation: (event) ->
+      event.stopPropagation()
+
+    selectItem: (event) ->
+      @model.set('selected', !@model.get('selected'))
+      @$('.item').toggleClass("selected")
+
+    serializeData: -> @model.viewJSON()
+
+    template: "_content_grid_item"
+
+  class ContentList extends Marionette.CollectionView
+
+    initialize: (opts) ->
+      # TODO: this does not handle order.... (collection order != current order)
+
+    getItemView: (item) ->
+      # TODO: List+Details View
+      return GridItem
 
   class Index extends Marionette.Layout
 
@@ -6,13 +55,28 @@ define ["marionette", "models/content"], (Marionette, Content) ->
 
     template: "content_index"
 
+    regions:
+      "list": "#list"
+
     serializeData: -> @model.viewJSON()
 
     initialize: (opts) ->
+      @contentListView = new ContentList(
+        collection: new BackboneProjections.Sorted(@model, comparator: (m) -> [m.get('selected'), m.get('id')])
+      )
+      @infobarView = new SelectInfoBar(model:
+        new BackboneProjections.Filtered(@model, filter: (m) -> m.get('selected') == true)
+      )
 
     onRender: (opts) ->
+      @list.show(@contentListView)
+      SecondFunnel.app.infobar.show(@infobarView)
+      @$('#js-tag-search').tagHandler()
 
     onShow: (opts) ->
+
+    onClose: ->
+      SecondFunnel.app.infobar.close()
 
   class Show extends Marionette.Layout
 

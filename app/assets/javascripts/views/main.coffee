@@ -44,8 +44,19 @@ define ["marionette"], ->
 
     onShow: (opts) ->
 
+  class TitleBar extends Marionette.ItemView
+
+    template: "title_bar"
+
+    initialize: (opts) ->
+
+    onRender: (opts) ->
+
+    onShow: (opts) ->
+
   return {
     Main: Main
     Nav: Nav
+    TitleBar: TitleBar
     Loading: Loading
   }

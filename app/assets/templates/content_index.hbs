@@ -1,30 +1,51 @@
 <div class="list">
-  <h2>Content</h2>
-  {{#each this}}
-  <div class="row box">
-    <a href="/{{store-id}}/content/{{id}}">
-      <div class="large-4 columns">
-        <div class="row center text-center">
-          {{#if remote-url}}
-          <img src="{{images.compact.url}}"/>
-          {{else}}
-          <img src="http://placehold.it/160x160"/>
-          {{/if}}
-        </div>
+  <div class="row">
+    <div class="columns large-2">
+      <label class="inline"><b>Criteria</b></label>
+    </div>
+    <div class="columns large-3">
+      <select>
+        <option>Most Recent First</option>
+        <option>Least Recent First</option>
+      </select>
+    </div>
+    <div class="columns large-3">
+      <select>
+        <option>All Content Types</option>
+        <option>Instagram</option>
+        <option>Tumblr</option>
+        <option>Facebook</option>
+        <option>Youtube</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="columns large-3">
+      <select>
+        <option>All Campaigns</option>
+        {{#each campaigns}}
+        <option>{{name}}</option>
+        {{/each}}
+      </select>
+    </div>
+    <div class="columns large-12">
+      <div class="row">
+        <span class="columns large-2 inline"><label class="inline"><b>Tags</b></label></span>
+        <span class="columns large-10">
+          <ul id="js-tag-search">
+            <li>Samsung</li>
+            <li>Hard-drive</li>
+          </ul>
+          <!--input type="text" placeholder="Tag"-->
+        </span>
       </div>
-      <div class="large-8 columns">
-        <dl>
-          <dt>Title</dt>
-          <dd>{{title}}</dd>
-          <dt>Description</dt>
-          <dd>{{description}}</dd>
-          <dt>Caption</dt>
-          <dd>{{caption}}</dd>
-        </dl>
-      </div>
-    </a>
+    </div>
+    <div class="columns" />
   </div>
-  {{else}}
-  (None)
-  {{/each}}
+  <i class="foundicon-view-mode"></i>
+  <div id="list" class="row">
+    <!-- list inserted here --!>
+  </div>
+  {{#empty this}}
+  No content meets selected criteria
+  {{/empty}}
 </div>

@@ -10,11 +10,14 @@ requirejs.config(
     backbone: 'backbone-min'
     underscore: 'lib/underscore'
     jquery: '//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min'
+    jquery_ui: '//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min'
     marionette: 'lib/backbone.marionette'
+    backboneprojections: 'backbone.projections'
     backboneassociations: 'backbone-associations-min'
     handlebars: 'handlebars'
     templates: '../templates/templates.pre.min'
     backbonerelational: 'backbone.relational'
+    tag_it: 'lib/jquery.taghandler'
   shim:
     jquery:
       exports: 'jQuery'
@@ -24,6 +27,8 @@ requirejs.config(
       deps: ['underscore', 'jquery']
       # Once loaded, use the global 'Backbone' as the module value.
       exports: 'Backbone'
+    jquery_ui:
+      deps: ['jquery']
     underscore:
       exports: '_'
     marionette:
@@ -39,9 +44,14 @@ requirejs.config(
       exports: 'Backbone.Relational'
     backboneassociations:
       deps: ['backbone']
+    backboneprojections:
+      deps: ['backbone']
+      exports: 'BackboneProjections'
     swag:
       deps: ['handlebars']
       exports: 'Swag'
+    tag_it:
+      deps: ['jquery', 'jquery_ui']
 )
 
 require ["secondfunnel", "app", "marionette", "handlebars", "swag", "jquery", "underscore", "templates"], (SecondFunnel, App, Marionette, Handlebars, Swag, $, _, JST) ->
@@ -59,7 +69,12 @@ require ["secondfunnel", "app", "marionette", "handlebars", "swag", "jquery", "u
 
 
   # Setup rendering to use JST given the template name
-  Marionette.Renderer.render = (template, data) -> return JST[_.result(t: template, 't')](data)
+  Marionette.Renderer.render = (template, data) ->
+    try
+      return JST[_.result(t: template, 't')](data)
+    catch e
+      console.error "JST Template '#{template}' does not exist."
+      throw e
 
   # Add additonal handlebars helpers
   Swag.registerHelpers(Handlebars)

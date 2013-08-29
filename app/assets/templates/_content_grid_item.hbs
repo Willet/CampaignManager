@@ -1,0 +1,20 @@
+<div class="item large-4 small-6 columns">
+  <div class="row center text-center">
+    <div class="row">
+    {{#if video}}
+      <div class="image" style="background-image:url({{video-thumbnail}})" />
+    {{else}}
+      {{#if remote-url}}
+        <div class="image" style="background-image:url({{images.compact.url}})" />
+      {{else}}
+        <div class="image" style="background-image:url('http://placehold.it/160x160&text=No Thumbnail')" />
+      {{/if}}
+    {{/if}}
+    </div>
+    <div class="row">
+      <a href="/{{store-id}}/content/{{id}}">
+        View
+      </a>
+    </div>
+  </div>
+</div>

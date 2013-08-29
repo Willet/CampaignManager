@@ -5,7 +5,7 @@ define [
   "views/campaigns",
   "views/stores"
 ], (Main, Products, Content, Campaigns, Stores) ->
-  {
+  SecondFunnel.Views = {
     Main: Main
     Products: Products
     Content: Content

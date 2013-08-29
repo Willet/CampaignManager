@@ -1,14 +1,26 @@
 <div class="list">
-  <h2>Campaigns</h2>
-  <ul>
+  <table>
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th class="text-center">Created</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th width=100></th>
+    </tr>
+    </thead>
+    <tbody>
     {{#each this}}
-    <li>
-      <a href="/{{id}}">
-        {{name}} ({{slug}})
-      </a>
-    </li>
-    {{else}}
-    (None)
+      <tr>
+        <td><a href="/{{store-id}}/campaigns/{{id}}">{{name}}</a></td>
+        <td>{{formatDate created '%d/%m/%Y'}}</td>
+        <td><a href="#">Edit<a/></td>
+        <td><a href="#">View</a></td>
+        <td><a href="#">Analytics</a></td>
+        <td><a href="#">Delete</a></td>
+      </tr>
     {{/each}}
-  </ul>
+    </tbody>
+  </table>
 </div>

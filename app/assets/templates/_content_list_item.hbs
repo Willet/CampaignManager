@@ -1,0 +1,27 @@
+<div class="row box">
+  <a href="/{{store-id}}/content/{{id}}">
+    <div class="large-4 columns">
+      <div class="row center text-center">
+        {{#if video}}
+          <img src="http://placehold.it/160x160&text=Video"/>
+        {{else}}
+          {{#if remote-url}}
+          <img src="{{images.compact.url}}"/>
+          {{else}}
+          <img src="http://placehold.it/160x160"/>
+          {{/if}}
+        {{/if}}
+      </div>
+    </div>
+    <div class="large-8 columns">
+      <dl>
+        <dt>Title</dt>
+        <dd>{{title}}</dd>
+        <dt>Description</dt>
+        <dd>{{description}}</dd>
+        <dt>Caption</dt>
+        <dd>{{caption}}</dd>
+      </dl>
+    </div>
+  </a>
+</div>

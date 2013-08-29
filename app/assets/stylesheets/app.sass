@@ -1,27 +1,182 @@
-body, #container, html
-  background-color: #f4f4f4
+@import "foundation"
+@import "lib/jquery.taghandler"
+@import "foundation-fonts/general_foundicons"
 
-nav.top-bar
-  margin-bottom: 4px
-  box-shadow: 0 1px 2px rgba(0,0,0,0.3)
-  .logo
-    background: url(/assets/images/logo.png) top center no-repeat
-    width: 128px
-    height: 48px
+
+$base-color: #A1A194
+$light-base-color: #FFFFFA
+$dark-base-color: #464646
+$body-font-color: #FF6600
+$link-color: lighten(#087891,17%)
+
+a, a:link, a:visited
+  color: $link-color
+
+a:hover
+  color: lighten($link-color, 5%)
+
+body, #container, html
+  min-height: 100%
+  height: 100%
+  background-color: $light-base-color
+  > .row
+    max-width: inherit
+    margin-left: 0
+    height: auto !important
+    min-height: 100%
+    height: 100%
+  .row.top-bar
+    padding: 20px
+    background: lighten($base-color, 35%)
+    height: 65px
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3)
+
+
+header.columns
+  z-index: 10
+  top: 0
+  left: 0
+  background: lighten($dark-base-color, 5%)
+  @media #{$small}
+    position: fixed !important
+    min-height: 100%
+    height: auto !important
+    height: 100%
+  position: relative
+  height: inherit
+  min-height: inherit
+  padding: 0 0
+#main
+  // make space for fixed nav bar + potentially infobar
+  position: relative
+  left: 0
+  top: 0
+  &.info-bar
+    top: 65px
+  @media #{$small}
+    left: 16.65%
+nav
+  > .logo
+    position: relative
+    .wrapper
+      text-align: center
+      left: 7px
+      position: relative
+      width: 100%
+      background-color: $light-base-color
+      margin-top: 5px
+      padding: 1px
+      z-index: 200
+      box-shadow: 0 2px 2px rgba(0,0,0,0.3), -2px 2px 2px rgba(0,0,0,0.2)
+      .logo
+        margin-top: 5px
+        margin-left: 25px
+        background: url(/assets/images/logo.png) top center no-repeat $light-base-color
+        width: 128px
+        height: 48px
+    .arrow
+      position: absolute
+      left: 100%
+      border-top: 7px solid $dark-base-color
+      border-right: 7px solid transparent
+      background-clip: padding-box
+      z-index: 9999
+      width: 0px
+      height: 0px
+      top: 100%
+      right: 100%
+  .side-nav
+    ul
+      width: 100%
+      li
+        margin: 0
+        &.active
+          border-right: 4px solid lighten($body-font-color, 5%)
+        font-size: 21px
+        position: relative
+        width: 100%
+        left: 1px
+        padding-right: 15px
+        margin-top: 8px
+
+        text-align: right
+
+        z-index: 200
+
+        //background-color: $light-base-color
+        background-color: lighten($dark-base-color, 10%)
+        //box-shadow: 0 2px 2px rgba(0,0,0,0.3), -2px 2px 2px rgba(0,0,0,0.2)
+        &.divider
+          padding: 0
+          margin: 0
+          height: 0
+          border-top-color: $dark-base-color
+          border-top: 1px solid $dark-base-color
+          border-bottom: 1px solid $dark-base-color
+        a, a:visited, a:link, a:hover
+          text-shadow: 0 1px 3px rgba(0, 0, 0, .4)
+          font-weight: 100
+          font-size: 16px
+          letter-spacing: 1px
+          color: $light-base-color
+          i
+            font-weight: 0
+          //color: $link-color
 
 span.bread-crumbs
   margin: 8px
 
 #container
-  margin: 1em
+  padding: 2em
   max-width: 900px
+
+$selected-color: $body-font-color
 
 #content-index
   .list
+    .item
+      min-height: 150px
+      .image
+        height: 100px
+        background-repeat: no-repeat
+        background-position: center center
+      > div
+        position: relative
+        top: 25px
+        max-height: 100px
+      box-shadow: 0 1px 2px $dark-base-color
+      &.selected
+        box-shadow: 0 1px 2px $selected-color
+        background-color: lighten($selected-color, 30%)
     > .row
       border-bottom: 1px solid #999
       padding-bottom: 10px
       margin: 10px 2px
+
+#info-bar
+  padding: 0
+  margin: 0
+  > div
+    position: fixed
+    top: 0
+    // TODO: reponsive
+    left: 16.66%
+    width: 83.44%
+    z-index: 8
+    background-color: lighten($dark-base-color, 20%)
+    height: 65px
+    padding-left: 30px
+    font-size: 16px
+    color: $light-base-color
+    .columns
+      padding-top: 24px
+      &.actions
+        padding-top: 16px
+        padding-right: 24px
+        text-align: right
+        float: right
+        div, button
+          display: inline-block
 
 .related-products
   .columns

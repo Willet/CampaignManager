@@ -1,5 +1,4 @@
 <div id="content_show">
-  <h2>Content</h2>
   <form>
     <div class="row">
       <div class="large-6 small-12 columns">
@@ -21,30 +20,22 @@
             <dt>Status</dt>
             <dd>
               {{#if active}}
-              {{#if approved}}
-                Approved<br/>
-                <button class="js-reject tiny button alert">Reject</button>
+                {{#if approved}}
+                  Approved<br/>
+                  <button class="js-reject tiny button alert">Reject</button>
+                {{else}}
+                Awaiting Decision <br /><br />
+                  <button class="js-approve tiny button success">Approve</button><br/>
+                  <button class="js-reject tiny button alert">Reject</button>
+                {{/if}}
               {{else}}
-              Awaiting Decision <br /><br />
-                <button class="js-approve tiny button success">Approve</button><br/>
-                <button class="js-reject tiny button alert">Reject</button>
-              {{/if}}
-              {{else}}
-              Rejected
+                Rejected
               {{/if}}
             </dd>
           </dl>
         </div>
       </div>
       <div class="large-6 small-10 columns">
-        <div class="row">
-          <div class="small-1 columns">
-            <label for="name" class="right inline">Name</label>
-          </div>
-          <div class="small-11 columns">
-            <input name="name" type="text" value="{{name}}">
-          </div>
-        </div>
         <div class="row">
           <div class="small-1 columns">
             <label for="title" class="right inline">Title</label>

@@ -36,7 +36,9 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
       json['product-ids'] = @get('product-ids').toJSON()
       if @get('original-url') && /youtube/i.test(@get('original-url'))
         json['video'] = true
+        video_id = @get('original-url').match(/v=(.+)/)[1]
         json['video-embed-url'] = @get('original-url').replace(/watch\?v=/, 'embed/')
+        json['video-thumbnail'] = "http://i1.ytimg.com/vi/#{video_id}/default.jpg"
       else if @get('remote-url')
         json['images'] = {
           pico:

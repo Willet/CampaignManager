@@ -22,7 +22,11 @@
     %script{:src => {routes.Assets.at("javascripts/vendor/custom.modernizr.js")}}
     %script{'data-main'=> {routes.Assets.at("javascripts/init.js")}, :src => {routes.Assets.at("javascripts/require.js")}}
   %body
-    %header
-    #container
-      - unescape(body)
-    %footer
+    .row
+      %header.columns.large-2.small-12
+      #main.columns.large-10.small-12
+        #info-bar.row
+        #title-bar.row.top-bar
+        #container.row
+          - unescape(body)
+      .columns

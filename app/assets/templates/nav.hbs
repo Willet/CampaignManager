@@ -1,38 +1,31 @@
-<nav class='top-bar sticky fixed'>
-  <ul class='title-area'>
-    <li class='name'>
-      <h1>
-        <a href='/'>
-          <div class="logo"/>
-        </a>
-      </h1>
-    </li>
-    <li class='toggle-topbar menu-icon'>
-      <a href='#'>
-        <span>Menu</span>
+<nav class='vertical-nav'>
+  <div class="logo">
+    <div class="logo wrapper">
+      <a href='/'>
+        <div class="logo"/>
       </a>
-    </li>
-  </ul>
-  <section class='top-bar-section'>
+    </div>
+    <div class="arrow" />
+  </div>
+  <section class='side-nav'>
     {{#if store}}
       <ul class='left'>
-        <li class='divider'></li>
         <li class='active'>
-          <a href='/{{store.id}}/content'>Content/Assets</a>
+          <a href='/{{store.id}}/campaigns'>Campaigns <i class="foundicon-globe"></i></a>
         </li>
-        <li class='divider'></li>
-        <li class='active'>
-          <a href='/{{store.id}}/products'>Products</a>
+        <li class="divider" />
+        <li>
+          <a href='/{{store.id}}/content'>Content <i class="foundicon-page"></i></a>
         </li>
-        <li class='divider'></li>
-        <li class='active'>
-          <a href='/{{store.id}}/themes'>Theme Manager</a>
+        <li class="divider" />
+        <li>
+          <a href='/{{store.id}}/analytics'>Analytics <i class="foundicon-graph"></i></a>
         </li>
-        <li class='divider'></li>
-        <li class='active'>
-          <a href='/{{store.id}}/analytics'>Analytics</a>
+        <li class="divider" />
+        <li>
+          <a href='/{{store.id}}/settings'>Settings <i class="foundicon-settings"></i></a>
         </li>
-        <li class='divider'></li>
+        <li class="divider" />
       </ul>
     {{/if}}
     {{#if 0}}
@@ -48,9 +41,3 @@
     {{/if}}
   </section>
 </nav>
-{{#if store}}
-<span class="bread-crumbs">
-  <a href="/">Stores</a> &#0187; <a href="/{{store.id}}">{{store.name}}</a>
-</span>
-{{/if}}
-
