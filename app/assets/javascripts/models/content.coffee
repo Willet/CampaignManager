@@ -34,11 +34,18 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
     viewJSON: ->
       json = @toJSON()
       json['product-ids'] = @get('product-ids').toJSON()
+      if @get('active')
+        if @get('approved')
+          json['approved'] = true
+        else
+          json['undecided'] = true
+      else
+        json['rejected'] = true
       if @get('original-url') && /youtube/i.test(@get('original-url'))
         json['video'] = true
         video_id = @get('original-url').match(/v=(.+)/)[1]
         json['video-embed-url'] = @get('original-url').replace(/watch\?v=/, 'embed/')
-        json['video-thumbnail'] = "http://i1.ytimg.com/vi/#{video_id}/default.jpg"
+        json['video-thumbnail'] = "http://i1.ytimg.com/vi/#{video_id}/mqdefault.jpg"
       else if @get('remote-url')
         json['images'] = {
           pico:

@@ -1,20 +1,28 @@
-<div class="item large-4 small-6 columns">
+<div class="large-3 small-6 columns">
+<div class="item">
   <div class="row center text-center">
-    <div class="row">
     {{#if video}}
       <div class="image" style="background-image:url({{video-thumbnail}})" />
     {{else}}
       {{#if remote-url}}
-        <div class="image" style="background-image:url({{images.compact.url}})" />
+        <div class="image" style="background-image:url({{images.medium.url}})" />
       {{else}}
-        <div class="image" style="background-image:url('http://placehold.it/160x160&text=No Thumbnail')" />
+        <div class="image" style="background-image:url('http://placehold.it/180x180&text=No Thumbnail')" />
       {{/if}}
     {{/if}}
-    </div>
-    <div class="row">
-      <a href="/{{store-id}}/content/{{id}}">
-        View
-      </a>
+    <div class="overlay">
+      <span class="actions"><a href="/{{store-id}}/content/{{id}}"><button class="tiny">View</button></a></span>
+      {{#if approved}}
+      <span class="approved bottom-right"><i class="icon-general-checkmark"></i></span>
+      {{/if}}
+      {{#if rejected}}
+      <span class="rejected bottom-right"><i class="icon-general-error"></i></span>
+      {{/if}}
+      {{#if undecided}}
+      <span class="undecided bottom-right"><i class="icon-accessibility-question"></i></span>
+      {{/if}}
+      <div class="color" />
     </div>
   </div>
+</div>
 </div>
