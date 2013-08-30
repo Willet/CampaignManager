@@ -20,8 +20,7 @@ define [
       pagesIndex: (store_id) ->
         store = Models.Store.Model.findOrCreate(id: store_id)
 
-        # TODO: currently listing products (instead of pagess/pages)
-        collection = new Models.Products.Collection()
+        collection = new Models.Pages.Collection()
         collection.store_id = store_id
         $.when(
           store.fetch(),
@@ -43,7 +42,7 @@ define [
           model.fetch()
         ).done(->
           SecondFunnel.app.main.show(new Views.Pages.Show(model: model))
-          SecondFunnel.app.titlebar.currentView.model.set(title: "Campaign: #{model.get('name')}")
+          SecondFunnel.app.titlebar.currentView.model.set(title: "Page: #{model.get('name')}")
           SecondFunnel.app.header.currentView.model.set(page: "pages", store: store)
         )
 

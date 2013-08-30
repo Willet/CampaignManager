@@ -11,7 +11,7 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
     url: (opts) ->
       "/api/stores/#{@store_id}/campaigns"
     parse: (data) ->
-      data['content']
+      data['campaigns']
 
   return {
     Model: Model

@@ -1,4 +1,4 @@
-<div class="list">
+<div class="list columns large-8">
   <div class="row">
     <div class="columns large-2">
       <label class="inline"><b>Criteria</b></label>
@@ -48,4 +48,38 @@
   {{#empty this}}
   No content meets selected criteria
   {{/empty}}
+</div>
+<div class="edit-area columns large-4">
+
+  <div class="row">
+    <div class="columns large-12">
+      <label class="inline"><b>Caption</b></label>
+      <textarea>{{combined.caption}}</textarea>
+    </div>
+    <div class="columns large-12">
+        <label class="inline"><b>Tagged Products</b></label>
+        <span class="columns">
+          <ul id="js-tag-search">
+            <li>Product 1</li>
+            <li>Product 2</li>
+          </ul>
+          <!--input type="text" placeholder="Tag"-->
+        </span>
+      </div>
+    </div>
+    <div class="columns large-12">
+      <div class="row">
+        <label class="inline"><b>Tagged Campaigns</b></label>
+        <span class="columns">
+          <ul id="js-tag-search">
+            <li>Fall</li>
+            <li>Christmas</li>
+          </ul>
+          <!--input type="text" placeholder="Tag"-->
+        </span>
+      </div>
+    </div>
+    <div class="columns" />
+  </div>
+
 </div>

@@ -54,7 +54,7 @@ requirejs.config(
       deps: ['jquery', 'jquery_ui']
 )
 
-require ["secondfunnel", "app", "marionette", "handlebars", "swag", "jquery", "underscore", "templates"], (SecondFunnel, App, Marionette, Handlebars, Swag, $, _, JST) ->
+require ["secondfunnel", "backbone", "app", "marionette", "handlebars", "swag", "jquery", "underscore", "templates"], (SecondFunnel, Backbone, App, Marionette, Handlebars, Swag, $, _, JST) ->
 
   # Handle Unauthorized (Redirect to login, etc...)
   redirectToLogin = ->
@@ -67,6 +67,8 @@ require ["secondfunnel", "app", "marionette", "handlebars", "swag", "jquery", "u
       redirectToLogin()
   )
 
+  Backbone.Model.prototype.toJSON = (opts) ->
+      _.omit(@attributes, @blacklist || {})
 
   # Setup rendering to use JST given the template name
   Marionette.Renderer.render = (template, data) ->

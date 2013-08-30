@@ -1,6 +1,7 @@
 define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
 
   class Model extends Backbone.RelationalModel
+    blacklist: ['selected',]
     relations: [
       {
         collectionType: "Models.Products.Collection"
@@ -20,12 +21,14 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
       "/api/stores/#{@get('store-id')}/content/#{@get('id') || ''}"
 
     reject: ->
+      # TODO: two-way
       @save(
         active: false
         approved: false
       )
 
     approve: ->
+      # TODO: two-way
       @save(
         active: true
         approved: true
@@ -34,6 +37,7 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
     viewJSON: ->
       json = @toJSON()
       json['product-ids'] = @get('product-ids').toJSON()
+      json['selected'] = @get('selected')
       if @get('active')
         if @get('approved')
           json['approved'] = true

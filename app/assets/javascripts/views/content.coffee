@@ -4,6 +4,10 @@ define ["marionette", "backboneprojections", "models/content", "tag_it"], (Mario
     # model is selected collection
     template: "content_selectbar"
 
+    events:
+      "click .js-reject": "rejectSelected"
+      "click .js-approve": "approveSelected"
+
     serializeData: ->
       return {
         size: @model.length
@@ -14,6 +18,16 @@ define ["marionette", "backboneprojections", "models/content", "tag_it"], (Mario
       # TODO: if no items selected don't show
       @model.on("add", (=> @render()), @)
       @model.on("remove", (=> @render()), @)
+
+    approveSelected: ->
+      @model.collect((m) -> m.approve())
+      foo = _.clone(@model.models)
+      _.each(foo, (m) -> m.set(selected: false))
+
+    rejectSelected: ->
+      @model.collect((m) -> m.reject())
+      foo = _.clone(@model.models)
+      _.each(foo, (m) -> m.set(selected: false))
 
     onShow: ->
       # TODO: move into regionLayout on App (custom)
@@ -34,11 +48,13 @@ define ["marionette", "backboneprojections", "models/content", "tag_it"], (Mario
 
     selectItem: (event) ->
       @model.set('selected', !@model.get('selected'))
-      @$('.item').toggleClass("selected")
 
     serializeData: -> @model.viewJSON()
 
     template: "_content_grid_item"
+
+    initialize: ->
+      @model.on("change", (=> @render()), @)
 
   class ContentList extends Marionette.CollectionView
 
