@@ -7,6 +7,8 @@ define ["marionette", "backboneprojections", "models/content", "tag_it"], (Mario
     events:
       "click .js-reject": "rejectSelected"
       "click .js-approve": "approveSelected"
+      "click .js-unselect-all": "unselectAll"
+      "click .js-select-all": "selectAll"
 
     serializeData: ->
       return {
@@ -16,21 +18,42 @@ define ["marionette", "backboneprojections", "models/content", "tag_it"], (Mario
 
     initialize: (opts) ->
       # TODO: if no items selected don't show
-      @model.on("add", (=> @render()), @)
-      @model.on("remove", (=> @render()), @)
+      @model.on("add remove", @modelChangeEvent, @)
+
+    modelChangeEvent: ->
+      if @model.length == 0
+        @hide()
+      else
+        @show()
+      @render()
+
+    unselectAll: ->
+      objs = _.clone(@model.models)
+      _.each(objs, (m) -> m.set(selected: false))
+      console.log @model
+
+    selectAll: ->
+      # TODO: this is a hack
+      objs = _.clone(@model.underlying.models)
+      _.each(objs, (m) -> m.set(selected: true))
 
     approveSelected: ->
       @model.collect((m) -> m.approve())
-      foo = _.clone(@model.models)
-      _.each(foo, (m) -> m.set(selected: false))
+      @unselectAll()
 
     rejectSelected: ->
       @model.collect((m) -> m.reject())
-      foo = _.clone(@model.models)
-      _.each(foo, (m) -> m.set(selected: false))
+      @unselectAll()
 
     onShow: ->
       # TODO: move into regionLayout on App (custom)
+      @modelChangeEvent
+
+    hide: ->
+      $('#info-bar').addClass("hide")
+      $('#main').removeClass("info-bar")
+    show: ->
+      $('#info-bar').removeClass("hide")
       $('#main').addClass("info-bar")
 
     onClose: ->
@@ -41,7 +64,14 @@ define ["marionette", "backboneprojections", "models/content", "tag_it"], (Mario
 
     events:
       "click .item": "selectItem"
+      "click .view": "viewModal"
       "click a": "stopPropagation"
+
+    viewModal: (event) ->
+      # TODO: soft navigation ? without losing selection
+      SecondFunnel.app.modal.show(new Show(model: @model))
+      event.stopPropagation()
+      false
 
     stopPropagation: (event) ->
       event.stopPropagation()

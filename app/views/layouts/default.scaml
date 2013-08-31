@@ -13,7 +13,6 @@
     %meta{:content => "width=device-width", :name => "viewport"}/
     %title = title
     %link{:href => {routes.Assets.at("stylesheets/normalize.css")}, :rel => "stylesheet"}/
-    %link{:href => {routes.Assets.at("stylesheets/foundation.css")}, :rel => "stylesheet"}/
     %link{:href => {routes.Assets.at("stylesheets/app.css")}, :rel => "stylesheet"}/
     %link{:rel => "shortcut icon", :href => {routes.Assets.at("images/favicon.ico")}}
 
@@ -22,10 +21,11 @@
     %script{:src => {routes.Assets.at("javascripts/vendor/custom.modernizr.js")}}
     %script{'data-main'=> {routes.Assets.at("javascripts/init.js")}, :src => {routes.Assets.at("javascripts/require.js")}}
   %body
+    #modal
     .row
       %header.columns.large-2.small-12
       #main.columns.large-10.small-12
-        #info-bar.row
+        #info-bar.row.hide
         #title-bar.row.top-bar
         #container.row
           - unescape(body)

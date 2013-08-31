@@ -11,7 +11,11 @@
       {{/if}}
     {{/if}}
     <div class="overlay">
-      <span class="actions"><a href="/{{store-id}}/content/{{id}}"><button class="tiny">View</button></a></span>
+      <span class="actions">
+        <a class="view" href="/{{store-id}}/content/{{id}}">
+          <button class="tiny">View</button>
+        </a>
+      </span>
       {{#if approved}}
       <span class="approved bottom-right"><i class="icon-general-checkmark"></i></span>
       {{/if}}

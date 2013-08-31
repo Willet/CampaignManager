@@ -3,6 +3,8 @@
 @import "foundation-fonts/foundation_icons_general/general_foundicons"
 @import "foundation-fonts/foundation_icons_accessibility/accessibility_foundicons"
 
+// All properties are ordered:
+//  z-index, position (top,left,right), paddings/margins dimensions, visual, container related(e.g. color)
 
 $base-color: #A1A194
 $light-base-color: #FFFFFA
@@ -37,7 +39,6 @@ body, #container, html
     height: 65px
     box-shadow: 0 1px 2px rgba(0,0,0,0.3)
 
-
 header.columns
   z-index: 10
   top: 0
@@ -57,6 +58,7 @@ header.columns
   position: relative
   left: 0
   top: 0
+  @include single-transition(all, .5s, ease-in)
   &.info-bar
     top: 65px
   @media #{$small}
@@ -141,8 +143,8 @@ $selected-color: $body-font-color
   position: relative
   .edit-area
     width: 28%
-    top: 180px
-    right: 0
+    top: 140px
+    right: 10px
     border-radius: 8px
     background-color: #eee
     position: fixed
@@ -212,20 +214,26 @@ $selected-color: $body-font-color
           background-position: center center
 
 #info-bar
+  z-index: 8
+  position: fixed
+  display: block
+  top: 0
+  left: 16.66%
   padding: 0
   margin: 0
+  height: 65px
+  padding-left: 30px
+  width: 83.44%
+  box-shadow: 0 1px 2px rgba(0,0,0,0.5)
+  background-color: lighten($dark-base-color, 20%)
+  color: $light-base-color
+  @include single-transition(all, .5s, ease-in)
+  &.hide
+    top: -100px
+    opacity: 0
   > div
-    position: fixed
-    top: 0
-    // TODO: reponsive
-    left: 16.66%
-    width: 83.44%
-    z-index: 8
-    background-color: lighten($dark-base-color, 20%)
-    height: 65px
-    padding-left: 30px
     font-size: 16px
-    color: $light-base-color
+
     .columns
       padding-top: 24px
       &.actions

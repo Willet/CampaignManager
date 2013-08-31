@@ -1,4 +1,5 @@
-define ['secondfunnel', 'marionette', 'backbone', 'jquery', 'router', 'controller', 'views'], (SecondFunnel, Marionette, Backbone, $, Router, Controller, Views) ->
+define ['secondfunnel', 'marionette', 'backbone', 'jquery', 'router', 'controller', 'views', 'regions'],
+ (SecondFunnel, Marionette, Backbone, $, Router, Controller, Views, Regions) ->
   app = SecondFunnel.app = new Marionette.Application()
   app.addInitializer(->
     SecondFunnel.router = new Router()
@@ -9,6 +10,9 @@ define ['secondfunnel', 'marionette', 'backbone', 'jquery', 'router', 'controlle
       SecondFunnel.router.trigger('404')
   )
   app.addRegions(
+    modal: 
+      selector: "#modal"
+      regionType: Regions.RevealDialog
     header: "header"
     infobar: "#info-bar"
     titlebar: "#title-bar"

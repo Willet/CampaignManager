@@ -18,6 +18,7 @@ requirejs.config(
     templates: '../templates/templates.pre.min'
     backbonerelational: 'backbone.relational'
     tag_it: 'lib/jquery.taghandler'
+    jwerty: 'lib/jwerty'
   shim:
     jquery:
       exports: 'jQuery'
@@ -52,9 +53,29 @@ requirejs.config(
       exports: 'Swag'
     tag_it:
       deps: ['jquery', 'jquery_ui']
+    'foundation/foundation.abide': ['jquery', 'foundation/foundation']
+    'foundation/foundation.alerts': ['jquery', 'foundation/foundation']
+    'foundation/foundation.clearing': ['jquery', 'foundation/foundation']
+    'foundation/foundation.cookie': ['jquery', 'foundation/foundation']
+    'foundation/foundation.forms': ['jquery', 'foundation/foundation']
+    'foundation/foundation.interchange': ['jquery', 'foundation/foundation']
+    'foundation/foundation.joyride': ['jquery', 'foundation/foundation']
+    'foundation/foundation': ['jquery', 'foundation/foundation']
+    'foundation/foundation.magellan': ['jquery', 'foundation/foundation']
+    'foundation/foundation.orbit': ['jquery', 'foundation/foundation']
+    'foundation/foundation.placeholder': ['jquery', 'foundation/foundation']
+    'foundation/foundation.reveal': ['jquery', 'foundation/foundation']
+    'foundation/foundation.section': ['jquery', 'foundation/foundation']
+    'foundation/foundation.tooltips': ['jquery', 'foundation/foundation']
+    'foundation/foundation.topbar': ['jquery', 'foundation/foundation']
+    'foundation/foundation': {
+        deps: [
+          'jquery'
+        ]
+    }
 )
 
-require ["secondfunnel", "backbone", "app", "marionette", "handlebars", "swag", "jquery", "underscore", "templates"], (SecondFunnel, Backbone, App, Marionette, Handlebars, Swag, $, _, JST) ->
+require ["secondfunnel", "backbone", "app", "marionette", "handlebars", "swag", "jquery", "underscore", "foundation/foundation", "templates"], (SecondFunnel, Backbone, App, Marionette, Handlebars, Swag, $, _, Foundation, JST) ->
 
   # Handle Unauthorized (Redirect to login, etc...)
   redirectToLogin = ->
