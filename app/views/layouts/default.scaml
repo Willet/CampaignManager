@@ -18,6 +18,7 @@
 
     :javascript
       var JST = {};
+    %script{'data-main'=> {routes.Assets.at("javascripts/config/config.js")}, :src => {routes.Assets.at("javascripts/require.js")}}
     %script{:src => {routes.Assets.at("javascripts/vendor/custom.modernizr.js")}}
     %script{'data-main'=> {routes.Assets.at("javascripts/init.js")}, :src => {routes.Assets.at("javascripts/require.js")}}
   %body
