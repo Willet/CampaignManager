@@ -2,6 +2,8 @@
 @import "lib/jquery.taghandler"
 @import "foundation-fonts/foundation_icons_general/general_foundicons"
 @import "foundation-fonts/foundation_icons_accessibility/accessibility_foundicons"
+$webicons-url: "/assets/images/webicons/"
+@import "webicons"
 
 // All properties are ordered:
 //  z-index, position (top,left,right), paddings/margins dimensions, visual, container related(e.g. color)
@@ -139,79 +141,144 @@ span.bread-crumbs
 
 $selected-color: $body-font-color
 
+.content-quick-view
+  > div
+    width: 100%
+    max-width: inherit
+    margin: 10px 0
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3)
+  .image
+    > div
+      min-height: 400px
+      height: auto
+      background-repeat: no-repeat
+      background-position: center center
+      padding: 5px
+  .info
+    height: 70px
+    padding: 10px
+    button
+      margin-top: 10px
+      height: inherit
+      width: 100%
+
 #content-index
   position: relative
-  .edit-area
-    width: 28%
-    top: 140px
-    right: 10px
-    border-radius: 8px
-    background-color: #eee
-    position: fixed
-  .list
+  #list
+    > div
+      &.grid-view
+        @include grid-column($columns: 8)
+    > div
+      &.list-view
+  .list-view
     .item
-      position: relative
+      height: 350px
+  .gride-view
+    .item
       height: 160px
-      box-shadow: 0 1px 2px $dark-base-color
-      &.selected
-        .overlay .color
-          background-color: transparentize($selected-color, 0.8)
-      .overlay
-        .color
-          pointer-events: none
+  .list
+    .row > .edit-area
+      width: 28%
+      top: 225px
+      right: 10px
+      border-radius: 8px
+      background-color: #eee
+      position: fixed
+      button
+        @include grid-column($columns: 12)
+    .item
+      > div
+        height: auto
+      .edit-area
+        button
+          @include grid-column($columns: 6)
+      .image-container
+        height: 100%
+      .image
+        background-size: contain
+        width: 100%
+        height: 100%
+        background-repeat: no-repeat
+        background-position: center center
+      &.list
+        box-shadow: 0 1px 2px rgba(0,0,0,0.30)
+        margin: 10px 0px
+        .image
+          height: 100%
+      &.grid
+        position: relative
+        height: 160px
+        box-shadow: 0 1px 2px $dark-base-color
+        &.selected
+          .overlay .color
+            background-color: transparentize($selected-color, 0.8)
+        > .row
+          margin: 10px 0px
+          height: 100%
+          .image
+            background-size: contain
+            width: 100%
+            height: 100%
+            background-repeat: no-repeat
+            background-position: center center
+        .overlay
+          .color
+            pointer-events: none
+            position: absolute
+            top: 0
+            left: 0
+            width: 100%
+            height: 100%
           position: absolute
           top: 0
           left: 0
           width: 100%
           height: 100%
-        position: absolute
-        top: 0
-        left: 0
-        width: 100%
-        height: 100%
-        text-align: left
-        &:hover
-          > .actions
-            display: block
-        > span
-          margin: 5px
-        .actions
-          z-index: 100
-          display: none
-          position: absolute
-          bottom: 0
-          left: 0
-          button
-            pointer-events: auto
-            margin: 0
-            font-weight: 100
-            font-size: 12px
-            border: 0
-            background-color: $action-color
-        > .bottom-right
-          padding-right: 10px
-          text-align: right
-          // TODO: color
-          &.approved
-            color: $approved-color
-          &.rejected
-            color: $rejected-color
-          &.undecided
-            color: $undecided-color
-          position: absolute
-          bottom: 0
-          right: 0
-          width: 100%
-          line-height: 24px
-      > .row
-        margin: 10px 0px
-        height: 100%
-        .image
-          background-size: contain
-          width: 100%
-          height: 100%
-          background-repeat: no-repeat
-          background-position: center center
+          text-align: left
+          &:hover
+            > .actions
+              display: block
+          > span
+            margin: 5px
+          .actions
+            z-index: 20
+            display: none
+            position: absolute
+            bottom: 0
+            left: 0
+            width: 65%
+            button, a, input, label
+              pointer-events: auto
+            a.selected
+              label
+                font-weight: bold
+              input, form
+                margin: 0
+                padding: 0
+            button
+              border-radius: 5px
+              font-weight: bolder
+              color: $dark-base-color
+              width: 100%
+              margin: 5px
+              font-size: 12px
+              border: 0
+              background-color: $action-color
+          > .bottom-right
+            padding-right: 10px
+            text-align: right
+            // TODO: color
+            &.approved
+              color: $approved-color
+            &.rejected
+              color: $rejected-color
+            &.undecided
+              color: $undecided-color
+            position: absolute
+            bottom: 0
+            right: 0
+            width: 100%
+            line-height: 24px
 
 #info-bar
   z-index: 8
@@ -247,3 +314,20 @@ $selected-color: $body-font-color
 .related-products
   .columns
     padding: 10px
+
+// Tabing between a set of options
+.tabs.pill
+  dd
+    float: right
+    margin: 0 3px
+    a
+      border-radius: 8px
+      padding: 0 8px
+      font-size: 12px
+      line-height: 24px
+      height: 24px
+      background-color: $dark-base-color
+      color: #fff
+    &.active
+      a
+        background-color: $action-color

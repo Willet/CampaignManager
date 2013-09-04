@@ -6,7 +6,7 @@ requirejs.config(
   # be triggered, and the deps config will be confusing
   # for those cases.
 
-  baseUrl: "./assets/javascripts"
+  baseUrl: "/assets/javascripts"
 
   paths:
     backbone: 'backbone-min'
@@ -67,7 +67,7 @@ requirejs.config(
     'foundation/magellan': ['jquery', 'foundation']
     'foundation/orbit': ['jquery', 'foundation']
     'foundation/placeholder': ['jquery', 'foundation']
-    'foundation/foundation.reveal': ['jquery', 'foundation']
+    'foundation/reveal': ['jquery', 'foundation']
     'foundation/section': ['jquery', 'foundation']
     'foundation/tooltips': ['jquery', 'foundation']
     'foundation/topbar': ['jquery', 'foundation']

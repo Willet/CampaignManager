@@ -1,5 +1,5 @@
 <div class="large-4 small-6 columns">
-  <div class="item {{#if selected}}selected{{/if}}">
+  <div class="item grid {{#if selected}}selected{{/if}}">
   <div class="row center text-center">
     {{#if video}}
       <div class="image" style="background-image:url({{video-thumbnail}})" />
@@ -11,9 +11,28 @@
       {{/if}}
     {{/if}}
     <div class="overlay">
-      <span class="actions">
-        <a class="view" href="/{{store-id}}/content/{{id}}">
-          <button class="tiny">View</button>
+      <span class="actions text-center">
+        <a class="js-approve row" href="/{{store-id}}/content/{{id}}/approve">
+          <button class="small">Approve <i class="icon-general-checkmark"></i></button>
+        </a>
+        <a class="js-reject row" href="/{{store-id}}/content/{{id}}/reject">
+          <button class="small">Reject <i class="icon-general-error"></i></button>
+        </a>
+        <!--
+        <a class="js-prioritize row" href="/{{store-id}}/content/{{id}}/prioritize">
+          <button class="small">Prioritize <i class="icon-general-up-arrow"></i></button>
+          <button class="small">Deprioritize <i class="icon-general-down-arrow"></i></button>
+        </a>
+        -->
+        <a class="js-view row" href="/{{store-id}}/content/{{id}}">
+          <button class="small">Quick View <i class="icon-general-search"></i></button>
+        </a>
+        <a class="js-select selected row">
+          <button>
+            <form>
+              <label for="selected"><input type="checkbox" class="js-selected" {{#if selected}}checked{{/if}}><span class="custom checkbox"></span> Select</label>
+            </form>
+          </button>
         </a>
       </span>
       {{#if approved}}

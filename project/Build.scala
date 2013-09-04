@@ -3,9 +3,9 @@ import Keys._
 import play.Project._
 import net.litola.SassPlugin
 import com.github.play2war.plugin._
-import com.ketalo.play.plugins.emberjs.EmberJsKeys
+import ca.riedler.play.plugins.handlebars.HandlebarsKeys
 
-object ApplicationBuild extends Build with EmberJsKeys {
+object ApplicationBuild extends Build with HandlebarsKeys {
 
   val appName         = "CampaignManager"
   val appVersion      = "1.0-SNAPSHOT"
@@ -32,6 +32,6 @@ object ApplicationBuild extends Build with EmberJsKeys {
     .settings(SassPlugin.sassSettings:_*)
     .settings(Play2WarPlugin.play2WarSettings: _*)
     .settings(Play2WarKeys.servletVersion := "3.0")
-    .settings(emberJsVersion := "1.0.0-rc.7")
+    .settings(handlebarsVersion := "1.0.0")
 
 }

@@ -1,27 +1,15 @@
-<div class="row box">
-  <a href="/{{store-id}}/content/{{id}}">
-    <div class="large-4 columns">
-      <div class="row center text-center">
-        {{#if video}}
-          <img src="http://placehold.it/160x160&text=Video"/>
-        {{else}}
-          {{#if remote-url}}
-          <img src="{{images.compact.url}}"/>
-          {{else}}
-          <img src="http://placehold.it/160x160"/>
-          {{/if}}
-        {{/if}}
-      </div>
-    </div>
-    <div class="large-8 columns">
-      <dl>
-        <dt>Title</dt>
-        <dd>{{title}}</dd>
-        <dt>Description</dt>
-        <dd>{{description}}</dd>
-        <dt>Caption</dt>
-        <dd>{{caption}}</dd>
-      </dl>
-    </div>
-  </a>
+<div class="item list">
+  <div class="image-container large-4 columns">
+  {{#if video}}
+    <div class="image" style="background-image:url({{video-thumbnail}})" />
+  {{else}}
+    {{#if remote-url}}
+      <div class="image" style="background-image:url({{images.large.url}})" />
+    {{else}}
+      <div class="image" style="background-image:url('http://placehold.it/180x180&text=No Thumbnail')" />
+    {{/if}}
+  {{/if}}
+  </div>
+  <div class="edit-area large-8 columns">
+  </div>
 </div>

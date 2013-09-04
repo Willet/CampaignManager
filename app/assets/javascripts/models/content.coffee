@@ -14,7 +14,7 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
       }
     ]
     initialize: (opts, relatedOptions) ->
-      if relatedOptions['store-id']
+      if relatedOptions && relatedOptions['store-id']
         @set('store-id', relatedOptions['store-id'])
 
     url: (opts) ->
