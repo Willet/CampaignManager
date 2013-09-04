@@ -2,6 +2,8 @@ import sbt._
 import Keys._
 import play.Project._
 import net.litola.SassPlugin
+import com.blendlabsinc.sbtelasticbeanstalk.{ ElasticBeanstalk, Deployment }
+import com.blendlabsinc.sbtelasticbeanstalk.ElasticBeanstalkKeys._
 import com.github.play2war.plugin._
 import ca.riedler.play.plugins.handlebars.HandlebarsKeys
 
@@ -24,14 +26,26 @@ object ApplicationBuild extends Build with HandlebarsKeys {
   )
 
 
-  val main = play.Project(appName, appVersion, appDependencies)
-    .settings(
+  val main = play.Project(appName, appVersion, appDependencies).settings(
+      resolvers += Resolver.url("SQS Ivy", url("http://sqs.github.com/repo"))(Resolver.ivyStylePatterns),
       resolvers += Resolver.url("sbt-plugin-snapshots",
-        url("http://repo.scala-sbt.org/scalasbt/sbt-plugin-releases/"))(Resolver.ivyStylePatterns)
-      )
+        url("http://repo.scala-sbt.org/scalasbt/sbt-plugin-releases/"))(Resolver.ivyStylePatterns),
+      Play2WarKeys.servletVersion := "3.0",
+      ebS3BucketName := "???",
+      ebDeployments := Seq(
+        Deployment(
+          appName = "campaign-manager",
+          envBaseName = "production",
+          templateName = "???",
+          cname = "campaign-manager.secondfunnel.com",
+          environmentVariables = Map("RUN_ENV" -> "production")
+        )
+      ),
+      ebRegion := "us-west-2"
+    )
     .settings(SassPlugin.sassSettings:_*)
     .settings(Play2WarPlugin.play2WarSettings: _*)
-    .settings(Play2WarKeys.servletVersion := "3.0")
+    .settings(ElasticBeanstalk.elasticBeanstalkSettings: _*)
     .settings(handlebarsVersion := "1.0.0")
 
 }

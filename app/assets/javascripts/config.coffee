@@ -6,8 +6,6 @@ requirejs.config(
   # be triggered, and the deps config will be confusing
   # for those cases.
 
-  baseUrl: "/assets/javascripts"
-
   paths:
     backbone: 'backbone-min'
     underscore: 'lib/underscore'

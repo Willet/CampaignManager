@@ -9,6 +9,8 @@ resolvers += "Sonatype OSS Releases" at "https://oss.sonatype.org/content/reposi
 
 resolvers += "Sonatype OSS Snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
 
+resolvers += Resolver.url("SQS Ivy", url("http://sqs.github.com/repo"))(Resolver.ivyStylePatterns)
+
 // Add your local publishes
 // resolvers += Resolver.file("Local repo", file("/Users/ariedler/.ivy2/local"))(Resolver.ivyStylePatterns)
 
@@ -27,6 +29,9 @@ addSbtPlugin("net.litola" % "play-sass" % "0.2.0")
 // For WAR compilation
 addSbtPlugin("com.github.play2war" % "play2-war-plugin" % "1.0")
 
-// Support for Ember Handlebars
+// For Elastic Beanstalk Deploy
+addSbtPlugin("com.blendlabsinc" % "sbt-elasticbeanstalk-plugin" % "0.0.6-SNAPSHOT")
+
+// Support for Handlebars Templates
 addSbtPlugin("ca.riedler" % "play-handlebars" % "0.0.1-SNAPSHOT")
 

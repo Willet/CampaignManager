@@ -6,11 +6,11 @@ import play.api.mvc._
 object Application extends Controller {
 
   def root = Action {
-    Ok(Scalate("main.scaml").render())
+    Ok(views.html.main())
   }
 
   def index(file: String) = Action {
-    Ok(Scalate("main.scaml").render())
+    Ok(views.html.main())
   }
 
   def notFound(file: String) = Action {
