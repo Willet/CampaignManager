@@ -31,29 +31,36 @@
       <div class="row">
         <span class="columns large-2 inline"><label class="inline"><b>Tags</b></label></span>
         <span class="columns large-10">
-          <ul id="js-tag-search">
-            <li>Samsung</li>
-            <li>Hard-drive</li>
-          </ul>
-          <!--input type="text" placeholder="Tag"-->
+          <ul id="js-tag-search"></ul>
         </span>
       </div>
     </div>
     <div class="columns" />
   </div>
 
-  <div id="view-mode-select" class="row"></div>
 
-  <div class="row">
-    <div id="list" class="columns">
+  <div id="list">
+    <div id="view-mode-select" class="row">
+      <div class="large-6 columns">
+        <dl class="tabs pill small">
+          <dd class="js-tab-grid active"><a class="js-grid">Grid</a></dd>
+          <dd class="js-tab-list"><a class="js-list">List</a></dd>
+        </dl>
+      </div>
+      <div class="large-6 columns text-right">
+        <a href="#" class="js-select-all">Select All</a> |
+        <a href="#" class="js-unselect-all">Clear Selection</a>
+      </div> 
+    </div>
+    <div id="items">
       <!-- list inserted here -->
+      {{#empty this}}
+      No content meets selected criteria
+      {{/empty}}
     </div>
     <div class="edit-area columns large-4">
     </div>
   </div>
 
-  {{#empty this}}
-  No content meets selected criteria
-  {{/empty}}
 </div>
 

@@ -1,19 +1,28 @@
-<div>
+<div class="caption">
   <label class="inline"><b>Caption</b></label>
-  <textarea>{{combined.caption}}</textarea>
+  <p>{{caption}}</p>
 </div>
 <div>
   <label class="inline"><b>Tagged Products</b></label>
   <span>
-    <ul class="js-tagged-products" />
+    <ul class="js-tagged-products"></ul>
   </span>
 </div>
 <div>
   <label class="inline"><b>Tagged Pages</b></label>
   <span>
-    <ul class="js-tagged-pages" />
+    <ul class="js-tagged-pages"></ul>
   </span>
 </div>
-<button class="js-approve small success">Approve</button>
-<button class="js-reject small alert">Reject</button>
+<div class="actions">
+  <a class="js-undecided undecided {{#if undecided}}active{{/if}}" title="Reset">
+    <i class="icon-accessibility-question"></i>
+  </a>
+  <a class="js-reject reject {{#if rejected}}active{{/if}}" title="Reject">
+    <i class="icon-general-error"></i>
+  </a>
+  <a class="js-approve approve {{#if approved}}active{{/if}}" title="Approve">
+    <i class="icon-general-checkmark"></i>
+  </a>
+</div>
 <!--button class="js-prioritize tiny">Prioritize</button-->

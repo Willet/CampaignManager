@@ -31,14 +31,14 @@ object ApplicationBuild extends Build with HandlebarsKeys {
       resolvers += Resolver.url("sbt-plugin-snapshots",
         url("http://repo.scala-sbt.org/scalasbt/sbt-plugin-releases/"))(Resolver.ivyStylePatterns),
       Play2WarKeys.servletVersion := "3.0",
-      ebS3BucketName := "???",
+      ebS3BucketName := "elasticbeanstalk-us-west-2-056265713214",
       ebDeployments := Seq(
         Deployment(
           appName = "campaign-manager",
           envBaseName = "production",
-          templateName = "???",
-          cname = "campaign-manager.secondfunnel.com",
-          environmentVariables = Map("RUN_ENV" -> "production")
+          templateName = "campaignmanager-dev",
+          cname = "campaignmanager-dev.secondfunnel.com",
+          environmentVariables = Map()
         )
       ),
       ebRegion := "us-west-2"

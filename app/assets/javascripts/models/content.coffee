@@ -21,17 +21,21 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
       "#{SecondFunnel.apiRoot}/stores/#{@get('store-id')}/content/#{@get('id') || ''}"
 
     reject: ->
-      # TODO: two-way
       @save(
         active: false
         approved: false
       )
 
     approve: ->
-      # TODO: two-way
       @save(
         active: true
         approved: true
+      )
+
+    undecided: ->
+      @save(
+        active: true
+        approved: false
       )
 
     viewJSON: ->
@@ -41,10 +45,13 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
       if @get('active')
         if @get('approved')
           json['approved'] = true
+          json['state'] = 'approved'
         else
           json['undecided'] = true
+          json['state'] = 'undecided'
       else
         json['rejected'] = true
+        json['state'] = 'rejected'
       if @get('original-url') && /youtube/i.test(@get('original-url'))
         json['video'] = true
         video_id = @get('original-url').match(/v=(.+)/)[1]

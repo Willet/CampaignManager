@@ -13,6 +13,8 @@
   background-image: none;
   background-position: 0 0;
   background-repeat: repeat;
+  font-style: normal;
+  font-weight: normal;
 }
 [class*="#{$classPrefix}"]:before {
   font-family: $fontName;
