@@ -7,7 +7,7 @@ define ['secondfunnel', 'marionette', 'backbone', 'jquery', 'router', 'controlle
     SecondFunnel.controller = new Controller()
     SecondFunnel.app.header.show(new Views.Main.Nav(model: new Backbone.Model(page: "none")))
     SecondFunnel.app.titlebar.show(new Views.Main.TitleBar(model: new Backbone.Model({title: "Loading..."})))
-    if (!Backbone.history.start(pushState: true))
+    if (!Backbone.history.start({pushState: true, root: window.appRoot}))
       SecondFunnel.router.trigger('404')
   )
   app.addRegions(

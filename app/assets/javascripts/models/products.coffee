@@ -20,7 +20,7 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
       }
     ]
     url: (opts) ->
-      "/api/stores/#{@get('store-id')}/products/#{@get('id') || ''}"
+      "#{SecondFunnel.apiRoot}/stores/#{@get('store-id')}/products/#{@get('id') || ''}"
     viewJSON: ->
       json = @toJSON()
       json['content-ids'] = @get('content-ids')?.viewJSON()
@@ -39,7 +39,7 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
       #       to check if multi-function
       @store_id = @hasmodel?.get?('store-id') || @store_id
       _.each(opts, (m) => m.set("store-id", @store_id))
-      "/api/stores/#{@store_id}/products"
+      "#{SecondFunnel.apiRoot}/stores/#{@store_id}/products"
     parse: (data) ->
       data['products']
     comparator: (model) ->

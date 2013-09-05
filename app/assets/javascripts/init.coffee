@@ -2,7 +2,7 @@ require ["secondfunnel", "backbone", "app", "marionette", "handlebars", "swag", 
 
   # Handle Unauthorized (Redirect to login, etc...)
   redirectToLogin = ->
-    locationhref = "/login"
+    locationhref = "#{window.appRoot}login"
     if (location.hash && location.hash.length > 0)
       locationhref += "?r=" + location.hash.substring(1)
     location.href = locationhref

@@ -3,13 +3,13 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
   class Model extends Backbone.RelationalModel
     relations: []
     url: (opts) ->
-      "/api/stores/#{@get('id')}"
+      "#{SecondFunnel.apiRoot}/stores/#{@get('id')}"
 
   Model.setup()
 
   class Collection extends Backbone.Collection
     url: (opts) ->
-      "/api/stores"
+      "#{SecondFunnel.apiRoot}/stores"
     parse: (data) ->
       data['stores']
 
