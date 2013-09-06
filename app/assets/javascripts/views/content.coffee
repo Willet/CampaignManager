@@ -1,4 +1,4 @@
-define ["marionette", "backboneprojections", "models/content", "tag_it"], (Marionette, BackboneProjections, Content, TagIt) ->
+define ["marionette", "backboneprojections", "models/content", "tokeninput"], (Marionette, BackboneProjections, Content, TokenInput) ->
 
   class ListItem extends Marionette.Layout
 
@@ -37,7 +37,7 @@ define ["marionette", "backboneprojections", "models/content", "tag_it"], (Mario
       "editArea": ".edit-area"
 
     events:
-      "click .item": "selectItem"
+      "click .overlay": "selectItem"
       "click .js-view": "viewModal"
       "click .js-approve": "approveContent"
       "click .js-reject": "rejectContent"
@@ -120,8 +120,17 @@ define ["marionette", "backboneprojections", "models/content", "tag_it"], (Mario
 
     onShow: ->
       _.defer =>
-        @$('.js-tagged-products').tagHandler()
-        @$('.js-tagged-pages').tagHandler()
+        $.when(
+          @model.fetchRelated("product-ids")
+          #,@model.fetchRelated("page-ids")
+        ).done(=>
+          @$('.js-tagged-products').tokenInput(
+            prePopulate: @model.get("product-ids").collect((m) -> m.attributes)
+          )
+          tagged_products = @$(".js-tagged-products")
+          @model.get("product-ids").collect((m) => tagged_products.tokenInput("add", m.attributes))
+          @$('.js-tagged-pages').tokenInput()
+        )
 
   class ContentList extends Marionette.CollectionView
 
@@ -184,7 +193,7 @@ define ["marionette", "backboneprojections", "models/content", "tag_it"], (Mario
     onRender: (opts) ->
       @itemRegion.show(@contentListView)
       @editArea.show(@editView)
-      @$('#js-tag-search').tagHandler()
+      @$('#js-tag-search').tokenInput()
 
     onShow: (opts) ->
 

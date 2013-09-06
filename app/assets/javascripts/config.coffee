@@ -17,7 +17,7 @@ requirejs.config(
     handlebars: 'handlebars'
     templates: '../templates/templates.pre.min'
     backbonerelational: 'backbone.relational'
-    tag_it: 'lib/jquery.taghandler'
+    tokeninput: 'lib/jquery.tokeninput'
     jwerty: 'lib/jwerty'
     foundation: 'lib/foundation'
   shim:
@@ -52,8 +52,8 @@ requirejs.config(
     swag:
       deps: ['handlebars']
       exports: 'Swag'
-    tag_it:
-      deps: ['jquery', 'jquery_ui']
+    tokeninput:
+      deps: ['jquery']
     foundation: ['jquery']
     'foundation/abide': ['jquery', 'foundation']
     'foundation/alerts': ['jquery', 'foundation']
