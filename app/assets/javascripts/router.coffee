@@ -10,7 +10,10 @@ define ["marionette", "controller"], (Marionette, Controller) ->
       ":store_id/content": "contentIndex"
       ":store_id/content/:id": "contentShow"
       ":store_id/pages": "pagesIndex"
-      ":store_id/pages/:id": "pagesShow"
+      ":store_id/pages/:id": "pagesName"
+      ":store_id/pages/:id/layout": "pagesLayout"
+      ":store_id/pages/:id/products": "pagesProducts"
+      ":store_id/pages/:id/content": "pagesContent"
 
     # standard not controller routes (call function in this router)
     routes: {}

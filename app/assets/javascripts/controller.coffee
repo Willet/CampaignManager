@@ -34,15 +34,51 @@ define [
           )
         )
 
-      pagesShow: (store_id, id) ->
+      pagesName: (store_id, id) ->
         store = Models.Store.Model.findOrCreate(id: store_id)
         model = Models.Pages.Model.findOrCreate(id: id, "store-id": store_id)
         $.when(
           store.fetch(),
           model.fetch()
         ).done(->
-          SecondFunnel.app.main.show(new Views.Pages.Show(model: model))
-          SecondFunnel.app.titlebar.currentView.model.set(title: "Page: #{model.get('name')}")
+          SecondFunnel.app.main.show(new Views.Pages.Name(model: model))
+          SecondFunnel.app.titlebar.currentView.model.set(title: "Pages")
+          SecondFunnel.app.header.currentView.model.set(page: "pages", store: store)
+        )
+
+      pagesLayout: (store_id, id) ->
+        store = Models.Store.Model.findOrCreate(id: store_id)
+        model = Models.Pages.Model.findOrCreate(id: id, "store-id": store_id)
+        $.when(
+          store.fetch(),
+          model.fetch()
+        ).done(->
+          SecondFunnel.app.main.show(new Views.Pages.Layout(model: model))
+          SecondFunnel.app.titlebar.currentView.model.set(title: "Pages")
+          SecondFunnel.app.header.currentView.model.set(page: "pages", store: store)
+        )
+
+      pagesProducts: (store_id, id) ->
+        store = Models.Store.Model.findOrCreate(id: store_id)
+        model = Models.Pages.Model.findOrCreate(id: id, "store-id": store_id)
+        $.when(
+          store.fetch(),
+          model.fetch()
+        ).done(->
+          SecondFunnel.app.main.show(new Views.Pages.Products(model: model))
+          SecondFunnel.app.titlebar.currentView.model.set(title: "Pages")
+          SecondFunnel.app.header.currentView.model.set(page: "pages", store: store)
+        )
+
+      pagesContent: (store_id, id) ->
+        store = Models.Store.Model.findOrCreate(id: store_id)
+        model = Models.Pages.Model.findOrCreate(id: id, "store-id": store_id)
+        $.when(
+          store.fetch(),
+          model.fetch()
+        ).done(->
+          SecondFunnel.app.main.show(new Views.Pages.Content(model: model))
+          SecondFunnel.app.titlebar.currentView.model.set(title: "Pages")
           SecondFunnel.app.header.currentView.model.set(page: "pages", store: store)
         )
 

@@ -1,0 +1,60 @@
+{{> "pages_wizard_header"}}
+<div class="content">
+  <h4>Add Products</h4>
+  <div class="page-edit products">
+    <div class="container row">
+      <div class="add-products">
+        <div class="row">
+          <span class="large-4 columns inline">Add by URL</span>
+          <span class="large-6 columns">
+            <input type="text" placeholder="http://..." />
+          </span>
+          <span class="large-2 columns text-center">
+            <a href="#" class="small button">Add</a>
+          </span>
+        </div>
+        <div class="row">
+          <span class="large-4 columns inline">Add by Search</span>
+          <span class="large-6 columns">
+            <input type="text" placeholder="Search by product or category" />
+          </span>
+          <span class="large-2 columns text-center">
+            <a href="#" class="small button">Add</a>
+          </span>
+        </div>
+        <div class="row">
+          <span class="large-4 columns">&nbsp;</span>
+          <span class="large-6 columns">
+            <div class="product-results">
+              <ul>
+              <li>
+                <span class="link large-8 columns">http://www.gap.ca/categories/awesome/359032</span>
+                <span class="action large-2 columns text-right">
+                  <a href="#" class="">Refresh</a>
+                </span>
+                <span class="action large-2 columns text-left">
+                  <a href="#" class="">Delete</a>
+                </span>
+              </li>
+              </ul>
+            </div>
+          </span>
+          <span class="large-2 columns">&nbsp;</span>
+        </div>
+      </div>
+      <p class="text-center row">Review products that have been added to the page and/or prioritize products to appear at the top of the page</p>
+      <div class="actions row text-center">
+        <a href="#" class="button small">Approved For Page</a>
+        <a href="#" class="button small">Rejected For Page</a>
+      </div>
+      <div class="products row text-left">
+        <p>
+        No products have been added to this page
+        </p>
+      </div>
+    </div>
+    <div class="actions row">
+      <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/content">Save &amp; Continue</a>
+    </div>
+  </div>
+</div>

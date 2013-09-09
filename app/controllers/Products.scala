@@ -18,10 +18,11 @@ object Products extends Controller {
       Status(response.status)(response.body)
   }
 
-  def index(store_id:Long)  = Action {
-    val request = WS.url("http://contentgraph-test.elasticbeanstalk.com/graph/store/" + store_id + "/product/live/")
+  def index(store_id:Long)  = Action { implicit request =>
+    val queryParams = "?" + request.rawQueryString
+    val cg_request = WS.url("http://contentgraph-test.elasticbeanstalk.com/graph/store/" + store_id + "/product/live/" + queryParams)
     Async {
-      request.withHeaders(apiHeaders)
+      cg_request.withHeaders(apiHeaders)
         .get()
         .map(relayResponse)
     }

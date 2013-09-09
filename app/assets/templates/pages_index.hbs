@@ -1,26 +1,49 @@
-<div class="list">
-  <table>
-    <thead>
-    <tr>
-      <th>Name</th>
-      <th class="text-center">Created</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th width=100></th>
-    </tr>
-    </thead>
-    <tbody>
-    {{#each this}}
+<div class="content">
+  <div class="actions">
+    <button id="new-page" class="small">New Page</button>
+    <button id="new-page" class="small">Edit Most Recent</button>
+  </div>
+  <div class="criteria">
+    <div class="row">
+      <span class="large-1 columns">Sort</span>
+      <span class="large-11 columns">
+         <select>
+          <option>Most Recent</option>
+          <option>Name</option>
+        </select> 
+      </span>
+    </div>
+    <div class="row">
+      <span class="large-1 columns">Search</span>
+      <span class="large-11 columns">
+        <input type="text" id="js-page-search" placeholder="Page Name"/>
+      </span>
+    </div>
+  </div>
+  <div class="list">
+    <table class="large-12">
+      <thead>
       <tr>
-        <td><a href="/{{store-id}}/pages/{{id}}">{{name}}</a></td>
-        <td>{{formatDate created '%d/%m/%Y'}}</td>
-        <td><a href="#">Edit<a/></td>
-        <td><a href="#">View</a></td>
-        <td><a href="#">Analytics</a></td>
-        <td><a href="#">Delete</a></td>
+        <th>Name</th>
+        <th>Last Saved</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <!-- TODO: th></th -->
       </tr>
-    {{/each}}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+      {{#each page}}
+        <tr>
+          <td><a href="/{{store-id}}/pages/{{id}}">{{name}}</a></td>
+          <td>{{formatDate page.created '%d/%m/%Y'}}</td>
+          <td><a href="/{{store-id}}/pages/{{id}}">Edit Page<a/></td>
+          <td><a href="/{{store-id}}/pages/{{id}}/view">View Page</a></td>
+          <td><a href="/{{store-id}}/pages/{{id}}/analytics">Analytics</a></td>
+          <!-- TODO: td><a href="#">Duplicate</a></td-->
+        </tr>
+      {{/each}}
+      </tbody>
+    </table>
+  </div>
 </div>

@@ -1,0 +1,80 @@
+@import "colors"
+
+ol.steps
+  $padding: 10px
+  $line-height: 22px
+  $arrow-size: ($line-height + 2 * $padding) / 2
+  $max-li: 10
+
+  list-style: none
+  margin: 0
+  padding: 0
+  overflow: hidden
+  font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', 'DejaVu Sans', 'Bitstream Vera Sans', 'Liberation Sans', Verdana, 'Verdana Ref', sans-serif
+  font-size: 13px
+  line-height: $line_height
+  font-weight: bold
+
+  li
+    list-style-image: none
+    list-style-type: none
+
+    text-align: center
+    a, a:active, a:link, a:visited
+      color: $light-base-color
+
+    position: relative
+    margin-left: 5px + 2 * $arrow-size
+
+    // Add the arrow
+    &:after
+      position: absolute
+      top: 50%
+      left: 100%
+      content: " "
+      height: 0
+      width: 0
+      pointer-events: none
+      border: solid transparent
+      border-left-color: $action-color
+      border-width: $arrow-size
+      margin-top: -$arrow-size
+    &:first-child
+      margin-left: 0
+      span
+        padding: $padding
+        &:after
+          border: none
+    &:last-child
+      &:after
+        border-width: 0
+    span
+      display: block
+      padding: $padding ($padding + $arrow-size) $padding $padding
+      background-color: $action-color
+
+      // Prepend arrow inset
+      &:after
+        position: absolute
+        top: 50%
+        right: 100%
+        content: " "
+        height: 0
+        width: 0
+        pointer-events: none
+        border: solid $action-color
+        border-left-color: transparent
+        border-width: $arrow-size
+        margin-top: -$arrow-size
+  li.active
+    a, a:active, a:link, a:visited
+      color: $light-base-color
+    &:after
+      border-left-color: $dark-base-color
+    span
+      background: $dark-base-color
+      &:after
+        border-color: $dark-base-color
+        border-left-color: transparent
+  & > li
+    float: left

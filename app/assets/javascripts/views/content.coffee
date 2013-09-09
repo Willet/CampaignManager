@@ -124,11 +124,12 @@ define ["marionette", "backboneprojections", "models/content", "tokeninput"], (M
           @model.fetchRelated("product-ids")
           #,@model.fetchRelated("page-ids")
         ).done(=>
-          @$('.js-tagged-products').tokenInput(
+          tagged_products = @$(".js-tagged-products")
+          tagged_products.tokenInput("#{SecondFunnel.apiRoot}/stores/#{@model.get("store-id")}/products",
+            queryParam: "name-prefix"
+            resultsLimit: 8
             prePopulate: @model.get("product-ids").collect((m) -> m.attributes)
           )
-          tagged_products = @$(".js-tagged-products")
-          @model.get("product-ids").collect((m) => tagged_products.tokenInput("add", m.attributes))
           @$('.js-tagged-pages').tokenInput()
         )
 

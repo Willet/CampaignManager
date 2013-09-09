@@ -1,0 +1,20 @@
+{{> "pages_wizard_header"}}
+
+<div class="content">
+  <h4>Select Content</h4>
+
+  <div class="page-edit content">
+
+    <div class="filter-actions row">
+      <ul class="button-group radius">
+        <li><a href="#" class="js-needs-review button small">Needs Review</a></li>
+        <li><a href="#" class="js-approved button small">Approved for Page</a></li>
+      </ul>
+    </div>
+    {{> "content_index"}}
+
+    <div class="actions row">
+      <a class="js-next button small" href="/{{store-id}}/pages">Save Page</a>
+    </div>
+  </div>
+</div>

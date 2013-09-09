@@ -8,19 +8,15 @@ $webicons-url: "../images/webicons/"
 // All properties are ordered:
 //  z-index, position (top,left,right), paddings/margins dimensions, visual, container related(e.g. color)
 
-$base-color: #A1A194
-$light-base-color: #FFFFFA
-$dark-base-color: #464646
-$body-font-color: #FF6600
-$link-color: lighten(#087891,17%)
-
-$approved-color: #00D178
-$rejected-color: #FF7030
-$undecided-color: #FFBE41
-$action-color: #08BBCC
+@import "colors"
+@import "steps"
 
 a, a:link, a:visited
   color: $link-color
+  &.button
+    color: #fefefe
+    &.active
+      background-color: #2284a1
 
 a:hover
   color: lighten($link-color, 5%)
@@ -136,10 +132,10 @@ nav
 span.bread-crumbs
   margin: 8px
 
-#container
-  padding: 2em
-
 $selected-color: $body-font-color
+
+div.content
+  margin: 2em
 
 .reveal-modal.open
   padding: 10px 15px !important
@@ -190,6 +186,7 @@ $selected-color: $body-font-color
 
   #list
     font-size: 14px
+    padding: 0 0 !important
 
   &.list-view #list
     @include grid-column($columns: 12)
@@ -250,8 +247,8 @@ $selected-color: $body-font-color
   &.grid-view .edit-area
     position: fixed
     width: 28%
-    top: 220px
-    right: 10px
+    top: 212px
+    right: 6px
     border-radius: 8px
     background-color: #fafafa
     border: 1px solid #e0e0e0
@@ -401,3 +398,59 @@ $selected-color: $body-font-color
     &.active
       a
         background-color: $action-color
+
+.page-edit
+  text-align: center
+  > .container, > .actions
+    text-align: right
+    margin: 0 auto
+    > .layout-types
+      .layout-type
+        @include grid-column($columns: 4)
+        border: 1px solid #eee
+        text-align: center
+        &.selected
+          border: 1px solid $action-color
+          background-color: lighten($action-color, 45%)
+        .label
+  &.content
+    .filter-actions
+      .button-group
+        margin: 0 auto
+        width: 33%
+  &.products
+    border-radius: 5px
+    margin: auto
+    padding: 8px
+    .actions
+      margin: 10px 0
+    .product-results
+      overflow-y: scroll
+      min-height: 120px
+      border: 1px solid #ccc
+      ul
+        list-style: none
+        text-align: left
+        li
+          .link
+            overflow: hidden
+          .action
+            font-weight: bold
+          font-size: 14px
+    .products
+      min-height: 300px
+      padding: 10px
+      margin: 10px 0
+
+#page-wizard-header
+  background: #eee
+  box-shadow: 0 1px 2px rgba(0,0,0,0.3)
+  h1
+    font-size: 16px
+  .row
+    > h1, > a
+      line-height: 34px
+  .steps
+    width: 100%
+    li
+      width: 15%

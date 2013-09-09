@@ -1,4 +1,4 @@
-guard 'livereload' do
+guard 'livereload', grace_period: 1 do
   watch(%r{app/views/.+\.(html)})
   watch(%r{app/assets/templates/.+\.(hbs)}) { |m| "/assets/templates/templates.pre.min.js" }
   watch(%r{app/assets/.+\.(less|css|js|scss|sass)$}) { |m| "/assets/stylesheets/app.css"}
