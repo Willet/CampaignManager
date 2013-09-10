@@ -1,57 +1,58 @@
 {{> "pages_wizard_header"}}
 <div class="content">
+  <h4>Layout</h4>
   <div class="page-edit layout">
     <div class="container">
       <div class="layout-types text-center">
-          <div class="layout-type columns selected">
-            <span class="row"><img src="http://placehold.it/100x100" /></span>
-            <span class="row">Hero Image</span>
+          <div class="layout-type js-layout-hero columns">
+            <span class="row"><img src="http://placehold.it/200x100" /></span>
+            <label class="row">Hero Image</label>
           </div>
-          <div class="layout-type columns">
-            <span class="row"><img src="http://placehold.it/100x100" /></span>
-            <span class="row">Featured Product</span>
+          <div class="layout-type js-layout-featured columns">
+            <span class="row"><img src="/assets/images/cb-product-200x100.png" /></span>
+            <label lass="row">Featured Product</label>
           </div>
-          <div class="layout-type columns">
-            <span class="row"><img src="http://placehold.it/100x100" /></span>
-            <span class="row">Shop The Look</span>
+          <div class="layout-type js-layout-shopthelook columns">
+            <span class="row"><img src="/assets/images/cb-split-200x100.png" /></span>
+            <label class="row">Shop The Look</label>
           </div>
       </div>
       <br/>
       <hr />
       <div class="layout-options">
         <div class="row">
-          <span class="large-4 columns inline">Hero Image (Desktop)</span>
-          <span class="large-8 columns">
+          <label class="large-2 columns inline">Hero Image (Desktop)</label>
+          <span class="large-10 columns">
             <input type="file" value="{{page.hero_desktop}}" />
           </span>
         </div>
         <div class="row">
-          <span class="large-4 columns inline">Hero Image (Mobile)</span>
-          <span class="large-8 columns">
+          <label class="large-2 columns inline">Hero Image (Mobile)</label>
+          <span class="large-10 columns">
             <input type="file" value="{{page.hero_mobile}}" />
           </span>
         </div>
         <div class="row">
-          <span class="large-4 columns inline">Legal Copy</span>
-          <span class="large-8 columns">
+          <label class="large-2 columns inline">Legal Copy</label>
+          <span class="large-10 columns">
             <textarea placeholder="enter text...">{{page.legal}}</textarea>
           </span>
         </div>
         <div class="row">
-          <span class="large-4 columns inline">Facebook Share Copy</span>
-          <span class="large-8 columns">
+          <label class="large-2 columns inline">Facebook Share Copy</label>
+          <span class="large-10 columns">
             <input type="text" value="{{page.facebook_share}}" placeholder="enter text..." />
           </span>
         </div>
         <div class="row">
-          <span class="large-4 columns inline">Twitter Share Copy</span>
-          <span class="large-8 columns">
+          <label class="large-2 columns inline">Twitter Share Copy</label>
+          <span class="large-10 columns">
             <input type="text" value="{{page.twitter_share}}" placeholder="enter text..." />
           </span>
         </div>
         <div class="row">
-          <span class="large-4 columns inline">Email Share Copy</span>
-          <span class="large-8 columns">
+          <label class="large-2 columns inline">Email Share Copy</label>
+          <span class="large-10 columns">
             <input type="text" value="{{page.email_share}}" placeholder="enter text..." />
           </span>
         </div>

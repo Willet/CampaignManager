@@ -6,12 +6,13 @@ define ["marionette", "models/pages"], (Marionette, Pages) ->
 
     serializeData: ->
       return {
-        page: @model.toJSON()
+        pages: @collection.toJSON()
         "store-id": @model.get("store-id")
         "title": @model.get("name")
       }
 
     initialize: (opts) ->
+      @collection = @model
 
     onRender: (opts) ->
 
@@ -62,6 +63,7 @@ define ["marionette", "models/pages"], (Marionette, Pages) ->
         page: @model.toJSON()
         "store-id": @model.get("store-id")
         "title": @model.get("name")
+        products: []
       }
 
     initialize: (opts) ->
