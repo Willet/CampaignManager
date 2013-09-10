@@ -18,7 +18,7 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
         @set('store-id', relatedOptions['store-id'])
 
     url: (opts) ->
-      "#{SecondFunnel.apiRoot}/stores/#{@get('store-id')}/content/#{@get('id') || ''}"
+      "#{require("app").apiRoot}/stores/#{@get('store-id')}/content/#{@get('id') || ''}"
 
     reject: ->
       @save(
@@ -113,7 +113,7 @@ define ["backbone", "backbonerelational"], (Backbone, BackboneRelational)->
       #       to check if multi-function
       @store_id = @hasmodel?.get?('store-id') || @store_id
       _.each(opts, (m) => m.set("store-id", @store_id))
-      "#{SecondFunnel.apiRoot}/stores/#{@store_id}/content"
+      "#{require("app").apiRoot}/stores/#{@store_id}/content"
     parse: (data) ->
       data['content']
     comparator: (model) ->

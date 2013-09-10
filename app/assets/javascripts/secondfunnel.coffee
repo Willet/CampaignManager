@@ -1,5 +1,6 @@
 define [], ->
-  window.SecondFunnel =
+  SecondFunnel =
+    appRoot: window.appRoot
     apiRoot: "#{window.appRoot}api"
     Views: {}
     Regions: {}

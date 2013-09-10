@@ -1,4 +1,4 @@
-require ['jquery', 'secondfunnel'], ($, SecondFunnel) ->
+require ['backbone', 'jquery'], (Backbone, $) ->
   # Globally capture clicks. If they are internal and not in the pass
   # through list, route them through Backbone's navigate method.
   $(document).on "click", "a[href^='/']", (event) ->
@@ -16,7 +16,7 @@ require ['jquery', 'secondfunnel'], ($, SecondFunnel) ->
       url = href.replace(/^\//,'').replace('\#\!\/','')
 
       # Instruct Backbone to trigger routing events
-      SecondFunnel.router.navigate url, { trigger: true }
+      Backbone.history.navigate url, { trigger: true }
       document.body.scrollTop = 0
 
       return false

@@ -22,7 +22,7 @@ define ["marionette", "backboneprojections", "models/content", "tokeninput"], (M
 
     viewModal: (event) ->
       # TODO: soft navigation ? without losing selection
-      SecondFunnel.app.modal.show(new Show(model: @model))
+      require("app").modal.show(new Show(model: @model))
       event.stopPropagation()
       false
 
@@ -76,7 +76,7 @@ define ["marionette", "backboneprojections", "models/content", "tokeninput"], (M
 
     viewModal: (event) ->
       # TODO: soft navigation ? without losing selection
-      SecondFunnel.app.modal.show(new QuickView(model: @model))
+      require("app").modal.show(new QuickView(model: @model))
       event.stopPropagation()
       false
 
@@ -125,7 +125,7 @@ define ["marionette", "backboneprojections", "models/content", "tokeninput"], (M
           #,@model.fetchRelated("page-ids")
         ).done(=>
           tagged_products = @$(".js-tagged-products")
-          tagged_products.tokenInput("#{SecondFunnel.apiRoot}/stores/#{@model.get("store-id")}/products",
+          tagged_products.tokenInput("#{require("app").apiRoot}/stores/#{@model.get("store-id")}/products",
             queryParam: "name-prefix"
             resultsLimit: 8
             prePopulate: @model.get("product-ids").collect((m) -> m.attributes)
@@ -154,7 +154,7 @@ define ["marionette", "backboneprojections", "models/content", "tokeninput"], (M
       "click .js-select-all": "selectAll"
       "click .js-unselect-all": "unselectAll"
       "click dd": "updateActive"
-  
+
     updateActive: (event) ->
       @switchActive(@extractState(event.currentTarget))
 
@@ -206,7 +206,7 @@ define ["marionette", "backboneprojections", "models/content", "tokeninput"], (M
 
     events:
       "click dd": "updateActive"
-  
+
     initialize: (opts) ->
       @current_state = opts['inital_state']
 
@@ -255,7 +255,6 @@ define ["marionette", "backboneprojections", "models/content", "tokeninput"], (M
       @model.save(data)
       false
 
-  # declare exports
   return {
     Index: Index
     Show: Show
