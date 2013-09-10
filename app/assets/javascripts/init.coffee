@@ -2,19 +2,16 @@ require [
   "app",
   "backbone",
   "marionette",
-  "handlebars",
-  "swag",
   "jquery",
   "underscore",
-  "foundation",
-  "templates",
+  # sub modules to load, they attach to the application
   "apps/contentmanager/app",
   "apps/pageswizard/app"
-], (App, Backbone, Marionette, Handlebars, Swag, $, _, Foundation, JST) ->
+], (App, Backbone, Marionette, $, _) ->
 
   # Handle Unauthorized (Redirect to login, etc...)
   redirectToLogin = ->
-    locationhref = "#{window.appRoot}login"
+    locationhref = "#{App.appRoot}login"
     if (location.hash && location.hash.length > 0)
       locationhref += "?r=" + location.hash.substring(1)
     location.href = locationhref
@@ -28,7 +25,4 @@ require [
   Backbone.Model.prototype.toJSON = (opts) ->
     _.omit(@attributes, @blacklist || {})
 
-  # Add additonal handlebars helpers
-  Swag.registerHelpers(Handlebars)
-
-  $().ready(-> App.start(); console.log App)
+  $().ready(-> App.start())

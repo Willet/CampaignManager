@@ -1,4 +1,4 @@
-define ["regions/reveal"], (Reveal) ->
+define ["components/regions/reveal"], (Reveal) ->
   return {
     RevealDialog: Reveal.RevealDialog
   }
