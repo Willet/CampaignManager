@@ -4,7 +4,7 @@ define [
   'marionette',
   'jquery',
   'underscore',
-  'views'
+  'views/contentmanager'
 ], (App, Backbone, Marionette, $, _, Views) ->
 
   ContentManager = App.module("ContentManager")
@@ -25,7 +25,7 @@ define [
         store.fetch(),
         collection.fetch()
       ).done(->
-        App.main.show(new Views.Content.Index(model: collection))
+        App.main.show(new Views.Index(model: collection))
         App.titlebar.currentView.model.set({title: "Content"})
         App.header.currentView.model.set(page: "content", store: store)
       )
@@ -48,7 +48,7 @@ define [
           )
         )
       ).done(=>
-        App.main.show(new Views.Content.Show(model: model))
+        App.main.show(new Views.Show(model: model))
         App.titlebar.currentView.model.set(title: "Content: #{model.get("title") || ""}")
         App.header.currentView.model.set(page: "content", store: store)
       )

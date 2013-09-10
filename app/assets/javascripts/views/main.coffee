@@ -20,12 +20,6 @@ define ["marionette"], ->
 
     template: "main_index"
 
-    initialize: (opts) ->
-
-    onRender: (opts) ->
-
-    onShow: (opts) ->
-
   class Nav extends Marionette.ItemView
 
     template: "nav"
@@ -39,10 +33,6 @@ define ["marionette"], ->
       json['page'] = @model.get('page')
       json
 
-    onRender: (opts) ->
-
-    onShow: (opts) ->
-
   class TitleBar extends Marionette.ItemView
 
     template: "title_bar"
@@ -50,19 +40,13 @@ define ["marionette"], ->
     initialize: (opts) ->
       @model.on("change", => @render())
 
-    onRender: (opts) ->
-
-    onShow: (opts) ->
-
   class NotFound extends Marionette.ItemView
 
     template: "404"
 
-    initialize: (opts) ->
+  class Index extends Marionette.Layout
 
-    onRender: (opts) ->
-
-    onShow: (opts) ->
+    template: "stores_index"
 
   return {
     Main: Main
@@ -70,4 +54,5 @@ define ["marionette"], ->
     TitleBar: TitleBar
     Loading: Loading
     NotFound: NotFound
+    Index: Index
   }

@@ -4,9 +4,9 @@ define "app", [
   'jquery',
   'underscore',
   'models',
-  'views',
-  'regions'
-], (Backbone, Marionette, $, _, Models, Views, Regions) ->
+  'views/main',
+  'components/regions/reveal'
+], (Backbone, Marionette, $, _, Models, Views, Reveal) ->
 
   App = new Marionette.Application()
   App.appRoot = window.appRoot
@@ -24,20 +24,20 @@ define "app", [
   class Controller extends Marionette.Controller
 
     root: (opts) ->
-      App.main.show(new Views.Main.Index())
+      App.main.show(new Views.Index())
 
     storeIndex: ->
       collection = new Models.Store.Collection()
       collection.fetch(success: ->
         App.header.currentView.model.set(store: null)
-        App.main.show(new Views.Stores.Index(model: collection))
+        App.main.show(new Views.Index(model: collection))
       )
 
     storeShow: (store_id) ->
       window.location = window.location + "/pages"
 
     notFound: (opts) ->
-      App.main.show(new Views.Main.NotFound())
+      App.main.show(new Views.NotFound())
       App.header.currentView.model.set(page: "notFound")
       App.titlebar.currentView.model.set(title: "404 - Page Not Found")
 
@@ -53,14 +53,14 @@ define "app", [
   )
 
   App.addInitializer(->
-    App.header.show(new Views.Main.Nav(model: new Backbone.Model(page: "none")))
-    App.titlebar.show(new Views.Main.TitleBar(model: new Backbone.Model({title: "Loading..."})))
+    App.header.show(new Views.Nav(model: new Backbone.Model(page: "none")))
+    App.titlebar.show(new Views.TitleBar(model: new Backbone.Model({title: "Loading..."})))
   )
 
   App.addRegions(
     modal:
       selector: "#modal"
-      regionType: Regions.RevealDialog
+      regionType: Reveal.RevealDialog
     header: "header"
     infobar: "#info-bar"
     titlebar: "#title-bar"

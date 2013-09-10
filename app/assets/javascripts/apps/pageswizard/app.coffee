@@ -4,7 +4,7 @@ define [
   'marionette',
   'jquery',
   'underscore',
-  'views'
+  'views/pages'
 ], (App, Backbone, Marionette, $, _, Views) ->
 
   PageWizard = App.module("PageWizard")
@@ -30,7 +30,7 @@ define [
         store.fetch(),
         collection.fetch()
       ).done(->
-        App.main.show(new Views.Pages.Index(model: collection))
+        App.main.show(new Views.Index(model: collection))
         App.titlebar.currentView.model.set(title: "Pages")
         App.header.currentView.model.set(
           page: "pages"
@@ -45,7 +45,7 @@ define [
         store.fetch(),
         model.fetch()
       ).done(->
-        App.main.show(new Views.Pages.Name(model: model))
+        App.main.show(new Views.Name(model: model))
         App.titlebar.currentView.model.set(title: "Pages: #{model.get("name")} - Name")
         App.header.currentView.model.set(page: "pages", store: store)
       )
@@ -57,7 +57,7 @@ define [
         store.fetch(),
         model.fetch()
       ).done(->
-        App.main.show(new Views.Pages.Layout(model: model))
+        App.main.show(new Views.Layout(model: model))
         App.titlebar.currentView.model.set(title: "Pages: #{model.get("name")} - Layout")
         App.header.currentView.model.set(page: "pages", store: store)
       )
@@ -69,7 +69,7 @@ define [
         store.fetch(),
         model.fetch()
       ).done(->
-        App.main.show(new Views.Pages.Products(model: model))
+        App.main.show(new Views.Products(model: model))
         App.titlebar.currentView.model.set(title: "Pages: #{model.get("name")} - Products")
         App.header.currentView.model.set(page: "pages", store: store)
       )
@@ -81,7 +81,7 @@ define [
         store.fetch(),
         model.fetch()
       ).done(->
-        App.main.show(new Views.Pages.Content(model: model))
+        App.main.show(new Views.Content(model: model))
         App.titlebar.currentView.model.set(title: "Pages: #{model.get("name")} - Content")
         App.header.currentView.model.set(page: "pages", store: store)
       )
@@ -93,7 +93,7 @@ define [
         store.fetch(),
         model.fetch()
       ).done(->
-        App.main.show(new Views.Pages.View(model: model))
+        App.main.show(new Views.View(model: model))
         App.titlebar.currentView.model.set(title: "Pages: #{model.get("name")} - Preview")
         App.header.currentView.model.set(page: "pages", store: store)
       )
