@@ -460,5 +460,12 @@ div.content
       line-height: 34px
   .steps
     width: 100%
+    // 4.5% * 3 = 13.50% + 21.625% * 4 = 100%
     li
-      width: 21%
+      margin-left: 4.5%
+      &:first-child
+        margin-left: 0
+      width: 21.625%
+
+#page-preview
+  min-height: 100%

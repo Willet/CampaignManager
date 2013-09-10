@@ -42,7 +42,7 @@ define [
           model.fetch()
         ).done(->
           SecondFunnel.app.main.show(new Views.Pages.Name(model: model))
-          SecondFunnel.app.titlebar.currentView.model.set(title: "Pages: #{model.get("name")}")
+          SecondFunnel.app.titlebar.currentView.model.set(title: "Pages: #{model.get("name")} - Name")
           SecondFunnel.app.header.currentView.model.set(page: "pages", store: store)
         )
 
@@ -54,7 +54,7 @@ define [
           model.fetch()
         ).done(->
           SecondFunnel.app.main.show(new Views.Pages.Layout(model: model))
-          SecondFunnel.app.titlebar.currentView.model.set(title: "Pages: #{model.get("name")}")
+          SecondFunnel.app.titlebar.currentView.model.set(title: "Pages: #{model.get("name")} - Layout")
           SecondFunnel.app.header.currentView.model.set(page: "pages", store: store)
         )
 
@@ -66,7 +66,7 @@ define [
           model.fetch()
         ).done(->
           SecondFunnel.app.main.show(new Views.Pages.Products(model: model))
-          SecondFunnel.app.titlebar.currentView.model.set(title: "Pages: #{model.get("name")}")
+          SecondFunnel.app.titlebar.currentView.model.set(title: "Pages: #{model.get("name")} - Products")
           SecondFunnel.app.header.currentView.model.set(page: "pages", store: store)
         )
 
@@ -78,7 +78,19 @@ define [
           model.fetch()
         ).done(->
           SecondFunnel.app.main.show(new Views.Pages.Content(model: model))
-          SecondFunnel.app.titlebar.currentView.model.set(title: "Pages: #{model.get("name")}")
+          SecondFunnel.app.titlebar.currentView.model.set(title: "Pages: #{model.get("name")} - Content")
+          SecondFunnel.app.header.currentView.model.set(page: "pages", store: store)
+        )
+
+      pagesView: (store_id, id) ->
+        store = Models.Store.Model.findOrCreate(id: store_id)
+        model = Models.Pages.Model.findOrCreate(id: id, "store-id": store_id)
+        $.when(
+          store.fetch(),
+          model.fetch()
+        ).done(->
+          SecondFunnel.app.main.show(new Views.Pages.View(model: model))
+          SecondFunnel.app.titlebar.currentView.model.set(title: "Pages: #{model.get("name")} - Preview")
           SecondFunnel.app.header.currentView.model.set(page: "pages", store: store)
         )
 
@@ -118,6 +130,7 @@ define [
           SecondFunnel.app.titlebar.currentView.model.set(title: "Product: #{model.get("name")}")
           SecondFunnel.app.header.currentView.model.set(store: store)
         )
+
 
       storeIndex: ->
         SecondFunnel.app.header.currentView.model.set(store: null)

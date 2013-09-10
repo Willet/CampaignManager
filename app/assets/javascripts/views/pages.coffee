@@ -91,6 +91,10 @@ define ["marionette", "models/pages"], (Marionette, Pages) ->
 
     onShow: (opts) ->
 
+  class View extends Marionette.Layout
+
+    template: "pages_view"
+
   # declare exports
   return {
     Index: Index
@@ -98,6 +102,7 @@ define ["marionette", "models/pages"], (Marionette, Pages) ->
     Layout: Layout
     Products: Products
     Content: Content
+    View: View
   }
 
 

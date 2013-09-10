@@ -14,6 +14,7 @@ define ["marionette", "controller"], (Marionette, Controller) ->
       ":store_id/pages/:id/layout": "pagesLayout"
       ":store_id/pages/:id/products": "pagesProducts"
       ":store_id/pages/:id/content": "pagesContent"
+      ":store_id/pages/:id/view": "pagesView"
 
     # standard not controller routes (call function in this router)
     routes: {}
