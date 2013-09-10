@@ -30,11 +30,12 @@ define "app", [
       collection = new Models.Store.Collection()
       collection.fetch(success: ->
         App.header.currentView.model.set(store: null)
+        App.titlebar.currentView.model.set(title: "Stores")
         App.main.show(new Views.Index(model: collection))
       )
 
     storeShow: (store_id) ->
-      window.location = window.location + "/pages"
+      Backbone.history.navigate("#{Backbone.history.getFragment()}/pages", trigger: true, replace: true)
 
     notFound: (opts) ->
       App.main.show(new Views.NotFound())
@@ -42,14 +43,12 @@ define "app", [
       App.titlebar.currentView.model.set(title: "404 - Page Not Found")
 
 
-  App.addInitializer(->
-    rootController = new Controller()
-    rootRouter = new Router(controller: rootController)
-  )
+  rootController = new Controller()
+  rootRouter = new Router(controller: rootController)
 
   App.on("initialize:after", ->
     if (Backbone.history && !Backbone.history.start({pushState: true, root: App.appRoot}))
-      rootRouter.trigger('notFound')
+      rootController.notFound()
   )
 
   App.addInitializer(->
