@@ -1,4 +1,32 @@
-define ["marionette", "backboneprojections", "models/content", "tokeninput"], (Marionette, BackboneProjections, Content, TokenInput) ->
+define [
+  "marionette",
+  "backboneprojections",
+  "models/content",
+  "jquery",
+  "select2"
+], (Marionette, BackboneProjections, Content, $) ->
+
+  ContentActions =
+
+    undecideContent: (event) ->
+      @model.undecided()
+      event.stopPropagation()
+      false
+
+    approveContent: (event) ->
+      @model.approve()
+      event.stopPropagation()
+      false
+
+    rejectContent: (event) ->
+      @model.reject()
+      event.stopPropagation()
+      false
+
+    prioritizeContent: (event) ->
+      alert("TODO: prioritize items")
+      event.stopPropagation()
+      false
 
   class ListItem extends Marionette.Layout
 
@@ -30,6 +58,7 @@ define ["marionette", "backboneprojections", "models/content", "tokeninput"], (M
       event.stopPropagation()
 
   class GridItem extends Marionette.Layout
+    _.extend(@, ContentActions)
 
     template: "_content_grid_item"
 
@@ -51,26 +80,6 @@ define ["marionette", "backboneprojections", "models/content", "tokeninput"], (M
 
     toggleSelected: (event) ->
       @model.set(selected: !@model.get('selected'))
-
-    undecideContent: (event) ->
-      @model.undecided()
-      event.stopPropagation()
-      false
-
-    approveContent: (event) ->
-      @model.approve()
-      event.stopPropagation()
-      false
-
-    rejectContent: (event) ->
-      @model.reject()
-      event.stopPropagation()
-      false
-
-    prioritizeContent: (event) ->
-      alert("TODO: prioritize items")
-      event.stopPropagation()
-      false
 
     serializeData: -> @model.viewJSON()
 
@@ -95,43 +104,74 @@ define ["marionette", "backboneprojections", "models/content", "tokeninput"], (M
 
       serializeData: -> @model.viewJSON()
 
-
-  class EditArea extends Marionette.ItemView
+  class EditArea extends Marionette.Layout
+    _.extend(@, ContentActions)
 
     template: "_content_edit_item"
 
-    initialize: ->
+    serializeData: -> @model.viewJSON()
 
     events:
       "click .js-approve": "approveContent"
       "click .js-reject": "rejectContent"
+      "select2-blur .js-tagged-products": "productsChanged"
+      "select2-blur .js-tagged-pages": "pagesChanged"
 
-    approveContent: (event) ->
-      @model.approve()
-      event.stopPropagation()
-      false
+    initialize: ->
 
-    rejectContent: (event) ->
-      @model.reject()
-      event.stopPropagation()
-      false
+    productsChanged: (event) ->
+      @trigger("change:tagged-products", @$(".js-tagged-products").select2("data"))
 
-    serializeData: -> @model.viewJSON()
+    pagesChanged: (event) ->
+      @trigger("change:tagged-pages", @$(".js-tagged-pages").select2("data"))
 
     onShow: ->
-      _.defer =>
-        $.when(
-          @model.fetchRelated("product-ids")
-          #,@model.fetchRelated("page-ids")
-        ).done(=>
-          tagged_products = @$(".js-tagged-products")
-          tagged_products.tokenInput("#{require("app").apiRoot}/stores/#{@model.get("store-id")}/products",
-            queryParam: "name-prefix"
-            resultsLimit: 8
-            prePopulate: @model.get("product-ids").collect((m) -> m.attributes)
-          )
-          @$('.js-tagged-pages').tokenInput()
+      @on("change:tagged-products", (data) -> console.log data)
+      @$('.js-tagged-products').select2(
+        multiple: true
+        allowClear: true
+        placeholder: "Search for a product"
+        tokenSeparators: [',']
+        ajax:
+          url: "#{require("app").apiRoot}/stores/#{@model.get("store-id")}/products"
+          dataType: 'json'
+          cache: true
+          data: (term, page) ->
+            return {
+              "name-prefix": term
+            }
+          results: (data, page) ->
+            return {
+              results: data['products']
+            }
+        formatResult: (product) ->
+          "<span>#{product['name']}</span>"
+        formatSelection: (product) ->
+          "<span>#{product['name']} #{product['id']}</span>"
+      )
+      
+      # TODO: CACHE THIS
+      $.ajax("#{require("app").apiRoot}/stores/#{@model.get("store-id")}/campaigns").success( (data) =>
+
+        @$('.js-tagged-pages').select2(
+          multiple: true
+          allowClear: true
+          placeholder: "Search for a page"
+          tokenSeparators: [',']
+          data:
+            results: data['campaigns']
+            text: (item) -> item['name']
+          formatNoMatches: (term) ->
+            "No pages match '#{term}'"
+          formatResult: (campaign) ->
+            "<span>#{campaign['name']}</span>"
+          formatSelection: (campaign) ->
+            "<span>#{campaign['name']} #{campaign['id']}</span>"
         )
+      )
+
+    onClose: ->
+      @$('.js-tagged-products').select2('destroy')
 
   class ContentList extends Marionette.CollectionView
 
@@ -194,7 +234,7 @@ define ["marionette", "backboneprojections", "models/content", "tokeninput"], (M
     onRender: (opts) ->
       @itemRegion.show(@contentListView)
       @editArea.show(@editView)
-      @$('#js-tag-search').tokenInput()
+      #@$('#js-tag-search').tokenInput()
 
     onShow: (opts) ->
 
@@ -228,6 +268,7 @@ define ["marionette", "backboneprojections", "models/content", "tokeninput"], (M
       @trigger('new-state', @current_state)
 
   class Show extends Marionette.Layout
+    _.extend(@, ContentActions)
 
     template: "content_show"
 
@@ -243,12 +284,6 @@ define ["marionette", "backboneprojections", "models/content", "tokeninput"], (M
     onRender: (opts) ->
 
     onShow: (opts) ->
-
-    rejectContent: (event) ->
-      @model.reject()
-
-    approveContent: (event) ->
-      @model.approve()
 
     saveContent: (event) ->
       data = @$('form').serializeObject()

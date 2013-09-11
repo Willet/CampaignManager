@@ -4,8 +4,9 @@ define [
   'marionette',
   'jquery',
   'underscore',
-  'views/pages'
-], (App, Backbone, Marionette, $, _, Views) ->
+  'views/pages',
+  'models'
+], (App, Backbone, Marionette, $, _, Views, Models) ->
 
   PageWizard = App.module("PageWizard")
 
@@ -22,7 +23,7 @@ define [
   class PageWizard.Controller extends Marionette.Controller
 
     pagesIndex: (store_id) ->
-      store = Models.Store.Model.findOrCreate(id: store_id)
+      store = new Models.Store.Model(id: store_id)
 
       collection = new Models.Pages.Collection()
       collection.store_id = store_id
@@ -39,8 +40,8 @@ define [
       )
 
     pagesName: (store_id, id) ->
-      store = Models.Store.Model.findOrCreate(id: store_id)
-      model = Models.Pages.Model.findOrCreate(id: id, "store-id": store_id)
+      store = new Models.Store.Model(id: store_id)
+      model = new Models.Pages.Model(id: id, "store-id": store_id)
       $.when(
         store.fetch(),
         model.fetch()
@@ -51,8 +52,8 @@ define [
       )
 
     pagesLayout: (store_id, id) ->
-      store = Models.Store.Model.findOrCreate(id: store_id)
-      model = Models.Pages.Model.findOrCreate(id: id, "store-id": store_id)
+      store = new Models.Store.Model(id: store_id)
+      model = new Models.Pages.Model(id: id, "store-id": store_id)
       $.when(
         store.fetch(),
         model.fetch()
@@ -63,8 +64,8 @@ define [
       )
 
     pagesProducts: (store_id, id) ->
-      store = Models.Store.Model.findOrCreate(id: store_id)
-      model = Models.Pages.Model.findOrCreate(id: id, "store-id": store_id)
+      store = new Models.Store.Model(id: store_id)
+      model = new Models.Pages.Model(id: id, "store-id": store_id)
       $.when(
         store.fetch(),
         model.fetch()
@@ -75,8 +76,8 @@ define [
       )
 
     pagesContent: (store_id, id) ->
-      store = Models.Store.Model.findOrCreate(id: store_id)
-      model = Models.Pages.Model.findOrCreate(id: id, "store-id": store_id)
+      store = new Models.Store.Model(id: store_id)
+      model = new Models.Pages.Model(id: id, "store-id": store_id)
       $.when(
         store.fetch(),
         model.fetch()
@@ -87,8 +88,8 @@ define [
       )
 
     pagesView: (store_id, id) ->
-      store = Models.Store.Model.findOrCreate(id: store_id)
-      model = Models.Pages.Model.findOrCreate(id: id, "store-id": store_id)
+      store = new Models.Store.Model(id: store_id)
+      model = new Models.Pages.Model(id: id, "store-id": store_id)
       $.when(
         store.fetch(),
         model.fetch()

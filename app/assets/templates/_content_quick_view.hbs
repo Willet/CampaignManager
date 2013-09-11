@@ -4,9 +4,9 @@
       <iframe width="640" height="480" src="{{video-embed-url}}" frameborder="0" allowfullscreen></iframe>
     {{else}}
       {{#if remote-url}}
-        <div style="background-image:url({{images.grande.url}})" />
+        <img src="{{images.grande.url}}" />
       {{else}}
-        <div style="background-image:url('http://placehold.it/180x180&text=No Thumbnail')" />
+        <img src="http://placehold.it/180x180&text=No Thumbnail" />
       {{/if}}
     {{/if}}
   </div>

@@ -1,19 +1,17 @@
 define [
-  'app',
   'backbone',
   'marionette',
   'jquery',
-  'underscore',
-  'backbonerelational'
-], (App, Backbone, Marionette, $, _, BackboneRelational) ->
+  'underscore'
+], (Backbone, Marionette, $, _) ->
 
   Entity = {}
 
-  class Entity.Model extends Backbone.RelationalModel
+  class Entity.Model extends Backbone.Model
     blacklist: ['selected',]
 
     viewJSON: (opts) ->
-      Backbone.RelationalModel.prototype.toJSON.call(opts)
+      Backbone.Model.prototype.toJSON.call(opts)
 
     toJSON: (opts) ->
       _.omit(@attributes, @blacklist || {})

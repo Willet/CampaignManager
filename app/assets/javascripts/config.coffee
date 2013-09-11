@@ -16,10 +16,10 @@ requirejs.config(
     backboneassociations: 'backbone-associations-min'
     handlebars: 'handlebars'
     templates: '../templates/templates.pre.min'
-    backbonerelational: 'backbone.relational'
-    tokeninput: 'lib/jquery.tokeninput'
     jwerty: 'lib/jwerty'
     foundation: 'lib/foundation'
+    backbonefetchcache: 'lib/backbone.fetch-cache'
+    select2: 'lib/select2'
   shim:
     jquery:
       exports: 'jQuery'
@@ -41,9 +41,6 @@ requirejs.config(
     templates:
       deps: ['handlebars']
       exports: 'JST'
-    backbonerelational:
-      deps: ['backbone']
-      exports: 'Backbone.Relational'
     backboneassociations:
       deps: ['backbone']
     backboneprojections:
@@ -52,8 +49,6 @@ requirejs.config(
     swag:
       deps: ['handlebars']
       exports: 'Swag'
-    tokeninput:
-      deps: ['jquery']
     foundation: ['jquery']
     'foundation/abide': ['jquery', 'foundation']
     'foundation/alerts': ['jquery', 'foundation']
@@ -69,10 +64,13 @@ requirejs.config(
     'foundation/section': ['jquery', 'foundation']
     'foundation/tooltips': ['jquery', 'foundation']
     'foundation/topbar': ['jquery', 'foundation']
+    backbonefetchcache:
+      deps: ['underscore', 'backbone', 'jquery']
+    select2:
+      deps: ['jquery']
 )
 
 require ["global/click_handler"]
 require ["global/form_serialize"]
-require ["config/backbone/model"]
 require ["config/marionette/renderer"]
 require ["init"]

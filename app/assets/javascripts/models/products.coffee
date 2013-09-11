@@ -1,29 +1,8 @@
 define [
-  "backbone",
-  "backbonerelational",
   "components/entity"
-], (Backbone, BackboneRelational, Entity) ->
+], (Entity) ->
 
   class Model extends Entity.Model
-
-    relations: [
-      {
-        collectionType: "Models.Content.Collection"
-        collectionKey: false
-        collectionOptions: (model) -> { model: model }
-        key: 'content-ids'
-        relatedModel: "Models.Content.Model"
-        type: Backbone.HasMany
-        includeInJSON: Backbone.Model.prototype.idAttribute
-      },
-      {
-        key: 'default-image-id'
-        relatedModel: "Models.Content.Model"
-        collectionOptions: (model) -> { model: model }
-        type: Backbone.HasOne
-        includeInJSON: Backbone.Model.prototype.idAttribute
-      }
-    ]
 
     url: (opts) ->
       "#{require("app").apiRoot}/stores/#{@get('store-id')}/products/#{@get('id') || ''}"
@@ -34,8 +13,6 @@ define [
       json['default-image-id'] = @get('default-image-id')?.viewJSON()
       json
 
-  Model.setup()
-
   class Collection extends Entity.Collection
 
     model: Model
@@ -44,8 +21,6 @@ define [
       @hasmodel = opts['model'] if opts
 
     url: (opts) ->
-      # TODO: this is a hack because relational calls this
-      #       to check if multi-function
       @store_id = @hasmodel?.get?('store-id') || @store_id
       _.each(opts, (m) => m.set("store-id", @store_id))
       "#{require("app").apiRoot}/stores/#{@store_id}/products"

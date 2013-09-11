@@ -1,22 +1,9 @@
 define [
-  "backbone",
-  "backbonerelational",
   "components/entity"
-], (Backbone, BackboneRelational, Entity) ->
+], (Entity) ->
 
   class Model extends Entity.Model
 
-    relations: [
-      {
-        collectionType: "Models.Products.Collection"
-        collectionKey: false
-        collectionOptions: (model) -> { model: model }
-        key: 'product-ids'
-        relatedModel: "Models.Products.Model"
-        type: Backbone.HasMany
-        includeInJSON: Backbone.Model.prototype.idAttribute
-      }
-    ]
     initialize: (opts, relatedOptions) ->
       if relatedOptions && relatedOptions['store-id']
         @set('store-id', relatedOptions['store-id'])
@@ -44,7 +31,7 @@ define [
 
     viewJSON: ->
       json = @toJSON()
-      json['product-ids'] = @get('product-ids').toJSON()
+      json['product-ids'] = @get('product-ids')?.toJSON()
       json['selected'] = @get('selected')
       if @get('active')
         if @get('approved')
@@ -106,8 +93,6 @@ define [
         }
       json
 
-  Model.setup()
-
   class Collection extends Entity.Collection
     model: Model
 
@@ -115,11 +100,9 @@ define [
       @hasmodel = opts['model'] if opts
 
     url: (opts) ->
-      # TODO: this is a hack because relational calls this
-      #       to check if multi-function
       @store_id = @hasmodel?.get?('store-id') || @store_id
       _.each(opts, (m) => m.set("store-id", @store_id))
-      "#{require("app").apiRoot}/stores/#{@store_id}/content"
+      "#{require("app").apiRoot}/stores/#{@store_id}/content?results=21"
 
     parse: (data) ->
       data['content']

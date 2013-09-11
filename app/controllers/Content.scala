@@ -19,19 +19,20 @@ object Content extends Controller {
       Status(response.status)(response.body)
   }
 
-  def index(store_id: Long) = Action {
-    val request = WS.url("http://contentgraph-test.elasticbeanstalk.com/graph/store/" + store_id + "/content")
+  def index(store_id: Long) = Action { implicit request =>
+    val queryParams = "?" + request.rawQueryString
+    val cg_request = WS.url("http://contentgraph-test.elasticbeanstalk.com/graph/store/" + store_id + "/content" + queryParams)
     Async {
-      request.withHeaders(apiHeaders)
+      cg_request.withHeaders(apiHeaders)
         .get()
         .map(relayResponse)
     }
   }
 
   def show(store_id: Long, id: Long) = Action {
-    val request = WS.url("http://contentgraph-test.elasticbeanstalk.com/graph/store/" + store_id + "/content/" + id)
+    val cg_request = WS.url("http://contentgraph-test.elasticbeanstalk.com/graph/store/" + store_id + "/content/" + id)
     Async {
-      request.withHeaders(apiHeaders)
+      cg_request.withHeaders(apiHeaders)
         .get()
         .map(relayResponse)
     }

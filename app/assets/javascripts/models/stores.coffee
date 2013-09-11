@@ -7,8 +7,6 @@ define [
     url: (opts) ->
       "#{require("app").apiRoot}/stores/#{@get('id')}"
 
-  Model.setup()
-
   class Collection extends Entity.Collection
 
     url: (opts) ->

@@ -1,11 +1,12 @@
 define [
   'app',
-  'backbone'
   'marionette',
   'jquery',
   'underscore',
-  'views/contentmanager'
-], (App, Backbone, Marionette, $, _, Views) ->
+  'views/contentmanager',
+  'models/content',
+  'models/stores'
+], (App, Marionette, $, _, Views, ContentEntities, StoreEntities) ->
 
   ContentManager = App.module("ContentManager")
 
@@ -18,39 +19,29 @@ define [
   class ContentManager.Controller extends Marionette.Controller
 
     contentIndex: (store_id) ->
-      store = Models.Store.Model.findOrCreate(id: store_id)
-      collection = new Models.Content.Collection()
+      App.setStore(id: store_id)
+      collection = new ContentEntities.Collection()
       collection.store_id = store_id
       $.when(
-        store.fetch(),
         collection.fetch()
       ).done(->
         App.main.show(new Views.Index(model: collection))
         App.titlebar.currentView.model.set({title: "Content"})
-        App.header.currentView.model.set(page: "content", store: store)
+        App.header.currentView.model.set(page: "content")
       )
 
     contentShow: (store_id, content_id) ->
-      store = Models.Store.Model.findOrCreate(id: store_id)
+      App.setStore(id: store_id)
 
-      model = Models.Content.Model.findOrCreate(id: content_id, "store-id": store_id)
+      model = new ContentEntities.Model(id: content_id, "store-id": store_id)
       model.set("store-id", store_id)
 
       $.when(
-        store.fetch(),
         model.fetch()
-      ).then(->
-        $.when.apply(@, model.fetchRelated("product-ids"))
-      ).then(->
-        $.when.apply(@,
-          model.get("product-ids").collect((m) =>
-            $.when.apply(@, m.fetchRelated("default-image-id", "store-id": store_id))
-          )
-        )
       ).done(=>
         App.main.show(new Views.Show(model: model))
         App.titlebar.currentView.model.set(title: "Content: #{model.get("title") || ""}")
-        App.header.currentView.model.set(page: "content", store: store)
+        App.header.currentView.model.set(page: "content")
       )
 
   App.addInitializer(->

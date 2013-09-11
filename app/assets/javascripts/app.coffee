@@ -12,6 +12,20 @@ define "app", [
   App.appRoot = window.appRoot
   App.apiRoot = "#{App.appRoot}api"
 
+  App.global = {}
+
+  App.currentStore = ->
+    return App.global.currentStore
+
+  App.setStore = (options) ->
+    unless App.global.currentStore && App.global.currentStore.get("id") == options['id']
+      store = App.global.currentStore = new Models.Store.Model(id: options['id'])
+      $.when(
+        store.fetch()
+      ).done(
+        App.header.currentView.model.set(store: store)
+      )
+
   class Router extends Marionette.AppRouter
 
     appRoutes:
