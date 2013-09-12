@@ -35,7 +35,6 @@ define [
     events:
       "click .item": "viewModal"
       "click a": "stopPropagation"
-      "click .item > *": "stopPropagation"
 
     regions:
       "editArea": ".edit-area"
@@ -54,11 +53,7 @@ define [
       event.stopPropagation()
       false
 
-    stopPropagation: (event) ->
-      event.stopPropagation()
-
   class GridItem extends Marionette.Layout
-    _.extend(@, ContentActions)
 
     template: "_content_grid_item"
 
@@ -76,6 +71,7 @@ define [
       "click a": "stopPropagation"
 
     initialize: ->
+      _.extend(@, ContentActions)
       @model.on("change", => @render())
 
     toggleSelected: (event) ->
@@ -94,6 +90,7 @@ define [
 
     stopPropagation: (event) ->
       event.stopPropagation()
+      false
 
     onRender: ->
       @editArea.show(new EditArea(model: @model))
@@ -105,7 +102,6 @@ define [
       serializeData: -> @model.viewJSON()
 
   class EditArea extends Marionette.Layout
-    _.extend(@, ContentActions)
 
     template: "_content_edit_item"
 
@@ -118,6 +114,7 @@ define [
       "select2-blur .js-tagged-pages": "pagesChanged"
 
     initialize: ->
+      _.extend(@, ContentActions)
 
     productsChanged: (event) ->
       @trigger("change:tagged-products", @$(".js-tagged-products").select2("data"))
@@ -125,8 +122,7 @@ define [
     pagesChanged: (event) ->
       @trigger("change:tagged-pages", @$(".js-tagged-pages").select2("data"))
 
-    onShow: ->
-      @on("change:tagged-products", (data) -> console.log data)
+    setupTaggedProducts: ->
       @$('.js-tagged-products').select2(
         multiple: true
         allowClear: true
@@ -149,7 +145,9 @@ define [
         formatSelection: (product) ->
           "<span>#{product['name']} #{product['id']}</span>"
       )
-      
+      false
+
+    setupTaggedPages: ->
       # TODO: CACHE THIS
       $.ajax("#{require("app").apiRoot}/stores/#{@model.get("store-id")}/campaigns").success( (data) =>
 
@@ -169,6 +167,11 @@ define [
             "<span>#{campaign['name']} #{campaign['id']}</span>"
         )
       )
+
+    onShow: ->
+      @on("change:tagged-products", (data) -> console.log data)
+      @setupTaggedProducts()
+      @setupTaggedPages()
 
     onClose: ->
       @$('.js-tagged-products').select2('destroy')
@@ -194,6 +197,22 @@ define [
       "click .js-select-all": "selectAll"
       "click .js-unselect-all": "unselectAll"
       "click dd": "updateActive"
+      "click .js-next-page": "nextPage"
+
+    last_id: null
+
+    autoLoadNextPage: (event) ->
+      distanceToBottom = 75
+      if ($(document).scrollTop() + $(window).height()) > $(document).height() - distanceToBottom
+        @nextPage()
+
+    nextPage: ->
+      $.when(
+        @model.getNextPage()
+      ).done(=>
+        @trigger("nextpage")
+      )
+      false
 
     updateActive: (event) ->
       @switchActive(@extractState(event.currentTarget))
@@ -218,7 +237,7 @@ define [
     initialize: (opts) ->
       @current_state = opts['inital_state']
       @contentListView = new ContentList(
-        collection: new BackboneProjections.Sorted(@model, comparator: (m) -> [m.get('selected'), m.get('id')])
+        collection: @model
       )
       @editView = new EditArea(model: new Content.Model("store-id": -1))
 
@@ -237,8 +256,11 @@ define [
       #@$('#js-tag-search').tokenInput()
 
     onShow: (opts) ->
+      @scrollFunction = => @autoLoadNextPage()
+      $(window).on("scroll", @scrollFunction)
 
     onClose: ->
+      $(window).off("scroll", @scrollFunction)
 
   class ViewModeSelect extends Marionette.ItemView
 
@@ -268,7 +290,6 @@ define [
       @trigger('new-state', @current_state)
 
   class Show extends Marionette.Layout
-    _.extend(@, ContentActions)
 
     template: "content_show"
 
@@ -280,6 +301,7 @@ define [
     serializeData: -> @model.viewJSON()
 
     initialize: (opts) ->
+      _.extend(@, ContentActions)
 
     onRender: (opts) ->
 

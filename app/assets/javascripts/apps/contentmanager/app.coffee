@@ -20,10 +20,10 @@ define [
 
     contentIndex: (store_id) ->
       App.setStore(id: store_id)
-      collection = new ContentEntities.Collection()
+      collection = new ContentEntities.PageableCollection()
       collection.store_id = store_id
       $.when(
-        collection.fetch()
+        collection.getNextPage()
       ).done(->
         App.main.show(new Views.Index(model: collection))
         App.titlebar.currentView.model.set({title: "Content"})

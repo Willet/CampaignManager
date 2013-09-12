@@ -473,58 +473,10 @@ div.content
 #page-preview
   min-height: 100%
 
-.autotag
-  position: relative
-  $textarea-height: 28px
-  .text-label
-    font-size: 10px
-    font-family: "Lucida Sans Unicode", "Lucida Grande", Garuda,sans-serif, Arial, Helvetica, Garuda, sans-serif
-  textarea
-    z-index: 1
-    height: auto
-    min-height: 0 // reset
-    margin: 0
-    overflow: hidden
-    resize: none
-    white-space: nowrap
-  .text-tags
-    pointer-events: none
-    z-index: 2
-    position: absolute
-    height: 100%
-    width: 100%
-    padding: 0
-    top: 0
-    cursor: text
-    .text-tag
-      pointer-events: auto
-      float: left
-      border-radius: 3px
-      background-color: lighten($action-color, 50%)
-      border: 1px solid $action-color
-      margin: 3px
-      padding: 0 3px
-      height: 18px
-      .text-label
-      a, a:link, a:active, a:visited
-        &.text-remove
-          font-size: 10px
-          font-weight: bold
-          color: $dark-base-color
-  .text-dropdown
-    position: absolute
-    z-index: 3
-    max-height: 100px
-    width: 100%
-    border-top: none
-    .text-list
-      .text-suggestion
-        padding: 3px 6px
-        border: 1px solid #aaa
-        border-top: none
-        background-color: $light-base-color
-        &.active
-          font-weight: bold
-          background-color: darken($light-base-color, 10%)
-        .text-label
-
+.next-page
+  position: fixed
+  right: 10px
+  bottom: 20px
+  width: 26%
+  height: 22px
+  text-align: center

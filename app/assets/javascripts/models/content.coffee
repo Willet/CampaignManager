@@ -110,8 +110,109 @@ define [
     viewJSON: ->
       @collect((m) -> m.viewJSON())
 
+
+  class PageCollection extends Entity.Collection
+    model: Model
+
+    initialize: (opts) ->
+      @queryParams = opts['queryParams']
+
+    parse: (data) ->
+      @params = @parseParams(data)
+      @parseData(data)
+
+    parseParams: (data) ->
+      result = {
+        "results": 25
+      }
+      result['start-id'] = data['last-id'] if data['last-id']
+      result
+
+    parseData: (data) ->
+      data['content']
+
+    url: (opts) ->
+      # TODO: correct URL
+      if @queryParams
+        params = "?" + $.param(@queryParams)
+      else
+        params = ""
+      "#{require("app").apiRoot}/stores/126/content" + params
+
+  class PageableCollection extends Entity.Collection
+    model: Model
+
+    initialize: ->
+      @resetPaging()
+
+    resetPaging: ->
+      @params = {
+        results: 25
+      }
+      @finished = false
+
+    getNextPage: (opts) ->
+      unless @finished
+        collection = new PageCollection(queryParams: @params)
+        xhr = collection.fetch()
+        $.when(
+          xhr
+        ).done(=>
+          @add(collection.models, at: @length)
+          @params = collection.params
+          @finished = true unless @params['start-id']
+        )
+      xhr
+
+    url: ->
+      "#{require("app").apiRoot}/stores/126/content"
+
+  ###
+  class PageableCollection extends Backbone.PageableCollection
+    model: Model
+
+    initialize: (opts) ->
+      super(arguments)
+
+    url: (opts) ->
+      "#{require("app").apiRoot}/stores/126/content"
+
+    lastPageId: null
+
+    mode: "infinite"
+    queryParams:
+      pageSize: "results"
+      "start-id": ->
+        @lastPageId
+      currentPage: null
+      totalPages: null
+      totalRecords: null
+
+    lastData: null
+
+    parseRecords: (data) ->
+      @lastData = @lastData || data['content']
+
+    parseLinks: (data) ->
+      oldLastPageId = @lastPageId
+      @lastPageId = data['last-id']+1
+      links = {}
+      if oldLastPageId
+        links['prev'] = "#{require("app").apiRoot}/stores/126/content?start-id=#{oldLastPageId}"
+      else
+        links['first'] = "#{require("app").apiRoot}/stores/126/content"
+      if @lastPageId
+        links['next'] = "#{require("app").apiRoot}/stores/126/content?start-id=#{@lastPageId}"
+      console.log links
+      return links
+
+    viewJSON: ->
+      @collect((m) -> m.viewJSON())
+  ###
+
   return {
     Model: Model
     Collection: Collection
+    PageableCollection: PageableCollection
   }
 
