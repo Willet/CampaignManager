@@ -2,7 +2,9 @@ define [
   "entities/base"
 ], (Base) ->
 
-  class Model extends Base.Model
+  Entities = Entities || {}
+
+  class Entities.Product extends Base.Model
 
     url: (opts) ->
       "#{require("app").apiRoot}/stores/#{@get('store-id')}/products/#{@get('id') || ''}"
@@ -13,9 +15,9 @@ define [
       json['default-image-id'] = @get('default-image-id')?.viewJSON()
       json
 
-  class Collection extends Base.Collection
+  class Entities.ProductCollection extends Base.Collection
 
-    model: Model
+    model: Entities.Product
 
     initialize: (models, opts) ->
       @hasmodel = opts['model'] if opts
@@ -32,7 +34,7 @@ define [
       @collect((m) -> m.viewJSON())
 
   return {
-    Model: Model
-    Collection: Collection
+    Model: Entities.Product
+    Collection: Entities.ProductCollection
   }
 

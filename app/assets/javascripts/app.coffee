@@ -7,7 +7,7 @@ define "app", [
   'components/regions/reveal'
 ], (Marionette, $, _, Entities, MainViews, Reveal) ->
 
-  App = new Marionette.Application()
+  App = window.App = new Marionette.Application()
 
   App.rootRoute = "root"
 
@@ -51,7 +51,7 @@ define "app", [
 
   App.setStore = (options) ->
     unless App.global.currentStore && App.global.currentStore.get("id") == options['id']
-      store = App.global.currentStore = new Entities.Store.Model(id: options['id'])
+      store = App.global.currentStore = new Entities.Store(id: options['id'])
       $.when(
         store.fetch()
       ).done(
@@ -73,7 +73,7 @@ define "app", [
       App.main.show(new MainViews.Index())
 
     storeIndex: ->
-      collection = new Entities.Store.Collection()
+      collection = new Entities.StoreCollection()
       collection.fetch(success: ->
         App.header.currentView.model.set(store: null)
         App.titlebar.currentView.model.set(title: "Stores")

@@ -4,9 +4,8 @@ define [
   'jquery',
   'underscore',
   'views/contentmanager',
-  'entities/content',
-  'entities/stores'
-], (App, Marionette, $, _, Views, ContentEntities, StoreEntities) ->
+  'entities'
+], (App, Marionette, $, _, Views, Entities) ->
 
   ContentManager = App.module("ContentManager")
 
@@ -20,7 +19,7 @@ define [
 
     contentIndex: (store_id) ->
       App.setStore(id: store_id)
-      collection = new ContentEntities.PageableCollection()
+      collection = new Entities.ContentPageableCollection()
       collection.store_id = store_id
       $.when(
         collection.getNextPage()
@@ -35,7 +34,7 @@ define [
     contentShow: (store_id, content_id) ->
       App.setStore(id: store_id)
 
-      model = new ContentEntities.Model(id: content_id, "store-id": store_id)
+      model = new Entities.Content(id: content_id, "store-id": store_id)
       model.set("store-id", store_id)
 
       $.when(

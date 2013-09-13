@@ -4,7 +4,7 @@ define [
   'underscore'
 ], (Backbone, $, _) ->
 
-  Base = {}
+  Base = Base || {}
 
   class Base.Model extends Backbone.Model
     blacklist: ['selected',]

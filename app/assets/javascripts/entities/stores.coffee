@@ -2,12 +2,16 @@ define [
   "entities/base"
 ], (Base) ->
 
-  class Model extends Base.Model
+  Entities = Entities || {}
+
+  class Entities.Store extends Base.Model
 
     url: (opts) ->
       "#{require("app").apiRoot}/stores/#{@get('id')}"
 
-  class Collection extends Base.Collection
+  class Entities.StoreCollection extends Base.Collection
+
+    model: Entities.Store
 
     url: (opts) ->
       "#{require("app").apiRoot}/stores"
@@ -15,8 +19,4 @@ define [
     parse: (data) ->
       data['stores']
 
-  return {
-    Model: Model
-    Collection: Collection
-  }
-
+  Entities

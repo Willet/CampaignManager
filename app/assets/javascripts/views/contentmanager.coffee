@@ -1,10 +1,9 @@
 define [
   "marionette",
-  "backboneprojections",
-  "entities/content",
   "jquery",
+  "entities/base"
   "select2"
-], (Marionette, BackboneProjections, ContentEntities, $) ->
+], (Marionette, $, Base) ->
 
   ContentActions =
 
@@ -25,31 +24,6 @@ define [
 
     prioritizeContent: (event) ->
       alert("TODO: prioritize items")
-      event.stopPropagation()
-      false
-
-  class ListItem extends Marionette.Layout
-
-    template: "_content_grid_item"
-
-    events:
-      "click .item": "viewModal"
-      "click a": "stopPropagation"
-
-    regions:
-      "editArea": ".edit-area"
-
-    serializeData: -> @model.viewJSON()
-
-    initialize: ->
-      @model.on("change", (=> _.throttle(_.defer(=> @render))))
-
-    onRender: ->
-      @editArea.show(new EditArea(model: @model))
-
-    viewModal: (event) ->
-      # TODO: soft navigation ? without losing selection
-      require("app").modal.show(new Show(model: @model))
       event.stopPropagation()
       false
 
@@ -93,7 +67,7 @@ define [
       false
 
     onRender: ->
-      @editArea.show(new EditArea(model: @model))
+      @editArea.show(new EditArea(model: @model, pages: new Base.Collection()))
 
     class QuickView extends Marionette.ItemView
 
@@ -113,8 +87,9 @@ define [
       "select2-blur .js-tagged-products": "productsChanged"
       "select2-blur .js-tagged-pages": "pagesChanged"
 
-    initialize: ->
+    initialize: (options) ->
       _.extend(@, ContentActions)
+      @pages = options['pages']
 
     productsChanged: (event) ->
       @trigger("change:tagged-products", @$(".js-tagged-products").select2("data"))
@@ -123,6 +98,7 @@ define [
       @trigger("change:tagged-pages", @$(".js-tagged-pages").select2("data"))
 
     setupTaggedProducts: ->
+      ## TODO: should build select2 component view
       @$('.js-tagged-products').select2(
         multiple: true
         allowClear: true
@@ -148,24 +124,21 @@ define [
       false
 
     setupTaggedPages: ->
-      # TODO: CACHE THIS
-      $.ajax("#{require("app").apiRoot}/stores/#{@model.get("store-id")}/campaigns").success( (data) =>
-
-        @$('.js-tagged-pages').select2(
-          multiple: true
-          allowClear: true
-          placeholder: "Search for a page"
-          tokenSeparators: [',']
-          data:
-            results: data['campaigns']
-            text: (item) -> item['name']
-          formatNoMatches: (term) ->
-            "No pages match '#{term}'"
-          formatResult: (campaign) ->
-            "<span>#{campaign['name']}</span>"
-          formatSelection: (campaign) ->
-            "<span>#{campaign['name']} #{campaign['id']}</span>"
-        )
+      ## TODO: should build select2 component view
+      @$('.js-tagged-pages').select2(
+        multiple: true
+        allowClear: true
+        placeholder: "Search for a page"
+        tokenSeparators: [',']
+        data:
+          results: @pages.toJSON()
+          text: (item) -> item['name']
+        formatNoMatches: (term) ->
+          "No pages match '#{term}'"
+        formatResult: (campaign) ->
+          "<span>#{campaign['name']}</span>"
+        formatSelection: (campaign) ->
+          "<span>#{campaign['name']} #{campaign['id']}</span>"
       )
 
     onShow: ->
@@ -251,7 +224,7 @@ define [
       @contentListView = new ContentList(
         collection: @model
       )
-      @editView = new EditArea(model: new ContentEntities.Model("store-id": -1))
+      @editView = new EditArea(model: new Base.Model(), pages: new Base.Collection())
 
     unselectAll: ->
       objs = _.clone(@model.models)

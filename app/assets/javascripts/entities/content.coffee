@@ -3,7 +3,9 @@ define [
   "entities/products"
 ], (Base, ProductEntities) ->
 
-  class Model extends Base.Model
+  Entities = Entities || {}
+
+  class Entities.Content extends Base.Model
 
     initialize: (opts, relatedOptions) ->
       if relatedOptions && relatedOptions['store-id']
@@ -111,8 +113,8 @@ define [
       }
 
 
-  class Collection extends Base.Collection
-    model: Model
+  class Entities.ContentCollection extends Base.Collection
+    model: Entities.Content
 
     initialize: (models, opts) ->
       @hasmodel = opts['model'] if opts
@@ -129,8 +131,8 @@ define [
       @collect((m) -> m.viewJSON())
 
 
-  class PageCollection extends Base.Collection
-    model: Model
+  class Entities.ContentPageCollection extends Base.Collection
+    model: Entities.Content
 
     initialize: (opts) ->
       @queryParams = opts['queryParams']
@@ -157,8 +159,8 @@ define [
         params = ""
       "#{require("app").apiRoot}/stores/126/content" + params
 
-  class PageableCollection extends Base.Collection
-    model: Model
+  class Entities.ContentPageableCollection extends Base.Collection
+    model: Entities.Content
 
     initialize: ->
       @resetPaging()
@@ -169,7 +171,7 @@ define [
         if val == ""
           delete @queryParams[key]
         else
-          @queryParams[key] = val 
+          @queryParams[key] = val
       @reset()
       @getNextPage()
 
@@ -190,7 +192,7 @@ define [
 
     getNextPage: (opts) ->
       unless @finished
-        collection = new PageCollection(queryParams: _.extend(@queryParams, @params))
+        collection = new Entities.ContentPageCollection(queryParams: _.extend(@queryParams, @params))
         xhr = collection.fetch()
         $.when(
           xhr
@@ -204,9 +206,5 @@ define [
     url: ->
       "#{require("app").apiRoot}/stores/126/content"
 
-  return {
-    Model: Model
-    Collection: Collection
-    PageableCollection: PageableCollection
-  }
+  Entities
 
