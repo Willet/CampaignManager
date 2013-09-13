@@ -4,8 +4,8 @@ define [
   'jquery',
   'underscore',
   'views/contentmanager',
-  'models/content',
-  'models/stores'
+  'entities/content',
+  'entities/stores'
 ], (App, Marionette, $, _, Views, ContentEntities, StoreEntities) ->
 
   ContentManager = App.module("ContentManager")
@@ -25,7 +25,9 @@ define [
       $.when(
         collection.getNextPage()
       ).done(->
-        App.main.show(new Views.Index(model: collection))
+        indexView = new Views.Index(model: collection)
+        indexView.on("change:sort-order", (new_order) -> collection.updateSortOrder(new_order))
+        App.main.show(indexView)
         App.titlebar.currentView.model.set({title: "Content"})
         App.header.currentView.model.set(page: "content")
       )

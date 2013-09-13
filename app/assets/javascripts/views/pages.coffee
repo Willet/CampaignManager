@@ -1,4 +1,4 @@
-define ["marionette", "models/pages"], (Marionette, Pages) ->
+define ["marionette"], (Marionette) ->
 
   class Index extends Marionette.Layout
 

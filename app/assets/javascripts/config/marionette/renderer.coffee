@@ -8,17 +8,18 @@ require [
   # Add additonal handlebars helpers
   Swag.registerHelpers(Handlebars)
 
-  Marionette.Renderer.render = (template_name, data) ->
-    # Setup rendering to use JST given the template name
-    try
-      template_name = _.result(t: template_name, 't')
-      template = JST[template_name]
-      unless template
-        console.error "JST Template '#{template_name}' does not exist."
-      else
-        return template(data)
-    catch e
-      console.error "error rendering template: '#{template_name}'"
-      throw e
-
+  # Make handlebars partials the same as JST
   Handlebars.partials = JST
+
+  _.extend Marionette.Renderer,
+
+    render: (template, data) ->
+      # Allow no-template views
+      return if template is false
+      templateFunction = @getTemplate(template)
+      throw "Template '#{template_name}' does not exist!" unless templateFunction
+      templateFunction(data)
+
+    getTemplate: (template) ->
+      template_name = _.result(t: template, 't')
+      template = JST[template_name]

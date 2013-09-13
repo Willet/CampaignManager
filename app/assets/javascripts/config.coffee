@@ -70,7 +70,16 @@ requirejs.config(
       deps: ['jquery']
 )
 
-require ["global/click_handler"]
-require ["global/form_serialize"]
-require ["config/marionette/renderer"]
-require ["init"]
+# Global Init of Modules Required (loaded in order)
+require [
+  "app",
+  "jquery",
+  "global/click_handler",
+  "global/form_serialize",
+  "config/marionette/application",
+  "config/marionette/renderer",
+  # sub apps to load, they attach to the root application
+  "apps/contentmanager/app",
+  "apps/pageswizard/app"
+], (App, $) ->
+  $().ready(-> App.start())

@@ -1,8 +1,8 @@
 define [
-  "components/entity"
-], (Entity) ->
+  "entities/base"
+], (Base) ->
 
-  class Model extends Entity.Model
+  class Model extends Base.Model
 
     url: (opts) ->
       "#{require("app").apiRoot}/stores/#{@get('store-id')}/products/#{@get('id') || ''}"
@@ -13,7 +13,7 @@ define [
       json['default-image-id'] = @get('default-image-id')?.viewJSON()
       json
 
-  class Collection extends Entity.Collection
+  class Collection extends Base.Collection
 
     model: Model
 

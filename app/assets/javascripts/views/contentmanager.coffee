@@ -1,10 +1,10 @@
 define [
   "marionette",
   "backboneprojections",
-  "models/content",
+  "entities/content",
   "jquery",
   "select2"
-], (Marionette, BackboneProjections, Content, $) ->
+], (Marionette, BackboneProjections, ContentEntities, $) ->
 
   ContentActions =
 
@@ -198,8 +198,20 @@ define [
       "click .js-unselect-all": "unselectAll"
       "click dd": "updateActive"
       "click .js-next-page": "nextPage"
+      "change #sort-order": "updateSortOrder"
+      "change #filter-page": "filterPage"
+      "change #filter-content-type": "filterContentType"
 
     last_id: null
+
+    filterContentType: (event) ->
+      @trigger("change:filter-content-type", @$(event.currentTarget).val())
+
+    filterPage: (event) ->
+      @trigger("change:filter-page", @$(event.currentTarget).val())
+
+    updateSortOrder: (event) ->
+      @trigger("change:sort-order", @$(event.currentTarget).val())
 
     autoLoadNextPage: (event) ->
       distanceToBottom = 75
@@ -239,7 +251,7 @@ define [
       @contentListView = new ContentList(
         collection: @model
       )
-      @editView = new EditArea(model: new Content.Model("store-id": -1))
+      @editView = new EditArea(model: new ContentEntities.Model("store-id": -1))
 
     unselectAll: ->
       objs = _.clone(@model.models)

@@ -1,16 +1,48 @@
 define "app", [
-  'backbone',
   'marionette',
   'jquery',
   'underscore',
-  'models',
+  'entities',
   'views/main',
   'components/regions/reveal'
-], (Backbone, Marionette, $, _, Models, Views, Reveal) ->
+], (Marionette, $, _, Entities, MainViews, Reveal) ->
 
   App = new Marionette.Application()
+
+  App.rootRoute = "root"
+
+  App.baseURI = window.appRoot
   App.appRoot = window.appRoot
   App.apiRoot = "#{App.appRoot}api"
+
+  App.addRegions
+    modal:
+      selector: "#modal"
+      regionType: Reveal.RevealDialog
+    header: "header"
+    infobar: "#info-bar"
+    titlebar: "#title-bar"
+    main: "#container"
+    footer: "footer"
+
+  App.addInitializer ->
+    App.header.show(new MainViews.Nav(model: new Backbone.Model(page: "none")))
+    App.titlebar.show(new MainViews.TitleBar(model: new Backbone.Model({title: "Loading..."})))
+
+    $(document).ajaxError (event, xhr) ->
+      if (xhr.status == 401)
+        redirectToLogin()
+
+  App.on "initialize:after", (options) ->
+    @startHistory()
+    @navigate(@rootRoute, trigger: true) unless @getCurrentRoute()
+
+
+  # Helpful for callback when a set of entities have been fetched
+  App.commands.setHandler "when:fetched", (entities, callback) ->
+    xhrs = _.chain([entities]).flatten().pluck("_fetch").value()
+    $.when(xhrs...).done ->
+      callback()
 
   App.global = {}
 
@@ -19,7 +51,7 @@ define "app", [
 
   App.setStore = (options) ->
     unless App.global.currentStore && App.global.currentStore.get("id") == options['id']
-      store = App.global.currentStore = new Models.Store.Model(id: options['id'])
+      store = App.global.currentStore = new Entities.Store.Model(id: options['id'])
       $.when(
         store.fetch()
       ).done(
@@ -38,47 +70,26 @@ define "app", [
   class Controller extends Marionette.Controller
 
     root: (opts) ->
-      App.main.show(new Views.Index())
+      App.main.show(new MainViews.Index())
 
     storeIndex: ->
-      collection = new Models.Store.Collection()
+      collection = new Entities.Store.Collection()
       collection.fetch(success: ->
         App.header.currentView.model.set(store: null)
         App.titlebar.currentView.model.set(title: "Stores")
-        App.main.show(new Views.Index(model: collection))
+        App.main.show(new MainViews.Index(model: collection))
       )
 
     storeShow: (store_id) ->
-      Backbone.history.navigate("#{Backbone.history.getFragment()}/pages", trigger: true, replace: true)
+      App.navigate("#{Backbone.history.getFragment()}/pages", trigger: true, replace: true)
 
     notFound: (opts) ->
-      App.main.show(new Views.NotFound())
+      App.main.show(new MainViews.NotFound())
       App.header.currentView.model.set(page: "notFound")
       App.titlebar.currentView.model.set(title: "404 - Page Not Found")
 
 
   rootController = new Controller()
   rootRouter = new Router(controller: rootController)
-
-  App.on("initialize:after", ->
-    if (Backbone.history && !Backbone.history.start({pushState: true, root: App.appRoot}))
-      rootController.notFound()
-  )
-
-  App.addInitializer(->
-    App.header.show(new Views.Nav(model: new Backbone.Model(page: "none")))
-    App.titlebar.show(new Views.TitleBar(model: new Backbone.Model({title: "Loading..."})))
-  )
-
-  App.addRegions(
-    modal:
-      selector: "#modal"
-      regionType: Reveal.RevealDialog
-    header: "header"
-    infobar: "#info-bar"
-    titlebar: "#title-bar"
-    main: "#container"
-    footer: "footer"
-  )
 
   App

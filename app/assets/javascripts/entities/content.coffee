@@ -1,8 +1,9 @@
 define [
-  "components/entity"
-], (Entity) ->
+  "entities/base",
+  "entities/products"
+], (Base, ProductEntities) ->
 
-  class Model extends Entity.Model
+  class Model extends Base.Model
 
     initialize: (opts, relatedOptions) ->
       if relatedOptions && relatedOptions['store-id']
@@ -29,9 +30,22 @@ define [
         approved: false
       )
 
+    tagNewProduct: (product) ->
+
+    parse: (data) ->
+      attrs = data
+      if data['tagged-products']
+        attrs['tagged-products'] = new ProductEntities.Collection(data['tagged-products'])
+      attrs
+
+    toJSON: ->
+      json = _.clone(@attributes)
+      if json['tagged-products']
+        json['tagged-products'] = @attributes['tagged-products'].toJSON()
+      json
+
     viewJSON: ->
       json = @toJSON()
-      json['product-ids'] = @get('product-ids')?.toJSON()
       json['selected'] = @get('selected')
       if @get('active')
         if @get('approved')
@@ -49,51 +63,55 @@ define [
         json['video-embed-url'] = @get('original-url').replace(/watch\?v=/, 'embed/')
         json['video-thumbnail'] = "http://i1.ytimg.com/vi/#{video_id}/mqdefault.jpg"
       else if @get('remote-url')
-        json['images'] = {
-          pico:
-            width: 16
-            height: 16
-            url: @get('remote-url').replace('master', 'pico')
-          icon:
-            width: 32
-            height: 32
-            url: @get('remote-url').replace('master', 'icon')
-          thumb:
-            width: 50
-            height: 50
-            url: @get('remote-url').replace('master', 'thumb')
-          small:
-            width: 100
-            height: 100
-            url: @get('remote-url').replace('master', 'small')
-          compact:
-            width: 160
-            height: 160
-            url: @get('remote-url').replace('master', 'compact')
-          medium:
-            width: 240
-            height: 240
-            url: @get('remote-url').replace('master', 'medium')
-          large:
-            width: 480
-            height: 480
-            url: @get('remote-url').replace('master', 'large')
-          grande:
-            width: 600
-            height: 600
-            url: @get('remote-url').replace('master', 'grande')
-          "1024x1024":
-            width: 1024
-            height: 1024
-            url: @get('remote-url').replace('master', '1024x1024')
-          master:
-            width: 2048
-            height: 2048
-            url: @get('remote-url')
-        }
+        json['images'] = @imageFormatsJSON(@get('remote-url'))
       json
 
-  class Collection extends Entity.Collection
+    imageFormatsJSON: (url) ->
+      {
+        pico:
+          width: 16
+          height: 16
+          url: url.replace('master', 'pico')
+        icon:
+          width: 32
+          height: 32
+          url: url.replace('master', 'icon')
+        thumb:
+          width: 50
+          height: 50
+          url: url.replace('master', 'thumb')
+        small:
+          width: 100
+          height: 100
+          url: url.replace('master', 'small')
+        compact:
+          width: 160
+          height: 160
+          url: url.replace('master', 'compact')
+        medium:
+          width: 240
+          height: 240
+          url: url.replace('master', 'medium')
+        large:
+          width: 480
+          height: 480
+          url: url.replace('master', 'large')
+        grande:
+          width: 600
+          height: 600
+          url: url.replace('master', 'grande')
+        "1024x1024":
+          width: 1024
+          height: 1024
+          url: url.replace('master', '1024x1024')
+        master:
+          width: 2048
+          height: 2048
+          url: url
+      }
+
+
+  class Collection extends Base.Collection
     model: Model
 
     initialize: (models, opts) ->
@@ -111,7 +129,7 @@ define [
       @collect((m) -> m.viewJSON())
 
 
-  class PageCollection extends Entity.Collection
+  class PageCollection extends Base.Collection
     model: Model
 
     initialize: (opts) ->
@@ -139,10 +157,29 @@ define [
         params = ""
       "#{require("app").apiRoot}/stores/126/content" + params
 
-  class PageableCollection extends Entity.Collection
+  class PageableCollection extends Base.Collection
     model: Model
 
     initialize: ->
+      @resetPaging()
+      @queryParams = {}
+
+    setFilter: (options) ->
+      for key, val of options
+        if val == ""
+          delete @queryParams[key]
+        else
+          @queryParams[key] = val 
+      @reset()
+      @getNextPage()
+
+    updateSortOrder: (new_order) ->
+      @queryParams['order'] = new_order
+      @reset()
+      @getNextPage()
+
+    reset: (models, options) ->
+      super(models, options)
       @resetPaging()
 
     resetPaging: ->
@@ -153,7 +190,7 @@ define [
 
     getNextPage: (opts) ->
       unless @finished
-        collection = new PageCollection(queryParams: @params)
+        collection = new PageCollection(queryParams: _.extend(@queryParams, @params))
         xhr = collection.fetch()
         $.when(
           xhr
@@ -166,49 +203,6 @@ define [
 
     url: ->
       "#{require("app").apiRoot}/stores/126/content"
-
-  ###
-  class PageableCollection extends Backbone.PageableCollection
-    model: Model
-
-    initialize: (opts) ->
-      super(arguments)
-
-    url: (opts) ->
-      "#{require("app").apiRoot}/stores/126/content"
-
-    lastPageId: null
-
-    mode: "infinite"
-    queryParams:
-      pageSize: "results"
-      "start-id": ->
-        @lastPageId
-      currentPage: null
-      totalPages: null
-      totalRecords: null
-
-    lastData: null
-
-    parseRecords: (data) ->
-      @lastData = @lastData || data['content']
-
-    parseLinks: (data) ->
-      oldLastPageId = @lastPageId
-      @lastPageId = data['last-id']+1
-      links = {}
-      if oldLastPageId
-        links['prev'] = "#{require("app").apiRoot}/stores/126/content?start-id=#{oldLastPageId}"
-      else
-        links['first'] = "#{require("app").apiRoot}/stores/126/content"
-      if @lastPageId
-        links['next'] = "#{require("app").apiRoot}/stores/126/content?start-id=#{@lastPageId}"
-      console.log links
-      return links
-
-    viewJSON: ->
-      @collect((m) -> m.viewJSON())
-  ###
 
   return {
     Model: Model

@@ -1,8 +1,8 @@
 define [
-  "models/products",
-  "models/content",
-  "models/pages",
-  "models/stores"
+  "entities/products",
+  "entities/content",
+  "entities/pages",
+  "entities/stores"
 ], (Products, Content, Pages, Stores) ->
 
   {

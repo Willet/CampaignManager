@@ -5,23 +5,23 @@
         <label class="inline"><b>Criteria</b></label>
       </div>
       <div class="columns large-3">
-        <select>
-          <option>Most Recent First</option>
-          <option>Least Recent First</option>
+        <select id="sort-order">
+          <option value="ascending">Most Recent First</option>
+          <option value="descending">Least Recent First</option>
         </select>
       </div>
       <div class="columns large-3">
-        <select>
-          <option>All Content Types</option>
-          <option>Instagram</option>
-          <option>Tumblr</option>
-          <option>Facebook</option>
-          <option>Youtube</option>
-          <option>Other</option>
+        <select id="filter-content-type">
+          <option value="">All Content Types</option>
+          <option value="instagram">Instagram</option>
+          <option value="tumblr">Tumblr</option>
+          <option value="facebook">Facebook</option>
+          <option value="youtube">Youtube</option>
+          <option value="other">Other</option>
         </select>
       </div>
       <div class="columns large-3">
-        <select>
+        <select id="filter-page">
           <option>All Pages</option>
           {{#each pages}}
           <option>{{name}}</option>
@@ -58,9 +58,6 @@
         {{#empty this}}
         No content meets selected criteria
         {{/empty}}
-      </div>
-      <div class="next-page">
-        <a href="#" class="button js-next-page" id="nextPage">Load More</a>
       </div>
       <div class="edit-area columns large-4">
       </div>

@@ -1,13 +1,14 @@
 define [
-  "components/entity"
-], (Entity) ->
+  "entities/base"
+], (Base) ->
 
-  class Model extends Entity.Model
+  class Model extends Base.Model
 
     url: (opts) ->
       "#{require("app").apiRoot}/stores/#{@get('store-id')}/campaigns/#{@get('id') || ''}"
 
-  class Collection extends Entity.Collection
+  class Collection extends Base.Collection
+
     url: (opts) ->
       "#{require("app").apiRoot}/stores/#{@store_id}/campaigns"
     parse: (data) ->
