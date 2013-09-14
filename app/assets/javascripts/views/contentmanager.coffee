@@ -50,6 +50,10 @@ define [
 
     toggleSelected: (event) ->
       @model.set(selected: !@model.get('selected'))
+      if @model.get('selected')
+        @model.trigger("grid-item:selected",@model)
+      else
+        @model.trigger("grid-item:deselected",@model)
 
     serializeData: -> @model.viewJSON()
 
@@ -61,6 +65,10 @@ define [
 
     selectItem: (event) ->
       @model.set('selected', !@model.get('selected'))
+      if @model.get('selected')
+        @model.trigger("grid-item:selected",@model)
+      else
+        @model.trigger("grid-item:deselected",@model)
 
     stopPropagation: (event) ->
       event.stopPropagation()
@@ -155,7 +163,7 @@ define [
       GridItem
 
   class Index extends Marionette.Layout
-
+    
     id: 'content-index'
 
     className: "grid-view"
@@ -229,11 +237,20 @@ define [
     unselectAll: ->
       objs = _.clone(@model.models)
       _.each(objs, (m) -> _.defer(=> m.set(selected: false)))
+      @pIdUnion.init()
+      @selectedItems = []
+      @selDataChange()
 
     selectAll: ->
       # TODO: this is a hack
       objs = _.clone(@model.models)
       _.each(objs, (m) -> _.defer(=> m.set(selected: true)))
+
+      for item in @allItems
+        unless item in @selectedItems
+          @pIdUnion.addList(@phGetProductIdsForContent(item.get('id')))
+      @selectedItems = @allItems
+      @selDataChange()
 
     onRender: (opts) ->
       @itemRegion.show(@contentListView)
@@ -244,8 +261,104 @@ define [
       @scrollFunction = => @autoLoadNextPage()
       $(window).on("scroll", @scrollFunction)
 
+      @initSelectionData()
+      @model.on("grid-item:selected", @itemWasSelected)
+      @model.on("grid-item:deselected", @itemWasDeselected)
+
     onClose: ->
       $(window).off("scroll", @scrollFunction)
+
+    initSelectionData: =>
+      @allItems = []
+      @selectedItems = []
+      @pIdUnion = new FrequencyList()
+      @pIdUnion.init()
+      objs = @model.models
+      _.each(objs, (m) => 
+        @allItems.push(m)
+        if m.get("selected") then @itemWasSelected(m)
+        )
+
+      @selDataChange()
+
+    itemWasSelected: (m) =>
+      console.log("Selected")
+      #For debugging
+      if m in @selectedItems
+        console.log("Error: Object is already in selected list")
+        return
+      @selectedItems.push(m)
+      @pIdUnion.addList(@phGetProductIdsForContent(m.get('id')))
+
+      @selDataChange()
+
+    itemWasDeselected: (m) =>
+      console.log("Deselected")
+      #For debugging
+      unless m in @selectedItems
+        console.log("Error: Object isn't in selected list")
+        return
+      @selectedItems.splice(@selectedItems.indexOf(m),1)
+      @pIdUnion.removeList(@phGetProductIdsForContent(m.get('id')))
+
+      @selDataChange()
+
+    selDataChange: =>
+      @selDataPrint()
+
+    selDataPrint: =>
+      console.log("=== Selected Item Ids ===")
+      #For debugging, just prints ids
+      ids = (m.get('id') for m in @selectedItems)
+      console.log(ids)
+
+      console.log("== Tagged Product Ids ==")
+      console.log(@pIdUnion.items)
+
+    #Placeholder
+    phGetProductIdsForContent: (cId) =>
+      switch(cId)
+        when 170 then [1,2]
+        when 171 then [1,2,3]
+        when 172 then [2,3,4]
+        when 173 then [3,4,5]
+        when 174 then [4,5,6]
+        when 175 then [5,6]
+        else []
+
+    #Works like a list, expect for duplicates in the item list there is an
+    #associated list specifying how many duplicates there are of each item
+    class FrequencyList
+      init: =>
+        @items = []
+        @freq = []
+
+      addList: (list) =>
+        for item in list
+          @addItem(item)
+
+      removeList: (list) =>
+        for item in list
+          @removeItem(item)
+
+      addItem: (item) =>
+        idx = @items.indexOf(item)
+        if idx is -1
+          @items.push(item)
+          @freq.push(1)
+        else
+          @freq[idx] = @freq[idx] + 1
+
+      removeItem: (item) =>
+        idx = @items.indexOf(item)
+        if idx is -1
+          console.log("Error: PId to remove is not in set")
+          return
+        @freq[idx] = @freq[idx] - 1
+        if @freq[idx] is 0
+          @items.splice(idx,1)
+          @freq.splice(idx,1)
+
 
   class ViewModeSelect extends Marionette.ItemView
 
