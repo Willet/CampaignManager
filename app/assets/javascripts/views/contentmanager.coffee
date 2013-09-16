@@ -253,7 +253,7 @@ define [
       for item in objs
         unless item in @selectedItems
           added = added.concat(@pIdUnion.addList(@tagData.getTaggedProductIdsFor(item.get('id'))))
-      console.log(added.length)
+          
       #Updates txt box display
       for item in added
         @addProductToTxtBox(item,126)
