@@ -253,7 +253,7 @@ define [
       for item in objs
         unless item in @selectedItems
           added = added.concat(@pIdUnion.addList(@tagData.getTaggedProductIdsFor(item.get('id'))))
-          
+
       #Updates txt box display
       for item in added
         @addProductToTxtBox(item,126)
@@ -318,7 +318,7 @@ define [
       @selDataChange()
 
     selDataChange: =>
-      #For denugging
+      #For debugging
       #@selDataPrint()
 
     selDataPrint: =>
@@ -372,7 +372,7 @@ define [
               i = i + 1
 
             #Adds content tag data
-            #TODO: This data currently does not exist yet, so I am going to use some placeholders
+            #TODO: This data currently does not exist yet, so I am just using some placeholders
             @tagData.tagWithProduct(172,46)
             @tagData.tagWithProduct(172,47)
             @tagData.tagWithProduct(173,46)
@@ -384,38 +384,72 @@ define [
     #Data object to hold content tag data in terms of ids
     #The idea is that there is one big ajax request when the page loads from which the minimal Id data is stored locally
     #and from there on ajax requests are only made when non-id data needs to be displayed
-    #TODO: Optimize functions a bit by sorting Ids and using non-linear searches
     class TagData
       init: =>
         #Arrays are kept in sync, so taggestProducts[idx] = products for contentIds[idx]
-        @contentIds = []
+        @contentIds = [] #Sorted
         @taggedProducts = []
         @taggedPages = []
 
       addContent: (contId) =>
-        @contentIds.push contId
-        @taggedProducts.push []
-        @taggedPages.push []
+        #Inserts into sorted array, smallest first
+        idx = @insertIntoSortedArray(@contentIds,contId)
+        @taggedProducts.splice(idx,0,[])
+        @taggedPages.splice(idx,0,[])
 
       tagWithProduct: (contId, prodId) =>
-        @getTaggedProductIdsFor(contId).push prodId
+        @insertIntoSortedArray(@getTaggedProductIdsFor(contId), prodId)
 
       untagWithProduct: (contId, prodId) =>
         a = @getTaggedProductIdsFor(contId)
-        a.splice(a.indexOf(prodId),1)
+        a.splice(@getIdx(a,prodId),1)
 
       tagWithPage: (contId, pageId) =>
-        @getTaggedPageIdsFor(contId).push pageId
+        @insertIntoSortedArray(@getTaggedPageIdsFor(contId), pageId)
 
       untagWithPage: (contId, pageId) =>
         a = @getTaggedPageIdsFor(contId)
-        a.splice(a.indexOf(pageId),1)
+        a.splice(@getIdx(a,pageId),1)
 
       getTaggedProductIdsFor: (contId) =>
-        @taggedProducts[@contentIds.indexOf(contId)]
+        r = @taggedProducts[@getIdx(@contentIds,contId)]
+        return r
 
       getTaggedPageIdsFor: (contId) =>
-        @taggedPages[@contentIds.indexOf(contId)]
+        r = @taggedPages[@getIdx(@contentIds,contId)]
+        return r
+
+      # Helper functions #
+
+      #For arrays sorted smallest elements first
+      #Returns index of inserted item
+      insertIntoSortedArray: (a, num) ->
+        idx = 0
+        while idx < a.length
+          if a[idx] > num
+            break
+          idx = idx + 1
+        a.splice(idx,0,num)
+        return idx
+
+      #Returns index of element, using binary search
+      getIdx: (a, num) ->
+        low = 0
+        high = a.length - 1
+        while high > low
+          mid = Math.round((high-low)/2) + low
+          if a[mid] is num
+            return mid
+          else
+            if a[mid] > num
+              high = mid - 1
+            else
+              low = mid + 1
+        if a[low] is num
+          return low
+
+        #Element not found
+        return -1
 
     #Works like a list, expect for duplicates in the item list there is an
     #associated list specifying how many duplicates there are of each item
@@ -462,7 +496,6 @@ define [
           true
         else
           false
-
 
   class ViewModeSelect extends Marionette.ItemView
 
