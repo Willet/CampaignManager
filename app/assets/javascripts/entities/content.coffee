@@ -1,7 +1,7 @@
 define [
   "entities/base",
   "entities/products"
-], (Base, ProductEntities) ->
+], (Base, Entities) ->
 
   Entities = Entities || {}
 
@@ -32,18 +32,26 @@ define [
         approved: false
       )
 
-    tagNewProduct: (product) ->
-
     parse: (data) ->
       attrs = data
       if data['tagged-products']
-        attrs['tagged-products'] = new ProductEntities.Collection(data['tagged-products'])
+        modelmap = _.map(data['tagged-products'], (id) -> { id: id, 'store-id': attrs['store-id'] })
+        if @get('tagged-products')
+          attrs['tagged-products'] = @get('tagged-products')
+          @get('tagged-products').add(modelmap)
+        else
+          attrs['tagged-products'] = new Entities.ProductCollection(modelmap)
+        attrs['tagged-products'].collect((m) -> m.fetch())
+      else
+        modelmap = []
+        attrs['tagged-products'] = new Entities.ProductCollection(modelmap)
+
       attrs
 
     toJSON: ->
-      json = _.clone(@attributes)
-      if json['tagged-products']
-        json['tagged-products'] = @attributes['tagged-products'].toJSON()
+      json = super()
+      if @attributes['tagged-products']
+        json['tagged-products'] = @get('tagged-products').collect((m) -> m.get("id"))
       json
 
     viewJSON: ->
@@ -166,6 +174,12 @@ define [
       @resetPaging()
       @queryParams = {}
 
+    selectAll: ->
+      @collect((m) -> m.set('selected', true))
+
+    unselectAll: ->
+      @collect((m) -> m.set('selected', false))
+
     setFilter: (options) ->
       for key, val of options
         if val == ""
@@ -191,7 +205,8 @@ define [
       @finished = false
 
     getNextPage: (opts) ->
-      unless @finished
+      unless @finished || @in_progress
+        @in_progress = true
         collection = new Entities.ContentPageCollection(queryParams: _.extend(@queryParams, @params))
         xhr = collection.fetch()
         $.when(
@@ -200,6 +215,7 @@ define [
           @add(collection.models, at: @length)
           @params = collection.params
           @finished = true unless @params['start-id']
+          @in_progress = false
         )
       xhr
 

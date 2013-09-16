@@ -9,7 +9,7 @@ define "app", [
 
   App = window.App = new Marionette.Application()
 
-  App.rootRoute = "root"
+  App.rootRoute = window.appRoot
 
   App.baseURI = window.appRoot
   App.appRoot = window.appRoot
@@ -30,8 +30,7 @@ define "app", [
     App.titlebar.show(new MainViews.TitleBar(model: new Backbone.Model({title: "Loading..."})))
 
     $(document).ajaxError (event, xhr) ->
-      if (xhr.status == 401)
-        redirectToLogin()
+      App.redirectToLogin() if (xhr.status == 401)
 
   App.on "initialize:after", (options) ->
     @startHistory()
@@ -45,6 +44,10 @@ define "app", [
       callback()
 
   App.global = {}
+
+  # Handle Unauthorized (Redirect to login, etc...)
+  App.redirectToLogin = ->
+    @navigate("#{@baseURI}login?r=#{window.location.hash}")
 
   App.currentStore = ->
     return App.global.currentStore

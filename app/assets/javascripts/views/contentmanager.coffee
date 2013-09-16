@@ -1,105 +1,158 @@
 define [
   "marionette",
   "jquery",
-  "entities/base"
+  "entities/products",
   "select2"
-], (Marionette, $, Base) ->
+], (Marionette, $, Entities) ->
 
-  ContentActions =
+  Views = Views || {}
 
-    undecideContent: (event) ->
-      @model.undecided()
-      event.stopPropagation()
+
+  class Views.ContentIndexLayout extends Marionette.Layout
+
+    id: 'content-index'
+
+    className: "grid-view"
+
+    template: "content_index"
+
+    regions:
+      "list": "#list"
+      "listControls": "#list-controls"
+      "multiedit": ".edit-area"
+
+    events:
+      "click dd": "updateActive"
+      "change #sort-order": "updateSortOrder"
+      "change #filter-page": "filterPage"
+      "change #filter-content-type": "filterContentType"
+
+    triggers:
+      "click .js-select-all": "content:select-all"
+      "click .js-unselect-all": "content:unselect-all"
+
+    initialize: (opts) ->
+      @current_state = opts['inital_state']
+
+    filterContentType: (event) ->
+      @trigger("change:filter-content-type", @$(event.currentTarget).val())
+
+    filterPage: (event) ->
+      @trigger("change:filter-page", @$(event.currentTarget).val())
+
+    updateSortOrder: (event) ->
+      @trigger("change:sort-order", @$(event.currentTarget).val())
+
+    autoLoadNextPage: (event) ->
+      distanceToBottom = 75
+      if ($(document).scrollTop() + $(window).height()) > $(document).height() - distanceToBottom
+        @nextPage()
+
+    nextPage: ->
+      @trigger("fetch:next-page")
       false
 
-    approveContent: (event) ->
-      @model.approve()
-      event.stopPropagation()
-      false
+    updateActive: (event) ->
+      @switchActive(@extractState(event.currentTarget))
 
-    rejectContent: (event) ->
-      @model.reject()
-      event.stopPropagation()
-      false
+    extractState: (element) ->
+      if result = element.className.match(/js-tab-([a-zA-Z-_]+)/)
+        return result[1]
+      null
 
-    prioritizeContent: (event) ->
-      alert("TODO: prioritize items")
-      event.stopPropagation()
-      false
+    currentlyActive: ->
+      @$('.tabs dd.active').className.split(/\s+/)
 
-  class GridItem extends Marionette.Layout
+    switchActive: (new_state) ->
+      @$(".tabs .active").removeClass("active")
+      @$(".tabs .js-tab-#{new_state}").addClass("active")
+      @current_state = new_state
+      @$el.removeClass("grid-view").removeClass("list-view").addClass("#{new_state}-view")
+
+    onRender: (opts) ->
+
+    onShow: (opts) ->
+      @scrollFunction = => @autoLoadNextPage()
+      $(window).on("scroll", @scrollFunction)
+
+    onClose: ->
+      $(window).off("scroll", @scrollFunction)
+
+
+  class Views.ContentList extends Marionette.CollectionView
+
+    getItemView: (item) ->
+      Views.ContentGridItem
+
+
+  class Views.ContentGridItem extends Marionette.Layout
 
     template: "_content_grid_item"
 
     regions:
       "editArea": ".edit-area"
 
-    events:
-      "click .overlay": "selectItem"
-      "click .js-view": "viewModal"
-      "click .js-approve": "approveContent"
-      "click .js-reject": "rejectContent"
-      "click .js-undecided": "undecideContent"
-      "click .js-prioritize": "prioritizeContent"
-      "click .js-select": "toggleSelected"
-      "click a": "stopPropagation"
+    triggers:
+      "click .js-select": "content:select-toggle"
+      "click .overlay": "content:select-toggle"
+      "click .js-approve": "content:approve"
+      "click .js-reject": "content:reject"
+      "click .js-undecided": "content:undecided"
+      "click .js-prioritize": "content:prioritize" # NOT USED
+      "click .js-view": "content:preview"
 
     initialize: ->
-      _.extend(@, ContentActions)
       @model.on("change", => @render())
 
-    toggleSelected: (event) ->
-      @model.set(selected: !@model.get('selected'))
-
     serializeData: -> @model.viewJSON()
-
-    viewModal: (event) ->
-      # TODO: soft navigation ? without losing selection
-      require("app").modal.show(new QuickView(model: @model))
-      event.stopPropagation()
-      false
-
-    selectItem: (event) ->
-      @model.set('selected', !@model.get('selected'))
 
     stopPropagation: (event) ->
       event.stopPropagation()
       false
 
     onRender: ->
-      @editArea.show(new EditArea(model: @model, pages: new Base.Collection()))
+      @editArea.show(new Views.ContentEditArea(model: @model))
+      @relayEvents(@editArea.currentView, 'edit')
 
-    class QuickView extends Marionette.ItemView
+    onShow: ->
 
-      template: "_content_quick_view"
+  class Views.ContentQuickView extends Marionette.ItemView
 
-      serializeData: -> @model.viewJSON()
-
-  class EditArea extends Marionette.Layout
-
-    template: "_content_edit_item"
+    template: "_content_quick_view"
 
     serializeData: -> @model.viewJSON()
 
-    events:
-      "click .js-approve": "approveContent"
-      "click .js-reject": "rejectContent"
-      "select2-blur .js-tagged-products": "productsChanged"
-      "select2-blur .js-tagged-pages": "pagesChanged"
+  class Views.TaggedPagesInput extends Marionette.ItemView
 
-    initialize: (options) ->
-      _.extend(@, ContentActions)
-      @pages = options['pages']
+    template: false
 
-    productsChanged: (event) ->
-      @trigger("change:tagged-products", @$(".js-tagged-products").select2("data"))
+    onShow: ->
+      @$el.parent().select2(
+        multiple: true
+        allowClear: true
+        placeholder: "Search for a page"
+        tokenSeparators: [',']
+        data:
+          results: [] # TODO: needs page data
+          text: (item) -> item['name']
+        formatNoMatches: (term) ->
+          "No pages match '#{term}'"
+        formatResult: (campaign) ->
+          "<span>#{campaign['name']}</span>"
+        formatSelection: (campaign) ->
+          "<span>#{campaign['name']} #{campaign['id']}</span>"
+      )
+      false
 
-    pagesChanged: (event) ->
-      @trigger("change:tagged-pages", @$(".js-tagged-pages").select2("data"))
+    onClose: ->
+      @$el.parent().select2("destroy")
 
-    setupTaggedProducts: ->
-      ## TODO: should build select2 component view
-      @$('.js-tagged-products').select2(
+  class Views.TaggedProductInput extends Marionette.ItemView
+
+    template: false
+
+    onShow: ->
+      @$el.parent().select2(
         multiple: true
         allowClear: true
         placeholder: "Search for a product"
@@ -121,141 +174,66 @@ define [
         formatSelection: (product) ->
           "<span>#{product['name']} #{product['id']}</span>"
       )
+      if @model.get("tagged-products")
+        @$el.parent().select2('data', @model.get("tagged-products").toJSON())
+      @$el.parent().on "change", (event, element) =>
+        if event.added
+          model = new Entities.Product(event.added)
+          @model.get('tagged-products').add(model)
+          @trigger('add', model)
+        if event.removed
+          model = @model.get('tagged-products').get(event.removed.id)
+          @model.get('tagged-products').remove(model)
+          @trigger('remove', model)
       false
 
-    setupTaggedPages: ->
-      ## TODO: should build select2 component view
-      @$('.js-tagged-pages').select2(
-        multiple: true
-        allowClear: true
-        placeholder: "Search for a page"
-        tokenSeparators: [',']
-        data:
-          results: @pages.toJSON()
-          text: (item) -> item['name']
-        formatNoMatches: (term) ->
-          "No pages match '#{term}'"
-        formatResult: (campaign) ->
-          "<span>#{campaign['name']}</span>"
-        formatSelection: (campaign) ->
-          "<span>#{campaign['name']} #{campaign['id']}</span>"
-      )
-
-    onShow: ->
-      @on("change:tagged-products", (data) -> console.log data)
-      @setupTaggedProducts()
-      @setupTaggedPages()
-
     onClose: ->
-      @$('.js-tagged-products').select2('destroy')
+      @$el.parent().select2("destroy")
 
-  class ContentList extends Marionette.CollectionView
+  class Views.ContentEditArea extends Marionette.Layout
 
-    getItemView: (item) ->
-      GridItem
+    template: "_content_edit_item"
 
-  class Index extends Marionette.Layout
-
-    id: 'content-index'
-
-    className: "grid-view"
-
-    template: "content_index"
+    serializeData: -> @model.viewJSON()
 
     regions:
-      "itemRegion": "#items"
-      "editArea": ".edit-area"
+      "taggedProducts": ".js-tagged-products"
+      "taggedPages": ".js-tagged-pages"
 
     events:
-      "click .js-select-all": "selectAll"
-      "click .js-unselect-all": "unselectAll"
-      "click dd": "updateActive"
-      "click .js-next-page": "nextPage"
-      "change #sort-order": "updateSortOrder"
-      "change #filter-page": "filterPage"
-      "change #filter-content-type": "filterContentType"
+      "select2-blur .js-tagged-products": "productsChanged"
+      "select2-blur .js-tagged-pages": "pagesChanged"
 
-    last_id: null
+    triggers:
+      "click .js-approve": "content:approve"
+      "click .js-reject": "content:reject"
+      "click .js-undecided": "content:undecided"
 
-    filterContentType: (event) ->
-      @trigger("change:filter-content-type", @$(event.currentTarget).val())
+    productsChanged: (event) ->
+      @trigger("change:tagged-products", @$(".js-tagged-products").select2("data"))
 
-    filterPage: (event) ->
-      @trigger("change:filter-page", @$(event.currentTarget).val())
+    pagesChanged: (event) ->
+      @trigger("change:tagged-pages", @$(".js-tagged-pages").select2("data"))
 
-    updateSortOrder: (event) ->
-      @trigger("change:sort-order", @$(event.currentTarget).val())
+    onShow: ->
+      @taggedProducts.show(new Views.TaggedProductInput(model: @model))
+      @taggedPages.show(new Views.TaggedPagesInput(model: @model))
+      @relayEvents(@taggedProducts.currentView, 'tagged-products')
+      @relayEvents(@taggedPages.currentView, 'tagged-pages')
 
-    autoLoadNextPage: (event) ->
-      distanceToBottom = 75
-      if ($(document).scrollTop() + $(window).height()) > $(document).height() - distanceToBottom
-        @nextPage()
-
-    nextPage: ->
-      $.when(
-        @model.getNextPage()
-      ).done(=>
-        @trigger("nextpage")
-      )
-      false
-
-    updateActive: (event) ->
-      @switchActive(@extractState(event.currentTarget))
-
-    extractState: (element) ->
-      if result = element.className.match(/js-tab-([a-zA-Z-_]+)/)
-        return result[1]
-      null
-
-    currentlyActive: ->
-      @$('.tabs dd.active').className.split(/\s+/)
-
-    switchActive: (new_state) ->
-      @$(".tabs .active").removeClass("active")
-      @$(".tabs .js-tab-#{new_state}").addClass("active")
-      @current_state = new_state
-      @$el.removeClass("grid-view").removeClass("list-view").addClass("#{new_state}-view")
-      @itemRegion.currentView.render()
-
-    serializeData: -> @model.viewJSON()
-
-    initialize: (opts) ->
-      @current_state = opts['inital_state']
-      @contentListView = new ContentList(
-        collection: @model
-      )
-      @editView = new EditArea(model: new Base.Model(), pages: new Base.Collection())
-
-    unselectAll: ->
-      objs = _.clone(@model.models)
-      _.each(objs, (m) -> _.defer(=> m.set(selected: false)))
-
-    selectAll: ->
-      # TODO: this is a hack
-      objs = _.clone(@model.models)
-      _.each(objs, (m) -> _.defer(=> m.set(selected: true)))
-
-    onRender: (opts) ->
-      @itemRegion.show(@contentListView)
-      @editArea.show(@editView)
-      #@$('#js-tag-search').tokenInput()
-
-    onShow: (opts) ->
-      @scrollFunction = => @autoLoadNextPage()
-      $(window).on("scroll", @scrollFunction)
+    onRender: ->
 
     onClose: ->
-      $(window).off("scroll", @scrollFunction)
 
-  class ViewModeSelect extends Marionette.ItemView
+  class Views.ContentListControls extends Marionette.ItemView
 
-    template: "_view_mode_select"
+    template: "_content_list_controls"
 
     events:
       "click dd": "updateActive"
 
     initialize: (opts) ->
-      @current_state = opts['inital_state']
+      @current_state = "grid"
 
     updateActive: (event) ->
       @switchActive(@extractState(event.currentTarget))
@@ -272,34 +250,6 @@ define [
       @$(".tabs .active").removeClass("active")
       @$(".tabs .js-tab-#{new_state}").addClass("active")
       @current_state = new_state
-      @trigger('new-state', @current_state)
+      @trigger('change:state', @current_state)
 
-  class Show extends Marionette.Layout
-
-    template: "content_show"
-
-    events:
-      "click .js-save": "saveContent"
-      "click .js-approve": "approveContent"
-      "click .js-reject": "rejectContent"
-
-    serializeData: -> @model.viewJSON()
-
-    initialize: (opts) ->
-      _.extend(@, ContentActions)
-
-    onRender: (opts) ->
-
-    onShow: (opts) ->
-
-    saveContent: (event) ->
-      data = @$('form').serializeObject()
-      @model.save(data)
-      false
-
-  return {
-    Index: Index
-    Show: Show
-  }
-
-
+  Views

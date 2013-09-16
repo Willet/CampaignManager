@@ -76,8 +76,10 @@ require [
   "jquery",
   "global/click_handler",
   "global/form_serialize",
+  "config/backbone/model",
   "config/marionette/application",
   "config/marionette/renderer",
+  "config/marionette/view",
   # sub apps to load, they attach to the root application
   "apps/contentmanager/app",
   "apps/pageswizard/app"

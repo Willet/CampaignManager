@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="columns large-2">
+    <label class="inline"><b>Criteria</b></label>
+  </div>
+  <div class="columns large-3">
+    <select id="sort-order">
+      <option value="ascending">Most Recent First</option>
+      <option value="descending">Least Recent First</option>
+    </select>
+  </div>
+  <div class="columns large-3">
+    <select id="filter-content-type">
+      <option value="">All Content Types</option>
+      <option value="instagram">Instagram</option>
+      <option value="tumblr">Tumblr</option>
+      <option value="facebook">Facebook</option>
+      <option value="youtube">Youtube</option>
+      <option value="other">Other</option>
+    </select>
+  </div>
+  <div class="columns large-3">
+    <select id="filter-page">
+      <option>All Pages</option>
+      {{#each pages}}
+      <option>{{name}}</option>
+      {{/each}}
+    </select>
+  </div>
+  <div class="columns large-12">
+    <div class="row">
+      <span class="columns large-2 inline"><label class="inline"><b>Tags</b></label></span>
+      <span class="columns large-10">
+        <input type="text" id="js-tag-search" />
+      </span>
+    </div>
+  </div>
+  <div class="columns" />
+</div>
+
+<div id="view-mode-select" class="row">
+  <div class="large-6 columns">
+    <dl class="tabs pill small">
+      <dd class="js-tab-grid active"><a class="js-grid">Grid</a></dd>
+      <dd class="js-tab-list"><a class="js-list">List</a></dd>
+    </dl>
+  </div>
+  <div class="large-6 columns text-right">
+    <a href="#" class="js-select-all">Select All</a> |
+    <a href="#" class="js-unselect-all">Clear Selection</a>
+  </div>
+</div>

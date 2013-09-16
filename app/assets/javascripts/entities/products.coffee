@@ -33,8 +33,4 @@ define [
     viewJSON: ->
       @collect((m) -> m.viewJSON())
 
-  return {
-    Model: Entities.Product
-    Collection: Entities.ProductCollection
-  }
-
+  Entities
