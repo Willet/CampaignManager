@@ -237,6 +237,9 @@ define [
     unselectAll: ->
       objs = _.clone(@model.models)
       _.each(objs, (m) -> _.defer(=> m.set(selected: false)))
+      removed =  @pIdUnion.items
+      for item in removed
+        @removeProductFromTxtBox(item)
       @pIdUnion.init()
       @selectedItems = []
       @selDataChange()
@@ -246,10 +249,16 @@ define [
       objs = _.clone(@model.models)
       _.each(objs, (m) -> _.defer(=> m.set(selected: true)))
 
-      for item in @allItems
+      added = []
+      for item in objs
         unless item in @selectedItems
-          @pIdUnion.addList(@phGetProductIdsForContent(item.get('id')))
-      @selectedItems = @allItems
+          added = added.concat(@pIdUnion.addList(@tagData.getTaggedProductIdsFor(item.get('id'))))
+      console.log(added.length)
+      #Updates txt box display
+      for item in added
+        @addProductToTxtBox(item,126)
+
+      @selectedItems = objs
       @selDataChange()
 
     onRender: (opts) ->
@@ -262,6 +271,7 @@ define [
       $(window).on("scroll", @scrollFunction)
 
       @initSelectionData()
+      @initTagData(126)
       @model.on("grid-item:selected", @itemWasSelected)
       @model.on("grid-item:deselected", @itemWasDeselected)
 
@@ -269,62 +279,143 @@ define [
       $(window).off("scroll", @scrollFunction)
 
     initSelectionData: =>
-      @allItems = []
       @selectedItems = []
       @pIdUnion = new FrequencyList()
       @pIdUnion.init()
       objs = @model.models
-      _.each(objs, (m) => 
-        @allItems.push(m)
+      _.each(objs, (m) =>
         if m.get("selected") then @itemWasSelected(m)
         )
 
       @selDataChange()
 
     itemWasSelected: (m) =>
-      console.log("Selected")
       #For debugging
       if m in @selectedItems
         console.log("Error: Object is already in selected list")
         return
       @selectedItems.push(m)
-      @pIdUnion.addList(@phGetProductIdsForContent(m.get('id')))
+      added = @pIdUnion.addList(@tagData.getTaggedProductIdsFor(m.get('id')))
+
+      #Updates txt box display
+      for item in added
+        @addProductToTxtBox(item,126)
 
       @selDataChange()
 
     itemWasDeselected: (m) =>
-      console.log("Deselected")
       #For debugging
       unless m in @selectedItems
         console.log("Error: Object isn't in selected list")
         return
       @selectedItems.splice(@selectedItems.indexOf(m),1)
-      @pIdUnion.removeList(@phGetProductIdsForContent(m.get('id')))
+      removed = @pIdUnion.removeList(@tagData.getTaggedProductIdsFor(m.get('id')))
+
+      #Updates txt box display
+      for item in removed
+        @removeProductFromTxtBox(item)
 
       @selDataChange()
 
     selDataChange: =>
-      @selDataPrint()
+      #For denugging
+      #@selDataPrint()
 
     selDataPrint: =>
       console.log("=== Selected Item Ids ===")
-      #For debugging, just prints ids
       ids = (m.get('id') for m in @selectedItems)
       console.log(ids)
 
+      ids = @pIdUnion.items
       console.log("== Tagged Product Ids ==")
-      console.log(@pIdUnion.items)
+      console.log(ids)
+      #for id in ids
+      #  @addProductToTxtBox(id,126)
 
-    #Placeholder
-    phGetProductIdsForContent: (cId) =>
-      switch(cId)
-        when 170 then [1,2]
-        when 171 then [1,2,3]
-        when 172 then [2,3,4]
-        when 173 then [3,4,5]
-        when 174 then [4,5,6]
-        when 175 then [5,6]
-        else []
+    addProductToTxtBox: (pId,storeId) =>
+      $.ajax "#{require("app").apiRoot}/stores/#{storeId}/products/#{pId}",
+        type: 'GET'
+        dataType: 'json'
+        error: (jqXHR, textStatus, errorThrown) ->
+            console.log("AJAX Error while adding product to textbox: #{textStatus}")
+        success: (data, textStatus, jqXHR) ->
+            dataArray = $('div#selection-edit .js-tagged-products').select2("data")
+            dataArray.push(data)
+            $('div#selection-edit .js-tagged-products').select2("data",dataArray)
+
+    removeProductFromTxtBox: (pId) =>
+      dataArray = @$('div#selection-edit .js-tagged-products').select2("data")
+      idx = 0
+      while idx < dataArray.length
+        if dataArray[idx]["id"] is pId
+          dataArray.splice(idx,1)
+          break
+        idx = idx + 1
+      @$('div#selection-edit .js-tagged-products').select2("data",dataArray)
+
+    initTagData: (storeId) =>
+      @tagData = new TagData()
+      @tagData.init()
+      $.ajax "#{require("app").apiRoot}/stores/#{storeId}/content",
+        type: 'GET'
+        dataType: 'json'
+        error: (jqXHR, textStatus, errorThrown) ->
+            console.log("AJAX Error while initializing tag data: #{textStatus}")
+        success: (data, textStatus, jqXHR) =>
+            #Adds Content Id Data
+            size = data["size"]
+            products = data["content"]
+            i = 0
+            while i < size
+              p = products[i]
+              @tagData.addContent(p["id"])
+              i = i + 1
+
+            #Adds content tag data
+            #TODO: This data currently does not exist yet, so I am going to use some placeholders
+            @tagData.tagWithProduct(172,46)
+            @tagData.tagWithProduct(172,47)
+            @tagData.tagWithProduct(173,46)
+            @tagData.tagWithProduct(173,47)
+            @tagData.tagWithProduct(173,49)
+            @tagData.tagWithProduct(174,47)
+            @tagData.tagWithProduct(174,49)
+
+    #Data object to hold content tag data in terms of ids
+    #The idea is that there is one big ajax request when the page loads from which the minimal Id data is stored locally
+    #and from there on ajax requests are only made when non-id data needs to be displayed
+    #TODO: Optimize functions a bit by sorting Ids and using non-linear searches
+    class TagData
+      init: =>
+        #Arrays are kept in sync, so taggestProducts[idx] = products for contentIds[idx]
+        @contentIds = []
+        @taggedProducts = []
+        @taggedPages = []
+
+      addContent: (contId) =>
+        @contentIds.push contId
+        @taggedProducts.push []
+        @taggedPages.push []
+
+      tagWithProduct: (contId, prodId) =>
+        @getTaggedProductIdsFor(contId).push prodId
+
+      untagWithProduct: (contId, prodId) =>
+        a = @getTaggedProductIdsFor(contId)
+        a.splice(a.indexOf(prodId),1)
+
+      tagWithPage: (contId, pageId) =>
+        @getTaggedPageIdsFor(contId).push pageId
+
+      untagWithPage: (contId, pageId) =>
+        a = @getTaggedPageIdsFor(contId)
+        a.splice(a.indexOf(pageId),1)
+
+      getTaggedProductIdsFor: (contId) =>
+        @taggedProducts[@contentIds.indexOf(contId)]
+
+      getTaggedPageIdsFor: (contId) =>
+        @taggedPages[@contentIds.indexOf(contId)]
 
     #Works like a list, expect for duplicates in the item list there is an
     #associated list specifying how many duplicates there are of each item
@@ -333,31 +424,44 @@ define [
         @items = []
         @freq = []
 
+      #Returns list of items that were added to the items list
       addList: (list) =>
+        added = []
         for item in list
-          @addItem(item)
+          if @addItem(item) then added.push(item)
+        return added
 
+      #Returns list of items that were removed from the items list
       removeList: (list) =>
+        removed = []
         for item in list
-          @removeItem(item)
+          if @removeItem(item) then removed.push(item)
+        return removed
 
+      #Returns True if item does not already exist in list
       addItem: (item) =>
         idx = @items.indexOf(item)
         if idx is -1
           @items.push(item)
           @freq.push(1)
+          true
         else
           @freq[idx] = @freq[idx] + 1
+          false
 
+      #Returns True if item will not exist in list after operation
       removeItem: (item) =>
         idx = @items.indexOf(item)
         if idx is -1
           console.log("Error: PId to remove is not in set")
-          return
+          return false
         @freq[idx] = @freq[idx] - 1
         if @freq[idx] is 0
           @items.splice(idx,1)
           @freq.splice(idx,1)
+          true
+        else
+          false
 
 
   class ViewModeSelect extends Marionette.ItemView
