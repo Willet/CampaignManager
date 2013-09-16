@@ -1,6 +1,9 @@
-define ["marionette"], (Marionette) ->
+define [
+  "marionette",
+  "exports"
+], (Marionette, Views) ->
 
-  class Index extends Marionette.Layout
+  class Views.PageIndex extends Marionette.Layout
 
     template: "pages_index"
 
@@ -18,7 +21,7 @@ define ["marionette"], (Marionette) ->
 
     onShow: (opts) ->
 
-  class Name extends Marionette.Layout
+  class Views.PageCreateName extends Marionette.Layout
 
     template: "pages_name"
 
@@ -36,7 +39,7 @@ define ["marionette"], (Marionette) ->
 
     onShow: (opts) ->
 
-  class Layout extends Marionette.Layout
+  class Views.PageCreateLayout extends Marionette.Layout
 
     template: "pages_layout"
 
@@ -54,7 +57,7 @@ define ["marionette"], (Marionette) ->
 
     onShow: (opts) ->
 
-  class Products extends Marionette.Layout
+  class Views.PageCreateProducts extends Marionette.Layout
 
     template: "pages_products"
 
@@ -73,7 +76,7 @@ define ["marionette"], (Marionette) ->
 
     onShow: (opts) ->
 
-  class Content extends Marionette.Layout
+  class Views.PageCreateContent extends Marionette.Layout
 
     template: "pages_content"
 
@@ -84,6 +87,9 @@ define ["marionette"], (Marionette) ->
         "title": @model.get("name")
       }
 
+    regions:
+      "contentList": ".content > .list"
+
     initialize: (opts) ->
 
     onRender: (opts) ->
@@ -91,18 +97,8 @@ define ["marionette"], (Marionette) ->
 
     onShow: (opts) ->
 
-  class View extends Marionette.Layout
+  class Views.PagePreview extends Marionette.Layout
 
     template: "pages_view"
 
-  # declare exports
-  return {
-    Index: Index
-    Name: Name
-    Layout: Layout
-    Products: Products
-    Content: Content
-    View: View
-  }
-
-
+  Views

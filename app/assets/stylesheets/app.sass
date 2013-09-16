@@ -1,6 +1,7 @@
 @import "foundation"
 @import "lib/select2"
 @import "foundation-fonts/foundation_icons_general/general_foundicons"
+@import "foundation-fonts/foundation_icons_general_enclosed/general_enclosed_foundicons"
 @import "foundation-fonts/foundation_icons_accessibility/accessibility_foundicons"
 $webicons-url: "../images/webicons/"
 @import "webicons"
@@ -480,3 +481,16 @@ div.content
   width: 26%
   height: 22px
   text-align: center
+
+
+#scroll-to-top
+  z-index: 20
+  position: fixed
+  bottom: 5px
+  right: 8px
+  margin: 0 auto
+  a
+    &:hover
+      text-shadow: 0 0 20px black
+    color: #b0bbbb
+    font-size: 32px

@@ -12,21 +12,42 @@
   </div>
   <div class="overlay">
     <span class="actions text-center">
-      <div class="row">
-      <a class="js-approve" href="/{{store-id}}/content/{{id}}/approve">
-        Approve <i class="icon-general-checkmark"></i>
-      </a>
-      </div>
-      <div class="row">
-      <a class="js-reject" href="/{{store-id}}/content/{{id}}/reject">
-        Reject <i class="icon-general-error"></i>
-      </a>
-      </div>
-      <div class="row">
-      <a class="js-view" href="/{{store-id}}/content/{{id}}">
-        Quick View <i class="icon-general-search"></i>
-      </a>
-      </div>
+      {{#if actions.page}}
+        {{#if approvedForPage}}
+          <div class="row">
+          <a class="js-reject-for-page" href="/{{store-id}}/content/{{id}}">
+            Reject for Page <i class="icon-general-error"></i>
+          </a>
+          </div>
+          <div class="row">
+          <a class="js-prioritize-for-page" href="/{{store-id}}/content/{{id}}/prioritize">
+            Prioritize for Page <i class="icon-general-up-arrow"></i>
+          </a>
+          </div>
+        {{else}}
+          <div class="row">
+          <a class="js-approve-for-page" href="/{{store-id}}/content/{{id}}">
+            Approve for Page <i class="icon-general-checkmark"></i>
+          </a>
+          </div>
+        {{/if}}
+      {{else}}
+        <div class="row">
+        <a class="js-approve" href="/{{store-id}}/content/{{id}}/approve">
+          Approve <i class="icon-general-checkmark"></i>
+        </a>
+        </div>
+        <div class="row">
+        <a class="js-reject" href="/{{store-id}}/content/{{id}}/reject">
+          Reject <i class="icon-general-error"></i>
+        </a>
+        </div>
+        <div class="row">
+        <a class="js-prioritize" href="/{{store-id}}/content/{{id}}/prioritize">
+          Prioritize <i class="icon-general-up-arrow"></i>
+        </a>
+        </div>
+      {{/if}}
       <div class="row">
       <a class="js-select selected">
         <form>

@@ -81,6 +81,9 @@ define [
 
   class Views.ContentList extends Marionette.CollectionView
 
+    initialize: (options) ->
+      @itemViewOptions = { actions: options.actions }
+
     getItemView: (item) ->
       Views.ContentGridItem
 
@@ -101,17 +104,18 @@ define [
       "click .js-prioritize": "content:prioritize" # NOT USED
       "click .js-view": "content:preview"
 
-    initialize: ->
+    initialize: (options) ->
       @model.on("change", => @render())
+      @actions = { actions: options.actions }
 
-    serializeData: -> @model.viewJSON()
+    serializeData: -> _.extend(@model.viewJSON(), @actions)
 
     stopPropagation: (event) ->
       event.stopPropagation()
       false
 
     onRender: ->
-      @editArea.show(new Views.ContentEditArea(model: @model))
+      @editArea.show(new Views.ContentEditArea(model: @model, actions: @actions))
       @relayEvents(@editArea.currentView, 'edit')
 
     onShow: ->
@@ -194,26 +198,19 @@ define [
 
     template: "_content_edit_item"
 
-    serializeData: -> @model.viewJSON()
+    serializeData: -> _.extend(@model.viewJSON(), @actions)
 
     regions:
       "taggedProducts": ".js-tagged-products"
       "taggedPages": ".js-tagged-pages"
-
-    events:
-      "select2-blur .js-tagged-products": "productsChanged"
-      "select2-blur .js-tagged-pages": "pagesChanged"
 
     triggers:
       "click .js-approve": "content:approve"
       "click .js-reject": "content:reject"
       "click .js-undecided": "content:undecided"
 
-    productsChanged: (event) ->
-      @trigger("change:tagged-products", @$(".js-tagged-products").select2("data"))
-
-    pagesChanged: (event) ->
-      @trigger("change:tagged-pages", @$(".js-tagged-pages").select2("data"))
+    initialize: (options) ->
+      @actions = options['actions']
 
     onShow: ->
       @taggedProducts.show(new Views.TaggedProductInput(model: @model))
