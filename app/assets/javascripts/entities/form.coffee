@@ -5,7 +5,7 @@ define [
   Entities = Entities || {}
 
   validators = {
-    emailVal : {args : ['value'], function: (args) ->
+    emailVal : (model) ->
       '''Rules:
             Email has only one @
             Part before @ is of length 2-50
@@ -18,7 +18,7 @@ define [
             Part after . is only 2 - 4 characters of alpha chars
       '''
       regex = /^([^@]*)@([^@]*)$/
-      if not m = args[0].match(regex) then return "Err: Email must have exactly one @"
+      if not m = model.get('value').match(regex) then return "Err: Email must have exactly one @"
       local = m[1]
       rest = m[2]
 
@@ -46,8 +46,8 @@ define [
       if not tld.match(regex) then return "Err: Part after '.' must consist of 2-4 letters"
 
       true
-    }
-    urlVal : {args : ['value'], function: (args) ->
+
+    urlVal : (model) ->
       '''For simplicity I am going to ignore anything after a '?' symbol or '#'
         The preceeding part is judged valid if it:
       - Starts with 'http' or 'https'
@@ -62,7 +62,7 @@ define [
         name is made up of 2 - 10 alphanumerics'''
 
       regex = /^([^#\?]*)((#|\?).*)?$/
-      m = args[0].match(regex)
+      m = model.get('value').match(regex)
       basicUrl = m[1]
 
       regex = /^((http)|(https)):\/\/(.*)/
@@ -103,7 +103,6 @@ define [
       if not rest.match(regex)
         return "Err: Filename extensions must consist of 2-10 letters, or digits"
       true
-    }
   }
 
   class Entities.FormElem extends Base.Model
@@ -117,16 +116,11 @@ define [
       validatorName = @get("validator")
       if not validatorName? then return "Err: No validator specified"
       console.log(validatorName)
-      valObj = validators[validatorName]
-      if not valObj?
+      valFun = validators[validatorName]
+      if not valFun?
         return "Err: Invalid validator name: " + validatorName
 
-      #Collects fields to pass into the function
-      args = []
-      for a in valObj.args
-        args.push(@get(a))
-
-      return valObj.function(args)
+      return valFun(@)
 
   class Entities.FormElemCollection extends Base.Collection
     model: Entities.FormElem
