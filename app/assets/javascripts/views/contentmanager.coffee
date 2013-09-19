@@ -87,7 +87,6 @@ define [
     getItemView: (item) ->
       Views.ContentGridItem
 
-
   class Views.ContentGridItem extends Marionette.Layout
 
     template: "_content_grid_item"

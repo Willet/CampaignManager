@@ -1,18 +1,12 @@
 define [
+  "app",
   "entities/base",
   "entities/products"
-], (Base, Entities) ->
+], (App, Base, Entities) ->
 
   Entities = Entities || {}
 
   class Entities.Content extends Base.Model
-
-    initialize: (opts, relatedOptions) ->
-      if relatedOptions && relatedOptions['store-id']
-        @set('store-id', relatedOptions['store-id'])
-
-    url: (opts) ->
-      "#{require("app").apiRoot}/stores/#{@get('store-id')}/content/#{@get('id') || ''}"
 
     reject: ->
       @save(
@@ -34,18 +28,7 @@ define [
 
     parse: (data) ->
       attrs = data
-      if data['tagged-products']
-        modelmap = _.map(data['tagged-products'], (id) -> { id: id, 'store-id': attrs['store-id'] })
-        if @get('tagged-products')
-          attrs['tagged-products'] = @get('tagged-products')
-          @get('tagged-products').add(modelmap)
-        else
-          attrs['tagged-products'] = new Entities.ProductCollection(modelmap)
-        attrs['tagged-products'].collect((m) -> m.fetch())
-      else
-        modelmap = []
-        attrs['tagged-products'] = new Entities.ProductCollection(modelmap)
-
+      attrs['tagged-products'] = App.request "product:entities:set", attrs['store-id'], data['tagged-products']
       attrs
 
     toJSON: ->
@@ -138,35 +121,6 @@ define [
     viewJSON: ->
       @collect((m) -> m.viewJSON())
 
-
-  class Entities.ContentPageCollection extends Base.Collection
-    model: Entities.Content
-
-    initialize: (opts) ->
-      @queryParams = opts['queryParams']
-
-    parse: (data) ->
-      @params = @parseParams(data)
-      @parseData(data)
-
-    parseParams: (data) ->
-      result = {
-        "results": 25
-      }
-      result['start-id'] = data['last-id'] if data['last-id']
-      result
-
-    parseData: (data) ->
-      data['content']
-
-    url: (opts) ->
-      # TODO: correct URL
-      if @queryParams
-        params = "?" + $.param(@queryParams)
-      else
-        params = ""
-      "#{require("app").apiRoot}/stores/126/content" + params
-
   class Entities.ContentPageableCollection extends Base.Collection
     model: Entities.Content
 
@@ -199,28 +153,32 @@ define [
       @resetPaging()
 
     resetPaging: ->
-      @params = {
+      @params =
         results: 25
-      }
       @finished = false
 
     getNextPage: (opts) ->
       unless @finished || @in_progress
         @in_progress = true
-        collection = new Entities.ContentPageCollection(queryParams: _.extend(@queryParams, @params))
-        xhr = collection.fetch()
+
+        # DEFER: could do an App.request here instead ... not sure if meaningful
+        collection = new Entities.ContentCollection
+        params = _.extend(@queryParams, @params)
+        collection.url = @url
+
+        xhr = collection.fetch
+          data: params
+          reset: true
+
         $.when(
           xhr
         ).done(=>
           @add(collection.models, at: @length)
-          @params = collection.params
+          @params['start-id'] = xhr.responseJSON['last-id']
           @finished = true unless @params['start-id']
           @in_progress = false
         )
       xhr
-
-    url: ->
-      "#{require("app").apiRoot}/stores/126/content"
 
   Entities
 

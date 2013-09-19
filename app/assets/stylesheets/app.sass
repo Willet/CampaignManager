@@ -13,6 +13,7 @@ $webicons-url: "../images/webicons/"
 @import "steps"
 
 body
+  font-size: 14px
   overflow: scroll
 
 a, a:link, a:visited
@@ -144,7 +145,7 @@ span.bread-crumbs
 
 $selected-color: $body-font-color
 
-div.content
+#container > div > .content
   margin: 2em
 
 .reveal-modal.open
@@ -204,7 +205,7 @@ div.content
       display: none
     .item
       overflow: auto
-      min-height: 350px
+      min-height: 200px
       margin: 10px 0px
       font-size: 14px
       .image-container
@@ -212,7 +213,7 @@ div.content
         background-color: #f0f0f0
         border-right: 1px solid #999
         position: relative
-        height: 350px
+        height: 200px
         min-height: 100%
       .edit-area
         @include grid-column($columns: 8)
@@ -265,7 +266,7 @@ div.content
   &.grid-view #list
     @include grid-column($columns: 8)
     .item
-      @include grid-column($columns: 4)
+      @include grid-column($columns: 3)
       height: 160px
       .edit-area // edit-area is centralized
         display: none
@@ -411,9 +412,11 @@ div.content
 .page-edit
   text-align: center
   > .container, > .actions
-    text-align: right
-    margin: 0 auto
-    > .layout-types
+    #layout-options
+      label
+        text-align: right
+    #layout-types
+      height: 230px
       .layout-type
         @include grid-column($columns: 4)
         border: 1px solid #eee
@@ -421,7 +424,12 @@ div.content
         &.selected
           border: 1px solid $action-color
           background-color: lighten($action-color, 45%)
-        .label
+        label
+        &.selected label
+          font-weight: bold
+        .icon
+          img
+            max-width: 165px
   &.content
     .filter-actions
       .button-group
@@ -433,24 +441,24 @@ div.content
     padding: 8px
     .actions
       margin: 10px 0
-    .product-results
+    #scrape-list
       overflow-y: scroll
-      min-height: 120px
-      border: 1px solid #ccc
-      ul
-        list-style: none
-        text-align: left
-        li
-          .link
-            overflow: hidden
-          .action
-            font-weight: bold
-          font-size: 14px
+      overflow-x: hidden
+      min-height: 200px
+      height: 200px
+      border-top: 1px solid #888
+      border-bottom: 1px solid #888
+      font-size: 14px
+      .link
+        overflow: hidden
+      .action
+        font-weight: bold
     .products
+      font-size: 14px
       border-radius: 3px
       background: #eee
       border: 1px solid #aaa
-      min-height: 180px
+      min-height: 280px
       padding: 10px
       margin: 10px 0
 

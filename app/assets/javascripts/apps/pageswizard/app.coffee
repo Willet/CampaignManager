@@ -5,9 +5,10 @@ define [
   'jquery',
   'underscore',
   'views/pages',
-  'views/contentmanager'
+  'views/contentmanager',
+  'views/main',
   'entities'
-], (App, BackboneProjections, Marionette, $, _, Views, ContentViews, Entities) ->
+], (App, BackboneProjections, Marionette, $, _, Views, ContentViews, MainViews, Entities) ->
 
   PageWizard = App.module("PageWizard")
 
@@ -21,64 +22,60 @@ define [
       ":store_id/pages/:id/content": "pagesContent"
       ":store_id/pages/:id/view": "pagesView"
 
+    before: (route, args) ->
+      store_id = args[0]
+      store = App.request "store:entity", store_id
+      App.nav.show(new MainViews.Nav(model: new Entities.Model(store: store, page: 'pages')))
+      @controller.setRegion(App.main)
+
   class PageWizard.Controller extends Marionette.Controller
 
     pagesIndex: (store_id) ->
-      store = new Entities.Store(id: store_id)
+      pages = App.request "page:entities", store_id
 
-      collection = new Entities.PageCollection()
-      collection.store_id = store_id
-      $.when(
-        store.fetch(),
-        collection.fetch()
-      ).done(->
-        App.main.show(new Views.PageIndex(model: collection))
-        App.titlebar.currentView.model.set(title: "Pages")
-        App.header.currentView.model.set(
-          page: "pages"
-          store: store
-        )
-      )
+      App.execute "when:fetched", pages, =>
+        @region.show(new Views.PageIndex(model: pages))
 
-    pagesName: (store_id, id) ->
-      store = new Entities.Store(id: store_id)
-      model = new Entities.Page(id: id, "store-id": store_id)
-      $.when(
-        store.fetch(),
-        model.fetch()
-      ).done(->
-        App.main.show(new Views.PageCreateName(model: model))
-        App.titlebar.currentView.model.set(title: "Pages: #{model.get("name")} - Name")
-        App.header.currentView.model.set(page: "pages", store: store)
-      )
+    pagesName: (store_id, page_id) ->
+      page = App.request "page:entity", store_id, page_id
 
-    pagesLayout: (store_id, id) ->
-      App.setStore(id: store_id)
-      model = new Entities.Page(id: id, "store-id": store_id)
-      $.when(
-        model.fetch()
-      ).done(->
-        App.main.show(new Views.PageCreateLayout(model: model))
-        App.titlebar.currentView.model.set(title: "Pages: #{model.get("name")} - Layout")
-        App.header.currentView.model.set(page: "pages", store: store)
-      )
+      App.execute "when:fetched", page, =>
+        @region.show(new Views.PageCreateName(model: page))
+        App.setTitle("Pages: #{page.get("name")} - Name")
 
-    pagesProducts: (store_id, id) ->
-      App.setStore(id: store_id)
-      model = new Entities.Page(id: id, "store-id": store_id)
-      $.when(
-        model.fetch()
-      ).done(->
-        @layout = new Views.PageCreateProducts model: model
+    pagesLayout: (store_id, page_id) ->
+      page = App.request "page:entity", store_id, page_id
 
-        @layout.on "show", =>
-          @layout.contentList.show @contentList(collection)
+      layout =  new Views.PageCreateLayout(model: page)
 
-        App.show @layout
+      layout.on 'layout:selected', (newLayout) ->
+        page.set("layout", newLayout)
+        layout.render()
 
-        App.setTitle title: "Pages: #{model.get("name")} - Products"
-      )
+      App.execute "when:fetched", page, =>
+        @region.show(layout)
+        App.setTitle("Pages: #{page.get("name")} - Layout")
 
+    pagesProducts: (store_id, page_id) ->
+      scrapes = App.request "page:scrapes:entities", store_id, page_id
+      page = App.request "page:entity", store_id, page_id
+
+      products = new Entities.ContentCollection
+      layout = new Views.PageCreateProducts model: page
+
+      layout.on "show", =>
+        scrapeList = new Views.PageScrapeList collection: scrapes
+        layout.scrapeList.show scrapeList
+        layout.on "new:scrape", (url) ->
+          scrape = new Entities.Scrape(store_id: store_id, page_id: page_id, url: url)
+          scrapes.add(scrape)
+          scrape.save()
+        scrapeList.on "itemview:remove", (view) ->
+          scrapes.remove(view.model)
+
+      App.execute "when:fetched", page, =>
+        App.show layout
+        App.setTitle "Pages: #{page.get("name")} - Products"
 
     contentList: (collection, actions) ->
       layout = new ContentViews.ContentIndexLayout()
@@ -151,32 +148,27 @@ define [
 
       return layout
 
-    pagesContent: (store_id, id) ->
-      App.setStore(id: store_id)
-      model = new Entities.Page(id: id, "store-id": store_id)
-      collection = new Entities.ContentPageableCollection()
-      $.when(
-        model.fetch(),
-        collection.getNextPage()
-      ).done(=>
-        @layout = new Views.PageCreateContent(model: model)
+    pagesContent: (store_id, page_id) ->
+      page = App.request "page:entity", store_id, page_id
+      contents = App.request "content:entities:paged", store_id, page_id
 
-        @layout.on "show", =>
-          @layout.contentList.show @contentList(collection)
+      layout = new Views.PageCreateContent(model: page)
 
-        App.show @layout
-        App.setTitle "Pages: #{model.get("name")} - Content"
-      )
+      contents.getNextPage()
+      App.execute "when:fetched", [page, contents], =>
 
-    pagesView: (store_id, id) ->
-      App.setStore(id: store_id)
-      model = new Entities.Page(id: id, "store-id": store_id)
-      $.when(
-        model.fetch()
-      ).done(->
-        App.show new Views.PagePreview(model: model)
-        App.setTitle "Pages: #{model.get("name")} - Preview"
-      )
+        layout.on "show", =>
+          layout.contentList.show @contentList(contents)
+
+        App.show layout
+        App.setTitle "Pages: #{page.get("name")} - Content"
+
+    pagesView: (store_id, page_id) ->
+      page = App.request "page:entity", store_id, page_id
+
+      App.execute "when:fetched", page, =>
+        App.show new Views.PagePreview(model: page)
+        App.setTitle "Pages: #{page.get("name")} - Preview"
 
 
   App.addInitializer(->

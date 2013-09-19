@@ -80,7 +80,16 @@ require [
   "config/marionette/application",
   "config/marionette/renderer",
   "config/marionette/view",
+  "config/marionette/router",
+  "config/marionette/controller",
+  "dao/base",
+  "dao/pages",
+  "dao/scrape",
+  "dao/stores",
+  "dao/content",
+  "dao/products",
   # sub apps to load, they attach to the root application
+  "apps/main/app",
   "apps/contentmanager/app",
   "apps/pageswizard/app"
 ], (App, $) ->

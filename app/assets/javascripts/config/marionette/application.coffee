@@ -4,7 +4,7 @@ require [
 
   _.extend Backbone.Marionette.Application::,
 
-    baseURI: ""
+    APP_ROOT: "/"
 
     navigate: (route, options = {}) ->
       Backbone.history.navigate route, options
@@ -14,8 +14,8 @@ require [
       if _.isEmpty(frag) then null else frag
 
     startHistory: ->
-      if Backbone.history && !Backbone.history.start(pushState: true, root: @baseURI)
-        Backbone.history.start()
+      if Backbone.history && !Backbone.history.start(pushState: true, root: @APP_ROOT)
+        @navigate("notFound", trigger: false)
 
     setTitle: (title) ->
       App.titlebar.currentView.model.set(title: title)

@@ -6,9 +6,6 @@ define [
 
   class Entities.Product extends Base.Model
 
-    url: (opts) ->
-      "#{require("app").apiRoot}/stores/#{@get('store-id')}/products/#{@get('id') || ''}"
-
     viewJSON: ->
       json = @toJSON()
       json['content-ids'] = @get('content-ids')?.viewJSON()

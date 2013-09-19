@@ -19,7 +19,6 @@ define [
   class ContentManager.Controller extends Marionette.Controller
 
     contentIndex: (store_id) ->
-      App.setStore(id: store_id)
       collection = new Entities.ContentPageableCollection()
       selectedCollection = new BackboneProjections.Filtered(collection, filter: ((m) -> m.get('selected') is true))
       collection.store_id = store_id
@@ -57,7 +56,6 @@ define [
 
         contentList.on "itemview:edit:tagged-products:add",
           (view, editArea, tagger, product) ->
-            console.log "Adding Product:", product
             view.model.get('tagged-products').add(product)
             view.model.save(silent: true)
 
@@ -76,7 +74,7 @@ define [
           (args)  => args.model.collect((m) -> m.approve())
 
         multiEditView.on "content:reject",
-          (args)  => console.log(args); args.model.collect((m) -> m.reject())
+          (args)  => args.model.collect((m) -> m.reject())
 
         multiEditView.on "content:undecided",
           (args)  => args.model.collect((m) -> m.undecided())

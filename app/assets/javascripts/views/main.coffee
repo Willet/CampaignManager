@@ -1,4 +1,6 @@
-define ["marionette"], ->
+define [
+  "marionette"
+], (Marionette) ->
 
   class Loading extends Marionette.ItemView
 

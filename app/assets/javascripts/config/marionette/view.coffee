@@ -4,6 +4,10 @@ require [
 
   _.extend Backbone.Marionette.View::,
 
+    extractClassSuffix: (el, prefix) ->
+      if result = el.attr('class').match(new RegExp("#{prefix}-([a-zA-Z-_]+)"))
+        result[1]
+
     relayEvents: (view, prefix)->
       @listenTo view, "all", =>
         args = [].slice.call(arguments)

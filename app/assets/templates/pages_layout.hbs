@@ -3,63 +3,79 @@
   <h4>Layout</h4>
   <div class="page-edit layout">
     <div class="container">
-      <div class="layout-types text-center">
-          <div class="layout-type js-layout-hero columns">
-            <span class="row"><img src="http://placehold.it/200x100" /></span>
+
+      <div id="layout-types">
+          <div class="layout-type js-layout-hero {{#is page.layout 'hero'}}selected{{/is}}">
+            <span class="icon row"><img src="/assets/images/page-type-hero.png" /></span>
             <label class="row">Hero Image</label>
           </div>
-          <div class="layout-type js-layout-featured columns">
-            <span class="row"><img src="/assets/images/cb-product-200x100.png" /></span>
-            <label lass="row">Featured Product</label>
+          <div class="layout-type js-layout-featured {{#is page.layout 'featured'}}selected{{/is}}">
+            <span class="icon row"><img src="/assets/images/page-type-featured.png" /></span>
+            <label class="row">Featured Product</label>
           </div>
-          <div class="layout-type js-layout-shopthelook columns">
-            <span class="row"><img src="/assets/images/cb-split-200x100.png" /></span>
+          <div class="layout-type js-layout-shopthelook {{#is page.layout 'shopthelook'}}selected{{/is}}">
+            <span class="icon row"><img src="/assets/images/page-type-shopthelook.png" /></span>
             <label class="row">Shop The Look</label>
           </div>
       </div>
+
       <br/>
-      <hr />
-      <div class="layout-options">
-        <div class="row">
-          <label class="large-2 columns inline">Hero Image (Desktop)</label>
-          <span class="large-10 columns">
-            <input type="file" value="{{page.hero_desktop}}" />
-          </span>
-        </div>
-        <div class="row">
-          <label class="large-2 columns inline">Hero Image (Mobile)</label>
-          <span class="large-10 columns">
-            <input type="file" value="{{page.hero_mobile}}" />
-          </span>
-        </div>
-        <div class="row">
-          <label class="large-2 columns inline">Legal Copy</label>
-          <span class="large-10 columns">
-            <textarea placeholder="enter text...">{{page.legal}}</textarea>
-          </span>
-        </div>
-        <div class="row">
-          <label class="large-2 columns inline">Facebook Share Copy</label>
-          <span class="large-10 columns">
-            <input type="text" value="{{page.facebook_share}}" placeholder="enter text..." />
-          </span>
-        </div>
-        <div class="row">
-          <label class="large-2 columns inline">Twitter Share Copy</label>
-          <span class="large-10 columns">
-            <input type="text" value="{{page.twitter_share}}" placeholder="enter text..." />
-          </span>
-        </div>
-        <div class="row">
-          <label class="large-2 columns inline">Email Share Copy</label>
-          <span class="large-10 columns">
-            <input type="text" value="{{page.email_share}}" placeholder="enter text..." />
-          </span>
-        </div>
+
+      {{#if page.layout}}
+      <div id="layout-options">
+        {{#each fields}}
+          {{#is type 'file'}}
+            <div class="row">
+              <label class="large-2 columns inline" for="{{var}}">{{label}}</label>
+              <span class="large-10 columns">
+                <input type="file" for="{{var}}" value="{{value}}" />
+              </span>
+            </div>
+          {{/is}}
+          {{#is type 'image'}}
+            <div class="row">
+              <label class="large-2 columns inline" for="{{var}}">{{label}}</label>
+              <!-- TODO: image preview, etc... -->
+              <span class="large-1 columns">
+                <input type="file" for="{{var}}" value="{{value}}" />
+              </span>
+              <span class="large-9 columns">
+                <img src='http://placehold.it/762x142' />
+              </span>
+            </div>
+          {{/is}}
+          {{#is type 'text'}}
+            <div class="row">
+              <label class="large-2 columns inline" for="{{var}}">{{label}}</label>
+              <span class="large-10 columns">
+                <input type="text" for="{{var}}" value="{{value}}" placeholder="{{default placeholder 'enter text...'}}" />
+              </span>
+            </div>
+          {{/is}}
+          {{#is type 'textarea'}}
+            <div class="row">
+              <label class="large-2 columns inline" for="{{var}}">{{label}}</label>
+              <span class="large-10 columns">
+                <textarea placeholder="{{default placeholder 'enter text...'}}">{{value}}</textarea>
+              </span>
+            </div>
+          {{/is}}
+          {{#is type 'select'}}
+            <div class="row">
+              <label class="large-2 columns inline" for="{{var}}">{{label}}</label>
+              <span class="large-10 columns">
+                <select>
+                  <option>TODO: implement</option>
+                </select>
+              </span>
+            </div>
+          {{/is}}
+        {{/each}}
       </div>
-    </div>
-    <div class="actions row">
-      <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/products">Save &amp; Continue</a>
+      <div class="actions row">
+        <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/products">Save &amp; Continue</a>
+      </div>
+      {{/if}}
     </div>
   </div>
 </div>

@@ -15,6 +15,9 @@ define [
     toJSON: (opts) ->
       _.omit(@attributes, @blacklist || {})
 
+    fetch: ->
+      @_fetch = super()
+
   class Base.Collection extends Backbone.Collection
 
     comparator: (model) ->
@@ -23,5 +26,8 @@ define [
 
     viewJSON: ->
       @collect((m) -> m.viewJSON())
+
+    fetch: ->
+      @_fetch = super(arguments...)
 
   return Base
