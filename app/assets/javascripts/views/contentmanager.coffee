@@ -2,8 +2,9 @@ define [
   "marionette",
   "jquery",
   "entities/base"
+  "entities/form"
   "select2"
-], (Marionette, $, Base) ->
+], (Marionette, $, Base, Form) ->
 
   ContentActions =
 
@@ -234,7 +235,38 @@ define [
       )
       @editView = new EditArea(model: new Base.Model(), pages: new Base.Collection())
 
+    #For testing FormElem stuff
+    testStuff: ->
+      console.log("Start testing...")
+      elem1 = new Form.FormElem({
+        var: "val1"
+        name: "Val 1"
+        value: "https://www.google.ca/search?q=coffescript+regex+capture+groups+if+successful&oq=coffescript+regex+capture+groups+if+successful&aqs=chrome..69i57.10628j0&sourceid=chrome&ie=UTF-8#q=coffeescript+regex+capture+groups+if+successful&spell=1"
+        type: {}
+        validator: "urlVal"
+        })
+      elem2 = new Form.FormElem({
+        var: "val2"
+        name: "Val 2"
+        value: "http://stackoverflow.com/questions/8242984/simplest-way-to-check-if-key-exists-in-object-using-coffeescript"
+        type: {}
+        validator: "urlVal"
+        })
+      elem3 = new Form.FormElem({
+        var: "val3"
+        name: "Val 3"
+        value: "http://openmymind.net/2012/5/16/Ten-Features-I-Like-About-CoffeeScript/"
+        type: {}
+        validator: "urlVal"
+        })
+      coll = new Form.FormElemCollection([elem1,elem2,elem3])
+      console.log(coll.validate())
+      console.log(coll.getConfigJSON())
+      console.log("End of tests")
+
     unselectAll: ->
+      #Just going to use this as an entry point for now
+      #@testStuff()
       objs = _.clone(@model.models)
       _.each(objs, (m) -> _.defer(=> m.set(selected: false)))
       removed =  @pIdUnion.items
@@ -551,5 +583,3 @@ define [
     Index: Index
     Show: Show
   }
-
-
