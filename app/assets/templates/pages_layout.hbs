@@ -37,10 +37,14 @@
               <label class="large-2 columns inline" for="{{var}}">{{label}}</label>
               <!-- TODO: image preview, etc... -->
               <span class="large-1 columns">
-                <input type="file" for="{{var}}" value="{{value}}" />
+                <input class="image-field" type="file" for="{{var}}" value="{{value}}" />
               </span>
               <span class="large-9 columns">
-                <img src='http://placehold.it/762x142' />
+                {{#if loadedUrl}}
+                  <img src='{{loadedUrl}}' />
+                {{else}}
+                  <img src='http://placehold.it/762x142' />
+                {{/if}}
               </span>
             </div>
           {{/is}}
