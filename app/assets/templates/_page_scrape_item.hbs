@@ -1,0 +1,21 @@
+<div class="row scrape-item" style="border-bottom: 1px dotted #333;">
+  <div class="large-6 columns details">
+    <span class="title">
+      <b>Title:</b>
+      {{default title "(pending)"}}
+    </span>
+    <span class="link" title="{{url}}" style="overflow-x:hidden;white-space:nowrap;word-break:break-all;">
+      <b>URL:</b>
+      <a href="{{url}}" target="_blank">{{url}}</a>
+    </span>
+  </div>
+  <div class="large-2 columns text-center status-{{status}}">
+    {{status}}
+  </div>
+  <div class="large-2 columns text-right action">
+    <a href="#" class="refresh">Refresh</a>
+  </div>
+  <div class="large-2 columns text-left action">
+    <a href="#" class="remove">Remove</a>
+  </div>
+</div>

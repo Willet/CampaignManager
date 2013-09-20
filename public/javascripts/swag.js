@@ -83,10 +83,12 @@
   });
 
   Swag.addHelper('capitalizeFirst', function(str) {
+    if (!str) { return ""; }
     return str.charAt(0).toUpperCase() + str.slice(1);
   });
 
   Swag.addHelper('capitalizeEach', function(str) {
+    if (!str) { return ""; }
     return str.replace(/\w\S*/g, function(txt) {
       return txt.charAt(0).toUpperCase() + txt.substr(1);
     });

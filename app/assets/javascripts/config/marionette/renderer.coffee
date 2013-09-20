@@ -17,7 +17,7 @@ require [
       # Allow no-template views
       return if template is false
       templateFunction = @getTemplate(template)
-      throw "Template '#{template_name}' does not exist!" unless templateFunction
+      throw "Template '#{template}' does not exist!" unless templateFunction
       templateFunction(data)
 
     getTemplate: (template) ->

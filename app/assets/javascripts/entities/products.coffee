@@ -6,9 +6,6 @@ define [
 
   class Entities.Product extends Base.Model
 
-    url: (opts) ->
-      "#{require("app").apiRoot}/stores/#{@get('store-id')}/products/#{@get('id') || ''}"
-
     viewJSON: ->
       json = @toJSON()
       json['content-ids'] = @get('content-ids')?.viewJSON()
@@ -33,8 +30,4 @@ define [
     viewJSON: ->
       @collect((m) -> m.viewJSON())
 
-  return {
-    Model: Entities.Product
-    Collection: Entities.ProductCollection
-  }
-
+  Entities

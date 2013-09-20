@@ -20,3 +20,11 @@ require ['backbone', 'jquery'], (Backbone, $) ->
       document.body.scrollTop = 0
 
       return false
+
+  # smooth scroll to hash position in page
+  $(document).on "click", 'a[href*=#]:not([href=#])', (event) ->
+    if location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') || location.hostname == this.hostname
+      target = $("[name=#{@hash.slice(1)}]")
+      if target.length
+        $('html,body').animate(scrollTop: target.offset().top, 1000)
+        false
