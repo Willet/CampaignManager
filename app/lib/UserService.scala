@@ -5,6 +5,7 @@ import models.Users
 import securesocial.core._
 import securesocial.core.providers.utils._
 import io.github.nremond.PBKDF2
+import play.Play
 import play.api.Application
 
 /**
@@ -64,6 +65,9 @@ class MyUserService(application: Application) extends UserServicePlugin(applicat
   private var tokens = Map[String, Token]()
 
   def find(uid: IdentityId) : Option[Identity] = {
+    if (Play.application.configuration.getString("application.mode") == "dev") {
+      return User(1, "ariedler", "george", "press", "alex@willetinc.com", "$$$w1llet!", false, false).socialUser
+    }
     // we are going to ignore the provider, cause we don't currently support oauth etc
     Users.findByEmail(uid.userId) match {
       case None => None
@@ -72,6 +76,10 @@ class MyUserService(application: Application) extends UserServicePlugin(applicat
   }
 
   def findByEmailAndProvider(email: String, providerId: String) : Option[Identity] = {
+    if (Play.application.configuration.getString("application.mode") == "dev") {
+      return User(1, "ariedler", "george", "press", "alex@willetinc.com", "$$$w!llet", false, false).socialUser
+    }
+
     // we are going to ignore the provider, cause we don't currently support oauth etc
     Users.findByEmail(email) match {
       case None => None

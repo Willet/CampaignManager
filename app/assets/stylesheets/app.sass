@@ -268,7 +268,8 @@ $selected-color: $body-font-color
     .item
       @include grid-column($columns: 3)
       height: 160px
-      .edit-area // edit-area is centralized
+      .edit-area
+        /* edit-area is centralized */
         display: none
       &.selected
         .overlay .color
@@ -344,7 +345,7 @@ $selected-color: $body-font-color
       margin: 0
       padding-right: 10px
       text-align: right
-      // TODO: color
+      /* TODO: color */
       &.approved
         color: $approved-color
       &.rejected
@@ -392,7 +393,7 @@ $selected-color: $body-font-color
   .columns
     padding: 10px
 
-// Tabing between a set of options
+/* Tabing between a set of options */
 .tabs.pill
   dd
     float: left
@@ -424,7 +425,6 @@ $selected-color: $body-font-color
         &.selected
           border: 1px solid $action-color
           background-color: lighten($action-color, 45%)
-        label
         &.selected label
           font-weight: bold
         .icon
@@ -472,7 +472,7 @@ $selected-color: $body-font-color
       line-height: 34px
   .steps
     width: 100%
-    // 4.5% * 3 = 13.50% + 21.625% * 4 = 100%
+    /* 4.5% * 3 = 13.50% + 21.625% * 4 = 100% */
     li
       margin-left: 4.5%
       &:first-child
