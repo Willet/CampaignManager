@@ -171,7 +171,7 @@ $selected-color: $body-font-color
       height: inherit
       width: 100%
 
-#content-index
+.content
   position: relative
   [class*="icon-"]
     text-shadow: 0 1px 0 rgba(0,0,0,0.2), 0 -1px 0 rgba(0,0,0,0.2), 1px 0 0 rgba(0,0,0,0.2), -1px 0 0 rgba(0,0,0,0.2), 0 2px 0 rgba(0,0,0,0.1), 0 1px 0 rgba(0,0,0,0.1), 0 2px 0 rgba(0,0,0,0.2)
@@ -199,7 +199,7 @@ $selected-color: $body-font-color
     font-size: 14px
     padding: 0 0 !important
 
-  &.list-view #list
+  #list.list-view
     @include grid-column($columns: 12)
     .overlay
       display: none
@@ -252,9 +252,6 @@ $selected-color: $body-font-color
             background-color: $undecided-color
             border-color: darken($undecided-color, 0.7)
 
-  &.list-view #list
-    > .edit-area
-      display: none
   &.grid-view .edit-area
     position: fixed
     width: 28%
@@ -263,7 +260,7 @@ $selected-color: $body-font-color
     background-color: #fafafa
     border: 1px solid #e0e0e0
 
-  &.grid-view #list
+  #list.grid-view
     @include grid-column($columns: 8)
     .item
       @include grid-column($columns: 3)
@@ -283,7 +280,7 @@ $selected-color: $body-font-color
           background-repeat: no-repeat
           background-position: center center
 
-  &.grid-view #list .item .overlay
+  #list.grid-view .item .overlay
     position: absolute
     top: 0
     left: 0
