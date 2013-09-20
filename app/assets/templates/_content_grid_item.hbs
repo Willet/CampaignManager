@@ -15,8 +15,8 @@
       {{#if actions.page}}
         {{#if approvedForPage}}
           <div class="row">
-          <a class="js-reject-for-page" href="/{{store-id}}/content/{{id}}">
-            Reject for Page <i class="icon-general-error"></i>
+          <a class="js-remove-from-page" href="/{{store-id}}/content/{{id}}">
+            Remove from Page <i class="icon-general-error"></i>
           </a>
           </div>
           <div class="row">
@@ -28,6 +28,11 @@
           <div class="row">
           <a class="js-approve-for-page" href="/{{store-id}}/content/{{id}}">
             Approve for Page <i class="icon-general-checkmark"></i>
+          </a>
+          </div>
+          <div class="row">
+          <a class="js-prioritize-for-page" href="/{{store-id}}/content/{{id}}/prioritize">
+            Approve &amp; Prioritize for Page <i class="icon-general-up-arrow"></i>
           </a>
           </div>
         {{/if}}
@@ -57,7 +62,11 @@
       </div>
     </span>
     {{#if approved}}
-    <span class="approved status"><i class="icon-general-checkmark"></i></span>
+      {{#if prioritized}}
+        <span class="approved prioritized status"><i class="icon-general-up-arrow"></i></span>
+      {{else}}
+        <span class="approved status"><i class="icon-general-checkmark"></i></span>
+      {{/if}}
     {{/if}}
     {{#if rejected}}
     <span class="rejected status"><i class="icon-general-error"></i></span>
@@ -68,5 +77,6 @@
     <div class="color" />
   </div>
   <div class="edit-area large-8 columns">
+    <!-- Edit Area Injected Here -->
   </div>
 </div>

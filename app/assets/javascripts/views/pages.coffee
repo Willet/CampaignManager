@@ -1,6 +1,7 @@
 define [
   "marionette",
-  "exports"
+  "exports",
+  "stickit"
 ], (Marionette, Views) ->
 
   class Views.PageIndex extends Marionette.Layout
@@ -28,9 +29,18 @@ define [
         "title": @model.get("name")
       }
 
+    bindings:
+      'input[for=name]':
+        observe: 'name'
+        events: ['blur']
+      'input[for=url]':
+        observe: 'url'
+        events: ['blur']
+
     initialize: (opts) ->
 
     onRender: (opts) ->
+      @stickit()
       @$(".steps .main").addClass("active")
 
     onShow: (opts) ->
@@ -77,15 +87,47 @@ define [
 
       fileReader.readAsDataURL(elem.files[0])
 
+    bindings:
+      '.js-layout-hero':
+        attributes: [
+          {
+            name: 'class'
+            observe: 'layout'
+            onGet: (val, options) ->
+              if val == "hero" then "selected" else ""
+          }
+        ],
+      '.js-layout-featured':
+        attributes: [
+          {
+            name: 'class'
+            observe: 'layout'
+            onGet: (val, options) ->
+              if val == "featured" then "selected" else ""
+          }
+        ],
+      '.js-layout-shopthelook':
+        attributes: [
+          {
+            name: 'class'
+            observe: 'layout'
+            onGet: (val, options) ->
+              if val == "shopthelook" then "selected" else ""
+          }
+        ]
+
     selectLayoutType: (event) ->
       layoutClicked = @$(event.currentTarget)
       @$('#layout-types .layout-type').removeClass('selected')
       layoutClicked.addClass('selected')
-      @trigger 'layout:selected', @extractClassSuffix(@$(event.currentTarget), 'js-layout')
+      new_layout = @extractClassSuffix(@$(event.currentTarget), 'js-layout')
+      @trigger 'layout:selected', new_layout
+      @model.set('layout', new_layout)
 
     initialize: (opts) ->
 
     onRender: (opts) ->
+      @stickit()
       @$(".steps .layout").addClass("active")
 
     onShow: (opts) ->

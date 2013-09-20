@@ -20,6 +20,7 @@ requirejs.config(
     foundation: 'lib/foundation'
     backbonefetchcache: 'lib/backbone.fetch-cache'
     select2: 'lib/select2'
+    stickit: 'lib/backbone.stickit'
   shim:
     jquery:
       exports: 'jQuery'
@@ -49,6 +50,8 @@ requirejs.config(
     swag:
       deps: ['handlebars']
       exports: 'Swag'
+    stickit:
+      depts: ['jquery', 'backbone']
     foundation: ['jquery']
     'foundation/abide': ['jquery', 'foundation']
     'foundation/alerts': ['jquery', 'foundation']

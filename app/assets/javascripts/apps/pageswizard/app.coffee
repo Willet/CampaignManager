@@ -25,7 +25,8 @@ define [
     before: (route, args) ->
       store_id = args[0]
       store = App.request "store:entity", store_id
-      App.nav.show(new MainViews.Nav(model: new Entities.Model(store: store, page: 'pages')))
+      App.execute "when:fetched", store, ->
+        App.nav.show(new MainViews.Nav(model: new Entities.Model(store: store, page: 'pages')))
       @controller.setRegion(App.main)
 
   class PageWizard.Controller extends Marionette.Controller
@@ -136,7 +137,10 @@ define [
 
       layout.on("content:select-all", => collection.selectAll())
       layout.on("content:unselect-all", => collection.unselectAll())
-      layout.on("fetch:next-page", => collection.getNextPage())
+      layout.on("fetch:next-page", =>
+        $.when(collection.getNextPage()).done =>
+          layout.trigger("fetch:next-page:complete")
+      )
 
       #
       # Show

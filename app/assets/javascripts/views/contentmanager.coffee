@@ -51,6 +51,7 @@ define [
         @nextPage()
 
     nextPage: ->
+      @$('.loading').show()
       @trigger("fetch:next-page")
       false
 
@@ -76,6 +77,9 @@ define [
     onShow: (opts) ->
       @scrollFunction = => @autoLoadNextPage()
       $(window).on("scroll", @scrollFunction)
+      @$('.loading').hide()
+      @on "fetch:next-page:complete", =>
+        @$('.loading').hide()
 
     onClose: ->
       $(window).off("scroll", @scrollFunction)

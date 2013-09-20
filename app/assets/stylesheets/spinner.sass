@@ -1,0 +1,97 @@
+@import 'mixin'
+
+#spinner
+  margin: 0 auto
+  position: relative
+  width: 199px
+  height: 24px
+
+  .spinner
+    position: absolute
+    top: 0
+    background-color: #545454
+    width: 25px
+    height: 25px
+    +vendor-prefix(animation-name, bounce_spinner)
+    +vendor-prefix(animation-duration, 1.3s)
+    +vendor-prefix(animation-iteration-count, infinite)
+    +vendor-prefix(animation-direction, linear)
+    +vendor-prefix(transform, scale(.3))
+    +vendor-prefix(border-radius, 16px)
+
+  #spinner_1
+    left: 0
+    +vendor-prefix(animation-delay, 0.52s)
+
+  #spinner_2
+    left: 25px
+    +vendor-prefix(animation-delay, 0.65s)
+
+  #spinner_3
+    left: 50px
+    +vendor-prefix(animation-delay, 0.78s)
+
+  #spinner_4
+    left: 75px
+    +vendor-prefix(animation-delay, 0.91s)
+
+  #spinner_5
+    left: 100px
+    +vendor-prefix(animation-delay, 1.04s)
+
+  #spinner_6
+    left: 124px
+    +vendor-prefix(animation-delay, 1.17s)
+
+  #spinner_7
+    left: 149px
+    +vendor-prefix(animation-delay, 1.3s)
+
+  #spinner_8
+    left: 174px
+    +vendor-prefix(animation-delay, 1.43s)
+
+  @-moz-keyframes bounce_spinner
+    0%
+      -moz-transform: scale(1)
+      background-color: #545454
+
+    100%
+      -moz-transform: scale(.3)
+      background-color: #FFFFFF
+
+  @-webkit-keyframes bounce_spinner
+    0%
+      -webkit-transform: scale(1)
+      background-color: #545454
+
+    100%
+      -webkit-transform: scale(.3)
+      background-color: #FFFFFF
+
+  @-ms-keyframes bounce_spinner
+    0%
+      -ms-transform: scale(1)
+      background-color: #545454
+
+    100%
+      -ms-transform: scale(.3)
+      background-color: #FFFFFF
+
+  @-o-keyframes bounce_spinner
+    0%
+      -o-transform: scale(1)
+      background-color: #545454
+
+    100%
+      -o-transform: scale(.3)
+      background-color: #FFFFFF
+
+  @keyframes bounce_spinner
+    0%
+      transform: scale(1)
+      background-color: #545454
+
+    100%
+      transform: scale(.3)
+      background-color: #FFFFFF
