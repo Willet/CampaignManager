@@ -7,7 +7,7 @@ define [
   API =
     getPage: (store_id, page_id, params = {}) ->
       page = new Entities.Page()
-      page.url = "#{App.API_ROOT}/stores/#{store_id}/campaigns/#{page_id}"
+      page.url = "#{App.API_ROOT}/stores/#{store_id}/pages/#{page_id}"
       page.fetch
         reset: true
         data: params
@@ -15,7 +15,7 @@ define [
 
     getPages: (store_id, params = {}) ->
       pages = new Entities.PageCollection()
-      pages.url = "#{App.API_ROOT}/stores/#{store_id}/campaigns"
+      pages.url = "#{App.API_ROOT}/stores/#{store_id}/pages"
       pages.fetch
         reset: true
         data: params

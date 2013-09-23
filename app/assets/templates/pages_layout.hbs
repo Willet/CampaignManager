@@ -35,16 +35,17 @@
           {{#is type 'image'}}
             <div class="row">
               <label class="large-2 columns inline" for="{{var}}">{{label}}</label>
-              <!-- TODO: image preview, etc... -->
-              <span class="large-1 columns">
-                <input class="image-field" type="file" for="{{var}}" value="{{value}}" />
-              </span>
-              <span class="large-9 columns">
-                {{#if loadedUrl}}
-                  <img src='{{loadedUrl}}' />
-                {{else}}
-                  <img src='http://placehold.it/762x142' />
-                {{/if}}
+              <span class="large-10 columns">
+                <span class="row">
+                  <input class="image-field" type="file" for="{{var}}" value="{{value}}" />
+                </span>
+                <span class="row">
+                  {{#if loadedUrl}}
+                    <img src='{{loadedUrl}}' />
+                  {{else}}
+                    <img src="http://placehold.it/762x142?text=''" />
+                  {{/if}}
+                </span>
               </span>
             </div>
           {{/is}}

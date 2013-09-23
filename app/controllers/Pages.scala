@@ -7,7 +7,7 @@ import play.api.libs.json.Json.toJson
 import play.api.libs.ws.WS
 import play.api.libs.ws.Response
 
-object Campaigns extends Controller {
+object Pages extends Controller {
 
   val apiHeaders = ("ApiKey","secretword")
 
@@ -18,7 +18,7 @@ object Campaigns extends Controller {
       Status(response.status)(response.body)
   }
 
-  def index(store_id:Long)  = Action {
+  def index(store_id: Long)  = Action {
     val request = WS.url("http://contentgraph-test.elasticbeanstalk.com/graph/store/" + store_id + "/campaign/")
     Async {
       request.withHeaders(apiHeaders)
@@ -27,11 +27,20 @@ object Campaigns extends Controller {
     }
   }
 
-  def show(store_id:Long, id: Long) = Action {
+  def show(store_id: Long, id: Long) = Action {
     val request = WS.url("http://contentgraph-test.elasticbeanstalk.com/graph/store/" + store_id + "/campaign/" + id)
     Async {
       request.withHeaders(apiHeaders)
         .get()
+        .map(relayResponse)
+    }
+  }
+
+  def update(store_id: Long, id: Long) = Action { implicit request =>
+    val cg_request = WS.url("http://contentgraph-test.elasticbeanstalk.com/graph/store/" + store_id + "/campaign/" + id)
+    Async {
+      cg_request.withHeaders(apiHeaders)
+        .put((request.body.asJson getOrElse "").toString)
         .map(relayResponse)
     }
   }

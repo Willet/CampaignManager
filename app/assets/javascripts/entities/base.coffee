@@ -1,7 +1,8 @@
 define [
   'backbone',
   'jquery',
-  'underscore'
+  'underscore',
+  'backboneuniquemodel'
 ], (Backbone, $, _) ->
 
   Base = Base || {}

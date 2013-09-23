@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+  <script src="vendor/underscore.js"></script>
+  <script src="vendor/backbone.js"></script>
+  <script src="../backbone.uniquemodel.js"></script>
+
+  <script>
+  var User = Backbone.Model.extend({});
+  var UniqueUser = Backbone.UniqueModel(User, 'User', 'localStorage');
+
+  var uniqueModelInstance = new UniqueUser({
+    id: 1,
+    name: 'Charles Xavier',
+    timestamp: +(new Date)
+  });
+  </script>
+</body>
+</html>

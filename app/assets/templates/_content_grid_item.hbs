@@ -54,26 +54,16 @@
         </div>
       {{/if}}
       <div class="row">
-      <a class="js-select selected">
-        <form>
-          <label for="selected"><input type="checkbox" class="js-selected" {{#if selected}}checked{{/if}}><span class="custom checkbox"></span> Select</label>
-        </form>
+      <a class="js-select">
+        <label for="selected"><input type="checkbox" class="js-selected" {{#if selected}}checked{{/if}}><span class="custom checkbox"></span> Select</label>
       </a>
       </div>
     </span>
-    {{#if approved}}
-      {{#if prioritized}}
-        <span class="approved prioritized status"><i class="icon-general-up-arrow"></i></span>
-      {{else}}
-        <span class="approved status"><i class="icon-general-checkmark"></i></span>
-      {{/if}}
-    {{/if}}
-    {{#if rejected}}
-    <span class="rejected status"><i class="icon-general-error"></i></span>
-    {{/if}}
-    {{#if undecided}}
-    <span class="undecided status"><i class="icon-accessibility-question"></i></span>
-    {{/if}}
+    <span class="status">
+      <span class="prioritized"><i class="icon-general-up-arrow"></i> Prioritized</span>
+      <span class="approved"><i class="icon-general-checkmark"></i> Approved</span>
+      <span class="rejected"><i class="icon-general-error"></i> Rejected</span>
+      <span class="undecided"><i class="icon-accessibility-question"></i> Undecided</span>
     <div class="color" />
   </div>
   <div class="edit-area large-8 columns">

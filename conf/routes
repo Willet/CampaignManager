@@ -44,8 +44,9 @@ GET     /api/stores/:store_id/products        controllers.Products.index(store_i
 GET     /api/stores/:store_id/products/:id    controllers.Products.show(store_id:Long, id:Long)
 PUT     /api/stores/:store_id/products/:id    controllers.Products.update(store_id:Long, id:Long)
 
-GET     /api/stores/:store_id/campaigns       controllers.Campaigns.index(store_id:Long)
-GET     /api/stores/:store_id/campaigns/:id   controllers.Campaigns.show(store_id:Long, id:Long)
+GET     /api/stores/:store_id/pages           controllers.Pages.index(store_id:Long)
+GET     /api/stores/:store_id/pages/:id       controllers.Pages.show(store_id:Long, id:Long)
+PUT     /api/stores/:store_id/pages/:id       controllers.Pages.update(store_id:Long, id:Long)
 
 # Not Found for any route that is not valid under the API
 GET     /api/*file                controllers.Application.notFound(file)

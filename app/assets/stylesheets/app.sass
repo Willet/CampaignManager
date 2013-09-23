@@ -11,7 +11,7 @@ $webicons-url: "../images/webicons/"
 
 @import "colors"
 @import "steps"
-@import 'mixin'
+@import "mixin"
 
 body
   font-size: 14px
@@ -187,6 +187,7 @@ $selected-color: $body-font-color
   #list
     font-size: 14px
     padding: 0 0 !important
+    margin-bottom: 2em
 
   #list.list-view
     @include grid-column($columns: 12)
@@ -253,13 +254,12 @@ $selected-color: $body-font-color
     @include grid-column($columns: 8)
     .item
       @include grid-column($columns: 3)
+      box-shadow: inset 1px 1px #aaa
+      border-right: 1px solid #aaa
       height: 160px
       .edit-area
         /* edit-area is centralized */
         display: none
-      &.selected
-        .overlay .color
-          background-color: transparentize($selected-color, 0.8)
       .image-container
         height: 100%
         .image
@@ -268,6 +268,9 @@ $selected-color: $body-font-color
           height: 100%
           background-repeat: no-repeat
           background-position: center center
+      &.selected
+        .overlay
+          background-color: transparentize($selected-color, 0.8)
 
   #list.grid-view .item .overlay
     position: absolute
@@ -295,6 +298,8 @@ $selected-color: $body-font-color
       bottom: 0
       left: 0
       width: 100%
+      input[type="file"], input[type="checkbox"], input[type="radio"], select
+        margin: 0
       a
         @include button
         font-weight: normal
@@ -328,19 +333,30 @@ $selected-color: $body-font-color
         border: 0
         background-color: $action-color
     .status
+      +vendor-prefix(transition, background-color 0.4s ease-in-out)
       margin: 0
       padding-right: 10px
-      text-align: right
-      /* TODO: color */
+      text-align: center
+      &, i
+        color: #f0f0f0
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5)
+      > span
+        display: none
       &.approved
-        color: $approved-color
+        background-color: transparentize($approved-color, 0.5)
+        > .approved
+          display: block
       &.rejected
-        color: $rejected-color
+        background-color: transparentize($rejected-color, 0.5)
+        > .rejected
+          display: block
       &.undecided
-        color: $undecided-color
+        background-color: transparentize($undecided-color, 0.5)
+        > .undecided
+          display: block
       position: absolute
       bottom: 0
-      right: 0
+      left: 0
       width: 100%
       line-height: 24px
 
@@ -400,6 +416,9 @@ $selected-color: $body-font-color
   text-align: center
   > .container, > .actions
     #layout-options
+      img
+        max-height: 100px
+        height: 100px
       label
         text-align: right
     #layout-types

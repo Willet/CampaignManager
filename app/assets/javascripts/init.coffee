@@ -8,6 +8,7 @@ requirejs.config(
 
   paths:
     backbone: 'libs/backbone/backbone-min'
+    backboneuniquemodel: 'libs/backbone.uniquemodel/backbone.uniquemodel'
     underscore: 'libs/underscore/underscore-min'
     jquery: 'libs/jquery/jquery.min'
     jquery_ui: '//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min'
