@@ -5,7 +5,7 @@ define [
   'jquery',
   'underscore',
   'views/pages',
-  'views/contentmanager',
+  '../contentmanager/views',
   'views/main',
   'entities'
 ], (App, BackboneProjections, Marionette, $, _, Views, ContentViews, MainViews, Entities) ->

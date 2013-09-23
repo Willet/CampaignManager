@@ -42,7 +42,7 @@ define "app", [
     window.location = "#{App.APP_ROOT}login?r=#{window.location.hash}"
 
   App.setTitle = (title) ->
-    App.pageInfo.set("title", title)
+    App.pageInfo.set "title", title
 
   _.extend(exports, App)
   App

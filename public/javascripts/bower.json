@@ -1,0 +1,19 @@
+{
+  "name": "CampaignManager",
+  "version": "1.0.0",
+  "homepage": "https://github.com/Willet/CampaignManager",
+  "authors": [
+    "Alex Riedler <alex@riedler.ca>"
+  ],
+  "directory": "libs",
+  "json": "libraries.json",
+  "main": "init.coffee",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
