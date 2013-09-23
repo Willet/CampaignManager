@@ -23,6 +23,7 @@
 
       {{#if page.layout}}
       <div id="layout-options">
+        <form id="layout-field-form">
         {{#each fields}}
           {{#is type 'file'}}
             <div class="row">
@@ -61,7 +62,7 @@
             <div class="row">
               <label class="large-2 columns inline" for="{{var}}">{{label}}</label>
               <span class="large-10 columns">
-                <textarea placeholder="{{default placeholder 'enter text...'}}">{{value}}</textarea>
+                <textarea for="{{var}}" placeholder="{{default placeholder 'enter text...'}}">{{value}}</textarea>
               </span>
             </div>
           {{/is}}
@@ -81,6 +82,7 @@
         <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/products">Save &amp; Continue</a>
       </div>
       {{/if}}
+      </form>
     </div>
   </div>
 </div>

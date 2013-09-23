@@ -1,12 +1,14 @@
 require [
-  "marionette"
-], (Marionette) ->
+  "marionette",
+  "jquery"
+], (Marionette, $) ->
 
   _.extend Backbone.Marionette.Application::,
 
     APP_ROOT: "/"
 
     navigate: (route, options = {}) ->
+      $(window).scrollTop(0)
       Backbone.history.navigate route, options
 
     getCurrentRoute: ->

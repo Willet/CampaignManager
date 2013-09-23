@@ -8,20 +8,26 @@ define [
 
     template: "pages_layout"
 
-    jsonFields: [
-          { var: "heroImageMobile", label: "Hero Image (Mobile)", type: "image" }
-          { var: "legalCopy", label: "Legal Copy", type: "textarea" },
-          { var: "facebookShare", label: "Facebook Share Copy", type: "text" },
-          { var: "twitterShare", label: "Twitter Share Copy", type: "text" },
-          { var: "emailShare", label: "Email Share Copy", type: "text" }
-        ]
     serializeData: ->
       return {
         page: @model.toJSON()
         "store-id": @model.get("store-id")
         "title": @model.get("name")
-        fields: @jsonFields
+        fields: @getLayoutJSON()
       }
+
+    getLayoutJSON: ->
+      jsonFields = [
+            { var: "heroImageMobile", label: "Hero Image (Mobile)", type: "image" }
+            { var: "legalCopy", label: "Legal Copy", type: "textarea" },
+            { var: "facebookShare", label: "Facebook Share Copy", type: "text" },
+            { var: "twitterShare", label: "Twitter Share Copy", type: "text" },
+            { var: "emailShare", label: "Email Share Copy", type: "text" }
+          ]
+      _.each jsonFields, (field) =>
+        if model_value = @model.get("fields")[field['var']]
+          field['value'] = model_value
+      jsonFields
 
     triggers:
       "click .js-next": "save"
@@ -29,6 +35,14 @@ define [
     events:
       "click .layout-type": "selectLayoutType"
       "change .image-field": "updateImgPreview"
+
+    getFields: ->
+      results = {}
+      _.each $("#layout-field-form textarea"), (m) ->
+        results[$(m).attr("for")] = $(m).val() if $(m).attr("for")
+      _.each $("#layout-field-form input"), (m) ->
+        results[$(m).attr("for")] = $(m).val() if $(m).attr("for")
+      results
 
     updateImgPreview: (event) ->
       #Get input element

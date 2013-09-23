@@ -13,6 +13,9 @@ define [
       "click #add-product": "addProduct"
       "keydown #url": "resetError"
 
+    triggers:
+      "click .js-next": "save"
+
     resetError: (event) ->
       $(event.currentTarget).removeClass("error")
 

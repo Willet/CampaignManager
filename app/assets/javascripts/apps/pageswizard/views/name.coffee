@@ -15,6 +15,9 @@ define [
         "title": @model.get("name")
       }
 
+    triggers:
+      "click .js-next": "save"
+
     bindings:
       'input[for=name]':
         observe: 'name'

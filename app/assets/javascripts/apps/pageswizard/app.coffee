@@ -18,6 +18,9 @@ define [
       ":store_id/pages/:id/content": "pagesContent"
       ":store_id/pages/:id/view": "pagesView"
 
+    triggers:
+      "click .js-next": "save"
+
     before: (route, args) ->
       store_id = args[0]
       store = App.request "store:entity", store_id

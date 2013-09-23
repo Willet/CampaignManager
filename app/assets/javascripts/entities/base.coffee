@@ -11,7 +11,7 @@ define [
     blacklist: ['selected',]
 
     viewJSON: (opts) ->
-      Backbone.Model.prototype.toJSON.call(opts)
+      _.clone(@attributes)
 
     toJSON: (opts) ->
       _.omit(@attributes, @blacklist || {})

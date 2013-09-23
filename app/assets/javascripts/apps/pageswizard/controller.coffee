@@ -25,9 +25,14 @@ define [
 
     pagesName: (store_id, page_id) ->
       page = App.request "page:entity", store_id, page_id
+      layout = new Views.PageCreateName(model: page)
+
+      layout.on 'save', ->
+        $.when(page.save()).done ->
+          App.navigate("/#{store_id}/pages/#{page_id}/content", trigger: true)
 
       App.execute "when:fetched", page, =>
-        @region.show(new Views.PageCreateName(model: page))
+        @region.show(layout)
         App.setTitle("Pages: #{page.get("name")} - Name")
 
     pagesLayout: (store_id, page_id) ->
@@ -40,8 +45,9 @@ define [
         layout.render()
 
       layout.on 'save', ->
-        console.log "SAVEEEE"
-        page.save()
+        page.set('fields', layout.getFields())
+        $.when(page.save()).done ->
+          App.navigate("/#{store_id}/pages/#{page_id}/products", trigger: true)
 
       App.execute "when:fetched", page, =>
         @region.show(layout)
@@ -63,6 +69,10 @@ define [
           scrape.save()
         scrapeList.on "itemview:remove", (view) ->
           scrapes.remove(view.model)
+
+      layout.on 'save', ->
+        $.when(page.save()).done ->
+          App.navigate("/#{store_id}/pages/#{page_id}/content", trigger: true)
 
       App.execute "when:fetched", page, =>
         App.show layout
