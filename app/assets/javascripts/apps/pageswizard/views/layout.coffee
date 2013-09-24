@@ -25,7 +25,7 @@ define [
             { var: "emailShare", label: "Email Share Copy", type: "text" }
           ]
       _.each jsonFields, (field) =>
-        if model_value = @model.get("fields")[field['var']]
+        if model_value = @model.get("fields")?[field['var']]
           field['value'] = model_value
       jsonFields
 
@@ -51,7 +51,7 @@ define [
       #Scans through json field objects and, using the "for"
       #attribute as an indentifier, finds the related object
       targetField = null
-      for field in @jsonFields
+      for field in @getLayoutJSON()
         if field.var is elem.getAttribute("for")
           targetField = field
 

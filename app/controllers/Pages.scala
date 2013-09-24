@@ -45,4 +45,13 @@ object Pages extends Controller {
     }
   }
 
+  def create(store_id: Long) = Action { implicit request =>
+    val cg_request = WS.url("http://contentgraph-test.elasticbeanstalk.com/graph/store/" + store_id + "/campaign")
+    Async {
+      cg_request.withHeaders(apiHeaders)
+        .post((request.body.asJson getOrElse "").toString)
+        .map(relayResponse)
+    }
+  }
+
 }

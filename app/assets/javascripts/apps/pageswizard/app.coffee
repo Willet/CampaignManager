@@ -28,9 +28,8 @@ define [
         App.nav.show(new MainViews.Nav(model: new Entities.Model(store: store, page: 'pages')))
       @controller.setRegion(App.main)
 
-  App.addInitializer(->
+  App.addInitializer ->
     controller = new PageWizard.Controller()
     router = new PageWizard.Router(controller: controller)
-  )
 
   PageWizard

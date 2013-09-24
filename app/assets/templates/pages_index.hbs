@@ -1,16 +1,16 @@
 <div class="content">
   <div class="actions">
-    <button id="new-page" class="small">New Page</button>
-    <button id="new-page" class="small">Edit Most Recent</button>
+    <a href="/{{store-id}}/pages/new" id="new-page" class="button small">New Page</a>
+    <button id="edit-most-recent" class="small">Edit Most Recent</button>
   </div>
   <div class="criteria">
     <div class="row text-right">
       <label class="large-1 columns inline">Sort</label>
       <span class="large-11 columns">
-         <select>
+         <select for="sort-order" class="sort-order">
           <option value="last-modified">Most Recent</option>
           <option value="name">Name</option>
-        </select> 
+        </select>
       </span>
     </div>
     <div class="row text-right">
@@ -21,29 +21,5 @@
     </div>
   </div>
   <div class="list">
-    <table class="large-12">
-      <thead>
-      <tr>
-        <th>Name</th>
-        <th>Last Saved</th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <!-- TODO: th></th -->
-      </tr>
-      </thead>
-      <tbody>
-      {{#each pages}}
-        <tr>
-          <td><a href="/{{store-id}}/pages/{{id}}">{{capitalizeEach name}}</a></td>
-          <td>{{formatDate last-modified '%d/%m/%Y'}}</td>
-          <td><a href="/{{store-id}}/pages/{{id}}">Edit Page<a/></td>
-          <td><a href="/{{store-id}}/pages/{{id}}/view">View Page</a></td>
-          <td><a href="/{{store-id}}/pages/{{id}}/analytics">Analytics</a></td>
-          <!-- TODO: td><a href="#">Duplicate</a></td-->
-        </tr>
-      {{/each}}
-      </tbody>
-    </table>
   </div>
 </div>

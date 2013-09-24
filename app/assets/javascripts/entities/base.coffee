@@ -17,7 +17,22 @@ define [
       _.omit(@attributes, @blacklist || {})
 
     fetch: ->
-      @_fetch = super()
+      @_fetch = super(arguments...)
+
+    sync: ->
+      @_fetch = super(arguments...)
+
+  reverseSortFn = (sortFn) ->
+    (left, right) ->
+      l = sortFn(left)
+      r = sortFn(right)
+
+      if l < r
+        1
+      else if l > r
+        -1
+      else
+        0
 
   class Base.Collection extends Backbone.Collection
 
@@ -27,6 +42,12 @@ define [
 
     viewJSON: ->
       @collect((m) -> m.viewJSON())
+
+    updateSortBy: (field, reverse = false) ->
+      @comparator = (m) -> m.get(field)
+      if reverse
+        @comparator = reverseSortFn(@comparator)
+      @sort()
 
     fetch: ->
       @_fetch = super(arguments...)

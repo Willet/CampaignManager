@@ -19,14 +19,45 @@ define [
   class PageWizard.Controller extends Marionette.Controller
 
     pagesIndex: (store_id) ->
+      @page = null
       pages = App.request "page:entities", store_id
+      view = new Views.PageIndex model: pages, 'store-id': store_id
+      all_models = null
+
+      view.on 'change:filter', (filter) ->
+        filtered_pages = _.filter(all_models, (m) -> (m.get("name") || "").search(filter) != -1)
+        pages.reset(filtered_pages)
+
+      view.on 'change:sort-order', (order) ->
+        pages.updateSortBy order, (order == 'last-modified')
+
+      view.on 'edit-most-recent', ->
+        most_recent = _.max(all_models, (m) -> m.get('last-modified'))
+        App.navigate("/#{store_id}/pages/#{most_recent.id}", trigger: true)
+
+      view.on 'new-page', =>
+        App.navigate("/#{store_id}/pages/new", trigger: true)
 
       App.execute "when:fetched", pages, =>
-        @region.show(new Views.PageIndex(model: pages))
+        all_models = _.clone(pages.models)
+        @region.show view
         App.setTitle "Pages"
 
+    getPage: (store_id, page_id) ->
+      @page =
+        if page_id == "new"
+          if @page && @page.get('id') == null
+            @page
+          else
+            @page = App.request "new:page:entity", store_id
+        else
+          if @page && @page.get('id') == page_id
+            @page
+          else
+            App.request "page:entity", store_id, page_id
+
     pagesName: (store_id, page_id) ->
-      page = App.request "page:entity", store_id, page_id
+      page = @getPage(store_id, page_id)
       layout = new Views.PageCreateName(model: page)
 
       layout.on 'save', ->
@@ -38,7 +69,7 @@ define [
         App.setTitle page.get("name")
 
     pagesLayout: (store_id, page_id) ->
-      page = App.request "page:entity", store_id, page_id
+      page = @getPage(store_id, page_id)
 
       layout =  new Views.PageCreateLayout(model: page)
 
@@ -56,8 +87,8 @@ define [
         App.setTitle page.get("name")
 
     pagesProducts: (store_id, page_id) ->
+      page = @getPage(store_id, page_id)
       scrapes = App.request "page:scrapes:entities", store_id, page_id
-      page = App.request "page:entity", store_id, page_id
 
       products = new Entities.ContentCollection
       layout = new Views.PageCreateProducts model: page
@@ -81,7 +112,7 @@ define [
         App.setTitle page.get("name")
 
     pagesContent: (store_id, page_id) ->
-      page = App.request "page:entity", store_id, page_id
+      page = @getPage(store_id, page_id)
       contents = App.request "content:entities:paged", store_id, page_id
 
       layout = new Views.PageCreateContent(model: page)
