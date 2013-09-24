@@ -33,7 +33,7 @@ define [
 
       App.execute "when:fetched", page, =>
         @region.show(layout)
-        App.setTitle("Pages: #{page.get("name")} - Name")
+        App.setTitle page.get("name")
 
     pagesLayout: (store_id, page_id) ->
       page = App.request "page:entity", store_id, page_id
@@ -51,7 +51,7 @@ define [
 
       App.execute "when:fetched", page, =>
         @region.show(layout)
-        App.setTitle("Pages: #{page.get("name")} - Layout")
+        App.setTitle page.get("name")
 
     pagesProducts: (store_id, page_id) ->
       scrapes = App.request "page:scrapes:entities", store_id, page_id
@@ -76,7 +76,7 @@ define [
 
       App.execute "when:fetched", page, =>
         App.show layout
-        App.setTitle "Pages: #{page.get("name")} - Products"
+        App.setTitle page.get("name")
 
     contentList: (collection, actions) ->
 
@@ -175,13 +175,13 @@ define [
           layout.contentList.show @contentList(contents)
 
         App.show layout
-        App.setTitle "Pages: #{page.get("name")} - Content"
+        App.setTitle page.get("name")
 
     pagesView: (store_id, page_id) ->
       page = App.request "page:entity", store_id, page_id
 
       App.execute "when:fetched", page, =>
         App.show new Views.PagePreview(model: page)
-        App.setTitle "Pages: #{page.get("name")} - Preview"
+        App.setTitle page.get("name")
 
   PageWizard
