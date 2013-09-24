@@ -70,6 +70,7 @@ requirejs.config(
 require [
   "app",
   "jquery",
+  "modernizr",
   "global/click_handler",
   "global/form_serialize",
   "config/backbone/model",
