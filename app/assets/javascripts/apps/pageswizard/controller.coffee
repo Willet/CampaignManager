@@ -23,6 +23,7 @@ define [
 
       App.execute "when:fetched", pages, =>
         @region.show(new Views.PageIndex(model: pages))
+        App.setTitle "Pages"
 
     pagesName: (store_id, page_id) ->
       page = App.request "page:entity", store_id, page_id
