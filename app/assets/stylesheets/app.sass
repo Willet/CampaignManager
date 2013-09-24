@@ -463,15 +463,26 @@ $selected-color: $body-font-color
     .actions
       margin: 10px 0
     #scrape-list
+      background: $light-base-color
+      border: 1px solid #888
+      padding: 5px
+      border-radius: 3px
       overflow-y: scroll
       overflow-x: hidden
       min-height: 200px
       height: 200px
-      border-top: 1px solid #888
-      border-bottom: 1px solid #888
       font-size: 14px
+      font-weight: 500
+      color: #4f4f4f
+      font-size: 12px
+      .item
+        padding: 7px
+        border-bottom: 1px dotted #333
+        box-shadow: none
       .link
-        overflow: hidden
+        overflow-x: hidden
+        white-space: nowrap
+        word-break: break-all
       .action
         font-weight: bold
     .products

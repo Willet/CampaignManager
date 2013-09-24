@@ -99,7 +99,6 @@ define [
             layout.multiedit.$el.css("display", "block")
           else
             layout.multiedit.$el.css("display", "none")
-          contentList.render()
 
       contentList.on "itemview:content:approve",
         (view, args) => args.model.approve()
