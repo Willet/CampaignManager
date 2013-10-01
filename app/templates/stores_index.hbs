@@ -1,0 +1,20 @@
+<div class="content list">
+  <table>
+    <thead>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Slug</th>
+    </thead>
+    <tbody>
+      {{#each this}}
+      <tr>
+        <td>
+          {{id}}
+        </td>
+        <td><a href="/{{id}}">{{name}}</a></td>
+        <td>{{slug}}</td>
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
+</div>

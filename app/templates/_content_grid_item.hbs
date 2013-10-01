@@ -1,0 +1,72 @@
+<div class="item {{#if selected}}selected{{/if}}">
+  <div class="image-container center text-center">
+    {{#if video}}
+    <div class="image" style="background-image:url({{video-thumbnail}})" />
+    {{else}}
+    {{#if remote-url}}
+    <div class="image" style="background-image:url({{images.medium.url}})" />
+    {{else}}
+    <div class="image" style="background-image:url('http://placehold.it/180x180&text=No Thumbnail')" />
+    {{/if}}
+    {{/if}}
+  </div>
+  <div class="overlay">
+    <span class="actions text-center">
+      {{#if actions.page}}
+        {{#if approvedForPage}}
+          <div class="row">
+          <a class="js-remove-from-page" href="/{{store-id}}/content/{{id}}">
+            Remove from Page <i class="icon-general-error"></i>
+          </a>
+          </div>
+          <div class="row">
+          <a class="js-prioritize-for-page" href="/{{store-id}}/content/{{id}}/prioritize">
+            Prioritize for Page <i class="icon-general-up-arrow"></i>
+          </a>
+          </div>
+        {{else}}
+          <div class="row">
+          <a class="js-approve-for-page" href="/{{store-id}}/content/{{id}}">
+            Approve for Page <i class="icon-general-checkmark"></i>
+          </a>
+          </div>
+          <div class="row">
+          <a class="js-prioritize-for-page" href="/{{store-id}}/content/{{id}}/prioritize">
+            Approve &amp; Prioritize for Page <i class="icon-general-up-arrow"></i>
+          </a>
+          </div>
+        {{/if}}
+      {{else}}
+        <div class="row">
+        <a class="js-approve" href="/{{store-id}}/content/{{id}}/approve">
+          Approve <i class="icon-general-checkmark"></i>
+        </a>
+        </div>
+        <div class="row">
+        <a class="js-reject" href="/{{store-id}}/content/{{id}}/reject">
+          Reject <i class="icon-general-error"></i>
+        </a>
+        </div>
+        <div class="row">
+        <a class="js-prioritize" href="/{{store-id}}/content/{{id}}/prioritize">
+          Prioritize <i class="icon-general-up-arrow"></i>
+        </a>
+        </div>
+      {{/if}}
+      <div class="row">
+      <a class="js-select">
+        <label for="selected"><input type="checkbox" class="js-selected" {{#if selected}}checked{{/if}}><span class="custom checkbox"></span> Select</label>
+      </a>
+      </div>
+    </span>
+    <span class="status {{status}}">
+      <span class="prioritized"><i class="icon-general-up-arrow"></i> Prioritized</span>
+      <span class="approved"><i class="icon-general-checkmark"></i> Approved</span>
+      <span class="rejected"><i class="icon-general-error"></i> Rejected</span>
+      <span class="undecided"><i class="icon-accessibility-question"></i> Undecided</span>
+    <div class="color" />
+  </div>
+  <div class="edit-area large-8 columns">
+    <!-- Edit Area Injected Here -->
+  </div>
+</div>

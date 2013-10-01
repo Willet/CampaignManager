@@ -1,0 +1,54 @@
+@import "mixin";
+
+#spinner {
+  margin: 0 auto;
+  position: relative;
+  width: 199px;
+  height: 24px;
+  .spinner {
+    position: absolute;
+    top: 0;
+    background-color: #545454;
+    width: 25px;
+    height: 25px;
+    @include vendor-prefix(animation-name, bounce_spinner);
+    @include vendor-prefix(animation-duration, 1.3s);
+    @include vendor-prefix(animation-iteration-count, infinite);
+    @include vendor-prefix(animation-direction, linear);
+    @include vendor-prefix(transform, scale(0.3));
+    @include vendor-prefix(border-radius, 16px);
+  }
+  #spinner_1 {
+    left: 0;
+    animation-delay: 0.52s;
+  }
+  #spinner_2 {
+    left: 25px;
+    animation-delay: 0.65s;
+  }
+  #spinner_3 {
+    left: 50px;
+    animation-delay: 0.78s;
+  }
+  #spinner_4 {
+    left: 75px;
+    animation-delay: 0.91s;
+  }
+  #spinner_5 {
+    left: 100px;
+    animation-delay: 1.04s;
+  }
+  #spinner_6 {
+    left: 124px;
+    animation-delay: 1.17s;
+  }
+  #spinner_7 {
+    left: 149px;
+    animation-delay: 1.3s;
+  }
+  #spinner_8 {
+    left: 174px;
+    animation-delay: 1.43s;
+  }
+
+}

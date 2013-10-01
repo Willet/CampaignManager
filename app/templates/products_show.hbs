@@ -1,0 +1,98 @@
+<h2>Product</h2>
+<form>
+  <div class="row">
+    <div class="large-4 small-12 columns">
+      <div class="row center text-center">
+        {{#if default-image-id}}
+          <img src="{{default-image-id.images.medium.url}}"/>
+        {{else}}
+          <img src="http://placehold.it/175x175"/>
+        {{/if}}
+        <!-- default image id: {{default-image-id}} -->
+      </div>
+      <div class="row text-center">
+        <dl>
+          <dt>Created</dt>
+          <dd>{{formatDate created "%d/%m/%Y"}}</dd>
+          <dt>Available</dt>
+          <dd>
+            {{#if available}}
+            Yes
+            {{else}}
+            No
+            {{/if}}
+          </dd>
+        </dl>
+      </div>
+    </div>
+    <div class="large-8 small-10 columns">
+      <div class="row">
+        <div class="small-1 columns">
+          <label for="name" class="right inline">Name</label>
+        </div>
+        <div class="small-11 columns">
+          <input name="name" type="text" value="{{name}}">
+        </div>
+      </div>
+      <div class="row">
+        <div class="small-1 columns">
+          <label for="description" class="right inline">Description</label>
+        </div>
+        <div class="small-11 columns">
+          <textarea name="description" type="text">{{description}}</textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="small-1 columns">
+          <label for="price" class="right inline">Price</label>
+        </div>
+        <div class="small-11 columns">
+          <input name="price" type="text" value="{{price}}">
+        </div>
+      </div>
+      <div class="row">
+        <div class="small-1 columns">
+          <label for="keywords" class="right inline">Keywords</label>
+        </div>
+        <div class="small-11 columns">
+          <input name="keywords" type="text" value="{{keywords}}">
+        </div>
+      </div>
+      <div class="row">
+        <div class="small-1 columns">
+          <label for="url" class="right inline">Url</label>
+        </div>
+        <div class="small-11 columns">
+          <small><a href="{{url}}">{{url}}</a></small>
+        </div>
+      </div>
+      <div class="row">
+        <div class="small-1 columns">
+          <label for="suggested-urls" class="right inline">Suggested Urls</label>
+        </div>
+        <div class="small-11 columns">
+          {{suggested-urls}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="small-8 right columns"/>
+    <div class="small-4 right columns text-center">
+      <button class="js-save small" type="submit">Save Changes</button>
+    </div>
+  </div>
+</form>
+<h3>Product Images/Assets/Content</h3>
+<div class="related-products">
+  <div class="row">
+  {{#each content-ids}}
+    <div class="small-4 large-3 columns">
+      <a href="/{{store-id}}/content/{{id}}">
+        <img src="{{images.compact.url}}"/>
+        {{title}}
+      </a>
+    </div>
+  {{/each}}
+  </div>
+</div>

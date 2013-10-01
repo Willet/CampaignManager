@@ -1,0 +1,25 @@
+<div class="content">
+  <div class="actions">
+    <a href="/{{store-id}}/pages/new" id="new-page" class="button small">New Page</a>
+    <button id="edit-most-recent" class="small">Edit Most Recent</button>
+  </div>
+  <div class="criteria">
+    <div class="row text-right">
+      <label class="large-1 columns inline">Sort</label>
+      <span class="large-11 columns">
+         <select for="sort-order" class="sort-order">
+          <option value="last-modified">Most Recent</option>
+          <option value="name">Name</option>
+        </select>
+      </span>
+    </div>
+    <div class="row text-right">
+      <label class="large-1 columns inline">Search</label>
+      <span class="large-11 columns">
+        <input type="text" id="js-page-search" placeholder="Page Name"/>
+      </span>
+    </div>
+  </div>
+  <div class="list">
+  </div>
+</div>

@@ -1,0 +1,44 @@
+<!--div class="caption">
+  <label class="inline"><b>Caption</b></label>
+  <p>{{caption}}</p>
+</div-->
+<div>
+  <label class="inline"><b>Tagged Products</b></label>
+  <input type="text" class="js-tagged-products" style="width:100%" />
+</div>
+{{#unless actions.page}}
+<div>
+  <label class="inline"><b>Tagged Pages</b></label>
+  <input type="text" class="js-tagged-pages" style="width:100%" />
+</div>
+{{/unless}}
+<div class="actions">
+  {{#if actions.page}}
+    {{#if approvedForPage}}
+      <a class="js-reject-for-page" href="/{{store-id}}/content/{{id}}">
+        Reject for Page <i class="icon-general-error"></i>
+      </a>
+      <a class="js-prioritize-for-page" href="/{{store-id}}/content/{{id}}/prioritize">
+        Prioritize for Page <i class="icon-general-up-arrow"></i>
+      </a>
+    {{else}}
+      <a class="js-approve-for-page" href="/{{store-id}}/content/{{id}}">
+        Approve for Page <i class="icon-general-checkmark"></i>
+      </a>
+      <a class="js-prioritize-for-page" href="/{{store-id}}/content/{{id}}/prioritize">
+        Approve & Prioritize for Page <i class="icon-general-up-arrow"></i>
+      </a>
+    {{/if}}
+  {{else}}
+  <a class="js-undecided undecided {{#if undecided}}active{{/if}}" title="Reset">
+    <i class="icon-accessibility-question"></i>
+  </a>
+  <a class="js-reject reject {{#if rejected}}active{{/if}}" title="Reject">
+    <i class="icon-general-error"></i>
+  </a>
+  <a class="js-approve approve {{#if approved}}active{{/if}}" title="Approve">
+    <i class="icon-general-checkmark"></i>
+  </a>
+  {{/if}}
+</div>
+<!--button class="js-prioritize tiny">Prioritize</button-->

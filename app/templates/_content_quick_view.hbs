@@ -1,0 +1,30 @@
+<div class="content-quick-view">
+  <div class="image row text-center">
+    {{#if video}}
+      <iframe width="640" height="480" src="{{video-embed-url}}" frameborder="0" allowfullscreen></iframe>
+    {{else}}
+      {{#if remote-url}}
+        <img src="{{images.grande.url}}" />
+      {{else}}
+        <img src="http://placehold.it/180x180&text=No Thumbnail" />
+      {{/if}}
+    {{/if}}
+  </div>
+  <div class="info row">
+    <div class="source-type large-1 columns">
+      <!-- TODO: actual icons -->
+      <a href="#" class="svg webicon large facebook" />
+    </div>
+    <div class="large-8 columns">
+      <div class="large-2 columns">
+        <label for="caption" class="inline">Caption</label>
+      </div>
+      <div class="large-10 columns">
+        <p>{{default caption "(No Caption)"}}</p>
+      </div>
+    </div>
+    <div class="large-2 columns">
+      <button class="reveal-close small">Close</button>
+    </div>
+  </div>
+</div>
