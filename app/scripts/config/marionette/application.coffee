@@ -16,13 +16,10 @@ require [
       if _.isEmpty(frag) then null else frag
 
     startHistory: ->
-      if Backbone.history && !Backbone.history.start(pushState: true, root: @APP_ROOT)
+      if Backbone.history && !Backbone.history.start(pushState: false, root: @APP_ROOT)
         @navigate("notFound", trigger: false)
 
     setTitle: (title) ->
       App.titlebar.currentView.model.set(title: title)
       App.header.currentView.model.set(page: title)
-
-    show: (view) ->
-      @main.show(view)
 

@@ -6,7 +6,7 @@ define [
 
   class Views.PageCreateProducts extends Marionette.Layout
 
-    template: "pages_products"
+    template: "page/products"
 
     events:
       "click #add-url": "addUrl"
@@ -52,7 +52,7 @@ define [
 
   class Views.PageScrapeItem extends Marionette.ItemView
 
-    template: "_page_scrape_item"
+    template: "page/scrape_item"
 
     triggers:
       "click .remove": "remove"

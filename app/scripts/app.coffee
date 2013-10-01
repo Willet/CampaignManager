@@ -4,7 +4,8 @@ define "app", [
   'underscore',
   'entities',
   'components/regions/reveal',
-  'exports'
+  'exports',
+  'mock/mock'
 ], (Marionette, $, _, Entities, Reveal, exports) ->
 
   App = window.App = new Marionette.Application()
@@ -16,11 +17,13 @@ define "app", [
     modal:
       selector: "#modal"
       regionType: Reveal.RevealDialog
-    nav: "header"
-    infobar: "#info-bar"
-    titlebar: "#title-bar"
-    main: "#container"
+    layout: "#layout"
+    header: "header"
     footer: "footer"
+
+  class CurrentPage extends Entities.Model
+
+  App.currentPage = new CurrentPage()
 
   App.addInitializer ->
     $(document).ajaxError (event, xhr) ->

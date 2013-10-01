@@ -6,7 +6,7 @@ define [
 
   class Views.ContentEditArea extends Marionette.Layout
 
-    template: "_content_edit_item"
+    template: "content/edit_item"
 
     serializeData: -> _.extend(@model.viewJSON(), @actions)
 

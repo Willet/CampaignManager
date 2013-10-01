@@ -1,0 +1,48 @@
+@import "foundation";
+@import "mixin";
+
+@import "colors";
+
+#main {
+  @media #{$small} {
+    left: 16.65%;
+    @include grid-column(10);
+    padding: 0;
+  }
+  @include grid-column(12);
+  padding: 0;
+  // make space for fixed nav bar + potentially infobar
+  position: relative;
+  left: 0;
+   #title-bar {
+    height: 56px;
+    line-height: 56px;
+  } top: 0;
+}
+
+nav {
+  z-index: 10;
+  top: 0;
+  left: 0;
+  /* on non-mobile make fixed left-hand-side nav */
+  @media #{$small} {
+    @include grid-column(2);
+    padding: 0;
+    position: fixed !important;
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+  }
+
+  /* on mobile/small screens make it inline */
+  @include grid-column(12);
+  padding: 0;
+  width: 100%;
+}
+
+#content {
+  @media #{$small} {
+    padding: 0;
+  }
+  padding: 0;
+}

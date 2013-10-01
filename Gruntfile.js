@@ -134,7 +134,7 @@ module.exports = function (grunt) {
               }
             },
             files: {
-              "<%= yeoman.tmp %>/scripts/templates.js": ["<%= yeoman.app %>/templates/*.hbs"],
+              "<%= yeoman.tmp %>/scripts/templates.js": ["<%= yeoman.app %>/templates/**/*.hbs"],
             }
           }
         },
@@ -225,8 +225,9 @@ module.exports = function (grunt) {
                     // http://requirejs.org/docs/errors.html#sourcemapcomments
                     preserveLicenseComments: false,
                     useStrict: true,
-                    wrap: true
+                    wrap: true,
                     //uglify2: {} // https://github.com/mishoo/UglifyJS2
+                    stubModules: ['text']
                 }
             }
         },
@@ -298,11 +299,11 @@ module.exports = function (grunt) {
                     // https://github.com/yeoman/grunt-usemin/issues/44
                     //collapseWhitespace: true,
                     collapseBooleanAttributes: true,
-                    removeAttributeQuotes: true,
+                    removeAttributeQuotes: true,*/
                     removeRedundantAttributes: true,
                     useShortDoctype: true,
                     removeEmptyAttributes: true,
-                    removeOptionalTags: true*/
+                    removeOptionalTags: true
                 },
                 files: [{
                     expand: true,
@@ -314,6 +315,17 @@ module.exports = function (grunt) {
         },
         // Put files not handled in other tasks here
         copy: {
+            images: {
+                files: [{
+                    expand: true,
+                    dot: true,
+                    cwd: '<%= yeoman.app %>',
+                    dest: '<%= yeoman.tmp %>',
+                    src: [
+                        'images/**/*.*'
+                    ]
+                }]
+            },
             js: {
                 files: [{
                     expand: true,
@@ -322,6 +334,7 @@ module.exports = function (grunt) {
                     dest: '<%= yeoman.tmp %>',
                     src: [
                         'scripts/**/*.js',
+                        'scripts/mock/data/**/*.json',
                         'bower_components/**/*.js'
                     ]
                 }]
@@ -398,6 +411,7 @@ module.exports = function (grunt) {
             'clean:server',
             'concurrent:server',
             'copy:js',
+            'copy:images',
             'autoprefixer',
             'connect:livereload',
             'watch'
@@ -417,6 +431,7 @@ module.exports = function (grunt) {
         'useminPrepare',
         'concurrent:dist',
         'copy:js',
+        'copy:images',
         'autoprefixer',
         'requirejs',
         'concat',

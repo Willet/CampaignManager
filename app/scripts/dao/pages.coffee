@@ -32,9 +32,12 @@ define [
       API.getPages store_id, params
 
   App.reqres.setHandler "page:entity",
-    (store_id, page_id, params) ->
-      API.getPage store_id, page_id, params
+    (params, options) ->
+      if params['page_id'] == 'new'
+        API.newPage params['store_id'], options
+      else
+        API.getPage params['store_id'], params['page_id'], options
 
   App.reqres.setHandler "new:page:entity",
-    (store_id, params) ->
-      API.newPage store_id, params
+    (params, options) ->
+      API.newPage params['store_id'], params

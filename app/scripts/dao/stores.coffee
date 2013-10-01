@@ -21,18 +21,10 @@ define [
         data: params
       stores
 
-  if App.mode == "local"
-    API =
-      getStore: (store_id, params = {}) ->
-        return new Entities.Store { id: store_id, name: "Second Funnel" }
-      getStores: (params = {}) ->
-        return new Entities.StoreCollection @getStore(126, params)
-
-
   App.reqres.setHandler "store:entities",
     (params) ->
       API.getStores params
 
   App.reqres.setHandler "store:entity",
-    (store_id, params) ->
-      API.getStore store_id, params
+    (params, options) ->
+      API.getStore params['store_id'], options

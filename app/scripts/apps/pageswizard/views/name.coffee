@@ -1,12 +1,13 @@
 define [
   "marionette",
   "../views",
+  "backbone",
   "backbone.stickit"
-], (Marionette, Views) ->
+], (Marionette, Views, Backbone, Stickit) ->
 
   class Views.PageCreateName extends Marionette.Layout
 
-    template: "pages_name"
+    template: "page/name"
 
     serializeData: ->
       return {
@@ -29,7 +30,7 @@ define [
     initialize: (opts) ->
 
     onRender: (opts) ->
-      @backbone.stickit()
+      @stickit()
       @$(".steps .main").addClass("active")
 
     onShow: (opts) ->

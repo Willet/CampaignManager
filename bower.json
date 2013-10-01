@@ -15,7 +15,9 @@
     "foundation": "~4.3.2",
     "requirejs": "~2.1.8",
     "foundation-icons": "*",
-    "handlebars.js": "~1.0.12"
+    "handlebars.js": "~1.0.12",
+    "requirejs-text": "~2.0.10",
+    "sinonjs": "~1.7.1"
   },
   "authors": [
     "Alex Riedler <alex@riedler.ca>"
@@ -27,8 +29,5 @@
     "app/bower_components",
     "test",
     "tests"
-  ],
-  "resolutions": {
-    "jquery": "~1.10.2"
-  }
+  ]
 }

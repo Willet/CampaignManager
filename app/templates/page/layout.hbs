@@ -1,0 +1,87 @@
+<div class="content">
+  <h4>Layout</h4>
+  <div class="page-edit layout">
+    <div class="container">
+
+      <div id="layout-types">
+          <div class="layout-type js-layout-hero {{#is page.layout 'hero'}}selected{{/is}}">
+            <span class="icon row"><img src="/images/page-type-hero.png" /></span>
+            <label class="row">Hero Image</label>
+          </div>
+          <div class="layout-type js-layout-featured {{#is page.layout 'featured'}}selected{{/is}}">
+            <span class="icon row"><img src="/images/page-type-featured.png" /></span>
+            <label class="row">Featured Product</label>
+          </div>
+          <div class="layout-type js-layout-shopthelook {{#is page.layout 'shopthelook'}}selected{{/is}}">
+            <span class="icon row"><img src="/images/page-type-shopthelook.png" /></span>
+            <label class="row">Shop The Look</label>
+          </div>
+      </div>
+
+      <br/>
+
+      {{#if page.layout}}
+      <div id="layout-options">
+        <form id="layout-field-form">
+        {{#each fields}}
+          {{#is type 'file'}}
+            <div class="row">
+              <label class="large-2 columns inline" for="{{var}}">{{label}}</label>
+              <span class="large-10 columns">
+                <input type="file" for="{{var}}" value="{{value}}" />
+              </span>
+            </div>
+          {{/is}}
+          {{#is type 'image'}}
+            <div class="row">
+              <label class="large-2 columns inline" for="{{var}}">{{label}}</label>
+              <span class="large-10 columns">
+                <span class="row">
+                  <input class="image-field" type="file" for="{{var}}" value="{{value}}" />
+                </span>
+                <span class="row">
+                  {{#if loadedUrl}}
+                    <img src='{{loadedUrl}}' />
+                  {{else}}
+                    <img src="http://placehold.it/762x142?text=''" />
+                  {{/if}}
+                </span>
+              </span>
+            </div>
+          {{/is}}
+          {{#is type 'text'}}
+            <div class="row">
+              <label class="large-2 columns inline" for="{{var}}">{{label}}</label>
+              <span class="large-10 columns">
+                <input type="text" for="{{var}}" value="{{value}}" placeholder="{{default placeholder 'enter text...'}}" />
+              </span>
+            </div>
+          {{/is}}
+          {{#is type 'textarea'}}
+            <div class="row">
+              <label class="large-2 columns inline" for="{{var}}">{{label}}</label>
+              <span class="large-10 columns">
+                <textarea for="{{var}}" placeholder="{{default placeholder 'enter text...'}}">{{value}}</textarea>
+              </span>
+            </div>
+          {{/is}}
+          {{#is type 'select'}}
+            <div class="row">
+              <label class="large-2 columns inline" for="{{var}}">{{label}}</label>
+              <span class="large-10 columns">
+                <select>
+                  <option>TODO: implement</option>
+                </select>
+              </span>
+            </div>
+          {{/is}}
+        {{/each}}
+      </div>
+      <div class="actions row">
+        <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/products">Save &amp; Continue</a>
+      </div>
+      {{/if}}
+      </form>
+    </div>
+  </div>
+</div>

@@ -6,7 +6,7 @@ define [
 
   class Views.ContentQuickView extends Marionette.ItemView
 
-    template: "_content_quick_view"
+    template: "content/quick_view"
 
     serializeData: -> @model.viewJSON()
 

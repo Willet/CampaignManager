@@ -9,7 +9,7 @@ require [
   Swag.registerHelpers(Handlebars)
 
   # Make handlebars partials the same as JST
-  # Handlebars.partials = JST
+  Handlebars.partials = JST
 
   _.extend Marionette.Renderer,
 

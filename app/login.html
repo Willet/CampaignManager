@@ -1,0 +1,50 @@
+<!doctype html>
+<html class='no-js' lang='en'>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Second Funnel - Campaign Manager</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <link href='images/favicon.ico' rel='shortcut icon'>
+        <!-- build:css(.tmp) styles/app.css -->
+        <link rel="stylesheet" href="styles/app.css">
+        <!-- endbuild -->
+        <!-- build:css(.tmp) styles/login.css -->
+        <link rel="stylesheet" href="styles/login.css">
+        <!-- endbuild -->
+        <!-- build:js scripts/vendor/modernizr.js -->
+        <script src="bower_components/modernizr/modernizr.js"></script>
+        <!-- endbuild -->
+        <style>
+        </style>
+    </head>
+    <body name="top">
+      <div id="modal"></div>
+
+      <div id="layout">
+        <div class="container">
+
+          <div id="login">
+            <div class="header logo">
+              <img src="/images/logo.png" />
+            </div>
+            <h2 class="title">Login</h2>
+            <form action="/login" class="login" method="post">
+              <input type="text" id="login-email" name="username" placeholder="Username or Email" >
+              <input type="password" id="login-password" name="password" placeholder="Password">
+              <button type="submit" class="small button right">Log In</button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+      <!-- build:js scripts/vendor.js -->
+      <!-- bower:js -->
+      <script src="bower_components/jquery/jquery.js"></script>
+      <!-- endbower -->
+      <!-- endbuild -->
+
+    </body>
+</html>

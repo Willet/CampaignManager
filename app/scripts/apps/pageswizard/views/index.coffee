@@ -6,7 +6,7 @@ define [
 
   class Views.PageIndex extends Marionette.Layout
 
-    template: "pages_index"
+    template: "page/index"
 
     regions:
       'list': ".list"
@@ -41,7 +41,7 @@ define [
 
   class Views.PageIndexList extends Marionette.ItemView
 
-    template: "pages_index_list"
+    template: "page/index_list"
 
     serializeData: ->
       return {

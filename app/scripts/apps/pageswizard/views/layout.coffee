@@ -6,7 +6,7 @@ define [
 
   class Views.PageCreateLayout extends Marionette.Layout
 
-    template: "pages_layout"
+    template: "page/layout"
 
     serializeData: ->
       return {
@@ -101,9 +101,10 @@ define [
       @model.set('layout', new_layout)
 
     initialize: (opts) ->
+      @listenTo(@model, "sync", => @render())
 
     onRender: (opts) ->
-      @backbone.stickit()
+      @stickit()
       @$(".steps .layout").addClass("active")
 
     onShow: (opts) ->

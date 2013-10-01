@@ -18,16 +18,12 @@ define [
         message: (if @options['initialized'] then @options['loadingMessage'] else @options['emptyMessage'])
       }
 
-  class Main extends Marionette.ItemView
-
-    template: "main_index"
-
   class Nav extends Marionette.ItemView
 
-    template: "nav"
+    template: "shared/nav"
 
     initialize: (opts) ->
-      @model.on("change", => @render())
+      @model.get('store')?.on("sync", => @render())
 
     serializeData: ->
       json = {}
@@ -37,10 +33,10 @@ define [
 
   class TitleBar extends Marionette.ItemView
 
-    template: "title_bar"
+    template: "shared/title_bar"
 
     initialize: (opts) ->
-      @model.on("change", => @render())
+      @listenTo(@model, 'sync', @render())
 
   class NotFound extends Marionette.ItemView
 
@@ -48,13 +44,23 @@ define [
 
   class Index extends Marionette.Layout
 
-    template: "stores_index"
+    template: "store/index"
+
+  class Layout extends Marionette.Layout
+
+    template: "layouts/main"
+
+    regions:
+      nav: "nav"
+      content: "#content"
+      controls: "#page-controls"
+      titlebar: "#title-bar"
 
   return {
-    Main: Main
     Nav: Nav
     TitleBar: TitleBar
     Loading: Loading
     NotFound: NotFound
     Index: Index
+    Layout: Layout
   }

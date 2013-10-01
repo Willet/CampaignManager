@@ -6,7 +6,7 @@ define [
 
   class Views.PageCreateContent extends Marionette.Layout
 
-    template: "pages_content"
+    template: "page/content"
 
     serializeData: ->
       return {

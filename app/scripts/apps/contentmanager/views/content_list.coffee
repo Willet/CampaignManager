@@ -2,6 +2,7 @@ define [
   "marionette",
   "entities",
   "../views",
+  "backbone.stickit"
 ], (Marionette, Entities, Views) ->
 
   class Views.ContentList extends Marionette.CollectionView
@@ -16,7 +17,7 @@ define [
 
   class Views.ContentGridItem extends Marionette.Layout
 
-    template: "_content_grid_item"
+    template: "content/grid_item"
 
     regions:
       "editArea": ".edit-area"
@@ -72,7 +73,7 @@ define [
       false
 
     onRender: ->
-      @backbone.stickit()
+      @stickit()
       @editArea.show(new Views.ContentEditArea(model: @model, actions: @actions))
       @relayEvents(@editArea.currentView, 'edit')
 

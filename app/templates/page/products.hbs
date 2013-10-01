@@ -1,0 +1,47 @@
+<div class="content">
+  <h4>Add Products</h4>
+  <div class="page-edit products">
+    <div class="container row">
+      <div class="add-products">
+        <div class="row">
+          <label class="large-2 columns inline">Add by URL</label>
+          <span class="large-8 columns">
+            <input id="url" type="text" placeholder="http://..." />
+          </span>
+          <span class="large-2 columns text-left">
+            <a href="#" id="add-url" class="small button">Add</a>
+          </span>
+        </div>
+        <div class="row">
+          <label class="large-2 columns inline">Add by Search</label>
+          <span class="large-8 columns">
+            <input id="search-product" type="text" placeholder="Search by product or category" />
+          </span>
+          <span class="large-2 columns text-left">
+            <a href="#" id="add-product" class="small button">Add</a>
+          </span>
+        </div>
+        <div class="row">
+          <span class="large-12 columns text-left">
+            <h5>Added URLS & Searches</h5>
+            <div id="scrape-list">
+              <!-- Injection Point -->
+            </div>
+          </span>
+        </div>
+      </div>
+      <h4 class="text-left">Add or Remove Products</h4>
+      <p class="text-left">Review products that have been added to the page and/or prioritize products to appear at the top of the page</p>
+      <div class="products row text-left">
+        TODO: Implement
+      </div>
+      <div class="actions row text-center">
+        <a href="#" id="add-to-page" class="button small">Add To Page</a>
+        <a href="#" id="reject-content" class="button small">Reject Content</a>
+      </div>
+    </div>
+    <div class="actions row">
+      <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/content">Save &amp; Continue</a>
+    </div>
+  </div>
+</div>

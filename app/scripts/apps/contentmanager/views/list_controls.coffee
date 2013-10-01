@@ -6,7 +6,7 @@ define [
 
   class Views.ContentListControls extends Marionette.ItemView
 
-    template: "_content_list_controls"
+    template: "content/list_controls"
 
     events:
       "click dd": "updateActive"

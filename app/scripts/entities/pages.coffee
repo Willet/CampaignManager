@@ -22,6 +22,6 @@ define [
     model: Entities.Page
 
     parse: (data) ->
-      data['campaigns']
+      data['results']
 
   Entities

@@ -1,0 +1,11 @@
+{
+  "id": "126",
+  "created": "2013-05-03 09:23:03",
+  "last_modified": "2013-07-22 05:19:50",
+  "name": "NewEgg",
+  "description": "",
+  "slug": "newegg",
+  "theme_id": "8",
+  "mobile_id": "9",
+  "public_base_url": "http://explore.newegg.com/"
+}

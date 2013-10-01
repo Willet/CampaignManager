@@ -1,4 +1,4 @@
-@import "foundation";
+@import "common";
 @import "libs/select2";
 @import "libs/toggle-switch";
 @import "foundation-fonts/foundation_icons_general/general_foundicons";
@@ -6,15 +6,14 @@
 @import "foundation-fonts/foundation_icons_accessibility/accessibility_foundicons";
 
 $webicons-url: "../images/webicons/";
-
 @import "webicons";
 
 // All properties are ordered:
 //  z-index, position (top,left,right), paddings/margins dimensions, visual, container related(e.g. color)
 
-@import "colors";
-@import "steps";
-@import "mixin";
+@import "nav";
+@import "main_layout";
+@import "not_found";
 
 body {
   font-size: 14px;
@@ -36,11 +35,12 @@ a:hover {
 }
 
 body, #container, html {
+  font-family: 'PT Sans', sans-serif;
   min-height: 100%;
   height: 100%;
   background-color: $light-base-color;
   background-image: url("../images/pw_maze_white.png");
-  > .row {
+  > #layout {
     max-width: inherit;
     margin-left: 0;
     height: auto !important;
@@ -61,137 +61,11 @@ body, #container, html {
   }
 }
 
-header.columns {
-  padding: 0;
-  z-index: 10;
-  top: 0;
-  left: 0;
-  background: $dark-base-color;
-  background-image: url("../images/txture.png");
-  @media #{$small} {
-    position: fixed !important;
-    min-height: 100%;
-    height: auto !important;
-    height: 100%;
-  }
-  position: relative;
-  height: inherit;
-  min-height: inherit;
-  padding: 0 0;
-  border-right: 1px solid $dark-base-color;
-}
-
-#main {
-  // make space for fixed nav bar + potentially infobar
-  position: relative;
-  left: 0;
-  top: 0;
-  @include single-transition(all, 0.5s, ease-in);
-  &.info-bar {
-    top: 65px;
-  }
-  @media #{$small} {
-    left: 16.65%;
-  }
-}
-
-nav {
-  width: 100%;
-  > .logo {
-    $logo-height: 42px;
-    position: relative;
-    margin-bottom: 9px;
-    .wrapper {
-      height: $logo-height;
-      text-align: center;
-      left: 7px;
-      position: relative;
-      width: 100%;
-      background-color: white;
-      margin-top: 5px;
-      padding: 1px;
-      z-index: 200;
-      box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3), -2px 2px 2px rgba(0, 0, 0, 0.2);
-      .logo {
-        margin: auto;
-        background: url("../images/logo.png") top center no-repeat $light-base-color;
-        background-size: contain;
-        width: 128px;
-        height: $logo-height - 1px;
-      }
-    }
-    .arrow {
-      position: absolute;
-      left: 100%;
-      border-top: 7px solid $dark-base-color;
-      border-right: 7px solid transparent;
-      background-clip: padding-box;
-      z-index: 9999;
-      width: 0px;
-      height: 0px;
-      top: 100%;
-      right: 100%;
-    }
-  }
-  .side-nav {
-    padding: 0;
-    ul {
-      width: 100%;
-      li {
-        padding: 0;
-        height: 42px;
-        margin: 0;
-        padding-right: 15px;
-        font-size: 24px;
-        line-height: 42px;
-        position: relative;
-        width: 100%;
-        left: 1px;
-        text-align: right;
-        z-index: 200;
-        background-color: transparentize($dark-base-color, 0.8);
-        &.active {
-          border-right: 4px solid lighten($body-font-color, 5%);
-          background-color: transparentize($dark-base-color, 0.6);
-        }
-        &.divider {
-          padding: 0;
-          margin: 0;
-          height: 0;
-          border-top: 0;
-          border-bottom: 1px solid transparentize($dark-base-color, 0.2);
-        }
-        &:hover {
-          a, a:visited, a:link, a:hover {
-            font-weight: 200;
-          }
-        }
-        a, a:visited, a:link, a:hover {
-          text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-          font-weight: 100;
-          font-size: 16px;
-          letter-spacing: 1px;
-          color: $light-base-color;
-          i {
-            font-weight: 0;
-          }
-          //color: $link-color
-
-        }
-      }
-    }
-  }
-}
-
 span.bread-crumbs {
   margin: 8px;
 }
 
 $selected-color: $body-font-color;
-
-#container > div > .content {
-  margin: 2em;
-}
 
 .reveal-modal.open {
   padding: 10px 15px !important;
@@ -224,7 +98,7 @@ $selected-color: $body-font-color;
   }
 }
 
-.content {
+body {
   [class*="icon-"] {
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.2), 1px 0 0 rgba(0, 0, 0, 0.2), -1px 0 0 rgba(0, 0, 0, 0.2), 0 2px 0 rgba(0, 0, 0, 0.1), 0 1px 0 rgba(0, 0, 0, 0.1), 0 2px 0 rgba(0, 0, 0, 0.2);
   }
@@ -540,9 +414,13 @@ $selected-color: $body-font-color;
       }
     }
     #layout-types {
-      height: 230px;
+      height: 320px;
       .layout-type {
-        @include grid-column($columns: 4);
+        @include grid-column($columns: 12);
+        @media #{$small} {
+          @include grid-column($columns: 4);
+        }
+        padding: 20px 0;
         border: 1px solid #eeeeee;
         text-align: center;
         &.selected {
@@ -651,19 +529,29 @@ $selected-color: $body-font-color;
   text-align: center;
 }
 
-#scroll-to-top {
+#page-controls {
   z-index: 20;
   position: fixed;
   bottom: 5px;
   right: 8px;
-  margin: 0 auto;
-  a {
-    &:hover {
-      text-shadow: 0 0 20px black;
+
+  #scroll-to-top {
+    margin: 0 auto;
+    a {
+      &:hover {
+        text-shadow: 0 0 20px black;
+      }
+      color: #b0bbbb;
+      font-size: 32px;
     }
-    color: #b0bbbb;
-    font-size: 32px;
   }
 }
 
 @import "spinner";
+
+.content-region > div > .content {
+  padding: 30px;
+}
+#content > div > .content {
+  padding: 30px;
+}

@@ -19,9 +19,14 @@ define [
   class ContentManager.Controller extends Marionette.Controller
 
     contentIndex: (store_id) ->
+      @setRegion(App.layout)
+      layout = new MainViews.Layout()
+      console.log @region
+      @region.show(layout)
+
       store = App.request "store:entity", store_id
-      App.execute "when:fetched", store, ->
-        App.nav.show(new MainViews.Nav(model: new Entities.Model(store: store, page: 'content')))
+      App.execute "when:fetched", store, =>
+        layout.nav.show(new MainViews.Nav(model: new Entities.Model(store: store, page: 'content')))
 
       contents = App.request "content:entities:paged", store_id
       contents.getNextPage()

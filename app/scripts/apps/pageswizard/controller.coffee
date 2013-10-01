@@ -13,13 +13,13 @@ define [
   './views/content',
   './views/layout',
   './views/name',
-  './views/products'
+  './views/products',
+  './views/wizard_layout'
 ], (PageWizard, BackboneProjections, Marionette, $, _, Views, ContentViews, MainViews, ContentList, Entities) ->
 
   class PageWizard.Controller extends Marionette.Controller
 
     pagesIndex: (store_id) ->
-      @page = null
       pages = App.request "page:entities", store_id
       view = new Views.PageIndex model: pages, 'store-id': store_id
       all_models = null
@@ -40,24 +40,10 @@ define [
 
       App.execute "when:fetched", pages, =>
         all_models = _.clone(pages.models)
-        @region.show view
-        App.setTitle "Pages"
-
-    getPage: (store_id, page_id) ->
-      @page =
-        if page_id == "new"
-          if @page && @page.get('id') == null
-            @page
-          else
-            @page = App.request "new:page:entity", store_id
-        else
-          if @page && @page.get('id') == page_id
-            @page
-          else
-            App.request "page:entity", store_id, page_id
+      @region.show view
 
     pagesName: (store_id, page_id) ->
-      page = @getPage(store_id, page_id)
+      page = App.routeModels.get('page')
       layout = new Views.PageCreateName(model: page)
 
       layout.on 'save', ->
@@ -66,10 +52,9 @@ define [
 
       App.execute "when:fetched", page, =>
         @region.show(layout)
-        App.setTitle page.get("name")
 
     pagesLayout: (store_id, page_id) ->
-      page = @getPage(store_id, page_id)
+      page = App.routeModels.get('page')
 
       layout =  new Views.PageCreateLayout(model: page)
 
@@ -82,12 +67,10 @@ define [
         $.when(page.save()).done ->
           App.navigate("/#{store_id}/pages/#{page_id}/products", trigger: true)
 
-      App.execute "when:fetched", page, =>
-        @region.show(layout)
-        App.setTitle page.get("name")
+      @region.show(layout)
 
     pagesProducts: (store_id, page_id) ->
-      page = @getPage(store_id, page_id)
+      page = App.routeModels.get('page')
       scrapes = App.request "page:scrapes:entities", store_id, page_id
 
       products = new Entities.ContentCollection
@@ -107,30 +90,24 @@ define [
         $.when(page.save()).done ->
           App.navigate("/#{store_id}/pages/#{page_id}/content", trigger: true)
 
-      App.execute "when:fetched", page, =>
-        App.show layout
-        App.setTitle page.get("name")
+      @region.show layout
 
     pagesContent: (store_id, page_id) ->
-      page = @getPage(store_id, page_id)
+      page = App.routeModels.get('page')
       contents = App.request "content:entities:paged", store_id, page_id
 
       layout = new Views.PageCreateContent(model: page)
 
       contents.getNextPage()
-      App.execute "when:fetched", [page, contents], =>
 
-        layout.on "show", =>
-          layout.contentList.show ContentList.createView(contents, { page: true })
+      layout.on "render", =>
+        layout.contentList.show ContentList.createView(contents, { page: true })
 
-        App.show layout
-        App.setTitle page.get("name")
+      @region.show layout
 
     pagesView: (store_id, page_id) ->
-      page = App.request "page:entity", store_id, page_id
+      page = App.routeModels.get('page')
 
-      App.execute "when:fetched", page, =>
-        App.show new Views.PagePreview(model: page)
-        App.setTitle page.get("name")
+      @region.show new Views.PagePreview(model: page)
 
   PageWizard

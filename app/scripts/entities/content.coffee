@@ -113,10 +113,10 @@ define [
     url: (opts) ->
       @store_id = @hasmodel?.get?('store-id') || @store_id
       _.each(opts, (m) => m.set("store-id", @store_id))
-      "#{require("app").apiRoot}/stores/#{@store_id}/content?results=21"
+      "#{require("app").apiRoot}/store/#{@store_id}/content?results=21"
 
     parse: (data) ->
-      data['content']
+      data['results']
 
     viewJSON: ->
       @collect((m) -> m.viewJSON())

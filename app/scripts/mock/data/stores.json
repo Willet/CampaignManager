@@ -1,0 +1,148 @@
+{
+  "meta": {},
+  "results": [
+    {
+      "id": "1",
+      "created": "2012-10-17 14:54:22",
+      "last_modified": "2012-10-23 18:53:00",
+      "name": "A Book Apart",
+      "description": "A Book Apart publishes highly detailed and meticulously edited examinations of single topics. We produce brief books of about 100 pages—the perfect size in terms of subject depth and coverage for topics like HTML5, CSS3, content strategy, responsive web design, and more.\t",
+      "slug": "abookapart",
+      "theme_id": null,
+      "mobile_id": null,
+      "public_base_url": null
+    },
+    {
+      "id": "21",
+      "created": "2012-11-09 13:56:47",
+      "last_modified": "2013-01-22 20:41:08",
+      "name": "shuuemura",
+      "description": "",
+      "slug": "shuuemura",
+      "theme_id": null,
+      "mobile_id": null,
+      "public_base_url": null
+    },
+    {
+      "id": "22",
+      "created": "2012-11-13 11:07:08",
+      "last_modified": "2013-01-09 18:16:50",
+      "name": "nelou",
+      "description": "",
+      "slug": "nelou",
+      "theme_id": null,
+      "mobile_id": null,
+      "public_base_url": null
+    },
+    {
+      "id": "23",
+      "created": "2012-11-13 11:15:16",
+      "last_modified": "2013-01-09 18:16:44",
+      "name": "zennioptical",
+      "description": "",
+      "slug": "zennioptical",
+      "theme_id": null,
+      "mobile_id": null,
+      "public_base_url": null
+    },
+    {
+      "id": "24",
+      "created": "2012-11-13 11:21:50",
+      "last_modified": "2013-01-09 18:16:37",
+      "name": "americaneagle",
+      "description": "",
+      "slug": "americaneagle",
+      "theme_id": null,
+      "mobile_id": null,
+      "public_base_url": null
+    },
+    {
+      "id": "38",
+      "created": "2012-11-21 22:54:58",
+      "last_modified": "2013-06-18 19:03:09",
+      "name": "GAP",
+      "description": "",
+      "slug": "gap",
+      "theme_id": "10",
+      "mobile_id": "11",
+      "public_base_url": ""
+    },
+    {
+      "id": "120",
+      "created": "2012-11-27 19:13:22",
+      "last_modified": "2013-07-12 18:49:36",
+      "name": "Native Shoes",
+      "description": "",
+      "slug": "nativeshoes",
+      "theme_id": "2",
+      "mobile_id": "2",
+      "public_base_url": "http://secondfunnel.com/pinpoint/"
+    },
+    {
+      "id": "121",
+      "created": "2012-11-25 03:13:12",
+      "last_modified": "2013-02-21 01:36:44",
+      "name": "Indochino",
+      "description": "",
+      "slug": "indochino",
+      "theme_id": null,
+      "mobile_id": null,
+      "public_base_url": null
+    },
+    {
+      "id": "122",
+      "created": "2012-11-24 22:16:14",
+      "last_modified": "2013-01-09 18:16:16",
+      "name": "Moxie Jean",
+      "description": "",
+      "slug": "moxiejean",
+      "theme_id": null,
+      "mobile_id": null,
+      "public_base_url": null
+    },
+    {
+      "id": "123",
+      "created": "2012-11-24 17:26:37",
+      "last_modified": "2012-12-19 22:07:35",
+      "name": "Bento&Co",
+      "description": "",
+      "slug": "bentoandco",
+      "theme_id": null,
+      "mobile_id": null,
+      "public_base_url": null
+    },
+    {
+      "id": "124",
+      "created": "2012-11-25 01:12:54",
+      "last_modified": "2013-01-09 18:16:01",
+      "name": "Esther",
+      "description": "",
+      "slug": "esther",
+      "theme_id": null,
+      "mobile_id": null,
+      "public_base_url": null
+    },
+    {
+      "id": "125",
+      "created": "2013-01-14 20:30:48",
+      "last_modified": "2013-01-22 20:09:52",
+      "name": "Test Store",
+      "description": "",
+      "slug": "test-store",
+      "theme_id": null,
+      "mobile_id": null,
+      "public_base_url": null
+    },
+    {
+      "id": "126",
+      "created": "2013-05-03 09:23:03",
+      "last_modified": "2013-07-22 05:19:50",
+      "name": "NewEgg",
+      "description": "",
+      "slug": "newegg",
+      "theme_id": "8",
+      "mobile_id": "9",
+      "public_base_url": "http://explore.newegg.com/"
+    }
+  ]
+}

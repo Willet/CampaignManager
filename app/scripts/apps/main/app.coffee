@@ -11,6 +11,7 @@ define [
     appRoutes:
       "": "storeIndex"
       ":store_id": "storeShow"
+      "*default": "notFound"
 
   class Controller extends Marionette.Controller
 
@@ -18,25 +19,28 @@ define [
       App.main.show(new MainViews.Index())
 
     storeIndex: ->
+      @setRegion(App.layout)
+      layout = new MainViews.Layout()
+      @region.show(layout)
+      layout.nav.show(new MainViews.Nav(model: new Entities.Model(store: null, page: 'stores')))
+      @setRegion(layout.content)
+
       stores = App.request "store:entities"
 
-      App.execute "when:fetched", stores, ->
+      App.execute "when:fetched", stores, =>
         App.setTitle("Stores")
-        App.main.show(new MainViews.Index(model: stores))
+        @region.show(new MainViews.Index(model: stores))
 
     storeShow: (store_id) ->
       App.navigate("#{Backbone.history.getFragment()}/pages", trigger: true, replace: true)
 
     notFound: (opts) ->
-      App.main.show(new MainViews.NotFound())
-      App.header.currentView.model.set(page: "notFound")
-      App.titlebar.currentView.model.set(title: "404 - Page Not Found")
-
+      App.layout.show(new MainViews.NotFound())
 
   App.addInitializer(->
     controller = new Controller()
     router = new Router(controller: controller)
-    App.titlebar.show(new MainViews.TitleBar(model: App.pageInfo))
+    #App.titlebar.show(new MainViews.TitleBar(model: App.pageInfo))
   )
 
   Main

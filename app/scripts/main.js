@@ -10,10 +10,12 @@ require.config({
         requirejs: '../bower_components/requirejs/require',
         'sass-bootstrap': '../bower_components/sass-bootstrap/dist/js/bootstrap',
         select2: '../bower_components/select2/select2',
+        sinon: '../bower_components/sinonjs/sinon',
         swag: '../bower_components/swag/lib/swag',
         underscore: '../bower_components/underscore/underscore',
         foundation: '../bower_components/foundation/js/foundation',
-        templates: 'templates'
+        templates: 'templates',
+        text: '../bower_components/requirejs-text/text'
     },
     shim: {
         'backbone': {
@@ -24,7 +26,8 @@ require.config({
           deps: ['jquery', 'underscore', 'backbone']
         },
         'backbone.stickit': {
-          deps: ['backbone']
+          deps: ['backbone'],
+          exports: 'Backbone.Stickit'
         },
         'jquery': {
           exports: '$'
@@ -42,6 +45,9 @@ require.config({
         'templates': {
           deps: ['handlebars'],
           exports: 'JST'
+        },
+        sinon: {
+          exports: 'sinon'
         },
         'swag': {
           deps: ['handlebars', 'underscore'],

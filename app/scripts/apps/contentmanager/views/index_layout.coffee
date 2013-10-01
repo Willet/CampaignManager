@@ -7,7 +7,7 @@ define [
 
   class Views.ContentIndexLayout extends Marionette.Layout
 
-    template: 'content_index'
+    template: 'content/index'
 
     regions:
       "list": "#list"

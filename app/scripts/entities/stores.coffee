@@ -12,6 +12,6 @@ define [
     model: Entities.Store
 
     parse: (data) ->
-      data['stores']
+      data['results']
 
   Entities
