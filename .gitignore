@@ -14,3 +14,26 @@ tmp
 /RUNNING_PID
 /.settings
 old
+
+
+aws_credential_file
+*.idea
+*.ropeproject
+*.pyc
+*.orig
+*.dot
+*.db
+*.sqlite
+*.sass-cache/
+bin/*
+/static
+.elasticbeanstalk/
+doc/
+log/
+runserver
+libpeerconnection.log
+MySQL-python-1.2.3
+
+# Testing directories
+apps/testing/resources
+apps/testing/tests/results
