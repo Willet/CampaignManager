@@ -13,10 +13,9 @@ include/
 applications/*/errors/*
 applications/*/sessions/*
 doc/
+cache/
 log/
 runserver
-libpeerconnection.log
-MySQL-python-1.2.3
 
 # Testing directories
 apps/testing/resources
