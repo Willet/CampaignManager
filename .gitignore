@@ -5,18 +5,19 @@ aws_credential_file
 *.pyc
 *.db
 *.sqlite
+.elasticbeanstalk/
+.directory
+
 bin/*
 /static
 include/
-.elasticbeanstalk/
-.directory
-applications/*/errors/*
-applications/*/sessions/*
+deposit/
 doc/
 cache/
+lib/
 log/
 runserver
 
-# Testing directories
-apps/testing/resources
-apps/testing/tests/results
+applications/*/errors/*
+applications/*/sessions/*
+applications/*/databases/*
