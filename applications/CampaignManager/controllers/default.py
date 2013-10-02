@@ -19,7 +19,7 @@ def index():
     return auth.wiki()
     """
     response.flash = None
-    return dict(message=T('Hello World'))
+    return {'message': 'Hello World'}
 
 
 def user():
