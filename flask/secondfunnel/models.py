@@ -6,5 +6,17 @@ class User(UserMixin):
         self.id = user_id
 
     @classmethod
-    def get(cls, id):
-        return cls('nterwoord')
+    def authenticate(cls, username, password):
+        user = None
+
+        if user:
+            authenticated = False #user.check_password
+        else:
+            authenticated = False
+
+        return user, authenticated
+
+
+    @classmethod
+    def get_by_id(cls, id):
+        return None

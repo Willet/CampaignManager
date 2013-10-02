@@ -1,7 +1,10 @@
 from flask import Flask
 from .extensions import login_manager
+from .accounts import accounts
 
-DEFAULT_BLUEPRINTS = ()
+DEFAULT_BLUEPRINTS = (
+    accounts,
+)
 
 def create_app(config=None, blueprints=None):
     if blueprints is None:
@@ -17,6 +20,11 @@ def configure_app(app, config=None):
     app.config['SECRET_KEY'] = 'yr\x1b\x90\x82]#%\xb6\xf7\x998\xa6\x96\xba\x1eg\x80\xc9\xac\xc8\x0e\xcdV'
 
 def configure_blueprints(app, blueprints):
+    """
+    Registers all blueprints with the app
+
+    N.B. All views should be handled via blueprints.
+    """
     for blueprint in blueprints:
         app.register_blueprint(blueprint)
 
