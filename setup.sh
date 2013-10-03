@@ -3,16 +3,14 @@
 # echo node modules if they haven't already in their bashrc
 export PATH=node_modules/.bin:${PATH}
 
-# install SASS + COMPASS
 echo "Installing SASS and COMPASS"
 gem install sass compass || echo "NOTE: This scripts requires NPM, and Ruby installed"
 
-# Install Yeoman
-echo "Installing Yeoman"
-npm install yo || echo "NOTE: This scripts requires NPM, and Ruby installed"
-
 echo "Installing Required Node Packages for DEV environment (package.json)"
 npm install
+
+echo "Installing Yeoman"
+npm install yo || echo "NOTE: This scripts requires NPM, and Ruby installed"
 
 echo "Grabbing remote packages (bower.json)"
 bower install
