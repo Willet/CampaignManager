@@ -25,10 +25,10 @@ module.exports = function (grunt) {
             tmp: '.tmp'
         },
         uglify: {
-          options: {
-            mangle: false,
-            exportAll: true
-          }
+            options: {
+                mangle: false,
+                exportAll: true
+            }
         },
         watch: {
             coffee: {
@@ -120,23 +120,26 @@ module.exports = function (grunt) {
             ]
         },
         handlebars: {
-          compile: {
-            options: {
-              amd: true,
-              namespace: "JST",
-              processName: function(filename) {
-                return filename.replace('app/templates/','').replace('.hbs','');
-              },
-              processContent: function(content) {
-                content = content.replace(/^[\x20\t]+/mg, '').replace(/[\x20\t]+$/mg, '');
-                content = content.replace(/^[\r\n]+/, '').replace(/[\r\n]*$/, '\n');
-                return content;
-              }
-            },
-            files: {
-              "<%= yeoman.tmp %>/scripts/templates.js": ["<%= yeoman.app %>/templates/**/*.hbs"],
+            compile: {
+                options: {
+                    amd: true,
+                    namespace: "JST",
+                    processName: function (filename) {
+                        return filename.replace('app/templates/',
+                            '').replace('.hbs', '');
+                    },
+                    processContent: function (content) {
+                        content = content.replace(/^[\x20\t]+/mg,
+                            '').replace(/[\x20\t]+$/mg, '');
+                        content = content.replace(/^[\r\n]+/,
+                            '').replace(/[\r\n]*$/, '\n');
+                        return content;
+                    }
+                },
+                files: {
+                    "<%= yeoman.tmp %>/scripts/templates.js": ["<%= yeoman.app %>/templates/**/*.hbs"]
+                }
             }
-          }
         },
         mocha: {
             all: {
