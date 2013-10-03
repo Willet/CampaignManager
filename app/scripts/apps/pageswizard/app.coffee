@@ -3,10 +3,12 @@ define [
   'exports',
   'marionette',
   './views',
-  'views/main',
   'entities',
-  './controller'
-], (App, PageWizard, Marionette, Views, MainViews, Entities) ->
+  './controller',
+  'components/views/main_layout',
+  'components/views/main_nav',
+  'components/views/title_bar'
+], (App, PageWizard, Marionette, Views, Entities, Controller, MainLayout, MainNav, TitleBar) ->
 
   class PageWizard.Router extends Marionette.AppRouter
 
@@ -36,7 +38,6 @@ define [
     setupRouteModels: (route, args) ->
       # extract any parameters in the route
       params = @parameterMap route, args
-      console.log params
       matches = route.match(/:[a-zA-Z_-]+/g)
       App.routeModels = App.routeModels || new Backbone.Model()
       for match, i in matches
@@ -71,10 +72,10 @@ define [
       @setupLayoutForRoute(route)
 
     setupMainLayout: () ->
-      layout = new MainViews.Layout()
+      layout = new MainLayout()
       layout.on "render", =>
-        layout.nav.show(new MainViews.Nav(model: new Entities.Model(store: @store, page: 'pages')))
-        layout.titlebar.show(new MainViews.TitleBar(model: new Entities.Model()))
+        layout.nav.show(new MainNav(model: new Entities.Model(store: @store, page: 'pages')))
+        layout.titlebar.show(new TitleBar(model: new Entities.Model()))
 
       @controller.setRegion layout.content
       App.layout.show layout

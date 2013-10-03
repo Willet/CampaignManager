@@ -5,7 +5,8 @@ define [
   'jquery',
   'underscore',
   './views'
-  'views/main',
+  'components/views/main_layout',
+  'components/views/main_nav',
   'components/views/content_list'
   'entities',
   './views/content_list',
@@ -14,26 +15,24 @@ define [
   './views/list_controls',
   './views/quick_view',
   './views/tagged_inputs',
-], (ContentManager, BackboneProjections, Marionette, $, _, Views, MainViews, ContentList, Entities) ->
+], (ContentManager, BackboneProjections, Marionette, $, _, Views, MainLayout, MainNav, ContentList, Entities) ->
 
   class ContentManager.Controller extends Marionette.Controller
 
     contentIndex: (store_id) ->
-      @setRegion(App.layout)
-      layout = new MainViews.Layout()
-      console.log @region
-      @region.show(layout)
+      layout = new MainLayout()
+      App.layout.show layout
 
-      store = App.request "store:entity", store_id
+      store = App.routeModels.get('store')
       App.execute "when:fetched", store, =>
-        layout.nav.show(new MainViews.Nav(model: new Entities.Model(store: store, page: 'content')))
+        layout.nav.show(new MainNav(model: new Entities.Model(store: store, page: 'content')))
 
       contents = App.request "content:entities:paged", store_id
       contents.getNextPage()
 
       App.execute "when:fetched", [contents], =>
 
-        App.show ContentList.createView(contents)
+        layout.content.show ContentList.createView(contents)
         App.setTitle "Content"
 
   ContentManager

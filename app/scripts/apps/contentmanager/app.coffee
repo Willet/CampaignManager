@@ -1,12 +1,15 @@
 define [
   'app',
+  'exports',
   'backbone.projections',
   'marionette',
   'jquery',
   'underscore',
   './views'
+  'components/views/main_layout',
+  'components/views/main_nav',
+  'components/views/title_bar'
   'entities',
-  'exports',
   './controller'
   './views/content_list',
   './views/edit_area',
@@ -14,12 +17,74 @@ define [
   './views/list_controls',
   './views/quick_view',
   './views/tagged_inputs',
-], (App, BackboneProjections, Marionette, $, _, Views, Entities, ContentManager) ->
+], (App, ContentManager, BackboneProjections, Marionette, $, _, Views, MainLayout, MainNav, TitleBar, Entities) ->
 
   class ContentManager.Router extends Marionette.AppRouter
 
     appRoutes:
       ":store_id/content": "contentIndex"
+
+    setupModels: (route, args) ->
+      @setupRouteModels(route, args)
+      @store = App.routeModels.get('store')
+
+    # build parameters into a map
+    parameterMap: (route, args) ->
+      params = {}
+      matches = route.match(/:[a-zA-Z_-]+/g)
+      for match, i in matches
+        params[match.replace(/^:/, '')] = args[i]
+      params
+
+    # For a given route, extracts the parameters
+    # and builds the related Models to that route
+    setupRouteModels: (route, args) ->
+      # extract any parameters in the route
+      params = @parameterMap route, args
+      matches = route.match(/:[a-zA-Z_-]+/g)
+      App.routeModels = App.routeModels || new Backbone.Model()
+      for match, i in matches
+        entityRequestName = @paramNameMapping(match)
+        # NOTE: Assumes all arguments from the list are valid
+        model = App.request entityRequestName, params
+        name = @routeModelNameMapping(match)
+        App.routeModels.set name, model
+      App.routeModels
+
+    # determines the name of what the route model should
+    # be given the parameter name in the route
+    routeModelNameMapping: (param_name) ->
+      # strip the id off the end
+      switch param_name
+        when ":store_id" then "store"
+        when ":page_id" then "page"
+        else param_name
+
+    # Given a parameter e.g. :store_id
+    # extract the App request it should make
+    paramNameMapping: (param_name) ->
+      switch param_name
+        when ":store_id" then "store:entity"
+        when ":page_id" then "page:entity"
+        else param_name
+
+    before: (route, args) ->
+      App.currentController = @controller
+      @setupModels(route, args)
+      @setupMainLayout(route)
+      @setupLayoutForRoute(route)
+
+    setupMainLayout: () ->
+      layout = new MainLayout()
+      layout.on "render", =>
+        layout.nav.show(new MainNav(model: new Entities.Model(store: @store, page: 'pages')))
+        layout.titlebar.show(new TitleBar(model: new Entities.Model()))
+
+      @controller.setRegion layout.content
+      App.layout.show layout
+      layout
+
+    setupLayoutForRoute: (route) ->
 
   #Data object to hold content tag data in terms of ids
   #The idea is that there is one big ajax request when the page loads from which the minimal Id data is stored locally

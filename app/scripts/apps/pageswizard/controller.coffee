@@ -5,17 +5,9 @@ define [
   'jquery',
   'underscore',
   './views',
-  '../contentmanager/views',
-  'views/main',
   'components/views/content_list'
   'entities',
-  './views/index',
-  './views/content',
-  './views/layout',
-  './views/name',
-  './views/products',
-  './views/wizard_layout'
-], (PageWizard, BackboneProjections, Marionette, $, _, Views, ContentViews, MainViews, ContentList, Entities) ->
+], (PageWizard, BackboneProjections, Marionette, $, _, Views, ContentList, Entities) ->
 
   class PageWizard.Controller extends Marionette.Controller
 
