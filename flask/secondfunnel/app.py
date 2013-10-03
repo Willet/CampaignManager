@@ -7,6 +7,8 @@ DEFAULT_BLUEPRINTS = (
     accounts,
 )
 
+
+
 def create_app(config=None, blueprints=None):
     if blueprints is None:
         blueprints = DEFAULT_BLUEPRINTS

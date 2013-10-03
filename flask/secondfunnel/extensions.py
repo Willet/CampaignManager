@@ -3,3 +3,6 @@ login_manager = LoginManager()
 
 from flask.ext.sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
+
+from webassets import Environment
+assets = Environment()
