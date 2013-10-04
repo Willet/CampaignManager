@@ -4,8 +4,7 @@ define "app", [
   'underscore',
   'entities',
   'components/regions/reveal',
-  'exports',
-  'mock/mock'
+  'exports'
 ], (Marionette, $, _, Entities, Reveal, exports) ->
 
   App = window.App = new Marionette.Application()

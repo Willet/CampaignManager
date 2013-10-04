@@ -2,7 +2,7 @@ define [
   "entities/base"
 ], (Base) ->
 
-  Entities = Entities || {};
+  Entities = Entities || {}
 
   class Entities.Page extends Base.Model
 
@@ -16,6 +16,8 @@ define [
       json = data
       if json && json['fields']
         json['fields'] = $.parseJSON(json['fields'])
+      json['last-modified'] = parseInt(json['last-modified'])
+      json['created'] = parseInt(json['created'])
       json
 
   class Entities.PageCollection extends Base.Collection

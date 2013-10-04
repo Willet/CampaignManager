@@ -18,6 +18,11 @@ define [
     fetch: ->
       @_fetch = super(arguments...)
 
+    save: (attrs, options = {}) ->
+      save_defaults = { patch: true }
+      options = _.defaults(options, save_defaults)
+      super(attrs, options)
+
     sync: ->
       @_fetch = super(arguments...)
 
