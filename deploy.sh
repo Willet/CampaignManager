@@ -1,6 +1,7 @@
 #!/bin/sh
 
-# sudo apt-get install s3cmd
+# (either) sudo apt-get install s3cmd
+# (or)             brew install s3cmd
 # s3cmd --configure
 # New settings:
 #   Access Key: ...
@@ -33,7 +34,7 @@ grunt build || (print_msg "Build failed" && exit 1)
 
 print_msg  "Uploading project..."
 
-s3cmd sync ./ s3://$1.secondfunnel.com/ || (print_msg "Sync failed" && exit 1)
+s3cmd sync —exclude ./dist/ s3://$1.secondfunnel.com/ || (print_msg "Sync failed" && exit 1)
 
 print_msg  "Correcting project permissions..."
 
