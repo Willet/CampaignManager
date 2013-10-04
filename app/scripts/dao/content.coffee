@@ -7,7 +7,7 @@ define [
   API =
     getContent: (store_id, content_id, params = {}) ->
       contents = new Entities.Content()
-      contents.url = "#{App.API_ROOT}/stores/#{store_id}/content/#{content_id}"
+      contents.url = "#{App.API_ROOT}/store/#{store_id}/content/#{content_id}"
       contents.fetch
         reset: true
         data: params
@@ -15,7 +15,7 @@ define [
 
     getContents: (store_id, params = {}) ->
       contents = new Entities.ContentCollection()
-      contents.url = "#{App.API_ROOT}/stores/#{store_id}/content"
+      contents.url = "#{App.API_ROOT}/store/#{store_id}/content"
       contents.fetch
         reset: true
         data: params
@@ -23,7 +23,7 @@ define [
 
     getPagedContents: (store_id, params = {}) ->
       contents = new Entities.ContentPageableCollection()
-      contents.url = "#{App.API_ROOT}/stores/#{store_id}/content"
+      contents.url = "#{App.API_ROOT}/store/#{store_id}/content"
       contents.getNextPage()
       contents
 
