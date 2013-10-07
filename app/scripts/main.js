@@ -1,3 +1,4 @@
+/*global require*/
 require.config({
     paths: {
         jquery: '../bower_components/jquery/jquery',
@@ -19,39 +20,43 @@ require.config({
     },
     shim: {
         'backbone': {
-          deps: ['jquery', 'underscore'],
-          exports: 'Backbone'
+            // These script dependencies should be loaded before loading
+            // backbone.js
+            deps: ['jquery', 'underscore'],
+            //Once loaded, use the global 'Backbone' as the
+            //module value.
+            exports: 'Backbone'
         },
         'backbone.projections': {
-          deps: ['jquery', 'underscore', 'backbone']
+            deps: ['jquery', 'underscore', 'backbone']
         },
         'backbone.stickit': {
-          deps: ['backbone'],
-          exports: 'Backbone.Stickit'
+            deps: ['backbone'],
+            exports: 'Backbone.Stickit'
         },
         'jquery': {
-          exports: '$'
+            exports: '$'
         },
         'underscore': {
-          exports: '_'
+            exports: '_'
         },
         'marionette': {
-          deps: ['backbone'],
-          exports: 'Backbone.Marionette'
+            deps: ['backbone'],
+            exports: 'Backbone.Marionette'
         },
         handlebars: {
-          exports: 'Handlebars'
+            exports: 'Handlebars'
         },
         'templates': {
-          deps: ['handlebars'],
-          exports: 'JST'
+            deps: ['handlebars'],
+            exports: 'JST'
         },
         sinon: {
-          exports: 'sinon'
+            exports: 'sinon'
         },
         'swag': {
-          deps: ['handlebars', 'underscore'],
-          exports: 'Swag'
+            deps: ['handlebars', 'underscore'],
+            exports: 'Swag'
         },
         'foundation/foundation': ['jquery'],
         'foundation/foundation.abide': ['jquery', 'foundation/foundation'],
@@ -72,27 +77,29 @@ require.config({
 });
 
 require([
-  "app",
-  "jquery",
-  "global/click_handler",
-  "global/form_serialize",
-  "config/backbone/model",
-  "config/marionette/application",
-  "config/marionette/renderer",
-  "config/marionette/view",
-  "config/marionette/router",
-  "config/marionette/controller",
-  "dao/base",
-  "dao/pages",
-  "dao/scrape",
-  "dao/stores",
-  "dao/content",
-  "dao/products",
-  // sub apps to load, they attach to the root application
-  "apps/main/app",
-  "apps/contentmanager/app",
-  "apps/pageswizard/app"
-], function(App, $) {
-  'use strict';
-  $().ready(function() { App.start(); });
+    "app",
+    "jquery",
+    "global/click_handler",
+    "global/form_serialize",
+    "config/backbone/model",
+    "config/marionette/application",
+    "config/marionette/renderer",
+    "config/marionette/view",
+    "config/marionette/router",
+    "config/marionette/controller",
+    "dao/base",
+    "dao/pages",
+    "dao/scrape",
+    "dao/stores",
+    "dao/content",
+    "dao/products",
+    // sub apps to load, they attach to the root application
+    "apps/main/app",
+    "apps/contentmanager/app",
+    "apps/pageswizard/app"
+], function (App, $) {
+    'use strict';
+    $().ready(function () {
+        App.start();
+    });
 });

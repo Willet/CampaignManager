@@ -1,3 +1,4 @@
+# loaded by entry point "main.js"
 define "app", [
   'marionette',
   'jquery',
@@ -26,23 +27,28 @@ define "app", [
 
   App.addInitializer ->
     $(document).ajaxError (event, xhr) ->
-      App.redirectToLogin() if (xhr.status == 401)
+      if (xhr.status == 401)
+        console.log "a 401 happened"
+        App.redirectToLogin()
     App.pageInfo = new Entities.Model(title: "Loading", page: "")
-
-  App.on "initialize:after", (options) ->
-    @startHistory()
-    @navigate(App.APP_ROOT, trigger: true) unless @getCurrentRoute()
 
   # TODO: we should really make an authentication method so we do not
   #       hardcode this in here.
-  $.ajaxSetup({
+  $.ajaxSetup(
     beforeSend: (request) ->
       request.setRequestHeader('ApiKey', 'secretword')
-  })
+  )
+
+  App.on "initialize:after", (options) ->
+    # custom Application prototype
+    @startHistory()
+    @navigate(App.APP_ROOT, trigger: true) unless @getCurrentRoute()
 
   # Helpful for callback when a set of entities have been fetched
+  # Wrepr.Commands
   App.commands.setHandler "when:fetched", (entities, callback) ->
     xhrs = _.chain([entities]).flatten().pluck("_fetch").value()
+    # $.when.apply($, xhrs)
     $.when(xhrs...).done ->
       callback()
 
