@@ -28,7 +28,7 @@
             <div class="row">
               <label class="large-2 columns inline" for="{{var}}">{{label}}</label>
               <span class="large-10 columns">
-                <input type="file" for="{{var}}" value="{{value}}" />
+                <input type="file" name="{{var}}" value="{{value}}" />
               </span>
             </div>
           {{/is}}
@@ -37,7 +37,7 @@
               <label class="large-2 columns inline" for="{{var}}">{{label}}</label>
               <span class="large-10 columns">
                 <span class="row">
-                  <input class="image-field" type="file" for="{{var}}" value="{{value}}" />
+                  <input class="image-field" name="{{var}}" type="file" value="{{value}}" />
                 </span>
                 <span class="row">
                   {{#if loadedUrl}}
@@ -53,7 +53,7 @@
             <div class="row">
               <label class="large-2 columns inline" for="{{var}}">{{label}}</label>
               <span class="large-10 columns">
-                <input type="text" for="{{var}}" value="{{value}}" placeholder="{{default placeholder 'enter text...'}}" />
+                <input type="text" name="{{var}}" value="{{value}}" placeholder="{{default placeholder 'enter text...'}}" />
               </span>
             </div>
           {{/is}}
@@ -61,7 +61,7 @@
             <div class="row">
               <label class="large-2 columns inline" for="{{var}}">{{label}}</label>
               <span class="large-10 columns">
-                <textarea for="{{var}}" placeholder="{{default placeholder 'enter text...'}}">{{value}}</textarea>
+                <textarea name="{{var}}" placeholder="{{default placeholder 'enter text...'}}">{{value}}</textarea>
               </span>
             </div>
           {{/is}}
@@ -69,8 +69,10 @@
             <div class="row">
               <label class="large-2 columns inline" for="{{var}}">{{label}}</label>
               <span class="large-10 columns">
-                <select>
-                  <option>TODO: implement</option>
+                <select name="{{var}}">
+                  {{#each fields}}
+                    <option>TODO: implement</option>
+                  {{/each}}
                 </select>
               </span>
             </div>
