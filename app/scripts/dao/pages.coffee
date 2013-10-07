@@ -7,7 +7,7 @@ define [
   API =
     getPage: (store_id, page_id, params = {}) ->
       page = new Entities.Page()
-      page.url = "#{App.API_ROOT}/store/#{store_id}/campaign/#{page_id}"
+      page.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}"
       page.fetch
         reset: true
         data: params
@@ -15,7 +15,7 @@ define [
 
     getPages: (store_id, params = {}) ->
       pages = new Entities.PageCollection()
-      pages.url = "#{App.API_ROOT}/store/#{store_id}/campaign"
+      pages.url = "#{App.API_ROOT}/store/#{store_id}/page"
       pages.fetch
         reset: true
         data: params
@@ -24,7 +24,7 @@ define [
     newPage: (store_id, params = {}) ->
       page = new Entities.Page(params)
       page.set('store-id', store_id)
-      page.url = -> "#{App.API_ROOT}/store/#{store_id}/campaign/#{@get('id') || ""}"
+      page.url = -> "#{App.API_ROOT}/store/#{store_id}/page/#{@get('id') || ""}"
       page
 
   App.reqres.setHandler "page:entities",
