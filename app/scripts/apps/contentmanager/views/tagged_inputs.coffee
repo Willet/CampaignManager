@@ -16,15 +16,19 @@ define [
         allowClear: true
         placeholder: "Search for a page"
         tokenSeparators: [',']
+        query: (query) ->
+          $.ajax "#{App.API_ROOT}/store/126/campaign",
+            success: (data) ->
+              query.callback(data)
         data:
           results: [] # TODO: needs page data
           text: (item) -> item['name']
         formatNoMatches: (term) ->
           "No pages match '#{term}'"
-        formatResult: (campaign) ->
-          "<span>#{campaign['name']}</span>"
-        formatSelection: (campaign) ->
-          "<span>#{campaign['name']} #{campaign['id']}</span>"
+        formatResult: (page) ->
+          "<span>#{page['name']}</span>"
+        formatSelection: (page) ->
+          "<span>#{page['name']} (id=#{page['id']})</span>"
       )
       false
 
@@ -35,6 +39,9 @@ define [
 
     template: false
 
+    initialize: (options) ->
+      @store = options['store']
+
     onShow: ->
       @$el.parent().select2(
         multiple: true
@@ -42,7 +49,7 @@ define [
         placeholder: "Search for a product"
         tokenSeparators: [',']
         ajax:
-          url: "#{require("app").apiRoot}/stores/#{@model.get("store-id")}/products"
+          url: "#{App.API_ROOT}/store/#{@model.get("store-id")}/product"
           dataType: 'json'
           cache: true
           data: (term, page) ->
@@ -51,7 +58,7 @@ define [
             }
           results: (data, page) ->
             return {
-              results: data['products']
+              results: data['results']
             }
         formatResult: (product) ->
           "<span>#{product['name']}</span>"

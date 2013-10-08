@@ -23,12 +23,12 @@ define [
       @actions = options['actions']
 
     onShow: ->
-      @taggedProducts.show(new Views.TaggedProductInput(model: @model))
-      @taggedPages.show(new Views.TaggedPagesInput(model: @model))
-      @relayEvents(@taggedProducts.currentView, 'tagged-products')
-      @relayEvents(@taggedPages.currentView, 'tagged-pages')
 
     onRender: ->
+      @taggedProducts.show(new Views.TaggedProductInput(model: @model, store: @store))
+      @taggedPages.show(new Views.TaggedPagesInput(model: @model, store: @store))
+      @relayEvents(@taggedProducts.currentView, 'tagged-products')
+      @relayEvents(@taggedPages.currentView, 'tagged-pages')
 
     onClose: ->
 

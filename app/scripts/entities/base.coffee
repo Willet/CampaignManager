@@ -56,4 +56,8 @@ define [
     fetch: ->
       @_fetch = super(arguments...)
 
+    parse: (data) ->
+      @metadata = data['meta']
+      return data['results']
+
   return Base

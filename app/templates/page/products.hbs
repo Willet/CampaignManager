@@ -32,8 +32,22 @@
       </div>
       <h4 class="text-left">Add or Remove Products</h4>
       <p class="text-left">Review products that have been added to the page and/or prioritize products to appear at the top of the page</p>
+      <div class="switch-toggle switch-3 panel radius">
+      <form>
+        <input id="needs-review" name="filter2" type="radio" checked>
+        <label for="needs-review" onclick="" class="js-needs-review">Needs Review</label>
+
+        <input id="added-to-page" name="filter2" type="radio">
+        <label for="added-to-page" onclick="" class="js-added-to-page">Added to Page</label>
+
+        <input id="rejected-from-page" name="filter2" type="radio">
+        <label for="rejected-from-page" onclick="" class="js-rejected-from-page">Rejected from Page</label>
+
+        <a class="button"></a>
+      </form>
+      </div>
       <div class="products row text-left">
-        TODO: Implement
+        TODO: here should be a list of all Product Collections that resulted from Product Searches that were added above (Also then filtered by non-rejected)
       </div>
       <div class="actions row text-center">
         <a href="#" id="add-to-page" class="button small">Add To Page</a>

@@ -14,6 +14,7 @@ define [
         page: @model.toJSON()
         "store-id": @model.get("store-id")
         "title": @model.get("name")
+        store: @store.toJSON()
       }
 
     triggers:
@@ -28,6 +29,7 @@ define [
         events: ['blur']
 
     initialize: (opts) ->
+      @store = opts['store']
 
     onRender: (opts) ->
       @stickit()

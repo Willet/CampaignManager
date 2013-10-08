@@ -5,6 +5,7 @@ require.config({
         backbone: '../bower_components/backbone/backbone',
         'backbone.projections': '../bower_components/backbone.projections/backbone.projections',
         'backbone.stickit': '../bower_components/backbone.stickit/backbone.stickit',
+        'backbone.viewmodel': 'lib/backbone.viewmodel',
         handlebars: '../bower_components/handlebars.js/dist/handlebars',
         marionette: '../bower_components/marionette/lib/backbone.marionette',
         moment: '../bower_components/moment/moment',
@@ -33,6 +34,10 @@ require.config({
         'backbone.stickit': {
             deps: ['backbone'],
             exports: 'Backbone.Stickit'
+        },
+        'backbone.viewmodel': {
+          deps: ['backbone'],
+          exports: 'Backbone.ViewModel'
         },
         'jquery': {
             exports: '$'
