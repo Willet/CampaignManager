@@ -16,6 +16,10 @@ $webicons-url: "../images/webicons/";
 @import "not_found";
 @import "login";
 
+.no-padding {
+  padding: 0;
+}
+
 body {
   font-size: 14px;
   overflow: scroll;

@@ -40,13 +40,15 @@ define [
       results = {}
       _.each $("#layout-field-form textarea"), (m) ->
         results[$(m).attr("for")] = $(m).val() if $(m).attr("for")
-      _.each $("#layout-field-form input"), (m) ->
+      _.each $("#layout-field-form input[type!=file]"), (m) ->
         results[$(m).attr("for")] = $(m).val() if $(m).attr("for")
       results
 
     updateImgPreview: (event) ->
       #Get input element
       elem = event.currentTarget
+      unless /.(jpg|jpeg|png)/.test($(elem).val())
+        console.error "Invalid file selected (not an image)."
 
       #Scans through json field objects and, using the "for"
       #attribute as an indentifier, finds the related object
@@ -58,8 +60,8 @@ define [
       fileReader = new FileReader()
       fileReader.onload = (event) =>
         #Updates related json object and refreshes view
-        targetField.loadedUrl = event.target.result
-        @render()
+        targetField.url = event.target.result
+        @$(elem).next().attr('src', event.target.result)
 
       fileReader.readAsDataURL(elem.files[0])
 
@@ -94,11 +96,9 @@ define [
 
     selectLayoutType: (event) ->
       layoutClicked = @$(event.currentTarget)
-      @$('#layout-types .layout-type').removeClass('selected')
-      layoutClicked.addClass('selected')
       new_layout = @extractClassSuffix(@$(event.currentTarget), 'js-layout')
-      @trigger 'layout:selected', new_layout
       @model.set('layout', new_layout)
+      @render()
 
     initialize: (opts) ->
       @listenTo(@model, "sync", => @render())

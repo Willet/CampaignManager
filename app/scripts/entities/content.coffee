@@ -8,6 +8,11 @@ define [
 
   class Entities.Content extends Base.Model
 
+    types = {
+      1: "images"
+      2: "videos"
+    }
+
     reject: ->
       @save(
         active: false
@@ -28,7 +33,12 @@ define [
 
     parse: (data) ->
       attrs = data
-      attrs['tagged-products'] = App.request "product:entities:set", attrs['store-id'], data['tagged-products']
+      attrs['active'] = if data['active'] == "true" then true else false
+      attrs['approved'] = if data['approved'] == "true" then true else false
+      attrs['tagged-products'] = []
+      _.each data['tagged-products'], (product_id) ->
+        attrs['tagged-products'].push(App.request("product:entity", attrs['store-id'], product_id))
+      attrs['tagged-products'] = new Entities.ProductCollection(attrs['tagged-products'])
       attrs
 
     toJSON: ->
@@ -113,7 +123,7 @@ define [
     url: (opts) ->
       @store_id = @hasmodel?.get?('store-id') || @store_id
       _.each(opts, (m) => m.set("store-id", @store_id))
-      "#{require("app").apiRoot}/store/#{@store_id}/content?results=21"
+      "#{App.API_ROOT}/store/#{@store_id}/content?results=21"
 
     parse: (data) ->
       data['results']

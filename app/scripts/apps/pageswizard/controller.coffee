@@ -36,23 +36,20 @@ define [
 
     pagesName: (store_id, page_id) ->
       page = App.routeModels.get('page')
-      layout = new Views.PageCreateName(model: page)
-
+      store = App.routeModels.get('store')
+      layout = new Views.PageCreateName(model: page, store: store)
       layout.on 'save', ->
         $.when(page.save()).done ->
           App.navigate("/#{store_id}/pages/#{page_id}/content", trigger: true)
 
       App.execute "when:fetched", page, =>
-        @region.show(layout)
+        App.execute "when:fetched", store, =>
+          @region.show(layout)
 
     pagesLayout: (store_id, page_id) ->
       page = App.routeModels.get('page')
 
       layout =  new Views.PageCreateLayout(model: page)
-
-      layout.on 'layout:selected', (newLayout) ->
-        page.set("layout", newLayout)
-        layout.render()
 
       layout.on 'save', ->
         page.set('fields', layout.getFields())

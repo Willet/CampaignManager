@@ -40,4 +40,4 @@ define [
 
   App.reqres.setHandler "product:entity",
     (store_id, product_id, params) ->
-      API.getProduct product_id, product_id, params
+      API.getProduct store_id, product_id, params
