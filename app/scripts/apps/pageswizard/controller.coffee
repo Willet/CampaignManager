@@ -40,7 +40,19 @@ define [
       layout = new Views.PageCreateName({model: page, store: store})
       layout.on 'save', ->
         $.when(page.save()).done ->
-          App.navigate("/#{store_id}/pages/#{page_id}/content", trigger: true)
+          App.navigate("/#{store_id}/pages/#{page_id}/import", trigger: true)
+
+      App.execute "when:fetched", page, =>
+        App.execute "when:fetched", store, =>
+          @region.show(layout)
+
+    pagesImport: (store_id, page_id) ->
+      page = App.routeModels.get('page')
+      store = App.routeModels.get('store')
+      layout = new Views.PageImport(model: page, store: store)
+      layout.on 'save', ->
+        $.when(page.save()).done ->
+          App.navigate("/#{store_id}/pages/#{page_id}/layout", trigger: true)
 
       App.execute "when:fetched", page, =>
         App.execute "when:fetched", store, =>

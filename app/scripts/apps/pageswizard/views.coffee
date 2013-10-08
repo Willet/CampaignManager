@@ -1,6 +1,7 @@
 define ["exports"
   './views/content',
   './views/header',
+  './views/import',
   './views/index',
   './views/layout',
   './views/name',

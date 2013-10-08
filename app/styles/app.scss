@@ -4,6 +4,7 @@
 @import "foundation-fonts/foundation_icons_general/general_foundicons";
 @import "foundation-fonts/foundation_icons_general_enclosed/general_enclosed_foundicons";
 @import "foundation-fonts/foundation_icons_accessibility/accessibility_foundicons";
+@import "foundation-fonts/foundation_icons_social/social_foundicons";
 
 $webicons-url: "../images/webicons/";
 @import "webicons";
@@ -38,6 +39,43 @@ a, a:link, a:visited {
 
 a:hover {
   color: lighten($link-color, 5%);
+}
+
+.social-media {
+  font-size: 24px;
+  i[class*="icon-"] {
+    text-shadow: none;
+  }
+  .icon-social-twitter {
+    color: #00aced;
+  }
+  .icon-social-google-plus {
+    color: #d34836;
+  }
+  .icon-social-facebook {
+    color: #3b5998;
+  }
+  .icon-social-youtube {
+    color: #bb0000
+  }
+  .icon-social-instagram {
+    color: #517fa4;
+  }
+  .icon-social-pinterest {
+    color: #cb2027;
+  }
+  .icon-social-tumblr {
+    color: #32506d;
+  }
+  .icon-social-vimeo {
+    color: #aad450;
+  }
+  .icon-social-flickr {
+    color: #0063dc;
+  }
+  .icon-social-wordpress {
+    color: #1e8cbe;
+  }
 }
 
 body, #container, html {
@@ -459,33 +497,6 @@ body {
     .actions {
       margin: 10px 0;
     }
-    #scrape-list {
-      background: $light-base-color;
-      border: 1px solid #888888;
-      padding: 5px;
-      border-radius: 3px;
-      overflow-y: scroll;
-      overflow-x: hidden;
-      min-height: 200px;
-      height: 200px;
-      font-size: 14px;
-      font-weight: 500;
-      color: #4f4f4f;
-      font-size: 12px;
-      .item {
-        padding: 7px;
-        border-bottom: 1px dotted #333333;
-        box-shadow: none;
-      }
-      .link {
-        overflow-x: hidden;
-        white-space: nowrap;
-        word-break: break-all;
-      }
-      .action {
-        font-weight: bold;
-      }
-    }
     .products {
       font-size: 14px;
       border-radius: 3px;
@@ -510,15 +521,43 @@ body {
     }
   }
   .steps {
-    width: 100%;
-    /* 4.5% * 3 = 13.50% + 21.625% * 4 = 100% */
+    $steps: 5;
+    $width: 100%;
+    $margin: 5%;
+    $width-portion: $width - ($margin * ($steps - 1));
+    $width-each: $width-portion / $steps;
+    width: $width;
     li {
-      margin-left: 4.5%;
+      margin-left: $margin;
       &:first-child {
         margin-left: 0;
       }
-      width: 21.625%;
+      width: $width-each;
     }
+  }
+}
+
+
+.sources {
+  padding: 5px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4f4f4f;
+  font-size: 12px;
+  .item {
+    background: $light-base-color;
+    padding: 7px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    margin: 10px 0px;
+    height: 40px;
+  }
+  .link {
+    overflow-x: hidden;
+    white-space: nowrap;
+    word-break: break-all;
+  }
+  .action {
+    font-weight: bold;
   }
 }
 
