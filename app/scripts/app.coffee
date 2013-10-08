@@ -36,8 +36,11 @@ define "app", [
   # TODO: we should really make an authentication method so we do not
   #       hardcode this in here.
   $.ajaxSetup({
-    beforeSend: (request) ->
+    beforeSend: (request, opts) ->
       request.setRequestHeader('ApiKey', 'secretword')
+
+      if not /^(GET|HEAD|OPTIONS|TRACE)$/.test(opts.type) and window.CSRF_TOKEN
+        request.setRequestHeader("X-CSRFToken", window.CSRF_TOKEN)
   })
 
   # Helpful for callback when a set of entities have been fetched
