@@ -20,7 +20,7 @@ print_msg () {
 
 # require parameter 1
 if [ "$1" = "" ]; then
-    print_msg "Usage: $0 <bucket name, e.g. campaign-manager-test>" && exit 1
+    print_msg "Usage: $0 <bucket name, e.g. campaign-manager-test> <secret key>" && exit 1
 fi
 
 # require s3cmd to be configured

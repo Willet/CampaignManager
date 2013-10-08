@@ -1,6 +1,6 @@
 define(["marionette"], function (Marionette) {
     "use strict";
-    var Login;  // it's a local variable. how's this work?
+    var Login;
 
     Login = Marionette.Layout.extend({
         template: "login"
