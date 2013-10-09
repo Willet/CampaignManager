@@ -13,6 +13,7 @@ define [
 
     appRoutes:
       "": "login"
+      "logout": "logout"
       ":store_id": "storeShow"
       "*default": "notFound"
 
@@ -22,6 +23,10 @@ define [
   class Main.Controller extends Marionette.Controller
 
     login: (opts) ->
+      App.layout.show(new Login())
+
+    logout: (opts) ->
+      # TODO: actually log out
       App.layout.show(new Login())
 
     ### TODO: decide where to put this, admin ?

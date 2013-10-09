@@ -3,10 +3,12 @@ require [
   "jquery"
 ], (Marionette, $) ->
 
+  # :: === .prototype
   _.extend Backbone.Marionette.Application::,
 
     APP_ROOT: "/"
 
+    # alias: App.navigate
     navigate: (route, options = {}) ->
       $(window).scrollTop(0)
       Backbone.history.navigate route, options
