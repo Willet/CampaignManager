@@ -28,5 +28,8 @@ define [
         data: JSON.stringify
           username: username
           password: password
+        success: ->
+            # Also WRONG; don't hardcode this!
+            App.navigate('126/pages', trigger: true)
 
   Login
