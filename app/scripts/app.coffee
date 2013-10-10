@@ -39,8 +39,7 @@ define "app", [
     beforeSend: (request, opts) ->
       request.setRequestHeader('ApiKey', 'secretword')
 
-      if not /^(GET|HEAD|OPTIONS|TRACE)$/.test(opts.type) and window.CSRF_TOKEN
-        request.setRequestHeader("X-CSRFToken", window.CSRF_TOKEN)
+      request.withCredentials = true
   })
 
   # Helpful for callback when a set of entities have been fetched

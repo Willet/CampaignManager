@@ -22,11 +22,9 @@ define [
         contentType: "application/json"
         dataType: 'json'
         type: 'POST'
+        crossDomain: true
         data: JSON.stringify
           username: username
           password: password
-        success: ->
-          # Set CSRF
-          ''
 
   Login
