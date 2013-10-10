@@ -18,6 +18,7 @@ define [
       # The app should have a logged in user and maintain things through that.
       # In other words, WRONG.
       $.ajax
+        # replace with App.API_ROOT
         url: 'http://localhost:8000/graph/v1/user/login/',
         contentType: "application/json"
         dataType: 'json'
