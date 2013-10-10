@@ -37,7 +37,7 @@ define [
     pagesName: (store_id, page_id) ->
       page = App.routeModels.get('page')
       store = App.routeModels.get('store')
-      layout = new Views.PageCreateName(model: page, store: store)
+      layout = new Views.PageCreateName({model: page, store: store})
       layout.on 'save', ->
         $.when(page.save()).done ->
           App.navigate("/#{store_id}/pages/#{page_id}/content", trigger: true)
