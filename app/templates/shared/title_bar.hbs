@@ -1,9 +1,13 @@
 <div class='columns small-8 large-10'>
-  <h1>{{title}}</h1>
+    {{#if title}}
+        <h2>{{title}}</h2>
+    {{else}}
+        <h2>Campaign Manager</h2>
+    {{/if}}
 </div>
 
 <div class='columns small-4 large-2 text-right'>
-  <a id='logout' href='/signout'>
-    Logout
-  </a>
+    <a id='logout' href='/signout'>
+        Logout
+    </a>
 </div>

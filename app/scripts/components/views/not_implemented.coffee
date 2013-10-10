@@ -2,8 +2,8 @@ define [
   "marionette"
 ], (Marionette) ->
 
-  class StoreIndex extends Marionette.Layout
+  class NotImplemented extends Marionette.ItemView
 
     template: "not_implemented"
 
-  return StoreIndex
+    NotImplemented

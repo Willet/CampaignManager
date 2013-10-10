@@ -1,40 +1,47 @@
 <div class="logo">
-  <div class="logo wrapper">
-    <a href='/'>
-      <div class="logo"/>
-    </a>
-  </div>
-  <div class="arrow" />
+    <div class="logo wrapper">
+        <a href='/'>
+            <div class="logo"/>
+        </a>
+    </div>
+    <div class="arrow"/>
 </div>
 {{#if store}}
-  <ul class='left'>
-    <li class="divider" />
-    <li {{#is page 'pages'}}class='active'{{/is}}>
-      <a href='/{{store.id}}/pages'>Pages <i class="icon-general-page"></i></a>
-    </li>
-    <li class="divider" />
-    <li {{#is page 'content'}}class='active'{{/is}}>
-      <a href='/{{store.id}}/content'>Content <i class="icon-general-photo"></i></a>
-    </li>
-    <li class="divider" />
-    <li {{#is page 'analytics'}}class='active'{{/is}}>
-      <a href='/{{store.id}}/analytics'>Analytics <i class="icon-general-graph"></i></a>
-    </li>
-    <li class="divider" />
-    <li {{#is page 'settings'}}class='active'{{/is}}>
-      <a href='/{{store.id}}/settings'>Settings <i class="icon-general-settings"></i></a>
-    </li>
-    <li class="divider" />
-  </ul>
-{{/if}}
-{{#if 0}}
-<ul class='right'>
-  <li class='divider hide-for-small'></li>
-  <li>
-    <a href='#'>Account</a>
-  </li>
-  <li>
-    <a href='/logout'>Logout</a>
-  </li>
-</ul>
+    <ul class='left'>
+        <li class="divider"></li>
+        <li {{#is page 'pages'}}class='active'{{/is}}>
+            <a href='/{{store.id}}/pages'>Pages
+                <span class="icon-general-page"></span>
+            </a>
+        </li>
+        <li class="divider"></li>
+        <li {{#is page 'content'}}class='active'{{/is}}>
+            <a href='/{{store.id}}/content'>Content
+                <span class="icon-general-photo"></span>
+            </a>
+        </li>
+        <li class="divider"></li>
+        <li {{#is page 'analytics'}}class='active'{{/is}}>
+            <a href='/{{store.id}}/analytics'>Analytics
+                <span class="icon-general-graph"></span>
+            </a>
+        </li>
+        <li class="divider"></li>
+        <li {{#is page 'settings'}}class='active'{{/is}}>
+            <a href='/{{store.id}}/settings'>Settings
+                <span class="icon-general-settings"></span>
+            </a>
+        </li>
+        <li class="divider"></li>
+    </ul>
+    <ul class='right'>
+        <li class='divider hide-for-small'></li>
+        <li>
+            <a href='#'>Account</a>
+        </li>
+        <li>
+            <a href='/logout'>Logout</a>
+        </li>
+    </ul>
+
 {{/if}}

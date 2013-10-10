@@ -27,10 +27,10 @@ module.exports = function (grunt) {
             tmp: '.tmp'
         },
         uglify: {
-          options: {
-            mangle: false,
-            exportAll: true
-          }
+            options: {
+                mangle: false,
+                exportAll: true
+            }
         },
         watch: {
             coffee: {
@@ -124,14 +124,16 @@ module.exports = function (grunt) {
         },
         clean: {
             dist: {
-                files: [{
-                    dot: true,
-                    src: [
-                        '<%= yeoman.tmp %>',
-                        '<%= yeoman.dist %>/*',
-                        '!<%= yeoman.dist %>/.git*'
-                    ]
-                }]
+                files: [
+                    {
+                        dot: true,
+                        src: [
+                            '<%= yeoman.tmp %>',
+                            '<%= yeoman.dist %>/*',
+                            '!<%= yeoman.dist %>/.git*'
+                        ]
+                    }
+                ]
             },
             server: '<%= yeoman.tmp %>'
         },
@@ -147,23 +149,26 @@ module.exports = function (grunt) {
             ]
         },
         handlebars: {
-          compile: {
-            options: {
-              amd: true,
-              namespace: "JST",
-              processName: function(filename) {
-                return filename.replace('app/templates/','').replace('.hbs','');
-              },
-              processContent: function(content) {
-                content = content.replace(/^[\x20\t]+/mg, '').replace(/[\x20\t]+$/mg, '');
-                content = content.replace(/^[\r\n]+/, '').replace(/[\r\n]*$/, '\n');
-                return content;
-              }
-            },
-            files: {
-              "<%= yeoman.tmp %>/scripts/templates.js": ["<%= yeoman.app %>/templates/**/*.hbs"],
+            compile: {
+                options: {
+                    amd: true,
+                    namespace: "JST",
+                    processName: function (filename) {
+                        return filename.replace('app/templates/',
+                            '').replace('.hbs', '');
+                    },
+                    processContent: function (content) {
+                        content = content.replace(/^[\x20\t]+/mg,
+                            '').replace(/[\x20\t]+$/mg, '');
+                        content = content.replace(/^[\r\n]+/,
+                            '').replace(/[\r\n]*$/, '\n');
+                        return content;
+                    }
+                },
+                files: {
+                    "<%= yeoman.tmp %>/scripts/templates.js": ["<%= yeoman.app %>/templates/**/*.hbs"]
+                }
             }
-          }
         },
         mocha: {
             all: {
@@ -175,22 +180,26 @@ module.exports = function (grunt) {
         },
         coffee: {
             dist: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= yeoman.app %>/scripts',
-                    src: '**/*.coffee',
-                    dest: '.tmp/scripts',
-                    ext: '.js'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= yeoman.app %>/scripts',
+                        src: '**/*.coffee',
+                        dest: '.tmp/scripts',
+                        ext: '.js'
+                    }
+                ]
             },
             test: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= yeoman.test %>/spec',
-                    src: '**/*.coffee',
-                    dest: '.tmp/spec',
-                    ext: '.js'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= yeoman.test %>/spec',
+                        src: '**/*.coffee',
+                        dest: '.tmp/spec',
+                        ext: '.js'
+                    }
+                ]
             }
         },
         compass: {
@@ -224,19 +233,21 @@ module.exports = function (grunt) {
                 browsers: ['last 1 version']
             },
             dist: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= yeoman.tmp %>/styles/',
-                    src: '**/*.css',
-                    dest: '<%= yeoman.tmp %>/styles/'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= yeoman.tmp %>/styles/',
+                        src: '**/*.css',
+                        dest: '<%= yeoman.tmp %>/styles/'
+                    }
+                ]
             }
         },
         // not used since Uglify task does concat,
         // but still available if needed
         /*concat: {
-            dist: {}
-        },*/
+         dist: {}
+         },*/
         requirejs: {
             dist: {
                 // Options: https://github.com/jrburke/r.js/blob/master/build/example.build.js
@@ -285,22 +296,26 @@ module.exports = function (grunt) {
         },
         imagemin: {
             dist: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= yeoman.app %>/images',
-                    src: '**/*.{png,jpg,jpeg}',
-                    dest: '<%= yeoman.dist %>/images'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= yeoman.app %>/images',
+                        src: '**/*.{png,jpg,jpeg}',
+                        dest: '<%= yeoman.dist %>/images'
+                    }
+                ]
             }
         },
         svgmin: {
             dist: {
-                files: [{
-                    expand: true,
-                    cwd: '<%= yeoman.app %>/images',
-                    src: '**/*.svg',
-                    dest: '<%= yeoman.dist %>/images'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= yeoman.app %>/images',
+                        src: '**/*.svg',
+                        dest: '<%= yeoman.dist %>/images'
+                    }
+                ]
             }
         },
         cssmin: {
@@ -323,63 +338,71 @@ module.exports = function (grunt) {
             dist: {
                 options: {
                     /*removeCommentsFromCDATA: true,
-                    // https://github.com/yeoman/grunt-usemin/issues/44
-                    //collapseWhitespace: true,
-                    collapseBooleanAttributes: true,
-                    removeAttributeQuotes: true,*/
+                     // https://github.com/yeoman/grunt-usemin/issues/44
+                     //collapseWhitespace: true,
+                     collapseBooleanAttributes: true,
+                     removeAttributeQuotes: true,*/
                     removeRedundantAttributes: true,
                     useShortDoctype: true,
                     removeEmptyAttributes: true,
                     removeOptionalTags: true
                 },
-                files: [{
-                    expand: true,
-                    cwd: '<%= yeoman.app %>',
-                    src: '*.html',
-                    dest: '<%= yeoman.dist %>'
-                }]
+                files: [
+                    {
+                        expand: true,
+                        cwd: '<%= yeoman.app %>',
+                        src: '*.html',
+                        dest: '<%= yeoman.dist %>'
+                    }
+                ]
             }
         },
         // Put files not handled in other tasks here
         copy: {
             images: {
-                files: [{
-                    expand: true,
-                    dot: true,
-                    cwd: '<%= yeoman.app %>',
-                    dest: '<%= yeoman.tmp %>',
-                    src: [
-                        'images/**/*.*'
-                    ]
-                }]
+                files: [
+                    {
+                        expand: true,
+                        dot: true,
+                        cwd: '<%= yeoman.app %>',
+                        dest: '<%= yeoman.tmp %>',
+                        src: [
+                            'images/**/*.*'
+                        ]
+                    }
+                ]
             },
             js: {
-                files: [{
-                    expand: true,
-                    dot: true,
-                    cwd: '<%= yeoman.app %>',
-                    dest: '<%= yeoman.tmp %>',
-                    src: [
-                        'scripts/**/*.js',
-                        'scripts/mock/data/**/*.json',
-                        'bower_components/**/*.js'
-                    ]
-                }]
+                files: [
+                    {
+                        expand: true,
+                        dot: true,
+                        cwd: '<%= yeoman.app %>',
+                        dest: '<%= yeoman.tmp %>',
+                        src: [
+                            'scripts/**/*.js',
+                            'scripts/mock/data/**/*.json',
+                            'bower_components/**/*.js'
+                        ]
+                    }
+                ]
             },
             dist: {
-                files: [{
-                    expand: true,
-                    dot: true,
-                    cwd: '<%= yeoman.app %>',
-                    dest: '<%= yeoman.dist %>',
-                    src: [
-                        '*.{ico,png,txt}',
-                        '.htaccess',
-                        'images/**/*.{webp,gif}',
-                        'styles/fonts/**/*.*',
-                        'bower_components/sass-bootstrap/fonts/*.*',
-                    ]
-                }]
+                files: [
+                    {
+                        expand: true,
+                        dot: true,
+                        cwd: '<%= yeoman.app %>',
+                        dest: '<%= yeoman.dist %>',
+                        src: [
+                            '*.{ico,png,txt}',
+                            '.htaccess',
+                            'images/**/*.{webp,gif}',
+                            'styles/fonts/**/*.*',
+                            'bower_components/sass-bootstrap/fonts/*.*'
+                        ]
+                    }
+                ]
             },
             styles: {
                 expand: true,
