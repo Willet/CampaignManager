@@ -1,6 +1,7 @@
 define [
+  "app"
   "marionette"
-], (Marionette) ->
+], (App, Marionette) ->
 
   class TitleBar extends Marionette.ItemView
 
@@ -20,7 +21,7 @@ define [
       # In other words, WRONG.
       $.ajax
         # replace with App.API_ROOT
-        url: 'http://localhost:8000/graph/v1/user/logout/',
+        url: App.API_ROOT + '/user/logout/',
         contentType: "application/json"
         dataType: 'json'
         type: 'POST'

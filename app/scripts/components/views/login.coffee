@@ -1,7 +1,8 @@
 define [
+  "app"
   "marionette",
   'jquery',
-], (Marionette, $) ->
+], (App, Marionette, $) ->
 
   class Login extends Marionette.Layout
     template: "login"
@@ -19,7 +20,7 @@ define [
       # In other words, WRONG.
       $.ajax
         # replace with App.API_ROOT
-        url: 'http://localhost:8000/graph/v1/user/login/',
+        url: App.API_ROOT + '/user/login/',
         contentType: "application/json"
         dataType: 'json'
         type: 'POST'
