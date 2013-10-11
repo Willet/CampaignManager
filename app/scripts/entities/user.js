@@ -1,6 +1,6 @@
 define([
-    "app", "entities/base", "entities/products"
-], function (App, Base, Entities) {
+    "app", "entities/base", "entities/products", "underscore"
+], function (App, Base, Entities, _) {
     Entities = Entities || {};
 
     Entities.User = Base.Model.extend({
@@ -21,17 +21,21 @@ define([
             });
 
             login.done(function(response) {
-                // Iterate over all things in response,
-                // and set properties on this model.
+                var store, navigateUrl;
+
                 that.set(response);
+
+                store = _(that.get('stores')).first();
 
                 // Is this where this belongs?
                 // Why do we need to do this? Why can't we just use App?
                 // Why is App not what I expect it to be?
                 window.App.user = that;
+                // Should we create a store instance?
+                window.App.store = store
 
-                // Is this where this belongs?
-                App.navigate('126/pages', {
+                navigateUrl = window.App.store.id + '/pages';
+                App.navigate(navigateUrl, {
                     trigger: true
                 });
             });
