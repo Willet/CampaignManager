@@ -23,6 +23,7 @@ define("app",
                     return App.redirectToLogin();
                 }
             });
+
             return App.pageInfo = new Entities.Model({
                 title: "Loading",
                 page: ""
