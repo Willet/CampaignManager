@@ -51,7 +51,7 @@ define("app",
             });
         });
         App.redirectToLogin = function () {
-            return window.location = "" + App.APP_ROOT + "login?r=" + window.location.hash;
+            return window.location = "" + App.APP_ROOT + "?r=" + window.location.hash;
         };
         App.setTitle = function (title) {
             return App.pageInfo.set("title", title);

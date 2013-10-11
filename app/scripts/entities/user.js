@@ -26,7 +26,9 @@ define([
                 that.set(response);
 
                 // Is this where this belongs?
-                App.user = that;
+                // Why do we need to do this? Why can't we just use App?
+                // Why is App not what I expect it to be?
+                window.App.user = that;
 
                 // Is this where this belongs?
                 App.navigate('126/pages', {

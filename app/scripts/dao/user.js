@@ -14,6 +14,7 @@ define([
     };
 
     App.reqres.setHandler("user:login", function(username, password) {
-        return API.login(username, password);
+        var user = API.login(username, password);
+        App.user = user;
     });
 });
