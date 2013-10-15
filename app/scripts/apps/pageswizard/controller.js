@@ -153,11 +153,15 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                 }));
             },
             generateView: function (store_id, page_id) {
-                var page;
+                var page, layout;
                 page = App.routeModels.get('page');
-                return this.region.show(new Views.GeneratePage({
+                layout = new Views.GeneratePage({
                     model: page
-                }));
+                });
+                layout.on("generate", function () {
+                    console.log('Testing!');
+                });
+                return this.region.show(layout);
             }
         });
         return PageWizard;
