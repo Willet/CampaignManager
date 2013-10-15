@@ -151,6 +151,13 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                 return this.region.show(new Views.PagePreview({
                     model: page
                 }));
+            },
+            generateView: function (store_id, page_id) {
+                var page;
+                page = App.routeModels.get('page');
+                return this.region.show(new Views.GeneratePage({
+                    model: page
+                }));
             }
         });
         return PageWizard;

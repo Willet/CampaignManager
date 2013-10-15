@@ -511,13 +511,13 @@ body {
   }
   .steps {
     width: 100%;
-    /* 4.5% * 3 = 13.50% + 21.625% * 4 = 100% */
+    /* 4.5% * 4 = 18% + 16.4% * 5 = 100% */
     li {
       margin-left: 4.5%;
       &:first-child {
         margin-left: 0;
       }
-      width: 21.625%;
+      width: 16.4%;
     }
   }
 }
