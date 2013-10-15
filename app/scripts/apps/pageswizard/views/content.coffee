@@ -17,6 +17,7 @@ define [
 
     triggers:
       "click .js-next": "save"
+      "click .generate": "generate"
 
     regions:
       "contentList": ".content > .list"

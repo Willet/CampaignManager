@@ -62,6 +62,9 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                             });
                     });
                 });
+                layout.on('generate', function(view) {
+                    console.log('Generate button pressed');
+                });
                 return App.execute("when:fetched", page, function () {
                     return _this.region.show(layout);
                 });
@@ -84,6 +87,9 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                                 trigger: true
                             });
                     });
+                });
+                layout.on('generate', function(view) {
+                    console.log('Generate button pressed');
                 });
                 return this.region.show(layout);
             },
@@ -124,6 +130,9 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                                 trigger: true
                             });
                     });
+                });
+                layout.on('generate', function(view) {
+                    console.log('Generate button pressed');
                 });
                 return this.region.show(layout);
             },
