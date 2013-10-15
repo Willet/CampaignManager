@@ -46,11 +46,13 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                 return this.region.show(view);
             },
             pagesName: function (store_id, page_id) {
-                var layout, page,
+                var layout, page, store,
                     _this = this;
                 page = App.routeModels.get('page');
+                store = App.routeModels.get('store');
                 layout = new Views.PageCreateName({
-                    model: page
+                    model: page,
+                    store: store
                 });
                 layout.on('save', function () {
                     return $.when(page.save()).done(function () {
