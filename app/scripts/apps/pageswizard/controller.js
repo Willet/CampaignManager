@@ -63,7 +63,20 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                     });
                 });
                 layout.on('generate', function(view) {
-                    console.log('Generate button pressed');
+                    // TODO: Replace with non-static URL
+                    var base_url = 'http://secondfunnel-test.elasticbeanstalk.com/static_pages'
+
+                    // TODO: handle case where page_id is 'new'
+
+                    $.ajax({
+                        url: base_url + '/' + store_id + '/' + page_id + '/regenerate',
+                        type: 'POST',
+                        dataType: 'jsonp'
+                    }).done(function(data, status, request) {
+                        // TODO: What to do on success?
+                    }).fail(function(request, status, error) {
+                        // TODO: What to do on fail?
+                    });
                 });
                 return App.execute("when:fetched", page, function () {
                     return _this.region.show(layout);
@@ -89,7 +102,20 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                     });
                 });
                 layout.on('generate', function(view) {
-                    console.log('Generate button pressed');
+                    // TODO: Replace with non-static URL
+                    var base_url = 'http://secondfunnel-test.elasticbeanstalk.com/static_pages'
+
+                    // TODO: handle case where page_id is 'new'
+
+                    $.ajax({
+                        url: base_url + '/' + store_id + '/' + page_id + '/regenerate',
+                        type: 'POST',
+                        dataType: 'jsonp'
+                    }).done(function(data, status, request) {
+                        // TODO: What to do on success?
+                    }).fail(function(request, status, error) {
+                        // TODO: What to do on fail?
+                    });
                 });
                 return this.region.show(layout);
             },
@@ -132,7 +158,20 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                     });
                 });
                 layout.on('generate', function(view) {
-                    console.log('Generate button pressed');
+                    // TODO: Replace with non-static URL
+                    var base_url = 'http://secondfunnel-test.elasticbeanstalk.com/static_pages'
+
+                    // TODO: handle case where page_id is 'new'
+
+                    $.ajax({
+                        url: base_url + '/' + store_id + '/' + page_id + '/regenerate',
+                        type: 'POST',
+                        dataType: 'jsonp'
+                    }).done(function(data, status, request) {
+                        // TODO: What to do on success?
+                    }).fail(function(request, status, error) {
+                        // TODO: What to do on fail?
+                    });
                 });
                 return this.region.show(layout);
             },
