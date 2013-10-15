@@ -20,7 +20,7 @@
       </span>
     </div>
     <div class="row">
-      <h4>Current Sources</h4>
+      <h4>Product Sources</h4>
       <div class="sources">
 
         <div class="row item">
@@ -58,88 +58,6 @@
         </div>
 
       </div>
-    </div>
-  </div>
-  <h4>Add Content Source</h4>
-  <div class="add-content">
-    <div class="row">
-      <label class="large-2 columns inline">Add by URL</label>
-      <span class="large-8 columns">
-        <input id="url" type="text" placeholder="http://..." />
-      </span>
-      <span class="large-2 columns text-left">
-        <a href="#" id="add-url" class="small button">Add</a>
-      </span>
-    </div>
-    <div class="row">
-      <label class="large-2 columns inline">Add from File</label>
-      <span class="large-8 columns">
-        <input id="search-product" type="file" />
-      </span>
-      <span class="large-2 columns text-left">
-        <a href="#" id="add-product" class="small button">Add</a>
-      </span>
-    </div>
-    <!-- DEFER: until we support social scraping
-    <div class="row">
-      <label class="large-2 columns inline">Add from Social Account</label>
-      <span class="large-8 columns social-media">
-        <i class="icon-social-twitter"></i>
-        <i class="icon-social-facebook"></i>
-        <i class="icon-social-pinterest"></i>
-        <i class="icon-social-tumblr"></i>
-        <i class="icon-social-instagram"></i>
-        <i class="icon-social-google-plus"></i>
-        <i class="icon-social-youtube"></i>
-        <i class="icon-social-vimeo"></i>
-        <i class="icon-social-flickr"></i>
-        <i class="icon-social-wordpress"></i>
-      </span>
-      <span class="large-2 columns text-left">
-        <a href="#" id="add-product" class="small button">Add</a>
-      </span>
-    </div>
-    -->
-    <div class="row">
-      <h4>Current Sources</h4>
-      <div class="sources">
-
-        <div class="row item">
-          <div class="large-6 columns details">
-            <span class="title">
-              <b>Title:</b>
-              {{default source.page_title "(pending)"}}
-            </span><br />
-            <span class="link" title="{{source.url}}">
-              <b>URL:</b>
-              <a href="{{source.url}}" target="_blank">{{source.url}}</a>
-            </span>
-          </div>
-          <div class="large-2 columns text-center status-{{source.status}}">
-            {{default source.status 'Fetching'}}
-          </div>
-          <div class="large-4 columns text-right action">
-            <a href="#" class="remove">Remove</a>
-          </div>
-        </div>
-
-        <div class="row item">
-          <div class="large-6 columns details">
-            <span class="title">
-              <b>File:</b>
-              {{ source.file_name }}
-            </span><br />
-          </div>
-          <div class="large-2 columns text-center status-{{source.status}}">
-            {{default source.status 'Fetching'}}
-          </div>
-          <div class="large-2 columns text-right action">
-            <a href="#" class="remove">Remove</a>
-          </div>
-        </div>
-
-      </div>
-
     </div>
   </div>
 </div>

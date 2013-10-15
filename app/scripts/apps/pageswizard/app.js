@@ -6,6 +6,7 @@ define(['app', 'exports', 'marionette', './views', 'entities', './controller', '
                 ":store_id/pages": "pagesIndex",
                 ":store_id/pages/:page_id": "pagesName",
                 ":store_id/pages/:page_id/layout": "pagesLayout",
+                ":store_id/pages/:page_id/import": "pagesImport",
                 ":store_id/pages/:page_id/products": "pagesProducts",
                 ":store_id/pages/:page_id/content": "pagesContent",
                 ":store_id/pages/:page_id/view": "pagesView"
@@ -116,6 +117,7 @@ define(['app', 'exports', 'marionette', './views', 'entities', './controller', '
         App.addInitializer(function () {
             var controller, router;
             controller = new PageWizard.Controller();
+            console.log(controller);
             return router = new PageWizard.Router({
                 controller: controller
             });
