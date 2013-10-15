@@ -31,7 +31,6 @@ define [
 
     triggers:
       "click .js-next": "save"
-      "click .generate": "generate"
 
     events:
       "click .layout-type": "selectLayoutType"

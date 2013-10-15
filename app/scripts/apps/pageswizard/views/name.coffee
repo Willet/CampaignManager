@@ -19,7 +19,6 @@ define [
 
     triggers:
       "click .js-next": "save"
-      "click .generate": "generate"
 
     bindings:
       'input[for=name]':
