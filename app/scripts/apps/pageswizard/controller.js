@@ -56,7 +56,11 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                 });
                 layout.on('save', function () {
                     return $.when(page.save()).done(function (data) {
-                        return App.navigate("/" + store_id + "/pages/" + page_id + "/content",
+                        // TODO: Should we only do this when page_id === 'new'?
+                        var store = data['store-id'],
+                            page = data['id'];
+
+                        return App.navigate("/" + store + "/pages/" + page + "/layout",
                             {
                                 trigger: true
                             });
@@ -78,8 +82,12 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                 });
                 layout.on('save', function () {
                     page.set('fields', layout.getFields());
-                    return $.when(page.save()).done(function () {
-                        return App.navigate("/" + store_id + "/pages/" + page_id + "/products",
+                    return $.when(page.save()).done(function (data) {
+                        // TODO: Should we only do this when page_id === 'new'?
+                        var store = data['store-id'],
+                            page = data['id'];
+
+                        return App.navigate("/" + store + "/pages/" + page + "/products",
                             {
                                 trigger: true
                             });
@@ -118,8 +126,12 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                     });
                 });
                 layout.on('save', function () {
-                    return $.when(page.save()).done(function () {
-                        return App.navigate("/" + store_id + "/pages/" + page_id + "/content",
+                    return $.when(page.save()).done(function (data) {
+                        // TODO: Should we only do this when page_id === 'new'?
+                        var store = data['store-id'],
+                            page = data['id'];
+
+                        return App.navigate("/" + store + "/pages/" + page + "/content",
                             {
                                 trigger: true
                             });
@@ -143,6 +155,20 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                             page: true
                         }));
                 });
+
+                layout.on('save', function () {
+                    return $.when(page.save()).done(function (data) {
+                        // TODO: Should we only do this when page_id === 'new'?
+                        var store = data['store-id'],
+                            page = data['id'];
+
+                        return App.navigate("/" + store + "/pages/" + page + "/generate",
+                            {
+                                trigger: true
+                            });
+                    });
+                });
+
                 return this.region.show(layout);
             },
             pagesView: function (store_id, page_id) {
