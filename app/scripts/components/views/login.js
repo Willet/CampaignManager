@@ -3,9 +3,7 @@ define(["app", "marionette", 'jquery'], function (App, Marionette, $) {
     Login = Marionette.Layout.extend({
         template: "login",
         events: {
-            "submit form": function (event) {
-                return this.login(event);
-            }
+            "submit form": "login"
         },
         login: function (event) {
             var password, username, user;

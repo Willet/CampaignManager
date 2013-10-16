@@ -8,6 +8,7 @@ define([
             var that = this,
                 login;
 
+            // TODO: Need to address security concerns of sending PW as plaintext
             login = $.ajax({
                 url: this.url + '/login/', // trailing slash required for some reason
                 contentType: "application/json",
