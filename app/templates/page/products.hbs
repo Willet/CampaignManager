@@ -3,26 +3,23 @@
   <div class="page-edit products">
     <div class="container row">
       <p class="text-left">Review products that have been imported, as well as prioritize products to appear at top of the page</p>
-      <div class="switch-toggle switch-3 panel radius">
+      <div class="switch-toggle switch-2 panel radius">
       <form>
-        <input id="needs-review" name="filter2" type="radio" checked>
-        <label for="needs-review" onclick="" class="js-needs-review">Needs Review</label>
+        <input id="all-items" name="filter2" type="radio" checked>
+        <label for="all-items" class="js-all-items">Imported</label>
 
         <input id="added-to-page" name="filter2" type="radio">
-        <label for="added-to-page" onclick="" class="js-added-to-page">Added to Page</label>
-
-        <input id="rejected-from-page" name="filter2" type="radio">
-        <label for="rejected-from-page" onclick="" class="js-rejected-from-page">Rejected from Page</label>
+        <label for="added-to-page" class="js-added-to-page">Added to Page</label>
 
         <a class="button"></a>
       </form>
       </div>
-      <div class="products row text-left">
-        TODO: here should be a list of all Product Collections (merged) that resulted from imported data sets (Also then excluding the rejected set)
+      <div id="product-list" class="products row text-left">
+        <!-- here should be a list of all Product Collections (merged) that resulted from imported data sets (Also then excluding the rejected set) -->
       </div>
       <div class="actions row text-center">
         <a href="#" id="add-to-page" class="button small">Add To Page</a>
-        <a href="#" id="reject-content" class="button small">Reject Content</a>
+        <a href="#" id="remove-from-page" class="button small">Remove from Page</a>
       </div>
     </div>
     <div class="actions row">

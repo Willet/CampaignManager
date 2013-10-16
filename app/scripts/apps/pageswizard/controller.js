@@ -128,9 +128,20 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
             pagesProducts: function (store_id, page_id) {
                 var layout, page, products, _this = this;
                 page = App.routeModels.get('page');
-                products = new Entities.ContentCollection();
+                products = App.request('page:product:entities:paged', store_id, page_id);
+                product_list = new Views.PageProductList({collection: products});
                 layout = new Views.PageCreateProducts({
                     model: page
+                });
+                layout.on("display:all-items", function() {
+                    products = App.request('page:product:entities:paged', store_id, page_id);
+                    product_list = new Views.PageProductList({collection: products});
+                    layout.productList.show(product_list);
+                });
+                layout.on("display:added-to-page", function() {
+                    products = App.request('added-to-page:page:product:entities:paged', store_id, page_id);
+                    product_list = new Views.PageProductList({collection: products});
+                    layout.productList.show(product_list);
                 });
                 layout.on('save', function () {
                     return $.when(page.save()).done(function () {
@@ -139,6 +150,9 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                                 trigger: true
                             });
                     });
+                });
+                layout.on('render', function() {
+                    layout.productList.show(product_list);
                 });
                 return this.region.show(layout);
             },

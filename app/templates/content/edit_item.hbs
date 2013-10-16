@@ -2,6 +2,7 @@
   <label class="inline"><b>Caption</b></label>
   <p>{{caption}}</p>
 </div-->
+<!--
 <div>
   <label class="inline"><b>Tagged Products</b></label>
   <input type="text" class="js-tagged-products" style="width:100%" />
@@ -12,6 +13,7 @@
   <input type="text" class="js-tagged-pages" style="width:100%" />
 </div>
 {{/unless}}
+-->
 <div class="actions">
   {{#if actions.page}}
     {{#if approvedForPage}}
@@ -30,14 +32,19 @@
       </a>
     {{/if}}
   {{else}}
+  <!--
   <a class="js-undecided undecided {{#if undecided}}active{{/if}}" title="Reset">
     <i class="icon-accessibility-question"></i>
   </a>
-  <a class="js-reject reject {{#if rejected}}active{{/if}}" title="Reject">
-    <i class="icon-general-error"></i>
+  -->
+  <a class="js-prioritize-for-page action prioritize" href="#" title="Prioritize">
+    <i class="icon-general-up-arrow"></i> Prioritize
   </a>
-  <a class="js-approve approve {{#if approved}}active{{/if}}" title="Approve">
-    <i class="icon-general-checkmark"></i>
+  <a class="js-approve action approve {{#if approved}}active{{/if}}" title="Approve">
+    <i class="icon-general-checkmark"></i> Add
+  </a>
+  <a class="js-reject action reject {{#if rejected}}active{{/if}}" title="Reject">
+    <i class="icon-general-error"></i> Remove
   </a>
   {{/if}}
 </div>

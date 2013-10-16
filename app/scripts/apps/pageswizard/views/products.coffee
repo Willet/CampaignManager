@@ -9,28 +9,17 @@ define [
     template: "page/products"
 
     events:
-      "click #add-url": "addUrl"
-      "click #add-product": "addProduct"
-      "keydown #url": "resetError"
+      "click #all-items": "allItems"
+      "click #added-to-page": "addedToPage"
 
     triggers:
       "click .js-next": "save"
 
-    resetError: (event) ->
-      $(event.currentTarget).removeClass("error")
+    addedToPage: (event) ->
+      @trigger("display:added-to-page")
 
-    validUrl: (url) ->
-      # TODO: move this to the scrape model ?
-      urlPattern = /(http|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
-      url && url != "" && urlPattern.test(url)
-
-    addUrl: (event) ->
-      if @validUrl(@$('#url').val())
-        @trigger "new:scrape", @$('#url').val()
-        @$('#url').val("")
-      else
-        @$('#url').addClass("error")
-        # figure out what to do
+    allItems: (event) ->
+      @trigger("display:all-items")
 
     serializeData: ->
       return {
@@ -40,7 +29,6 @@ define [
       }
 
     regions:
-      "scrapeList": "#scrape-list"
       "productList": "#product-list"
 
     initialize: (opts) ->
@@ -50,18 +38,12 @@ define [
 
     onShow: (opts) ->
 
-  class Views.PageScrapeItem extends Marionette.ItemView
+  class Views.PageProductItem extends Marionette.ItemView
 
-    template: "page/scrape_item"
+    template: "page/product_item"
 
-    triggers:
-      "click .remove": "remove"
+  class Views.PageProductList extends Marionette.CollectionView
 
-    serializeData: ->
-      @model.viewJSON()
-
-  class Views.PageScrapeList extends Marionette.CollectionView
-
-    itemView: Views.PageScrapeItem
+    itemView: Views.PageProductItem
 
   Views

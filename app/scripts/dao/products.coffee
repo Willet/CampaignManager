@@ -21,6 +21,14 @@ define [
         data: params
       products
 
+    getAddedPageProducts: (store_id, page_id, params = {}) ->
+      products = new Entities.ProductCollection()
+      products.url = "#{App.API_ROOT}/graph/store/#{store_id}/page/#{page_id}/product"
+      products.fetch
+        reset: true
+        data: params
+      products
+
     getProductSet: (store_id, product_ids, params = {}) ->
       products = new Entities.ProductCollection(_.map(product_ids, (id) -> {'id': id, 'store-id': store_id}))
       if products.size() > 0
@@ -34,11 +42,19 @@ define [
     (store_id, product_ids, params) ->
       API.getProductSet store_id, product_ids, params
 
+  App.reqres.setHandler "added-to-page:page:product:entities:paged",
+    (store_id, page_id, params) ->
+      API.getAddedPageProducts store_id, page_id, params
+
+  App.reqres.setHandler "page:product:entities:paged",
+    (store_id, page_id, params) ->
+      API.getProducts store_id, params
+
   App.reqres.setHandler "product:entities",
-    (product_id, params) ->
+    (store_id, params) ->
       # search is possible by passing "seach-name" to
       # params
-      API.getProducts product_id, params
+      API.getProducts store_id, params
 
   App.reqres.setHandler "product:entity",
     (store_id, product_id, params) ->

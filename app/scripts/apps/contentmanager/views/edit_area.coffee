@@ -25,10 +25,10 @@ define [
     onShow: ->
 
     onRender: ->
-      @taggedProducts.show(new Views.TaggedProductInput(model: @model, store: @store))
-      @taggedPages.show(new Views.TaggedPagesInput(model: @model, store: @store))
-      @relayEvents(@taggedProducts.currentView, 'tagged-products')
-      @relayEvents(@taggedPages.currentView, 'tagged-pages')
+      #@taggedProducts.show(new Views.TaggedProductInput(model: @model, store: @store))
+      #@taggedPages.show(new Views.TaggedPagesInput(model: @model, store: @store))
+      #@relayEvents(@taggedProducts.currentView, 'tagged-products')
+      #@relayEvents(@taggedPages.currentView, 'tagged-pages')
 
     onClose: ->
 

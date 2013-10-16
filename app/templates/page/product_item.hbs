@@ -1,0 +1,34 @@
+<div class="item {{#if selected}}selected{{/if}}">
+  <div class="image-container center text-center">
+    {{#if images}}
+    <div class="image" style="background-image:url({{images.medium.url}})" />
+    {{else}}
+    <div class="image" style="background-image:url('http://placehold.it/180x180&text=No Thumbnail')" />
+    {{/if}}
+  </div>
+  <div class="overlay">
+    <span class="actions text-center">
+      {{#if inPage}}
+        <div class="row">
+        <a class="js-remove-from-page" href="/{{store-id}}/content/{{id}}">
+          Remove from Page <i class="icon-general-error"></i>
+        </a>
+        </div>
+      {{else}}
+        <div class="row">
+        <a class="js-approve-for-page" href="/{{store-id}}/content/{{id}}">
+          Add to Page<i class="icon-general-checkmark"></i>
+        </a>
+        </div>
+      {{/if}}
+      <div class="row">
+      <a class="js-select">
+        <label for="selected"><input type="checkbox" class="js-selected" {{#if selected}}checked{{/if}}><span class="custom checkbox"></span> Select</label>
+      </a>
+      </div>
+    </span>
+    <span class="status {{status}}">
+      <span class="added"><i class="icon-general-checkmark"></i> Added</span>
+    <div class="color" />
+  </div>
+</div>

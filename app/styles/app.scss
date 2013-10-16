@@ -148,6 +148,9 @@ body {
   }
   .edit-area {
     .actions {
+      .action {
+        width: 100%;
+      }
       > button {
         background-color: #eeeeee;
         color: #111111;

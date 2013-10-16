@@ -22,4 +22,15 @@ define [
 
     onShow: (opts) ->
 
+  class Views.PageScrapeItem extends Marionette.ItemView
+
+    template: "page/scrape_item"
+
+    triggers:
+      "click .remove": "remove"
+
+  class Views.PageScrapeList extends Marionette.CollectionView
+
+    itemView: Views.PageScrapeItem
+
   Views
