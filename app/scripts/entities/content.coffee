@@ -65,8 +65,8 @@ define [
         video_id = @get('original-url').match(/v=(.+)/)[1]
         json['video-embed-url'] = @get('original-url').replace(/watch\?v=/, 'embed/')
         json['video-thumbnail'] = "http://i1.ytimg.com/vi/#{video_id}/mqdefault.jpg"
-      else if @get('remote-url')
-        json['images'] = @imageFormatsJSON(@get('remote-url'))
+      else if @get('url')
+        json['images'] = @imageFormatsJSON(@get('url'))
       json
 
     imageFormatsJSON: (url) ->
