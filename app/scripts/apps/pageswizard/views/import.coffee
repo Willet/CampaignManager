@@ -11,9 +11,11 @@ define [
     serializeData: ->
       return {
         page: @model.toJSON()
+        product_sources: @product_sources.toJSON()
       }
 
     initialize: (opts) ->
+      @product_sources = opts['product_sources']
       @listenTo(@model, "sync", => @render())
 
     onRender: (opts) ->

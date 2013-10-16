@@ -4,7 +4,7 @@ define("app",
         var App, CurrentPage;
         App = window.App = new Marionette.Application();
         App.APP_ROOT = window.APP_ROOT;
-        App.API_ROOT = "http://contentgraph-test.elasticbeanstalk.com/graph";
+        App.API_ROOT = "http://contentgraph-test.elasticbeanstalk.com";
         App.addRegions({
             modal: {
                 selector: "#modal",

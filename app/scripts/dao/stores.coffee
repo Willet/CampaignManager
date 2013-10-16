@@ -7,7 +7,7 @@ define [
   API =
     getStore: (store_id, params = {}) ->
       store = new Entities.Store()
-      store.url = "#{App.API_ROOT}/store/#{store_id}"
+      store.url = "#{App.API_ROOT}/graph/store/#{store_id}"
       store.fetch
         reset: true
         data: params
@@ -15,7 +15,7 @@ define [
 
     getStores: (params = {}) ->
       stores = new Entities.StoreCollection()
-      stores.url = "#{App.API_ROOT}/store"
+      stores.url = "#{App.API_ROOT}/graph/store"
       stores.fetch
         reset: true
         data: params

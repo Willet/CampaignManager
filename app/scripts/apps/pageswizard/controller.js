@@ -92,10 +92,24 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                     _this = this;
                 page = App.routeModels.get('page');
                 store = App.routeModels.get('store');
+                product_sources = App.request('product-source:entities', store.id, page.id);
+
                 layout = new Views.PageImport({
                     model: page,
-                    store: store
+                    store: store,
+                    product_sources: product_sources
                 });
+                layout.on('product-source:create', function(data) {
+
+                  product_source = App.request('product-source:entity', store.id, page.id, data);
+                  // auto-queue the product source if it has an attached scraper job
+                  App.execute('when:fetched', product_source, function() {
+                      if (product_source.get('scraper-job-name')) {
+                        App.execute('scraper:entity:queue', store.id, product_source.get('scraper-job-name'));
+                      }
+                  });
+
+                })
                 layout.on('save', function() {
                     return $.when(page.save()).done(function() {
                         return App.navigate("/" + store_id + "/pages/" + page_id + "/layout", {
@@ -103,9 +117,11 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                         });
                     });
                 });
-                App.execute("when:fetched", page, function() {
-                    App.execute("when:fetched", store, function() {
-                        _this.region.show(layout);
+                App.execute("when:fetched", product_sources, function() {
+                    App.execute("when:fetched", page, function() {
+                        App.execute("when:fetched", store, function() {
+                            _this.region.show(layout);
+                        });
                     });
                 });
             },

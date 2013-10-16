@@ -7,7 +7,7 @@ define [
   API =
     getPage: (store_id, page_id, params = {}) ->
       page = new Entities.Page()
-      page.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}"
+      page.url = "#{App.API_ROOT}/graph/store/#{store_id}/page/#{page_id}"
       page.fetch
         reset: true
         data: params
@@ -15,7 +15,7 @@ define [
 
     getPages: (store_id, params = {}) ->
       pages = new Entities.PageCollection()
-      pages.url = "#{App.API_ROOT}/store/#{store_id}/page"
+      pages.url = "#{App.API_ROOT}/graph/store/#{store_id}/page"
       pages.fetch
         reset: true
         data: params
@@ -24,23 +24,23 @@ define [
     newPage: (store_id, params = {}) ->
       page = new Entities.Page(params)
       page.set('store-id', store_id)
-      page.url = -> "#{App.API_ROOT}/store/#{store_id}/page/#{@get('id') || ""}"
+      page.url = -> "#{App.API_ROOT}/graph/store/#{store_id}/page/#{@get('id') || ""}"
       page
 
     addContentToPage: (store_id, page_id, content_id, params = {}) ->
-      url = "#{App.API_ROOT}/store/#{store_id}/campaign/#{page_id}/content/#{content_id}"
+      url = "#{App.API_ROOT}/graph/store/#{store_id}/campaign/#{page_id}/content/#{content_id}"
       $.ajax url, type: "PUT"
 
     removeContentFromPage: (store_id, page_id, content_id, params = {}) ->
-      url = "#{App.API_ROOT}/store/#{store_id}/campaign/#{page_id}/content/#{content_id}"
+      url = "#{App.API_ROOT}/graph/store/#{store_id}/campaign/#{page_id}/content/#{content_id}"
       $.ajax url, type: "DELETE"
 
     addProductToPage: (store_id, page_id, product_id, params = {}) ->
-      url = "#{App.API_ROOT}/store/#{store_id}/campaign/#{page_id}/product/#{product_id}"
+      url = "#{App.API_ROOT}/graph/store/#{store_id}/campaign/#{page_id}/product/#{product_id}"
       $.ajax url, type: "PUT"
 
     removeProductFromPage: (store_id, page_id, product_id, params = {}) ->
-      url = "#{App.API_ROOT}/store/#{store_id}/campaign/#{page_id}/product/#{product_id}"
+      url = "#{App.API_ROOT}/graph/store/#{store_id}/campaign/#{page_id}/product/#{product_id}"
       $.ajax url, type: "DELETE"
 
   App.reqres.setHandler "page:entities",

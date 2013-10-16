@@ -7,7 +7,7 @@ define [
   API =
     getProduct: (store_id, product_id, params = {}) ->
       product = new Entities.Product()
-      product.url = "#{App.API_ROOT}/store/#{store_id}/product/live/#{product_id}"
+      product.url = "#{App.API_ROOT}/graph/store/#{store_id}/product/live/#{product_id}"
       product.fetch
         reset: true
         data: params
@@ -15,7 +15,7 @@ define [
 
     getProducts: (store_id, params = {}) ->
       products = new Entities.ProductCollection()
-      products.url = "#{App.API_ROOT}/store/#{store_id}/product/live"
+      products.url = "#{App.API_ROOT}/graph/store/#{store_id}/product/live"
       products.fetch
         reset: true
         data: params
@@ -36,6 +36,8 @@ define [
 
   App.reqres.setHandler "product:entities",
     (product_id, params) ->
+      # search is possible by passing "seach-name" to
+      # params
       API.getProducts product_id, params
 
   App.reqres.setHandler "product:entity",

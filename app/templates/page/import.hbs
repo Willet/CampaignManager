@@ -22,41 +22,30 @@
     <div class="row">
       <h4>Product Sources</h4>
       <div class="sources">
-
+        {{#each product_sources}}
         <div class="row item">
           <div class="large-6 columns details">
+            {{title}}
             <span class="title">
               <b>Title:</b>
-              {{default source.page_title "(pending)"}}
+              {{source.title}}
             </span><br />
-            <span class="link" title="{{source.url}}">
+            {{title}}
+            {{url}}
+            <span class="link">
               <b>URL:</b>
-              <a href="{{source.url}}" target="_blank">{{source.url}}</a>
+              <a href="{{url}}" target="_blank">{{url}}</a>
             </span>
+            {{.url}}
           </div>
-          <div class="large-2 columns text-center status-{{source.status}}">
-            {{default source.status 'Fetching'}}
-          </div>
-          <div class="large-4 columns text-right action">
-            <a href="#" class="remove">Remove</a>
-          </div>
-        </div>
-
-        <div class="row item">
-          <div class="large-6 columns details">
-            <span class="title">
-              <b>Search:</b>
-              {{ source.search}}
-            </span><br />
-          </div>
-          <div class="large-2 columns text-center status-{{source.status}}">
-            {{default source.status 'Fetching'}}
+          <div class="large-2 columns text-center status-{{status}}">
+            {{default status 'Fetching'}}
           </div>
           <div class="large-4 columns text-right action">
             <a href="#" class="remove">Remove</a>
           </div>
         </div>
-
+        {{/each}}
       </div>
     </div>
   </div>
