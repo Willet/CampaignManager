@@ -1,12 +1,14 @@
-define(["marionette", "../views"], function (Marionette, Views) {
+define(["marionette", "../views", "backbone.stickit"], function (Marionette, Views) {
     var _ref;
     Views.GeneratePage = Marionette.Layout.extend({
         template: "page/generate",
         triggers: {
-            "click .generate": "generate"
+            "click .js-next": "generate"
         },
         onRender: function (opts) {
-            $(".steps .layout").addClass("active")
+            // is this necessary?
+            this.stickit();
+            return this.$(".steps .generate").addClass("active")
         }
     });
 
