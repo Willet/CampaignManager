@@ -15,6 +15,16 @@ define [
         "title": @model.get("name")
       }
 
+    events:
+      "click #all-content": "allContent"
+      "click #added-to-page": "addedToPage"
+
+    addedToPage: (event) ->
+      @trigger("display:added-to-page")
+
+    allContent: (event) ->
+      @trigger("display:all-content")
+
     triggers:
       "click .js-next": "save"
 

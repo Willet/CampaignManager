@@ -27,6 +27,12 @@ define [
       contents.getNextPage()
       contents
 
+    getAddedtoPagePagedContents: (store_id, page_id, params = {}) ->
+      contents = new Entities.ContentPageableCollection()
+      contents.url = "#{App.API_ROOT}/graph/store/#{store_id}/page/#{page_id}/content"
+      contents.getNextPage()
+      contents
+
   App.reqres.setHandler "content:entities",
     (store_id, params) ->
       API.getContents store_id, params
@@ -34,6 +40,10 @@ define [
   App.reqres.setHandler "content:entities:paged",
     (store_id, params) ->
       API.getPagedContents store_id, params
+
+  App.reqres.setHandler "added-to-page:content:entities:paged",
+    (store_id, page_id, params) ->
+      API.getAddedtoPagePagedContents store_id, page_id, params
 
   App.reqres.setHandler "content:entity",
     (store_id, content_id, params) ->
