@@ -26,7 +26,7 @@ define [
       model.save()
       model
 
-  App.reqres.setHandler "product-sources:entities",
+  App.reqres.setHandler "product-source:entities",
     (store_id, page_id) ->
       API.getProductSources store_id, page_id
 

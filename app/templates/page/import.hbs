@@ -25,18 +25,18 @@
         {{#each product_sources}}
         <div class="row item">
           <div class="large-6 columns details">
-            {{title}}
+            {{#if title}}
             <span class="title">
               <b>Title:</b>
-              {{source.title}}
+              {{title}}
             </span><br />
-            {{title}}
-            {{url}}
+            {{/if}}
+            {{#if url}}
             <span class="link">
               <b>URL:</b>
               <a href="{{url}}" target="_blank">{{url}}</a>
             </span>
-            {{.url}}
+            {{/if}}
           </div>
           <div class="large-2 columns text-center status-{{status}}">
             {{default status 'Fetching'}}

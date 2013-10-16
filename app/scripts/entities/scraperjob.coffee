@@ -27,7 +27,6 @@ define [
       delete data['name']
       data
 
-
   class Entities.ProductSourceCollection extends Base.Collection
     model: Entities.ScraperJob
 

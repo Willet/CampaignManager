@@ -1,6 +1,5 @@
 define [
   "entities/base",
-  "./scraperjob"
 ], (Base) ->
 
   Entities = Entities || {}

@@ -15,7 +15,7 @@ define [
 
     queueJob: (store_id, scraperjob_name, params = {}) ->
       # TODO: production URL, how to know which environment
-      url = "http://scraper-test.elasticbeanstalk.com/queue/store/#{store_id}/#{scraperjob_name}")
+      url = "http://scraper-test.elasticbeanstalk.com/queue/store/#{store_id}/#{scraperjob_name}"
       $.ajax(
         method: "GET" # TODO: this should really be a POST ? one for create, one for status?
         url: url

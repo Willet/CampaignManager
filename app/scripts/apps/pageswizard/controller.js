@@ -92,7 +92,7 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                     _this = this;
                 page = App.routeModels.get('page');
                 store = App.routeModels.get('store');
-                product_sources = App.request('product-source:entities', store.id, page.id);
+                product_sources = App.request('product-source:entities', store_id, page_id);
 
                 layout = new Views.PageImport({
                     model: page,
@@ -126,34 +126,11 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                 });
             },
             pagesProducts: function (store_id, page_id) {
-                var layout, page, products, scrapes,
-                    _this = this;
+                var layout, page, products, _this = this;
                 page = App.routeModels.get('page');
-                scrapes = App.request("page:scrapes:entities", store_id,
-                    page_id);
-                products = new Entities.ContentCollection;
+                products = new Entities.ContentCollection();
                 layout = new Views.PageCreateProducts({
                     model: page
-                });
-                layout.on("show", function () {
-                    var scrapeList;
-                    scrapeList = new Views.PageScrapeList({
-                        collection: scrapes
-                    });
-                    layout.scrapeList.show(scrapeList);
-                    layout.on("new:scrape", function (url) {
-                        var scrape;
-                        scrape = new Entities.Scrape({
-                            store_id: store_id,
-                            page_id: page_id,
-                            url: url
-                        });
-                        scrapes.add(scrape);
-                        return scrape.save();
-                    });
-                    return scrapeList.on("itemview:remove", function (view) {
-                        return scrapes.remove(view.model);
-                    });
                 });
                 layout.on('save', function () {
                     return $.when(page.save()).done(function () {
