@@ -27,7 +27,8 @@
     "grunt-concurrent": "~0.3.0",
     "load-grunt-tasks": "~0.1.0",
     "time-grunt": "~0.1.1",
-    "grunt-contrib-handlebars": "~0.5.11"
+    "grunt-contrib-handlebars": "~0.5.11",
+    "grunt-connect-proxy": "~0.1.6"
   },
   "engines": {
     "node": ">=0.8.0"

@@ -13,8 +13,10 @@ module.exports = function (grunt) {
     require('time-grunt')(grunt);
     // load all grunt tasks
     require('load-grunt-tasks')(grunt);
+    var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
 
     grunt.loadNpmTasks('grunt-contrib-handlebars');
+    grunt.loadNpmTasks('grunt-connect-proxy');
 
     grunt.initConfig({
         // configurable paths
@@ -76,7 +78,24 @@ module.exports = function (grunt) {
                     base: [
                         '<%= yeoman.tmp %>',
                         '<%= yeoman.app %>'
-                    ]
+                    ],
+                    middleware: function(connect, options) {
+                        // https://github.com/gruntjs/grunt-contrib-connect#middleware
+                        // Serve static files:
+                        var middlewares = []
+                        if (!Array.isArray(options.base)) {
+                            options.base = [options.base];
+                        }
+
+                        options.base.forEach(function(base) {
+                            // Serve static files.
+                            middlewares.push(connect.static(base));
+                        });
+
+                        // Make directory browse-able.
+                        middlewares.push(proxySnippet);
+                        return middlewares;
+                    }
                 }
             },
             test: {
@@ -93,7 +112,15 @@ module.exports = function (grunt) {
                     open: true,
                     base: '<%= yeoman.dist %>'
                 }
-            }
+            },
+            proxies: [{
+                context: '/graph/v1',
+                host: 'localhost',
+                port: 8000,
+                https: false,
+                changeOrigin: false,
+                xforward: false
+            }]
         },
         clean: {
             dist: {
@@ -436,6 +463,7 @@ module.exports = function (grunt) {
             'copy:js',
             'copy:images',
             'autoprefixer',
+            'configureProxies',
             'connect:livereload',
             'watch'
         ]);

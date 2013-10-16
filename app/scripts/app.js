@@ -30,7 +30,8 @@ define("app",
         });
         $.ajaxSetup({
             beforeSend: function (request) {
-                return request.setRequestHeader('ApiKey', 'secretword');
+                request.setRequestHeader('ApiKey', 'secretword');
+                return request.withCredentials = true;
             }
         });
         App.on("initialize:after", function (options) {
