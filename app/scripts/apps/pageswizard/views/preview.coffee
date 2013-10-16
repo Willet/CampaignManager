@@ -4,7 +4,7 @@ define [
   "backbone.stickit"
 ], (Marionette, Views) ->
 
-  class Views.PagePreview extends Marionette.Layout
+  Views.PagePreview = Marionette.Layout.extend
 
     template: "page/view"
 

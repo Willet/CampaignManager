@@ -63,7 +63,9 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                     });
                 });
                 return App.execute("when:fetched", page, function () {
-                    return _this.region.show(layout);
+                    return App.execute("when:fetched", store, function () {
+                        return _this.region.show(layout);
+                    });
                 });
             },
             pagesLayout: function (store_id, page_id) {
@@ -72,10 +74,12 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                 layout = new Views.PageCreateLayout({
                     model: page
                 });
+                /*
                 layout.on('layout:selected', function (newLayout) {
                     page.set("layout", newLayout);
                     return layout.render();
                 });
+                */
                 layout.on('save', function () {
                     page.set('fields', layout.getFields());
                     return $.when(page.save()).done(function () {

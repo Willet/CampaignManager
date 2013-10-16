@@ -5,7 +5,7 @@ define [
   "backbone.stickit"
 ], (Marionette, Views, Backbone, Stickit) ->
 
-  class Views.PageCreateName extends Marionette.Layout
+  Views.PageCreateName = Marionette.Layout.extend
 
     template: "page/name"
 
