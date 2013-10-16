@@ -49,7 +49,7 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                 var layout, page, store,
                     _this = this;
                 page = App.routeModels.get('page');
-                store = App.routeModels.get('store')
+                store = App.routeModels.get('store');
                 layout = new Views.PageCreateName({
                     model: page,
                     store: store
