@@ -11,7 +11,7 @@ define("app",
         } else if (window.location.hostname.indexOf('-test') > 0) {  // test bucket
             App.API_ROOT = "http://secondfunnel-test.elasticbeanstalk.com/graph/v1";
         } else {  // assumed production bucket
-            App.API_ROOT = "http://secondfunnel.elasticbeanstalk.com/graph/v1";
+            App.API_ROOT = "http://secondfunnel.com/graph/v1";
         }
 
         App.addRegions({
