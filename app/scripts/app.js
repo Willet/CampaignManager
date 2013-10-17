@@ -4,7 +4,12 @@ define("app",
         var App, CurrentPage;
         App = window.App = new Marionette.Application();
         App.APP_ROOT = window.APP_ROOT;
-        App.API_ROOT = "http://contentgraph-test.elasticbeanstalk.com/graph";
+        if (window.location.hostname === '127.0.0.1' ||
+            window.location.hostname === 'localhost') {
+            App.API_ROOT = window.location.origin + "/graph/v1";
+        } else {
+            App.API_ROOT = "http://contentgraph-test.elasticbeanstalk.com/graph";
+        }
         App.addRegions({
             modal: {
                 selector: "#modal",
