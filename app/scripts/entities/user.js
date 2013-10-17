@@ -41,6 +41,9 @@ define([
                     trigger: true
                 });
             });
+
+            // allow more deferreds to be set
+            return login;
         },
 
         logout: function () {

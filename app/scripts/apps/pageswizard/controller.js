@@ -1,17 +1,19 @@
 define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', './views', 'components/views/content_list', 'entities'],
     function (PageWizard, BackboneProjections, Marionette, $, _, Views,
               ContentList, Entities) {
-        /*
-         Can we afford comments?
-         */
+        "use strict";
+
         PageWizard.Controller = Marionette.Controller.extend({
             pagesIndex: function (store_id) {
-                var all_models, pages, view,
+                var all_models, pages, store, view,
                     _this = this;
+
+                // gets a list of pages belonging to this store.
                 pages = App.request("page:entities", store_id);
+                store = App.request("store:entity", store_id);
                 view = new Views.PageIndex({
                     model: pages,
-                    'store-id': store_id
+                    'store': store
                 });
                 all_models = null;
                 view.on('change:filter', function (filter) {
@@ -41,13 +43,15 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                     });
                 });
                 App.execute("when:fetched", pages, function () {
-                    return all_models = _.clone(pages.models);
+                    App.execute("when:fetched", store, function () {
+                        return all_models = _.clone(pages.models);
+                    });
                 });
                 return this.region.show(view);
             },
             pagesName: function (store_id, page_id) {
                 var layout, page, store,
-                    _this = this;
+                    self = this;
                 page = App.routeModels.get('page');
                 store = App.routeModels.get('store');
                 layout = new Views.PageCreateName({
@@ -67,7 +71,7 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                     });
                 });
                 return App.execute("when:fetched", page, function () {
-                    return _this.region.show(layout);
+                    return self.region.show(layout);
                 });
             },
             pagesLayout: function (store_id, page_id) {
@@ -171,36 +175,55 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
 
                 return this.region.show(layout);
             },
-            pagesView: function (store_id, page_id) {
-                var page;
-                page = App.routeModels.get('page');
+            /**
+             * Shows in iframe with the page in it.
+             *
+             * @param {Object} response from regeneration
+             * @returns {*}
+             */
+            pagesView: function (data) {
                 return this.region.show(new Views.PagePreview({
-                    model: page
+                    model: data
                 }));
             },
             generateView: function (store_id, page_id) {
-                var page, layout;
+                var page, store, layout, self = this;
                 page = App.routeModels.get('page');
+                store = App.routeModels.get('store');
+
                 layout = new Views.GeneratePage({
-                    model: page
+                    model: page,
+                    store: store
                 });
                 layout.on("generate", function () {
-                    // TODO: Replace with non-static URL
-                    var base_url = 'http://secondfunnel-test.elasticbeanstalk.com/static_pages'
+                    // TODO: move static_pages API under /graph/v1. ain't nobody got time for that today
+                    var req, base_url = App.API_ROOT
+                        .replace("/graph/v1", '/static_pages')
+                        .replace(":9000", ':8000');
 
                     // TODO: handle case where page_id is 'new'
 
-                    $.ajax({
+                    req = $.ajax({
                         url: base_url + '/' + store_id + '/' + page_id + '/regenerate',
                         type: 'POST',
                         dataType: 'jsonp'
-                    }).done(function(data, status, request) {
-                        // TODO: What to do on success?
-                    }).fail(function(request, status, error) {
+                    });
+                    req.done(function (data, status, request) {
+                        // crude as it is, this is also an option
+                        // window.open('http://' + data.result.bucket_name + '/' +
+                        //     data.result.s3_path);
+                        self.pagesView(data);
+                    });
+                    req.fail(function (request, status, error) {
                         // TODO: What to do on fail?
                     });
                 });
-                return this.region.show(layout);
+
+                return App.execute("when:fetched", page, function () {
+                    return App.execute("when:fetched", store, function () {
+                        return self.region.show(layout);
+                    });
+                });
             }
         });
         return PageWizard;
