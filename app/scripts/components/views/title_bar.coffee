@@ -8,7 +8,7 @@ define [
     template: "shared/title_bar"
 
     events:
-      "click #logout": (event) -> @logout(event)
+      "click #logout": "logout"
 
     initialize: (opts) ->
       @listenTo(@model, 'sync', @render())

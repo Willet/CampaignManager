@@ -8,7 +8,8 @@ define(['app', 'exports', 'marionette', './views', 'entities', './controller', '
                 ":store_id/pages/:page_id/layout": "pagesLayout",
                 ":store_id/pages/:page_id/products": "pagesProducts",
                 ":store_id/pages/:page_id/content": "pagesContent",
-                ":store_id/pages/:page_id/view": "pagesView"
+                ":store_id/pages/:page_id/view": "pagesView",
+                ":store_id/pages/:page_id/generate": "generateView"
             },
             setupModels: function (route, args) {
                 this.setupRouteModels(route, args);

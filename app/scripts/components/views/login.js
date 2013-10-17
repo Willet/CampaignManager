@@ -3,31 +3,16 @@ define(["app", "marionette", 'jquery'], function (App, Marionette, $) {
     Login = Marionette.Layout.extend({
         template: "login",
         events: {
-            "submit form": function (event) {
-                return this.login(event);
-            }
+            "submit form": "login"
         },
         login: function (event) {
-            var password, username;
+            var password, username, user;
             event.preventDefault();
+
             username = $(event.target).find("[name='username']").val();
             password = $(event.target).find("[name='password']").val();
-            return $.ajax({
-                url: App.API_ROOT + '/user/login/',
-                contentType: "application/json",
-                dataType: 'json',
-                type: 'POST',
-                crossDomain: true,
-                data: JSON.stringify({
-                    username: username,
-                    password: password
-                }),
-                success: function () {
-                    return App.navigate('126/pages', {
-                        trigger: true
-                    });
-                }
-            });
+
+            user = App.request("user:login", username, password);
         }
     });
     return Login;
