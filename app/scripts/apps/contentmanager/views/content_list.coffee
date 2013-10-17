@@ -26,9 +26,12 @@ define [
       "click .js-select": "content:select-toggle"
       "click .overlay": "content:select-toggle"
       "click .js-approve": "content:approve"
+      "click .js-approve-for-page": "content:approve"
       "click .js-reject": "content:reject"
       "click .js-undecided": "content:undecided"
       "click .js-prioritize": "content:prioritize"
+      "click .js-prioritize-for-page": "content:prioritize"
+      "click .js-remove-from-page": "content:reject"
       "click .js-view": "content:preview"
 
     bindings:
