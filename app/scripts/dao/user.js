@@ -2,18 +2,18 @@ define([
     "app", "dao/base", "entities"
 ], function (App, Base, Entities) {
     var API = {
-        login: function(username, password) {
+        login: function (username, password) {
             var user = new Entities.User();
-            user.url = App.API_ROOT + "/user" //
+            user.url = App.API_ROOT + "/user"; //
             user.login(username, password);
-            return user
+            return user;
         },
-        logout: function() {
+        logout: function () {
 
         }
     };
 
-    App.reqres.setHandler("user:login", function(username, password) {
+    App.reqres.setHandler("user:login", function (username, password) {
         var user = API.login(username, password);
         App.user = user;
     });

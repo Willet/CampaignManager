@@ -4,7 +4,16 @@ define("app",
         var App, CurrentPage;
         App = window.App = new Marionette.Application();
         App.APP_ROOT = window.APP_ROOT;
-        App.API_ROOT = "http://contentgraph-test.elasticbeanstalk.com/graph";
+
+        if (window.location.hostname === '127.0.0.1' ||
+            window.location.hostname === 'localhost') {  // dev
+            App.API_ROOT = window.location.origin + "/graph/v1";
+        } else if (window.location.hostname.indexOf('-test') > 0) {  // test bucket
+            App.API_ROOT = "http://secondfunnel-test.elasticbeanstalk.com/graph/v1";
+        } else {  // assumed production bucket
+            App.API_ROOT = "http://secondfunnel.elasticbeanstalk.com/graph/v1";
+        }
+
         App.addRegions({
             modal: {
                 selector: "#modal",
