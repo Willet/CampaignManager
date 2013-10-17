@@ -78,18 +78,18 @@ define [
           @trigger('remove', model)
       false
 
-    addProduct: (product) =>
-      products = $('div#selection-edit .js-tagged-products').select2("data")
+    addProduct: (product) ->
+      products = @$el.parent().select2("data")
       products.push(product.toJSON())
-      $('div#selection-edit .js-tagged-products').select2("data", products)
+      @$el.parent().select2("data", products)
 
-    removeProduct: (product_id) =>
-      products = @$('div#selection-edit .js-tagged-products').select2("data")
+    removeProduct: (product_id) ->
+      products = @$el.parent().select2("data")
       for product, i in products
         if product['id'] is product_id
           delete product[i]
           break
-      @$('div#selection-edit .js-tagged-products').select2("data", products)
+      @$el.parent().select2("data", products)
 
     onClose: ->
       @$el.parent().select2("destroy")
