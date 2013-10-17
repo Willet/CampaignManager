@@ -1,10 +1,11 @@
 define([
     "app", "entities/base", "entities/products", "underscore"
 ], function (App, Base, Entities, _) {
+    "use strict";
     Entities = Entities || {};
 
     Entities.User = Base.Model.extend({
-        login: function(username, password) {
+        login: function (username, password) {
             var that = this,
                 login;
 
@@ -21,19 +22,19 @@ define([
                 })
             });
 
-            login.done(function(response) {
+            login.done(function (response) {
                 var store, navigateUrl;
 
                 that.set(response);
 
-                store = _(that.get('stores')).first();
+                store = _.first(that.get('stores'));
 
                 // Is this where this belongs?
                 // Why do we need to do this? Why can't we just use App?
                 // Why is App not what I expect it to be?
                 window.App.user = that;
                 // Should we create a store instance?
-                window.App.store = store
+                window.App.store = store;
 
                 navigateUrl = window.App.store.id + '/pages';
                 App.navigate(navigateUrl, {
@@ -42,15 +43,15 @@ define([
             });
         },
 
-        logout: function() {
+        logout: function () {
             $.ajax({
                 url: this.url + '/logout/',
                 contentType: "application/json",
                 dataType: 'json',
                 type: 'POST'
-            })
+            });
         }
     });
 
-    return Entities
+    return Entities;
 });
