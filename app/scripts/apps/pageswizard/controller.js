@@ -177,14 +177,18 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
             },
             /**
              * Shows in iframe with the page in it.
-             *
-             * @param {Object} response from regeneration
-             * @returns {*}
              */
-            pagesView: function (data) {
-                return this.region.show(new Views.PagePreview({
-                    model: data
-                }));
+            pagesView: function (store_id, page_id, data) {
+                var view = new Views.PagePreview({
+                    model: new Entities.Model(data)
+                });
+                view.on('generate', function () {
+                    return App.navigate(
+                        "/" + store_id + "/pages/" + page_id + "/generate",
+                        {trigger: true}
+                    );
+                });
+                return this.region.show(view);
             },
             generateView: function (store_id, page_id) {
                 var page, store, layout, self = this;
@@ -212,7 +216,7 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                         // crude as it is, this is also an option
                         // window.open('http://' + data.result.bucket_name + '/' +
                         //     data.result.s3_path);
-                        self.pagesView(data);
+                        self.pagesView(store_id, page_id, data);
                     });
                     req.fail(function (request, status, error) {
                         // TODO: What to do on fail?
