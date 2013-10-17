@@ -21,7 +21,11 @@ define(["app", "marionette", 'jquery'], function (App, Marionette, $) {
             });
         },
         'onRender': function () {
+            var self = this;
             this.$(this.loginFail.el).hide();
+            setTimeout(function () {  // whenever the DOM shows this element
+                self.$('#login-email').focus();
+            }, 100);
         }
     });
     return Login;
