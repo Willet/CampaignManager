@@ -43,18 +43,13 @@ define [
       @store = options['store']
 
     onShow: ->
-      # Quick and dirty hack; Nick doesn't want to ship late.
-      #store_id = @model.get("store-id")
-      # TODO: Figure out why the first tagged input is always used, and why it is always missing a model
-      store_id = '38';
-
       @$el.parent().select2(
         multiple: true
         allowClear: true
         placeholder: "Search for a product"
         tokenSeparators: [',']
         ajax:
-          url: "#{App.API_ROOT}/store/#{store_id}/product"
+          url: "#{App.API_ROOT}/store/#{@model.get("store-id")}/product"
           dataType: 'json'
           cache: true
           data: (term, page) ->

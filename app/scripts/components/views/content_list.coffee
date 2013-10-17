@@ -7,7 +7,7 @@ define [
 
   ContentList.createView = (collection, actions = {}) ->
 
-    layout = new ContentViews.ContentIndexLayout()
+    layout = new ContentViews.ContentIndexLayout initial_state: 'list'
     selectedCollection = new BackboneProjections.Filtered(collection, filter: ((m) -> m.get('selected') is true))
 
     contentList = new ContentViews.ContentList { collection: collection, actions: actions }
@@ -84,7 +84,7 @@ define [
     layout.on "show", ->
       layout.list.show contentList
       layout.listControls.show contentListControls
-      layout.multiedit.show multiEditView
+      #layout.multiedit.show multiEditView
 
     return layout
 
