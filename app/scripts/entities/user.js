@@ -5,6 +5,9 @@ define([
     Entities = Entities || {};
 
     Entities.User = Base.Model.extend({
+        /**
+         * @returns {Promise}
+         */
         login: function (username, password) {
             var that = this,
                 login;
@@ -43,7 +46,7 @@ define([
             });
 
             // allow more deferreds to be set
-            return login;
+            return login.promise();
         },
 
         logout: function () {
