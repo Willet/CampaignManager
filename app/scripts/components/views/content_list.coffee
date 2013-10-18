@@ -32,12 +32,21 @@ define [
       (view, args) =>
           page = App.routeModels.get('page')
 
-          args.model.approve()
-          App.request("tileconfig:approve",
-            page.get('id'),
-            template: args.model.get('type'),
-            id: args.model.get('id')
-          )
+          if actions['page']
+            App.request("add_content:page:entity",
+              {
+                page_id: page.id
+                store_id: page.get('store-id')
+                content_id: args.model.get('id')
+              }
+            )
+            App.request("tileconfig:approve",
+              page.get('id'),
+              template: args.model.get('type'),
+              id: args.model.get('id')
+            )
+          else
+            args.model.approve()
 
           args.view.render()
 
@@ -45,17 +54,27 @@ define [
       (view, args)  =>
           page = App.routeModels.get('page')
 
-          args.model.reject()
-          App.request("tileconfig:reject",
-            page.get('id'),
-            template: args.model.get('type'),
-            id: args.model.get('id')
-          )
+          if actions['page']
+            App.request("remove_content:page:entity",
+              {
+                page_id: page.id
+                store_id: page.get('store-id')
+                content_id: args.model.get('id')
+              }
+            )
+            App.request("tileconfig:reject",
+              page.get('id'),
+              template: args.model.get('type'),
+              id: args.model.get('id')
+            )
+          else
+            args.model.reject()
           args.view.render()
 
     contentList.on "itemview:content:undecided",
       (view, args)  =>
-          args.model.undecided()
+          if !actions['page']
+            args.model.undecided()
           args.view.render()
 
     contentList.on "itemview:edit:tagged-products:add",

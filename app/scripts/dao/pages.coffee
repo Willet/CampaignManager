@@ -28,19 +28,19 @@ define [
       page
 
     addContentToPage: (store_id, page_id, content_id, params = {}) ->
-      url = "#{App.API_ROOT}/store/#{store_id}/campaign/#{page_id}/content/#{content_id}"
+      url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/#{content_id}"
       $.ajax url, type: "PUT"
 
     removeContentFromPage: (store_id, page_id, content_id, params = {}) ->
-      url = "#{App.API_ROOT}/store/#{store_id}/campaign/#{page_id}/content/#{content_id}"
+      url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/#{content_id}"
       $.ajax url, type: "DELETE"
 
     addProductToPage: (store_id, page_id, product_id, params = {}) ->
-      url = "#{App.API_ROOT}/store/#{store_id}/campaign/#{page_id}/product/#{product_id}"
+      url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product/#{product_id}"
       $.ajax url, type: "PUT"
 
     removeProductFromPage: (store_id, page_id, product_id, params = {}) ->
-      url = "#{App.API_ROOT}/store/#{store_id}/campaign/#{page_id}/product/#{product_id}"
+      url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product/#{product_id}"
       $.ajax url, type: "DELETE"
 
   App.reqres.setHandler "page:entities",

@@ -155,20 +155,27 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                 return this.region.show(layout);
             },
             pagesContent: function (store_id, page_id) {
-                var contents, layout, page,
+                var contents, content_list, layout, page,
                     _this = this;
                 page = App.routeModels.get('page');
-                contents = App.request("content:entities:paged", store_id,
-                    page_id);
+                contents = App.request("content:entities:paged", store_id, page_id);
+                content_list = ContentList.createView(contents, { page: true });
                 layout = new Views.PageCreateContent({
                     model: page
                 });
                 contents.getNextPage();
+                layout.on('display:needs-review', function() {
+                    contents = App.request("content:entities:paged", store_id, page_id);
+                    content_list = ContentList.createView(contents, { page: true });
+                    layout.contentList.show(content_list);
+                });
+                layout.on('display:added-to-page', function() {
+                    contents = App.request("added-to-page:content:entities:paged", store_id, page_id);
+                    content_list = ContentList.createView(contents, { page: true });
+                    layout.contentList.show(content_list);
+                });
                 layout.on("render", function () {
-                    return layout.contentList.show(ContentList.createView(contents,
-                        {
-                            page: true
-                        }));
+                    layout.contentList.show(content_list);
                 });
 
                 layout.on('save', function () {

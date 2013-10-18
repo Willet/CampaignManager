@@ -1,8 +1,9 @@
 define [
   "app",
   "entities/base",
-  "entities/products"
-], (App, Base, Entities) ->
+  "entities/products",
+  "underscore"
+], (App, Base, Entities, _) ->
 
   Entities = Entities || {}
 
@@ -31,14 +32,27 @@ define [
         approved: false
       )
 
+    # TODO: should be a better way
+    # since this belongs to collections from different paths
+    # e.g. from inside the page, need to override to always use this path
+    # this allows .save() to work.
+    url: ->
+      "#{App.API_ROOT}/store/#{@get('store-id')}/content/#{@get('id')}"
+
     parse: (data) ->
-      attrs = data
+      attrs = _.clone(data)
       attrs['active'] = if data['active'] == "true" then true else false
       attrs['approved'] = if data['approved'] == "true" then true else false
       attrs['tagged-products'] = []
       _.each data['tagged-products'], (product_id) ->
-        attrs['tagged-products'].push(App.request("product:entity", attrs['store-id'], product_id))
+        product = App.request("product:entity", attrs['store-id'], product_id)
+        attrs['tagged-products'].push(product)
       attrs['tagged-products'] = new Entities.ProductCollection(attrs['tagged-products'])
+
+      # trigger an event when related models are fetched
+      xhrs = _.map(attrs['tagged-products'].models, ((product) -> product._fetch))
+      $.when.apply($, xhrs).done(=> @trigger('related-fetched'))
+
       attrs
 
     toJSON: ->
@@ -184,8 +198,8 @@ define [
           xhr
         ).done(=>
           @add(collection.models, at: @length)
-          @params['start-id'] = xhr.responseJSON['last-id']
-          @finished = true unless @params['start-id']
+          @params['offset'] = xhr.responseJSON['meta']?['cursors']?['next']
+          @finished = true unless @params['offset']
           @in_progress = false
         )
       xhr

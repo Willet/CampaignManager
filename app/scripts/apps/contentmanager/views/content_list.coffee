@@ -69,6 +69,7 @@ define [
 
     initialize: (options) ->
       @actions = { actions: options.actions }
+      @model.on('related-fetched', => @render())
 
     serializeData: -> _.extend(@model.viewJSON(), @actions)
 
