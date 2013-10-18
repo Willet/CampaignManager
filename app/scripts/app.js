@@ -39,9 +39,19 @@ define("app",
             });
         });
         $.ajaxSetup({
+            // there are records online that indicate this works, but...
             beforeSend: function (request) {
                 request.setRequestHeader('ApiKey', 'secretword');
-                return request.withCredentials = true;
+                request.withCredentials = true;
+                request.xhrFields = {
+                    withCredentials: true
+                };
+                return request;
+            },
+            // ... it took these to work, at least for chrome.
+            withCredentials: true,
+            xhrFields: {
+                withCredentials: true
             }
         });
         App.on("initialize:after", function (options) {
@@ -60,7 +70,8 @@ define("app",
             });
         });
         App.redirectToLogin = function () {
-            return window.location = "" + App.APP_ROOT + "?r=" + window.location.hash;
+            // if the URL already contains ?r=, this will not reload the page.
+            window.location.replace(App.APP_ROOT + "?r=" + window.location.hash);
         };
         App.setTitle = function (title) {
             return App.pageInfo.set("title", title);

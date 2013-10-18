@@ -205,8 +205,10 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                         .replace("/graph/v1", '/static_pages')
                         .replace(":9000", ':8000');
 
-                    // TODO: handle case where page_id is 'new'
+                    // TODO: less fugly handler
+                    layout.$('.generate.button').text("Generating...");
 
+                    // TODO: handle case where page_id is 'new'
                     req = $.ajax({
                         url: base_url + '/' + store_id + '/' + page_id + '/regenerate',
                         type: 'POST',
