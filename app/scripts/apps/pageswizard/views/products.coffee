@@ -150,6 +150,14 @@ define [
           product_id: @model.get('id')
         }
       )
+
+      page = App.routeModels.get('page')
+      App.request("tileconfig:approve",
+        page.get('id'),
+        template: 'product',
+        id: @model.get('id')
+      )
+
       event.stopPropagation()
       @added = true
       @render()
@@ -161,6 +169,12 @@ define [
           page_id: App.routeModels.get('page').get('id')
           product_id: @model.get('id')
         }
+      )
+      page = App.routeModels.get('page')
+      App.request("tileconfig:approve",
+        page.get('id'),
+        template: 'product',
+        id: @model.get('id')
       )
       event.stopPropagation()
       @added = false
