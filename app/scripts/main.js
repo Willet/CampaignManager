@@ -98,6 +98,7 @@ require([
     "dao/stores",
     "dao/content",
     "dao/products",
+    "dao/tile-config",
     "dao/user",
     // sub apps to load, they attach to the root application
     "apps/main/app",
