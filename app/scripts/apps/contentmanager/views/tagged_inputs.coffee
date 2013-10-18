@@ -28,7 +28,7 @@ define [
         formatResult: (page) ->
           "<span>#{page['name']}</span>"
         formatSelection: (page) ->
-          "<span>#{page['name']} (id=#{page['id']})</span>"
+          "<span>#{page['name']}</span>"
       )
       false
 
@@ -63,7 +63,7 @@ define [
         formatResult: (product) ->
           "<span>#{product['name']}</span>"
         formatSelection: (product) ->
-          "<span>#{product['name']} #{product['id']}</span>"
+          "<span>#{product['name']}</span>"
       )
       if @model.get("tagged-products")
         @$el.parent().select2('data', @model.get("tagged-products").toJSON())

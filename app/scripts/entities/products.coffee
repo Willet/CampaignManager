@@ -8,8 +8,8 @@ define [
 
     viewJSON: ->
       json = @toJSON()
-      json['content-ids'] = @get('content-ids')?.viewJSON()
-      json['default-image-id'] = @get('default-image-id')?.viewJSON()
+      json['content-ids'] = @get('content-ids')?.viewJSON?()
+      json['default-image-id'] = @get('default-image-id')?.viewJSON?()
       json
 
   class Entities.ProductCollection extends Base.Collection
@@ -24,10 +24,12 @@ define [
       _.each(opts, (m) => m.set("store-id", @store_id))
       "#{require("app").apiRoot}/stores/#{@store_id}/products"
 
-    parse: (data) ->
-      data['products']
-
     viewJSON: ->
       @collect((m) -> m.viewJSON())
+
+  class Entities.ProductPageableCollection extends Base.PageableCollection
+
+    model: Entities.Product
+    collectionType: Entities.ProductCollection
 
   Entities
