@@ -2,8 +2,9 @@ define [
   'exports'
   'backbone.projections',
   'underscore',
-  'apps/contentmanager/views'
-], (ContentList, BackboneProjections, _, ContentViews) ->
+  'apps/contentmanager/views',
+  'app'
+], (ContentList, BackboneProjections, _, ContentViews, App) ->
 
   ContentList.createView = (collection, actions = {}) ->
 
@@ -29,12 +30,27 @@ define [
 
     contentList.on "itemview:content:approve",
       (view, args) =>
+          page = App.routeModels.get('page')
+
           args.model.approve()
+          App.request("tileconfig:approve",
+            page.get('id'),
+            template: args.model.get('type'),
+            id: args.model.get('id')
+          )
+
           args.view.render()
 
     contentList.on "itemview:content:reject",
       (view, args)  =>
+          page = App.routeModels.get('page')
+
           args.model.reject()
+          App.request("tileconfig:reject",
+            page.get('id'),
+            template: args.model.get('type'),
+            id: args.model.get('id')
+          )
           args.view.render()
 
     contentList.on "itemview:content:undecided",
