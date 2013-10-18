@@ -47,6 +47,7 @@ define [
 
     updateImgPreview: (event) ->
       #Get input element
+      self = @
       elem = event.currentTarget
       unless /.(jpg|jpeg|png)/.test($(elem).val())
         console.error "Invalid file selected (not an image)."
@@ -77,7 +78,7 @@ define [
             processData: false,
             success: (data) ->
               targetField.url = data.url
-              @$(elem).attr('value', data.url)
+              self.$(elem).attr('value', data.url)
         )
 
         @$(elem).next().attr('src', event.target.result)
