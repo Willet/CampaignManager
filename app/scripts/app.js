@@ -7,7 +7,8 @@ define("app",
 
         if (window.location.hostname === '127.0.0.1' ||
             window.location.hostname === 'localhost') {  // dev
-            App.API_ROOT = window.location.origin + "/graph/v1";
+            // App.API_ROOT = window.location.origin + "/graph/v1";
+            App.API_ROOT = "http://secondfunnel-test.elasticbeanstalk.com/graph/v1";
         } else if (window.location.hostname.indexOf('-test') > 0) {  // test bucket
             App.API_ROOT = "http://secondfunnel-test.elasticbeanstalk.com/graph/v1";
         } else {  // assumed production bucket
@@ -71,7 +72,8 @@ define("app",
         });
         App.redirectToLogin = function () {
             // if the URL already contains ?r=, this will not reload the page.
-            window.location.replace(App.APP_ROOT + "?r=" + window.location.hash);
+            //window.location.replace(App.APP_ROOT + "?r=" + window.location.hash);
+            App.navigate("");
         };
         App.setTitle = function (title) {
             return App.pageInfo.set("title", title);
