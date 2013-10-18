@@ -63,21 +63,21 @@ define [
         #Updates related json object and refreshes view
         filename = elem.files[0].name
 
-        url = 'http://contentgraph-test.elasticbeanstalk.com/graph/store/38/page/97/files/' + filename
-        targetField.url = url
-        @$(elem).attr('value', url)
-
         data = new FormData()
         data.append('file', elem.files[0])
 
         # Post file
+        # TODO: Can't use proxy; how to avoid hardcoding URL?
         $.ajax(
-            url: url
+            url: 'http://contentgraph-test.elasticbeanstalk.com/graph/store/38/page/97/files/' + filename
             type: 'POST'
             data: data
             cache: false
             contentType: false
-            processData: false
+            processData: false,
+            success: (data) ->
+              targetField.url = data.url
+              @$(elem).attr('value', data.url)
         )
 
         @$(elem).next().attr('src', event.target.result)
