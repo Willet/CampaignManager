@@ -85,17 +85,28 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                     return layout.render();
                 });
                 layout.on('save', function () {
-                    page.set('fields', layout.getFields());
-                    return $.when(page.save()).done(function (data) {
-                        // TODO: Should we only do this when page_id === 'new'?
-                        var store = data['store-id'],
-                            page = data['id'];
-
-                        return App.navigate("/" + store + "/pages/" + page + "/products",
-                            {
-                                trigger: true
-                            });
+                    _.each(layout.getFields(), function (v, k) {
+                        // content graph 500s on you if you PATCH with an
+                        // empty string (something about dynamos).
+                        // setting it to null removes the value from the DB.
+                        if (v === '') {
+                            v = null;
+                        }
+                        page.set(k, v);
                     });
+                    return $.when(page.save())
+                        .done(function (data) {
+                            // TODO: Should we only do this when page_id === 'new'?
+                            var store = data['store-id'],
+                                page = data['id'];
+
+                            return App.navigate("/" + store + "/pages/" + page + "/products",
+                                {
+                                    trigger: true
+                                });
+                        }).fail(function (jqXHR, why) {
+                            console.log(arguments);
+                        });
                 });
                 return this.region.show(layout);
             },
@@ -205,8 +216,10 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                         .replace("/graph/v1", '/static_pages')
                         .replace(":9000", ':8000');
 
-                    // TODO: handle case where page_id is 'new'
+                    // TODO: less fugly handler
+                    layout.$('.generate.button').text("Generating...");
 
+                    // TODO: handle case where page_id is 'new'
                     req = $.ajax({
                         url: base_url + '/' + store_id + '/' + page_id + '/regenerate',
                         type: 'POST',

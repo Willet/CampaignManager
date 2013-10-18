@@ -25,8 +25,7 @@ define [
             { var: "emailShare", label: "Email Share Copy", type: "text" }
           ]
       _.each jsonFields, (field) =>
-        if model_value = @model.get("fields")?[field['var']]
-          field['value'] = model_value
+        field.value = @model.get(field.var)
       jsonFields
 
     triggers:
@@ -39,9 +38,9 @@ define [
     getFields: ->
       results = {}
       _.each $("#layout-field-form textarea"), (m) ->
-        results[$(m).attr("for")] = $(m).val() if $(m).attr("for")
+        results[$(m).attr("name")] = $(m).val() if $(m).attr("name")
       _.each $("#layout-field-form input[type!=file]"), (m) ->
-        results[$(m).attr("for")] = $(m).val() if $(m).attr("for")
+        results[$(m).attr("name")] = $(m).val() if $(m).attr("name")
       results
 
     updateImgPreview: (event) ->
@@ -50,7 +49,7 @@ define [
       unless /.(jpg|jpeg|png)/.test($(elem).val())
         console.error "Invalid file selected (not an image)."
 
-      #Scans through json field objects and, using the "for"
+      #Scans through json field objects and, using the "name"
       #attribute as an indentifier, finds the related object
       targetField = null
       for field in @getLayoutJSON()
