@@ -73,7 +73,7 @@ define("app",
         App.redirectToLogin = function () {
             // if the URL already contains ?r=, this will not reload the page.
             //window.location.replace(App.APP_ROOT + "?r=" + window.location.hash);
-            App.navigate("");
+            App.navigate("", { trigger: true });
         };
         App.setTitle = function (title) {
             return App.pageInfo.set("title", title);
