@@ -2,12 +2,13 @@ define [
   'exports'
   'backbone.projections',
   'underscore',
-  'apps/contentmanager/views'
-], (ContentList, BackboneProjections, _, ContentViews) ->
+  'apps/contentmanager/views',
+  'app'
+], (ContentList, BackboneProjections, _, ContentViews, App) ->
 
   ContentList.createView = (collection, actions = {}) ->
 
-    layout = new ContentViews.ContentIndexLayout()
+    layout = new ContentViews.ContentIndexLayout initial_state: 'list'
     selectedCollection = new BackboneProjections.Filtered(collection, filter: ((m) -> m.get('selected') is true))
 
     contentList = new ContentViews.ContentList { collection: collection, actions: actions }
@@ -28,13 +29,34 @@ define [
           layout.multiedit.$el.css("display", "none")
 
     contentList.on "itemview:content:approve",
-      (view, args) => args.model.approve()
+      (view, args) =>
+          page = App.routeModels.get('page')
+
+          args.model.approve()
+          App.request("tileconfig:approve",
+            page.get('id'),
+            template: args.model.get('type'),
+            id: args.model.get('id')
+          )
+
+          args.view.render()
 
     contentList.on "itemview:content:reject",
-      (view, args)  => args.model.reject()
+      (view, args)  =>
+          page = App.routeModels.get('page')
+
+          args.model.reject()
+          App.request("tileconfig:reject",
+            page.get('id'),
+            template: args.model.get('type'),
+            id: args.model.get('id')
+          )
+          args.view.render()
 
     contentList.on "itemview:content:undecided",
-      (view, args)  => args.model.undecided()
+      (view, args)  =>
+          args.model.undecided()
+          args.view.render()
 
     contentList.on "itemview:edit:tagged-products:add",
       (view, editArea, tagger, product) ->
@@ -84,7 +106,7 @@ define [
     layout.on "show", ->
       layout.list.show contentList
       layout.listControls.show contentListControls
-      layout.multiedit.show multiEditView
+      #layout.multiedit.show multiEditView
 
     return layout
 

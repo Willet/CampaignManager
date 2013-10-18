@@ -39,7 +39,8 @@ define([
                 // Should we create a store instance?
                 window.App.store = store;
 
-                navigateUrl = window.App.store.id + '/pages';
+                // Default to store 38 (Gap) for demo ...
+                navigateUrl = '38/pages';
                 App.navigate(navigateUrl, {
                     trigger: true
                 });
