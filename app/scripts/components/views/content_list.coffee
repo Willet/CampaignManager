@@ -28,13 +28,19 @@ define [
           layout.multiedit.$el.css("display", "none")
 
     contentList.on "itemview:content:approve",
-      (view, args) => args.model.approve()
+      (view, args) =>
+          args.model.approve()
+          args.view.render()
 
     contentList.on "itemview:content:reject",
-      (view, args)  => args.model.reject()
+      (view, args)  =>
+          args.model.reject()
+          args.view.render()
 
     contentList.on "itemview:content:undecided",
-      (view, args)  => args.model.undecided()
+      (view, args)  =>
+          args.model.undecided()
+          args.view.render()
 
     contentList.on "itemview:edit:tagged-products:add",
       (view, editArea, tagger, product) ->

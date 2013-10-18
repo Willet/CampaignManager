@@ -28,6 +28,7 @@ define [
       "click .js-approve": "content:approve"
       "click .js-approve-for-page": "content:approve"
       "click .js-reject": "content:reject"
+      "click .js-reject-for-page": "content:reject"
       "click .js-undecided": "content:undecided"
       "click .js-prioritize": "content:prioritize"
       "click .js-prioritize-for-page": "content:prioritize"
@@ -76,9 +77,9 @@ define [
       false
 
     onRender: ->
-      @stickit()
       @editArea.show(new Views.ContentEditArea(model: @model, actions: @actions))
       @relayEvents(@editArea.currentView, 'edit')
+      @stickit()
 
     onShow: ->
 
