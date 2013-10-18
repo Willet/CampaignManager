@@ -41,6 +41,10 @@ module.exports = function (grunt) {
                 files: ['test/spec/**/*.coffee'],
                 tasks: ['coffee:test']
             },
+            js: {
+                files: ['<%= yeoman.app %>/scripts/**/*.js'],
+                tasks: ['copy:js']
+            },
             compass: {
                 files: ['<%= yeoman.app %>/styles/**/*.{scss,sass}'],
                 tasks: ['compass:server', 'autoprefixer']

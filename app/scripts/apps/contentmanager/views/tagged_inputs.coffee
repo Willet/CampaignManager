@@ -54,7 +54,7 @@ define [
           cache: true
           data: (term, page) ->
             return {
-              "name-prefix": term
+              "search-name": term
             }
           results: (data, page) ->
             return {

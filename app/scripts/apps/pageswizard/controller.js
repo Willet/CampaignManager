@@ -10,7 +10,7 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
 
                 // gets a list of pages belonging to this store.
                 pages = App.request("page:entities", store_id);
-                store = App.request("store:entity", store_id);
+                store = App.request("store:entity", {store_id: store_id});
                 view = new Views.PageIndex({
                     model: pages,
                     'store': store
