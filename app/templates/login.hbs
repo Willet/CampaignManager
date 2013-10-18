@@ -1,13 +1,19 @@
 <div class="container">
-  <div id="login">
-    <div class="header logo">
-      <img src="/images/logo.png" />
+    <div id="login">
+        <div class="header logo">
+            <img src="/images/logo.png"/>
+        </div>
+        <h2 class="title">Login</h2>
+        <p class="login-fail alert-box secondary">
+            We could not log you in. <br>
+            Please check your username / password and try again.
+        </p>
+        <form action="/login" class="login" method="post">
+            <input type="text" id="login-email" name="username"
+                   placeholder="Username or Email">
+            <input type="password" id="login-password" name="password"
+                   placeholder="Password">
+            <input type="submit" class="small button right" value="Log In"/>
+        </form>
     </div>
-    <h2 class="title">Login</h2>
-    <form action="/login" class="login" method="post">
-      <input type="text" id="login-email" name="username" placeholder="Username or Email" >
-      <input type="password" id="login-password" name="password" placeholder="Password">
-      <input type="submit" class="small button right" value="Log In"/>
-    </form>
-  </div>
 </div>
