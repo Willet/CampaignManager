@@ -60,7 +60,24 @@ define [
       fileReader = new FileReader()
       fileReader.onload = (event) =>
         #Updates related json object and refreshes view
-        targetField.url = event.target.result
+
+        # targetField does not exist usually
+        #targetField.url = event.target.result
+        filename = elem.files[0].name
+
+        data = new FormData()
+        data.append('file', elem.files[0])
+
+        # Post file
+        $.ajax(
+            url: 'http://contentgraph-test.elasticbeanstalk.com/graph/store/38/page/97/files/' + filename
+            type: 'POST'
+            data: data
+            cache: false
+            contentType: false
+            processData: false
+        )
+
         @$(elem).next().attr('src', event.target.result)
 
       fileReader.readAsDataURL(elem.files[0])
