@@ -151,15 +151,15 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                     //       the products is of type 'added'
                     products.add(new_product);
                 });
-                product_list = new Views.PageProductList({collection: products});
+                product_list = new Views.PageProductList({collection: products, added: false});
                 layout.on('display:needs-review', function() {
                     products = App.request("product:entities:paged", store_id, page_id);
-                    product_list = new Views.PageProductList({collection: products});
+                    product_list = new Views.PageProductList({collection: products, added: false});
                     layout.productList.show(product_list);
                 });
                 layout.on('display:added-to-page', function() {
                     products = App.request("added-to-page:product:entities:paged", store_id, page_id);
-                    product_list = new Views.PageProductList({collection: products});
+                    product_list = new Views.PageProductList({collection: products, added: true});
                     layout.productList.show(product_list);
                 });
                 layout.on('render', function () {

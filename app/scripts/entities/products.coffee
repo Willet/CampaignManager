@@ -8,8 +8,8 @@ define [
 
     viewJSON: ->
       json = @toJSON()
-      json['content-ids'] = @get('content-ids')?.viewJSON()
-      json['default-image-id'] = @get('default-image-id')?.viewJSON()
+      json['content-ids'] = @get('content-ids')?.viewJSON?()
+      json['default-image-id'] = @get('default-image-id')?.viewJSON?()
       json
 
   class Entities.ProductCollection extends Base.Collection

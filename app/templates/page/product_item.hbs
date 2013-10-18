@@ -6,16 +6,15 @@
       {{else}}
         <div class="image" style="background-image:url('http://placehold.it/180x180&text=No Thumbnail')" />
       {{/if}}
-      {{/if}}
     </div>
     <div class="row">
       {{name}}
     </div>
   </div>
   <div class="actions">
-    {{#if approved}}
-      <a class="js-reject-for-page" href="/{{store-id}}/content/{{id}}">
-        Reject for Page <i class="icon-general-error"></i>
+    {{#if added}}
+      <a class="js-remove-from-page" href="/{{store-id}}/product/{{id}}">
+        Remove from Page<i class="icon-general-error"></i>
       </a>
       <!--
       <a class="js-prioritize-for-page" href="/{{store-id}}/content/{{id}}/prioritize">
@@ -23,8 +22,8 @@
       </a>
       -->
     {{else}}
-      <a class="js-approve-for-page" href="/{{store-id}}/content/{{id}}">
-        Approve for Page <i class="icon-general-checkmark"></i>
+      <a class="js-add-to-page" href="/{{store-id}}/product/{{id}}">
+        Add to Page <i class="icon-general-checkmark"></i>
       </a>
       <!--
       <a class="js-prioritize-for-page" href="/{{store-id}}/content/{{id}}/prioritize">

@@ -42,6 +42,8 @@ define [
       else
         @$('#url').addClass("error")
         # figure out what to do
+      event.stopPropagation()
+      false
 
     serializeData: ->
       return {
@@ -117,12 +119,52 @@ define [
     template: false
 
     initialize: (options) ->
+      @itemViewOptions = { added: options['added'] }
 
     getItemView: (item) ->
       Views.PageProductGridItem
 
   class Views.PageProductGridItem extends Marionette.Layout
 
+    # TODO: implement a sane version of "added"
+    #       how do we figure out if a product is in a page...
     template: "page/product_item"
+
+    serializeData: ->
+      console.log @model
+      result = @model.viewJSON()
+      result['added'] = @added
+      result
+
+    events:
+      "click .js-add-to-page": "addToPage"
+      "click .js-remove-from-page": "removeFromPage"
+
+    initialize: (options) ->
+      @added = options['added']
+
+    addToPage: (event) ->
+      App.request("add_product:page:entity", {
+          store_id: App.routeModels.get('store').get('id')
+          page_id: App.routeModels.get('page').get('id')
+          product_id: @model.get('id')
+        }
+      )
+      event.stopPropagation()
+      @added = true
+      @render()
+      false
+
+    removeFromPage: (event) ->
+      App.request("remove_product:page:entity", {
+          store_id: App.routeModels.get('store').get('id')
+          page_id: App.routeModels.get('page').get('id')
+          product_id: @model.get('id')
+        }
+      )
+      event.stopPropagation()
+      @added = false
+      @render()
+      false
 
   Views
