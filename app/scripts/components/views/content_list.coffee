@@ -45,6 +45,7 @@ define [
               template: args.model.get('type'),
               id: args.model.get('id')
             )
+            args.model.approve() # TODO: remove fake approve
           else
             args.model.approve()
 
@@ -67,6 +68,7 @@ define [
               template: args.model.get('type'),
               id: args.model.get('id')
             )
+            args.model.reject() # TODO: remove fake reject
           else
             args.model.reject()
           args.view.render()
