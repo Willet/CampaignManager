@@ -28,14 +28,25 @@ define(['app', 'exports', 'marionette', './views', 'entities', './controller', '
             },
             setupRouteModels: function (route, args) {
                 var entityRequestName, i, match, matches, model, name, params, _i, _len;
+                // params = e.g. {store_id: "38", page_id: "97"}
                 params = this.parameterMap(route, args);
+
+                // find what the route captures
                 matches = route.match(/:[a-zA-Z_-]+/g);
                 App.routeModels = App.routeModels || new Backbone.Model();
+
                 for (i = _i = 0, _len = matches.length; _i < _len; i = ++_i) {
-                    match = matches[i];
+                    match = matches[i];  // e.g. ':store_id'
+
+                    // e.g. turn capture into request name, e.g. 'store:entity'
                     entityRequestName = this.paramNameMapping(match);
+
+                    // makes a request for the object, e.g. Store
                     model = App.request(entityRequestName, params);
+
+                    // name = e.g. 'store'
                     name = this.routeModelNameMapping(match);
+
                     App.routeModels.set(name, model);
                 }
                 return App.routeModels;
@@ -50,6 +61,11 @@ define(['app', 'exports', 'marionette', './views', 'entities', './controller', '
                     return param_name;
                 }
             },
+            /**
+             * Turns a "capture group" into its entity request name.
+             * @param {string} param_name
+             * @returns {*}
+             */
             paramNameMapping: function (param_name) {
                 switch (param_name) {
                 case ":store_id":
