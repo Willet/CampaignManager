@@ -42,7 +42,7 @@ define([
 
             config = this.getFromConfig(config);
 
-            obj[config.field] = [config.id];
+            obj[config.field] = config.id;
 
             tileConfigCollection = new Entities.TileConfigCollection();
             tileConfigCollection.url = App.API_ROOT + "/page/" + page_id + "/tile-config";
