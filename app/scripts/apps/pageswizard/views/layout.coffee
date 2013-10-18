@@ -41,6 +41,8 @@ define [
         results[$(m).attr("name")] = $(m).val() if $(m).attr("name")
       _.each $("#layout-field-form input[type!=file]"), (m) ->
         results[$(m).attr("name")] = $(m).val() if $(m).attr("name")
+      _.each $("#layout-field-form input[type=file]"), (m) ->
+        results[$(m).attr("name")] = $(m).attr('value') if $(m).attr("name")
       results
 
     updateImgPreview: (event) ->
@@ -53,23 +55,24 @@ define [
       #attribute as an indentifier, finds the related object
       targetField = null
       for field in @getLayoutJSON()
-        if field.var is elem.getAttribute("for")
+        if field.var is elem.getAttribute("name")
           targetField = field
 
       fileReader = new FileReader()
       fileReader.onload = (event) =>
         #Updates related json object and refreshes view
-
-        # targetField does not exist usually
-        #targetField.url = event.target.result
         filename = elem.files[0].name
+
+        url = 'http://contentgraph-test.elasticbeanstalk.com/graph/store/38/page/97/files/' + filename
+        targetField.url = url
+        @$(elem).attr('value', url)
 
         data = new FormData()
         data.append('file', elem.files[0])
 
         # Post file
         $.ajax(
-            url: 'http://contentgraph-test.elasticbeanstalk.com/graph/store/38/page/97/files/' + filename
+            url: url
             type: 'POST'
             data: data
             cache: false
