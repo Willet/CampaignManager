@@ -60,4 +60,57 @@ define [
       @metadata = data['meta']
       return data['results']
 
+
+  class Base.PageableCollection extends Base.Collection
+
+    initialize: ->
+      @resetPaging()
+      @queryParams = {}
+
+    setFilter: (options) ->
+      for key, val of options
+        if val == ""
+          delete @queryParams[key]
+        else
+          @queryParams[key] = val
+      @reset()
+      @getNextPage()
+
+    updateSortOrder: (new_order) ->
+      @queryParams['order'] = new_order
+      @reset()
+      @getNextPage()
+
+    reset: (models, options) ->
+      super(models, options)
+      @resetPaging()
+
+    resetPaging: ->
+      @params =
+        results: 25
+      @finished = false
+
+    getNextPage: (opts) ->
+      unless @finished || @in_progress
+        @in_progress = true
+
+        # DEFER: could do an App.request here instead ... not sure if meaningful
+        collection = new @collectionType
+        params = _.extend(@queryParams, @params)
+        collection.url = @url
+
+        xhr = collection.fetch
+          data: params
+          reset: true
+        $.when(
+          xhr
+        ).done(=>
+          @add(collection.models, at: @length)
+          @params['offset'] = xhr.responseJSON['meta']?['cursors']?['next']
+          @finished = true unless @params['offset']
+          @in_progress = false
+        )
+      xhr
+
+
   return Base

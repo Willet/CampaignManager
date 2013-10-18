@@ -24,10 +24,12 @@ define [
       _.each(opts, (m) => m.set("store-id", @store_id))
       "#{require("app").apiRoot}/stores/#{@store_id}/products"
 
-    parse: (data) ->
-      data['products']
-
     viewJSON: ->
       @collect((m) -> m.viewJSON())
+
+  class Entities.ProductPageableCollection extends Base.PageableCollection
+
+    model: Entities.Product
+    collectionType: Entities.ProductCollection
 
   Entities

@@ -15,7 +15,7 @@
         <div class="row">
           <label class="large-2 columns inline">Add by Search</label>
           <span class="large-8 columns">
-            <input id="search-product" type="text" placeholder="Search by product or category" />
+            <input id="search-product" style="width:100%;" type="text" placeholder="Search for product" />
           </span>
           <span class="large-2 columns text-left">
             <a href="#" id="add-product" class="small button">Add</a>
@@ -23,7 +23,7 @@
         </div>
         <div class="row">
           <span class="large-12 columns text-left">
-            <h5>Added URLS & Searches</h5>
+            <h5>Added URLS</h5>
             <div id="scrape-list">
               <!-- Injection Point -->
             </div>
@@ -31,27 +31,26 @@
         </div>
       </div>
       <h4 class="text-left">Add or Remove Products</h4>
-      <p class="text-left">Review products that have been added to the page and/or prioritize products to appear at the top of the page</p>
-      <div class="switch-toggle switch-3 panel radius">
+      <p class="text-left">Review products that have been added to the page <!-- /or prioritize products to appear at the top of the page --></p>
+      <div class="switch-toggle switch-2 panel radius">
       <form>
         <input id="needs-review" name="filter2" type="radio" checked>
-        <label for="needs-review" onclick="" class="js-needs-review">Needs Review</label>
+        <label for="needs-review" class="js-needs-review">Needs Review</label>
 
         <input id="added-to-page" name="filter2" type="radio">
-        <label for="added-to-page" onclick="" class="js-added-to-page">Added to Page</label>
-
-        <input id="rejected-from-page" name="filter2" type="radio">
-        <label for="rejected-from-page" onclick="" class="js-rejected-from-page">Rejected from Page</label>
+        <label for="added-to-page" class="js-added-to-page">Added to Page</label>
 
         <a class="button"></a>
       </form>
       </div>
       <div class="products row text-left">
-        TODO: here should be a list of all Product Collections that resulted from Product Searches that were added above (Also then filtered by non-rejected)
+        <div id="product-list">
+          <!-- TODO: here should be a list of all Product Collections that resulted from Product Searches that were added above (Also then filtered by non-rejected) -->
+        </div>
       </div>
       <div class="actions row text-center">
         <a href="#" id="add-to-page" class="button small">Add To Page</a>
-        <a href="#" id="reject-content" class="button small">Reject Content</a>
+        <a href="#" id="remove-from-page" class="button small">Remove From Page</a>
       </div>
     </div>
     <div class="actions row">

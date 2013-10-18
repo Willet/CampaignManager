@@ -1,0 +1,36 @@
+<div class="item list">
+  <div class="image-container large-4 columns">
+    <div class="row">
+      {{#if images}}
+        <div class="image" style="background-image:url({{images.large.url}})" />
+      {{else}}
+        <div class="image" style="background-image:url('http://placehold.it/180x180&text=No Thumbnail')" />
+      {{/if}}
+      {{/if}}
+    </div>
+    <div class="row">
+      {{name}}
+    </div>
+  </div>
+  <div class="actions">
+    {{#if approved}}
+      <a class="js-reject-for-page" href="/{{store-id}}/content/{{id}}">
+        Reject for Page <i class="icon-general-error"></i>
+      </a>
+      <!--
+      <a class="js-prioritize-for-page" href="/{{store-id}}/content/{{id}}/prioritize">
+        Prioritize for Page <i class="icon-general-up-arrow"></i>
+      </a>
+      -->
+    {{else}}
+      <a class="js-approve-for-page" href="/{{store-id}}/content/{{id}}">
+        Approve for Page <i class="icon-general-checkmark"></i>
+      </a>
+      <!--
+      <a class="js-prioritize-for-page" href="/{{store-id}}/content/{{id}}/prioritize">
+        Approve & Prioritize for Page <i class="icon-general-up-arrow"></i>
+      </a>
+      -->
+    {{/if}}
+  </div>
+</div>

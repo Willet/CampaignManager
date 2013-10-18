@@ -1,7 +1,7 @@
 define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', './views', 'components/views/content_list', 'entities'],
     function (PageWizard, BackboneProjections, Marionette, $, _, Views,
               ContentList, Entities) {
-        "use strict";
+        'use strict';
 
         PageWizard.Controller = Marionette.Controller.extend({
             pagesIndex: function (store_id) {
@@ -81,7 +81,7 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                     model: page
                 });
                 layout.on('layout:selected', function (newLayout) {
-                    page.set("layout", newLayout);
+                    page.set('layout', newLayout);
                     return layout.render();
                 });
                 layout.on('save', function () {
@@ -111,12 +111,11 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                 return this.region.show(layout);
             },
             pagesProducts: function (store_id, page_id) {
-                var layout, page, products, scrapes,
+                var layout, page, products, scrapes, product_list,
                     _this = this;
                 page = App.routeModels.get('page');
-                scrapes = App.request("page:scrapes:entities", store_id,
-                    page_id);
-                products = new Entities.ContentCollection;
+                scrapes = App.request("page:scrapes:entities", store_id, page_id);
+                products = App.request("product:entities:paged", store_id, page_id);
                 layout = new Views.PageCreateProducts({
                     model: page
                 });
@@ -134,11 +133,37 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                             url: url
                         });
                         scrapes.add(scrape);
-                        return scrape.save();
+                        scrape.save();
+                        // TODO: remove dirty hack that just queues it and hopes
+                        //       for the best; backend has no way to check status
+                        //       right now???
+                        $.ajax(
+                            "http://scraper-test.elasticbeanstalk.com/scrapers/queue/store/#{store_id}/?url=#{url}"
+                        );
                     });
                     return scrapeList.on("itemview:remove", function (view) {
                         return scrapes.remove(view.model);
                     });
+                });
+                layout.on('added-product', function (product_data) {
+                    var new_product = new Entities.Product(product_data);
+                    // TODO: we should really only add this in the case
+                    //       the products is of type 'added'
+                    products.add(new_product);
+                });
+                product_list = new Views.PageProductList({collection: products});
+                layout.on('display:needs-review', function() {
+                    products = App.request("product:entities:paged", store_id, page_id);
+                    product_list = new Views.PageProductList({collection: products});
+                    layout.productList.show(product_list);
+                });
+                layout.on('display:added-to-page', function() {
+                    products = App.request("added-to-page:product:entities:paged", store_id, page_id);
+                    product_list = new Views.PageProductList({collection: products});
+                    layout.productList.show(product_list);
+                });
+                layout.on('render', function () {
+                    layout.productList.show(product_list);
                 });
                 layout.on('save', function () {
                     return $.when(page.save()).done(function (data) {
@@ -163,7 +188,6 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                 layout = new Views.PageCreateContent({
                     model: page
                 });
-                contents.getNextPage();
                 layout.on('display:needs-review', function() {
                     contents = App.request("content:entities:paged", store_id, page_id);
                     content_list = ContentList.createView(contents, { page: true });
