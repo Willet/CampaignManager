@@ -13,6 +13,9 @@ define("app",
             App.API_ROOT = "http://secondfunnel-test.elasticbeanstalk.com/graph/v1";
         } else {  // assumed production bucket
             App.API_ROOT = "http://secondfunnel.com/graph/v1";
+
+            // production db isn't ready.
+            App.API_ROOT = "http://test.secondfunnel.com/graph/v1";
         }
 
         App.addRegions({
