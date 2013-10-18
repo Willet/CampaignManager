@@ -75,6 +75,7 @@ define [
             data: data
             cache: false
             contentType: false
+            dataType: 'json'
             processData: false,
             success: (data) ->
               targetField.url = data.url
