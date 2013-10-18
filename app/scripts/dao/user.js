@@ -3,10 +3,11 @@ define([
 ], function (App, Base, Entities) {
     var API = {
         login: function (username, password) {
-            var user = new Entities.User();
+            var promise,
+                user = new Entities.User();
             user.url = App.API_ROOT + "/user"; //
-            user.login(username, password);
-            return user;
+            promise = user.login(username, password);
+            return promise;
         },
         logout: function () {
 
@@ -14,7 +15,8 @@ define([
     };
 
     App.reqres.setHandler("user:login", function (username, password) {
-        var user = API.login(username, password);
-        App.user = user;
+        var promise = API.login(username, password);
+        App.user = promise.user;
+        return promise;
     });
 });
