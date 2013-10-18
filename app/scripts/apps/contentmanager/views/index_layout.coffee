@@ -32,7 +32,7 @@ define [
       "click .js-unselect-all": "content:unselect-all"
 
     initialize: (opts) ->
-      @current_state = opts['inital_state']
+      @current_state = opts['initial_state']
 
     filterContentType: (event) ->
       @trigger("change:filter-content-type", @$(event.currentTarget).val())
