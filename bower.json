@@ -17,7 +17,8 @@
     "foundation-icons": "*",
     "handlebars.js": "git@github.com:wycats/handlebars.js.git#master",
     "requirejs-text": "~2.0.10",
-    "sinonjs": "~1.7.1"
+    "sinonjs": "~1.7.1",
+    "backbone.uniquemodel": "*"
   },
   "authors": [
     "Alex Riedler <alex@riedler.ca>"

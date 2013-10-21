@@ -2,7 +2,8 @@ define [
   "app",
   "entities/base",
   "entities/products",
-  "underscore"
+  "underscore",
+  "backbone.uniquemodel"
 ], (App, Base, Entities, _) ->
 
   Entities = Entities || {}
@@ -62,7 +63,7 @@ define [
       json
 
     viewJSON: ->
-      json = @toJSON()
+      json = _.clone(@attributes)
       json['selected'] = @get('selected')
       if @get('active')
         if @get('approved')
@@ -127,6 +128,7 @@ define [
           url: url
       }
 
+  Entities.Content = Backbone.UniqueModel(Entities.Content)
 
   class Entities.ContentCollection extends Base.Collection
     model: Entities.Content

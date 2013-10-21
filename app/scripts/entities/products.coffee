@@ -1,5 +1,6 @@
 define [
-  "entities/base"
+  "entities/base",
+  "backbone.uniquemodel"
 ], (Base) ->
 
   Entities = Entities || {}
@@ -7,10 +8,22 @@ define [
   class Entities.Product extends Base.Model
 
     viewJSON: ->
-      json = @toJSON()
+      json = super()
       json['content-ids'] = @get('content-ids')?.viewJSON?()
-      json['default-image-id'] = @get('default-image-id')?.viewJSON?()
+      console.log "YUP...", @get('default-image')
+      json['default-image'] = @get('default-image')?.viewJSON?()
       json
+
+    parse: (data) ->
+      if data['default-image-id']
+        content = App.request("content:entity", data['store-id'], data['default-image-id'])
+        data['default-image'] = content
+        # trigger an event when related models are fetched
+        xhrs = [content._fetch]
+        $.when.apply($, xhrs).done(=> @trigger('related-fetched'))
+      data
+
+  Entities.Product = Backbone.UniqueModel(Entities.Product)
 
   class Entities.ProductCollection extends Base.Collection
 

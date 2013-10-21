@@ -6,11 +6,12 @@ define [
 
   API =
     getContent: (store_id, content_id, params = {}) ->
-      contents = new Entities.Content()
+      contents = new Entities.Content(id: content_id, 'store-id': store_id)
       contents.url = "#{App.API_ROOT}/store/#{store_id}/content/#{content_id}"
-      contents.fetch
-        reset: true
-        data: params
+      unless content.isNew # don't fetch multiple times
+        contents.fetch
+          reset: true
+          data: params
       contents
 
     getContents: (store_id, params = {}) ->

@@ -6,11 +6,12 @@ define [
 
   API =
     getProduct: (store_id, product_id, params = {}) ->
-      product = new Entities.Product()
+      product = new Entities.Product(id: product_id, 'store-id': store_id)
       product.url = "#{App.API_ROOT}/store/#{store_id}/product/live/#{product_id}"
-      product.fetch
-        reset: true
-        data: params
+      unless product.isNew # don't fetch multiple times
+        product.fetch
+          reset: true
+          data: params
       product
 
     getProducts: (store_id, params = {}) ->

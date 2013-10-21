@@ -1,35 +1,37 @@
-<div class="item list">
+<div class="item list row">
   <div class="image-container large-4 columns">
     <div class="row">
-      {{#if images}}
-        <div class="image" style="background-image:url({{images.large.url}})" />
+      {{#if default-image}}
+        <img src="{{default-image.images.small.url}}" />
       {{else}}
-        <div class="image" style="background-image:url('http://placehold.it/180x180&text=No Thumbnail')" />
+        <img src="http://placehold.it/180x180&text=No Thumbnail" />
       {{/if}}
     </div>
-    <div class="row">
+    <div class="title">
       {{name}}
     </div>
   </div>
-  <div class="actions">
-    {{#if added}}
-      <a class="js-remove-from-page" href="/{{store-id}}/product/{{id}}">
-        Remove from Page<i class="icon-general-error"></i>
-      </a>
-      <!--
-      <a class="js-prioritize-for-page" href="/{{store-id}}/content/{{id}}/prioritize">
-        Prioritize for Page <i class="icon-general-up-arrow"></i>
-      </a>
-      -->
-    {{else}}
-      <a class="js-add-to-page" href="/{{store-id}}/product/{{id}}">
-        Add to Page <i class="icon-general-checkmark"></i>
-      </a>
-      <!--
-      <a class="js-prioritize-for-page" href="/{{store-id}}/content/{{id}}/prioritize">
-        Approve & Prioritize for Page <i class="icon-general-up-arrow"></i>
-      </a>
-      -->
-    {{/if}}
+  <dic class="actions-container large-8 columns">
+    <div class="actions">
+      {{#if added}}
+        <a class="js-remove-from-page" href="/{{store-id}}/product/{{id}}">
+          Remove from Page<i class="icon-general-error"></i>
+        </a>
+        <!--
+        <a class="js-prioritize-for-page" href="/{{store-id}}/content/{{id}}/prioritize">
+          Prioritize for Page <i class="icon-general-up-arrow"></i>
+        </a>
+        -->
+      {{else}}
+        <a class="js-add-to-page" href="/{{store-id}}/product/{{id}}">
+          Add to Page <i class="icon-general-checkmark"></i>
+        </a>
+        <!--
+        <a class="js-prioritize-for-page" href="/{{store-id}}/content/{{id}}/prioritize">
+          Approve & Prioritize for Page <i class="icon-general-up-arrow"></i>
+        </a>
+        -->
+      {{/if}}
+    </div>
   </div>
 </div>
