@@ -71,7 +71,9 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                     });
                 });
                 return App.execute("when:fetched", page, function () {
-                    return self.region.show(layout);
+                    return App.execute("when:fetched", store, function () {
+                        return self.region.show(layout);
+                    });
                 });
             },
             pagesLayout: function (store_id, page_id) {
