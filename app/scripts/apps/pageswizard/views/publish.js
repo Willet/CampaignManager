@@ -3,6 +3,9 @@ define(["marionette", "../views", "backbone", "backbone.stickit"],
         "use strict";
         var _ref;
         Views.PublishPage = Marionette.Layout.extend({
+            'regions': {
+                'publishFail': '.fail'
+            },
             template: "page/publish",
             initialize: function (opts) {
                 this.store = opts.store;
@@ -19,6 +22,7 @@ define(["marionette", "../views", "backbone", "backbone.stickit"],
             },
             onRender: function (opts) {
                 this.stickit();
+                this.$('.fail').hide();
 
                 return this.$(".steps .publish").addClass("active");
             }
