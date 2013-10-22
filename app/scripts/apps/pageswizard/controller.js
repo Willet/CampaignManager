@@ -223,14 +223,48 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
             pagesView: function (store_id, page_id, data) {
                 // existence of bucket name is a signal that the page was
                 // successfully created.
-                if (data && data.result && data.result.bucket_name) {
-                    var view = new Views.PagePreview({
-                        model: new Entities.Model(data)
+
+                var page = App.routeModels.get('page'),
+                    store = App.routeModels.get('store'),
+                    self = this,
+                    args = arguments,
+                    getBucketInfo = function (page, store) {
+                        // mock out page generator result, making sure
+                        // that the urls match CM's format
+                        var domain = store.get('public-base-url')
+                                .replace(/https?:\/\//i, '')
+                                .replace(/\/$/, ''),
+                            path = page.get('url');
+                        if (path.substring(0, 1) === '/') {
+                            path = path.substring(1);
+                        }
+                        if (path.substring(0, 1) === '/') {
+                            path = path.substring(1);
+                        }
+                        return {
+                            'result': {
+                                'bucket_name': domain,
+                                's3_path': path
+                            },
+                            'url': 'http://' + domain + '/' + path
+                        };
+                    };
+
+                return App.execute("when:fetched", page, function () {
+                    return App.execute("when:fetched", store, function () {
+                        $.ajax(data || getBucketInfo(page, store))
+                            .done(function () {
+                                var view = new Views.PagePreview({
+                                    model: new Entities.Model(data)
+                                });
+                                return self.region.show(view);
+                            })
+                            .fail(function () {
+                                // S3 emits 404 if page not generated
+                                return self.generateView.apply(self, args);
+                            });
                     });
-                    return this.region.show(view);
-                } else {
-                    return this.generateView.apply(this, arguments);
-                }
+                });
             },
             generateView: function (store_id, page_id) {
                 var page, store, layout, self = this;
