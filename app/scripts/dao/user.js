@@ -10,7 +10,8 @@ define([
             return promise;
         },
         logout: function () {
-
+            // any instance of the User entity logs out the current user only
+            return (new Entities.User()).logout();
         }
     };
 
@@ -18,5 +19,9 @@ define([
         var promise = API.login(username, password);
         App.user = promise.user;
         return promise;
+    });
+
+    App.reqres.setHandler("user:logout", function () {
+        return API.logout();
     });
 });

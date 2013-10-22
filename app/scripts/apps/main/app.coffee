@@ -26,8 +26,8 @@ define [
       App.layout.show(new Login())
 
     logout: (opts) ->
-      # TODO: actually log out
-      App.layout.show(new Login())
+      # App.layout.show(new Login())
+      App.request("user:logout")
 
     ### TODO: decide where to put this, admin ?
     storeIndex: ->

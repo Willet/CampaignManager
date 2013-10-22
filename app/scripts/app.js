@@ -8,11 +8,10 @@ define("app",
 
         if (window.location.hostname === '127.0.0.1' ||
             window.location.hostname === 'localhost') {  // dev
-            // App.API_ROOT = window.location.origin + "/graph/v1";
-            App.API_ROOT = "http://secondfunnel-test.elasticbeanstalk.com/graph/v1";
+            App.API_ROOT = window.location.origin + "/graph/v1";
             App.ENVIRONMENT = 'DEV';
         } else if (window.location.hostname.indexOf('-test') > 0) {  // test bucket
-            App.API_ROOT = "http://secondfunnel-test.elasticbeanstalk.com/graph/v1";
+            App.API_ROOT = "http://test.secondfunnel.com/graph/v1";
             App.ENVIRONMENT = 'TEST';
         } else {  // assumed production bucket
             App.API_ROOT = "http://secondfunnel.com/graph/v1";
@@ -78,8 +77,6 @@ define("app",
             });
         });
         App.redirectToLogin = function () {
-            // if the URL already contains ?r=, this will not reload the page.
-            //window.location.replace(App.APP_ROOT + "?r=" + window.location.hash);
             App.navigate("", { trigger: true });
         };
         App.setTitle = function (title) {
