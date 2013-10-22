@@ -78,9 +78,9 @@ define [
             success: (data) ->
               targetField.url = data.url
               self.$(elem).attr('value', data.url)
+              self.$('img[alt="' + self.$(elem).attr('name') + '"]')
+                .attr('src', data.url)
         )
-
-        @$(elem).next().attr('src', event.target.result)
 
       fileReader.readAsDataURL(elem.files[0])
 
