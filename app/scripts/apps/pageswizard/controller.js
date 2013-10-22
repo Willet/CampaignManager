@@ -210,7 +210,7 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                         var store = data['store-id'],
                             page = data['id'];
 
-                        return App.navigate("/" + store + "/pages/" + page + "/generate",
+                        return App.navigate("/" + store + "/pages/" + page + "/publish",
                             {
                                 trigger: true
                             });
@@ -270,28 +270,28 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                             })
                             .fail(function () {
                                 // S3 emits 404 if page not generated
-                                return self.generateView.apply(self, args);
+                                return self.publishView.apply(self, args);
                             });
                     });
                 });
             },
-            generateView: function (store_id, page_id) {
+            publishView: function (store_id, page_id) {
                 var page, store, layout, self = this;
                 page = App.routeModels.get('page');
                 store = App.routeModels.get('store');
 
-                layout = new Views.GeneratePage({
+                layout = new Views.PublishPage({
                     model: page,
                     store: store
                 });
-                layout.on("generate", function () {
+                layout.on("publish", function () {
                     // TODO: move static_pages API under /graph/v1. ain't nobody got time for that today
                     var req, base_url = App.API_ROOT
                         .replace("/graph/v1", '/static_pages')
                         .replace(":9000", ':8000');
 
                     // TODO: less fugly handler
-                    layout.$('.generate.button').text("Generating...");
+                    layout.$('.publish.button').text("Publishing...");
 
                     // TODO: handle case where page_id is 'new'
                     req = $.ajax({
