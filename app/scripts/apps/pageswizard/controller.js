@@ -241,6 +241,13 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                         if (path.substring(0, 1) === '/') {
                             path = path.substring(1);
                         }
+
+                        if (App.ENVIRONMENT === 'DEV') {
+                            domain = 'dev-' + domain;
+                        } else if (App.ENVIRONMENT === 'TEST') {
+                            domain = 'test-' + domain;
+                        }
+
                         return {
                             'result': {
                                 'bucket_name': domain,
@@ -303,6 +310,21 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
 
                 return App.execute("when:fetched", page, function () {
                     return App.execute("when:fetched", store, function () {
+
+                        if (App.ENVIRONMENT === 'DEV') {
+                            store.set(
+                                'public-base-url',
+                                store.get('public-base-url', '')
+                                    .replace(/(https?:\/\/)/, '$1dev-')
+                            );
+                        } else if (App.ENVIRONMENT === 'TEST') {
+                            store.set(
+                                'public-base-url',
+                                store.get('public-base-url', '')
+                                    .replace(/(https?:\/\/)/, '$1test-')
+                            );
+                        }
+
                         return self.region.show(layout);
                     });
                 });
