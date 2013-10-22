@@ -152,14 +152,19 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                     // TODO: we should really only add this in the case
                     //       the products is of type 'added'
                     products.add(new_product);
+
+                    // reload list
+                    layout.trigger('display:added-to-page');
+                    // also change the tab UI
+                    layout.$('#added-to-page').click();
                 });
                 product_list = new Views.PageProductList({collection: products, added: false});
-                layout.on('display:needs-review', function() {
+                layout.on('display:needs-review', function () {
                     products = App.request("product:entities:paged", store_id, page_id);
                     product_list = new Views.PageProductList({collection: products, added: false});
                     layout.productList.show(product_list);
                 });
-                layout.on('display:added-to-page', function() {
+                layout.on('display:added-to-page', function () {
                     products = App.request("added-to-page:product:entities:paged", store_id, page_id);
                     product_list = new Views.PageProductList({collection: products, added: true});
                     layout.productList.show(product_list);

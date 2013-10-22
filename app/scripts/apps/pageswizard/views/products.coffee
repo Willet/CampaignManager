@@ -15,6 +15,7 @@ define [
       "keydown #url": "resetError"
       "click #needs-review": "displayNeedsReview"
       "click #added-to-page": "displayAddedToPage"
+      "change #search-product": "searchProductChanged"
 
     displayNeedsReview: (event) ->
       @trigger('display:needs-review')
@@ -22,6 +23,10 @@ define [
 
     displayAddedToPage: (event) ->
       @trigger('display:added-to-page')
+      true
+
+    searchProductChanged: (event) ->
+      @trigger('display:needs-review')
       true
 
     triggers:
@@ -69,6 +74,7 @@ define [
         placeholder: "Search for a product"
         tokenSeparators: [',']
         ajax:
+          # TODO: un-hardcode
           url: "#{App.API_ROOT}/store/38/product"
           dataType: 'json'
           cache: true
