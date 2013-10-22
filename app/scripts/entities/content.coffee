@@ -10,6 +10,20 @@ define [
 
   class Entities.Content extends Base.Model
 
+    relations: [
+      {
+        type: Backbone.Many
+        key: 'tagged-products'
+        collectionType: 'Entities.ProductCollection'
+        map: (data, type) ->
+          if typeof(type) == "function"
+            products = _.map(data, (id) -> new Entities.Product(id: id))
+            return new type(products)
+          else
+            return data
+      }
+    ]
+
     types = {
       1: "images"
       2: "videos"
@@ -41,9 +55,11 @@ define [
       "#{App.API_ROOT}/store/#{@get('store-id')}/content/#{@get('id')}"
 
     parse: (data) ->
-      attrs = _.clone(data)
+      attrs = data
       attrs['active'] = if data['active'] == "true" then true else false
       attrs['approved'] = if data['approved'] == "true" then true else false
+      attrs = super(attrs)
+      ###
       attrs['tagged-products'] = []
       _.each data['tagged-products'], (product_id) ->
         product = App.request("product:entity", attrs['store-id'], product_id)
@@ -53,17 +69,24 @@ define [
       # trigger an event when related models are fetched
       xhrs = _.map(attrs['tagged-products'].models, ((product) -> product._fetch))
       $.when.apply($, xhrs).done(=> @trigger('related-fetched'))
+      ###
 
       attrs
 
-    toJSON: ->
-      json = super()
+    toJSON: (options) ->
+      json = _.clone(@attributes)
       if @attributes['tagged-products']
-        json['tagged-products'] = @get('tagged-products').collect((m) -> m.get("id"))
+        if @get('tagged-products').collect
+          json['tagged-products'] = @get('tagged-products').collect((m) -> m.get("id"))
       json
 
-    viewJSON: ->
-      json = _.clone(@attributes)
+    viewJSON: (opts = {}) ->
+      json = _.clone(@toJSON())
+      # TODO: sucks that we have to undo toJSON for relational objects
+      if !opts['nested']
+        if @attributes['tagged-products']
+          if @get('tagged-products').collect
+            json['tagged-products'] = @get('tagged-products').collect((m) -> m.viewJSON(nested: true))
       json['selected'] = @get('selected')
       if @get('active')
         if @get('approved')
@@ -147,64 +170,10 @@ define [
     viewJSON: ->
       @collect((m) -> m.viewJSON())
 
-  class Entities.ContentPageableCollection extends Base.Collection
+  class Entities.ContentPageableCollection extends Base.PageableCollection
+
     model: Entities.Content
-
-    initialize: ->
-      @resetPaging()
-      @queryParams = {}
-
-    selectAll: ->
-      @collect((m) -> m.set('selected', true))
-
-    unselectAll: ->
-      @collect((m) -> m.set('selected', false))
-
-    setFilter: (options) ->
-      for key, val of options
-        if val == ""
-          delete @queryParams[key]
-        else
-          @queryParams[key] = val
-      @reset()
-      @getNextPage()
-
-    updateSortOrder: (new_order) ->
-      @queryParams['order'] = new_order
-      @reset()
-      @getNextPage()
-
-    reset: (models, options) ->
-      super(models, options)
-      @resetPaging()
-
-    resetPaging: ->
-      @params =
-        results: 25
-      @finished = false
-
-    getNextPage: (opts) ->
-      unless @finished || @in_progress
-        @in_progress = true
-
-        # DEFER: could do an App.request here instead ... not sure if meaningful
-        collection = new Entities.ContentCollection
-        params = _.extend(@queryParams, @params)
-        collection.url = @url
-
-        xhr = collection.fetch
-          data: params
-          reset: true
-
-        $.when(
-          xhr
-        ).done(=>
-          @add(collection.models, at: @length)
-          @params['offset'] = xhr.responseJSON['meta']?['cursors']?['next']
-          @finished = true unless @params['offset']
-          @in_progress = false
-        )
-      xhr
+    collectionType: Entities.ContentCollection
 
   Entities
 

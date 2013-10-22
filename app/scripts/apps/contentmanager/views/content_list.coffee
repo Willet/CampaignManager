@@ -69,7 +69,8 @@ define [
 
     initialize: (options) ->
       @actions = { actions: options.actions }
-      @model.on('related-fetched', => @render())
+      @model.on('nested-change', => @render())
+      @model.on('sync:tagged-products', => @render())
 
     serializeData: -> _.extend(@model.viewJSON(), @actions)
 

@@ -116,6 +116,15 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                 page = App.routeModels.get('page');
                 scrapes = App.request("page:scrapes:entities", store_id, page_id);
                 products = App.request("product:entities:paged", store_id, page_id);
+
+                App.execute("when:fetched", products, function() {
+                    // for each product, fetch their content image
+                    products.collect(function(product) {
+                        App.request("fetch:content", store_id, product.get("default-image-id"));
+                    });
+                });
+
+
                 layout = new Views.PageCreateProducts({
                     model: page
                 });
@@ -184,17 +193,35 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                     _this = this;
                 page = App.routeModels.get('page');
                 contents = App.request("content:entities:paged", store_id, page_id);
+
+                var fetchRelatedProducts = function(contents) {
+                    App.execute("when:fetched", contents, function() {
+                        // for each product, fetch their content image
+                        contents.collect(function(content) {
+                            var products = content.get('tagged-products');
+                            if (products) {
+                                products.collect(function(product) {
+                                    App.request("fetch:product", store_id, product);
+                                });
+                            }
+                        });
+                    });
+                }
+                fetchRelatedProducts(contents);
+
                 content_list = ContentList.createView(contents, { page: true });
                 layout = new Views.PageCreateContent({
                     model: page
                 });
                 layout.on('display:needs-review', function() {
                     contents = App.request("content:entities:paged", store_id, page_id);
+                    fetchRelatedProducts(contents);
                     content_list = ContentList.createView(contents, { page: true });
                     layout.contentList.show(content_list);
                 });
                 layout.on('display:added-to-page', function() {
                     contents = App.request("added-to-page:content:entities:paged", store_id, page_id);
+                    fetchRelatedProducts(contents);
                     content_list = ContentList.createView(contents, { page: true });
                     layout.contentList.show(content_list);
                 });

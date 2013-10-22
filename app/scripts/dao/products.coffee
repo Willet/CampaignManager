@@ -5,10 +5,20 @@ define [
 ], (App, Base, Entities) ->
 
   API =
+    fetchProduct: (store_id, product, params = {}) ->
+      product.store_id = store_id
+      product.url = "#{App.API_ROOT}/store/#{store_id}/product/live/#{product.get('id')}"
+      unless product.isFetched # don't fetch multiple times
+        product.fetch
+          reset: true
+          data: params
+      product
+
     getProduct: (store_id, product_id, params = {}) ->
       product = new Entities.Product(id: product_id, 'store-id': store_id)
+      product.store_id = store_id
       product.url = "#{App.API_ROOT}/store/#{store_id}/product/live/#{product_id}"
-      unless product.isNew # don't fetch multiple times
+      unless product.isFetched # don't fetch multiple times
         product.fetch
           reset: true
           data: params
@@ -16,6 +26,7 @@ define [
 
     getProducts: (store_id, params = {}) ->
       products = new Entities.ProductCollection()
+      products.store_id = store_id
       products.url = "#{App.API_ROOT}/store/#{store_id}/product/live"
       products.fetch
         reset: true
@@ -24,6 +35,7 @@ define [
 
     getProductsPaged: (store_id, params = {}) ->
       products = new Entities.ProductPageableCollection()
+      products.store_id = store_id
       products.url = "#{App.API_ROOT}/store/#{store_id}/product/live"
       products.getNextPage()
       products
@@ -64,3 +76,6 @@ define [
     (store_id, product_id, params) ->
       API.getProduct store_id, product_id, params
 
+  App.reqres.setHandler "fetch:product",
+    (store_id, product, params) ->
+      API.fetchProduct store_id, product, params

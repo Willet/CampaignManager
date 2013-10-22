@@ -7,6 +7,7 @@ require.config({
         'backbone.stickit': '../bower_components/backbone.stickit/backbone.stickit',
         'backbone.viewmodel': 'lib/backbone.viewmodel',
         'backbone.uniquemodel': '../bower_components/backbone.uniquemodel/backbone.uniquemodel',
+        'backbone-associations': '../bower_components/backbone-associations/backbone-associations',
         handlebars: '../bower_components/handlebars.js/dist/handlebars',
         marionette: '../bower_components/marionette/lib/backbone.marionette',
         moment: '../bower_components/moment/moment',
@@ -43,6 +44,10 @@ require.config({
         'backbone.uniquemodel': {
           deps: ['backbone'],
           exports: 'Backbone.UniqueModel'
+        },
+        'backbone-associations': {
+          deps: ['backbone'],
+          exports: 'Backbone.Associations'
         },
         'jquery': {
             exports: '$'

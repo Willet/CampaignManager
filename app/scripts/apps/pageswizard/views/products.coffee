@@ -141,7 +141,7 @@ define [
 
     initialize: (options) ->
       @added = options['added']
-      @model.on('related-fetched', => @render())
+      @model.on('nested-change', => @render())
 
     addToPage: (event) ->
       App.request("add_product:page:entity", {

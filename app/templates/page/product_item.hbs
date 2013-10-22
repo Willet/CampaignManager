@@ -1,10 +1,10 @@
 <div class="item list row">
   <div class="image-container large-4 columns">
     <div class="row">
-      {{#if default-image}}
-        <img src="{{default-image.images.small.url}}" />
+      {{#if default-image-id}}
+        <img src="{{default-image-id.images.small.url}}" />
       {{else}}
-        <img src="http://placehold.it/180x180&text=No Thumbnail" />
+        <img src="http://placehold.it/100x100&text=No Thumbnail" />
       {{/if}}
     </div>
     <div class="title">

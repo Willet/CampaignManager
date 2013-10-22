@@ -7,21 +7,25 @@ define [
 
   class Entities.Product extends Base.Model
 
-    viewJSON: ->
-      json = super()
-      json['content-ids'] = @get('content-ids')?.viewJSON?()
-      console.log "YUP...", @get('default-image')
-      json['default-image'] = @get('default-image')?.viewJSON?()
+    relations: [
+      {
+        type: Backbone.One
+        key: 'default-image-id'
+        relatedModel: 'Entities.Content'
+        map: (data, type) ->
+          new Entities.Content(id: data)
+      }
+    ]
+
+    toJSON: (opts) ->
+      json = _.clone(@attributes)
+      json['default-image-id'] = @get('default-image-id')?.get('id')
       json
 
-    parse: (data) ->
-      if data['default-image-id']
-        content = App.request("content:entity", data['store-id'], data['default-image-id'])
-        data['default-image'] = content
-        # trigger an event when related models are fetched
-        xhrs = [content._fetch]
-        $.when.apply($, xhrs).done(=> @trigger('related-fetched'))
-      data
+    viewJSON: (opts) ->
+      json = _.clone(@toJSON())
+      json['default-image-id'] = @get('default-image-id')?.viewJSON(nested: true)
+      json
 
   Entities.Product = Backbone.UniqueModel(Entities.Product)
 
