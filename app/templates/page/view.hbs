@@ -1,19 +1,13 @@
 <div class="content">
     <h4>View Page</h4>
-    {{#if result.bucket_name}}
-        <p>Page generated! Open this in a new tab:
-            <a href="http://{{result.bucket_name}}/{{result.s3_path}}"
-               target="_blank">
-                http://{{result.bucket_name}}/{{result.s3_path}}
-            </a>
-        </p>
-        <iframe id="page-preview" src="http://{{result.bucket_name}}/{{result.s3_path}}"
-                width="100%" height="100%"
-                style="min-height:100%;border:0;background:#fff;">
-        </iframe>
-    {{else}}
-        <div class="page-edit">
-            <p>You must first <a class="generate">generate this page</a> to see it.</p>
-        </div>
-    {{/if}}
+    <p>Page generated! Open this in a new tab:
+        <a href="http://{{result.bucket_name}}/{{result.s3_path}}"
+           target="_blank">
+            http://{{result.bucket_name}}/{{result.s3_path}}
+        </a>
+    </p>
+    <iframe id="page-preview" src="http://{{result.bucket_name}}/{{result.s3_path}}"
+            width="100%" height="100%"
+            style="min-height:100%;border:0;background:#fff;">
+    </iframe>
 </div>

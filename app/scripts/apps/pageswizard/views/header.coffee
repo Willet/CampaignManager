@@ -56,6 +56,15 @@ define [
               if val == "content" then "active" else ""
           }
         ]
+      '.steps .generate':
+        attributes: [
+          {
+            name: 'class'
+            observe: 'page'
+            onGet: (val, options) ->
+              if val in ["view", "generate"] then "active" else ""
+          }
+        ]
 
 
     onRender: ->

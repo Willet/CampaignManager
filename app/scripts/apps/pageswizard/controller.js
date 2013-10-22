@@ -221,16 +221,16 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
              * Shows in iframe with the page in it.
              */
             pagesView: function (store_id, page_id, data) {
-                var view = new Views.PagePreview({
-                    model: new Entities.Model(data)
-                });
-                view.on('generate', function () {
-                    return App.navigate(
-                        "/" + store_id + "/pages/" + page_id + "/generate",
-                        {trigger: true}
-                    );
-                });
-                return this.region.show(view);
+                // existence of bucket name is a signal that the page was
+                // successfully created.
+                if (data && data.result && data.result.bucket_name) {
+                    var view = new Views.PagePreview({
+                        model: new Entities.Model(data)
+                    });
+                    return this.region.show(view);
+                } else {
+                    return this.generateView.apply(this, arguments);
+                }
             },
             generateView: function (store_id, page_id) {
                 var page, store, layout, self = this;

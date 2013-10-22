@@ -18,11 +18,9 @@ define [
 
     getLayoutJSON: ->
       jsonFields = [
-            { var: "heroImageMobile", label: "Hero Image (Mobile)", type: "image" }
+            { var: "heroImageMobile", label: "Hero Image (Mobile)", type: "image" },
             { var: "legalCopy", label: "Legal Copy", type: "textarea" },
-            { var: "facebookShare", label: "Facebook Share Copy", type: "text" },
-            { var: "twitterShare", label: "Twitter Share Copy", type: "text" },
-            { var: "emailShare", label: "Email Share Copy", type: "text" }
+            { var: "shareText", label: "Share Text", type: "text" },
           ]
       _.each jsonFields, (field) =>
         field.value = @model.get(field.var)
