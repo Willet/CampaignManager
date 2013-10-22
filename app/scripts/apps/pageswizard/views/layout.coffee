@@ -18,6 +18,7 @@ define [
 
     getLayoutJSON: ->
       jsonFields = [
+            { var: "heroImageDesktop", label: "Hero Image (Desktop)", type: "image" },
             { var: "heroImageMobile", label: "Hero Image (Mobile)", type: "image" },
             { var: "legalCopy", label: "Legal Copy", type: "textarea" },
             { var: "shareText", label: "Share Text", type: "text" },

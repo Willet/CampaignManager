@@ -421,7 +421,7 @@ body {
       }
     }
     #layout-types {
-      height: 320px;
+      height: 125px;
       .layout-type {
         @include grid-column($columns: 12);
         @media #{$small} {
