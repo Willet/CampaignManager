@@ -5,7 +5,7 @@ define [
   "select2"
 ], (Marionette, Views) ->
 
-  class Views.PageCreateProducts extends Marionette.Layout
+  Views.PageCreateProducts = Marionette.Layout.extend
 
     template: "page/products"
 
@@ -60,11 +60,13 @@ define [
     regions:
       "scrapeList": "#scrape-list"
       "productList": "#product-list"
+      "productAddedBySearch": ".product-added-search.success"
 
     initialize: (opts) ->
 
     onRender: (opts) ->
       @$(".steps .products").addClass("active")
+      @$(@productAddedBySearch.el).hide()
 
     onShow: (opts) ->
       # TODO: unhard-code this...
@@ -101,6 +103,7 @@ define [
         )
         @trigger "added-product", event.added
         @$('#search-product').select2('val', null)
+        @$(@productAddedBySearch.el).fadeIn(200).delay(1500).fadeOut(400)
       false
 
     onClose: ->
