@@ -3,16 +3,16 @@
   <div class="page-edit layout">
     <div class="container">
 
-      <div id="layout-types">
+      <div id="layout-types" class="panel">
           <div class="layout-type js-layout-hero {{#is page.layout 'hero'}}selected{{/is}}">
             <span class="icon row"><img src="/images/page-type-hero.png" /></span>
             <label class="row">Hero Image</label>
           </div>
-          <div class="layout-type js-layout-featured {{#is page.layout 'featured'}}selected{{/is}}">
+          <div class="layout-type js-layout-featured {{#is page.layout 'featured'}}selected{{/is}} disabled">
             <span class="icon row"><img src="/images/page-type-featured.png" /></span>
             <label class="row">Featured Product</label>
           </div>
-          <div class="layout-type js-layout-shopthelook {{#is page.layout 'shopthelook'}}selected{{/is}}">
+          <div class="layout-type js-layout-shopthelook {{#is page.layout 'shopthelook'}}selected{{/is}} disabled">
             <span class="icon row"><img src="/images/page-type-shopthelook.png" /></span>
             <label class="row">Shop The Look</label>
           </div>
@@ -21,7 +21,7 @@
       <br/>
 
       {{#if page.layout}}
-      <div id="layout-options">
+      <div id="layout-options" class="panel">
         <form id="layout-field-form">
         {{#each fields}}
           {{#is type 'file'}}
@@ -40,10 +40,10 @@
                   <input class="image-field" name="{{var}}" type="file" value="{{value}}" />
                 </span>
                 <span class="row">
-                  {{#if loadedUrl}}
-                    <img src='{{loadedUrl}}' />
+                  {{#if value}}
+                    <img alt="{{var}}" src='{{value}}' />
                   {{else}}
-                    <img src="http://placehold.it/762x142?text=''" />
+                    <img alt="{{var}}" src="http://placehold.it/762x142?text=''" />
                   {{/if}}
                 </span>
               </span>
@@ -78,12 +78,12 @@
             </div>
           {{/is}}
         {{/each}}
-      </div>
-      <div class="actions row">
-        <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/products">Save &amp; Continue</a>
-      </div>
-      {{/if}}
       </form>
+    </div>
+    <div class="actions row">
+      <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/products">Save &amp; Continue</a>
+    </div>
+    {{/if}}
     </div>
   </div>
 </div>

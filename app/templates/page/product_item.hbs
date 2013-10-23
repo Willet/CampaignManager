@@ -1,17 +1,17 @@
-<div class="item list">
+<div class="item list row">
   <div class="image-container large-4 columns">
-    <div class="row">
       {{#if images}}
         <div class="image" style="background-image:url({{images.large.url}})" />
       {{else}}
         <div class="image" style="background-image:url('http://placehold.it/180x180&text=No Thumbnail')" />
       {{/if}}
-    </div>
+  </div>
+  <div class="large-4 columns">
     <div class="row">
-      {{name}}
+        {{name}}
     </div>
   </div>
-  <div class="actions">
+    <div class="large-4 columns actions">
     {{#if added}}
       <a class="js-remove-from-page" href="/{{store-id}}/product/{{id}}">
         Remove from Page<i class="icon-general-error"></i>

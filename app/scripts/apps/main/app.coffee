@@ -1,11 +1,12 @@
 define [
   "app",
+  "jquery",
   "components/views/main_layout",
   "components/views/main_nav",
   "components/views/login",
   "components/views/not_found",
   "entities"
-], (App, MainLayout, MainNav, Login, NotFound, Entities) ->
+], (App, $, MainLayout, MainNav, Login, NotFound, Entities) ->
 
   Main = App.module("Main")
 
@@ -23,11 +24,16 @@ define [
   class Main.Controller extends Marionette.Controller
 
     login: (opts) ->
-      App.layout.show(new Login())
+      $.get(App.API_ROOT + "/store")
+        .done ->
+          # TODO: use @storeShow
+          App.navigate('/38/pages', {trigger: true})
+        .fail ->
+          App.layout.show(new Login())
 
     logout: (opts) ->
-      # TODO: actually log out
-      App.layout.show(new Login())
+      # App.layout.show(new Login())
+      App.request("user:logout")
 
     ### TODO: decide where to put this, admin ?
     storeIndex: ->

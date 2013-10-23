@@ -51,12 +51,12 @@ define([
         },
 
         logout: function () {
-            $.ajax({
+            return $.ajax({
                 url: this.url + '/logout/',
                 contentType: "application/json",
                 dataType: 'json',
                 type: 'POST'
-            });
+            }).promise();
         }
     });
 

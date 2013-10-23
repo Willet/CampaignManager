@@ -1,6 +1,6 @@
 <div class="content">
-    <h4>Generate Page</h4>
-    <div class="page-edit">
+    <h4>Publish Page</h4>
+    <div class="page-edit panel">
         <p>
             The page will be live immediately:
             <a href="http://{{store.public-base-url}}{{page.url}}/">
@@ -11,7 +11,11 @@
             <span class="label">Note</span> It will overwrite the existing page.
         </p>
         <div class="actions row">
-            <a class="generate js-next button small" href="">Generate Page</a>
+            <a class="publish js-next button small" href="">Publish Page</a>
+        </div>
+        <div class="row fail">
+            <span class="alert label">Error</span>
+            Could not publish page. Please try again later.
         </div>
     </div>
 </div>

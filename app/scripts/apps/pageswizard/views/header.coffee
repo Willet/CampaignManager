@@ -56,6 +56,15 @@ define [
               if val == "content" then "active" else ""
           }
         ]
+      '.steps .publish':
+        attributes: [
+          {
+            name: 'class'
+            observe: 'page'
+            onGet: (val, options) ->
+              if val in ["view", "publish"] then "active" else ""
+          }
+        ]
 
 
     onRender: ->
