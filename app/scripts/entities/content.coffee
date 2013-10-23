@@ -15,12 +15,23 @@ define [
         type: Backbone.Many
         key: 'tagged-products'
         collectionType: 'Entities.ProductCollection'
-        map: (data, type) ->
-          if typeof(type) == "function"
-            products = _.map(data, (id) -> new Entities.Product(id: id))
-            return new type(products)
-          else
+        map: (fids, type) ->
+          # see https://github.com/dhruvaray/backbone-associations/issues/79
+          # a pull request I opened up to address how insane this code is
+          # in what should be a simple case
+          collection = type
+          fids = if _.isArray(fids) then fids else [fids]
+          type = if (type instanceof Backbone.Collection) then type.model else type
+          data = _.map fids, (fid) ->
+            if fid instanceof Backbone.Model
+              fid
+            else
+              new Entities.Product({id: fid})
+
+          if collection instanceof Backbone.Collection
             return data
+          else
+            return new type(data)
       }
     ]
 
@@ -58,6 +69,10 @@ define [
       attrs = data
       attrs['active'] = if data['active'] == "true" then true else false
       attrs['approved'] = if data['approved'] == "true" then true else false
+
+      # make sure tagged-products exist (so that the relation exists)
+      unless attrs['tagged-products']
+        attrs['tagged-products'] = []
       attrs = super(attrs)
       ###
       attrs['tagged-products'] = []
@@ -75,9 +90,11 @@ define [
 
     toJSON: (options) ->
       json = _.clone(@attributes)
-      if @attributes['tagged-products']
-        if @get('tagged-products').collect
-          json['tagged-products'] = @get('tagged-products').collect((m) -> m.get("id"))
+      if json['tagged-products']
+        if json['tagged-products'] instanceof Backbone.Collection
+          json['tagged-products'] = json['tagged-products'].collect((m) -> m.get('id'))
+        else
+          json['tagged-products'] = _.map(json['tagged-products'], (m) -> m.get('id'))
       json
 
     viewJSON: (opts = {}) ->
