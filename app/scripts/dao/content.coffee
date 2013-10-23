@@ -23,7 +23,11 @@ define [
 
     getPagedContents: (store_id, params = {}) ->
       contents = new Entities.ContentPageableCollection()
+
       contents.url = "#{App.API_ROOT}/store/#{store_id}/content"
+      if store_id is "38"
+        contents.setFilter({tags: 'backtoblue'})
+
       contents.getNextPage()
       contents
 
