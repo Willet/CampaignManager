@@ -538,6 +538,20 @@ body {
         margin-left: 0;
       }
       width: 16.4%;
+
+      $disabled-color: transparentize($action-color, 0.7);
+      &.disabled {
+        span {
+          background-color: $disabled-color;
+          &:after {
+            border-color: $disabled-color;
+            border-left-color: transparent;
+          }
+        }
+        &:after {
+          border-left-color: $disabled-color;
+        }
+      }
     }
   }
 }
