@@ -421,7 +421,7 @@ body {
       }
     }
     #layout-types {
-      height: 125px;
+      height: 150px;
       .layout-type {
         @include grid-column($columns: 12);
         @media #{$small} {
@@ -499,6 +499,11 @@ body {
       }
       [class*="icon-"] {
         margin-left: 3px;
+      }
+      .row {
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
       }
     }
     .products {

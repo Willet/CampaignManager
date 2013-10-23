@@ -3,7 +3,7 @@
   <div class="page-edit layout">
     <div class="container">
 
-      <div id="layout-types">
+      <div id="layout-types" class="panel">
           <div class="layout-type js-layout-hero {{#is page.layout 'hero'}}selected{{/is}}">
             <span class="icon row"><img src="/images/page-type-hero.png" /></span>
             <label class="row">Hero Image</label>
@@ -21,7 +21,7 @@
       <br/>
 
       {{#if page.layout}}
-      <div id="layout-options">
+      <div id="layout-options" class="panel">
         <form id="layout-field-form">
         {{#each fields}}
           {{#is type 'file'}}
@@ -78,12 +78,12 @@
             </div>
           {{/is}}
         {{/each}}
-      </div>
-      <div class="actions row">
-        <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/products">Save &amp; Continue</a>
-      </div>
-      {{/if}}
       </form>
+    </div>
+    <div class="actions row">
+      <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/products">Save &amp; Continue</a>
+    </div>
+    {{/if}}
     </div>
   </div>
 </div>
