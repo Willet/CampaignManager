@@ -6,18 +6,22 @@ define [
   "select2"
 ], (Marionette, Entities, Views, $) ->
 
-  class Views.TaggedPagesInput extends Marionette.ItemView
+  Views.TaggedPagesInput = Marionette.ItemView.extend
 
     template: false
 
+    initialize: (options) ->
+      @store = options.store
+
     onShow: ->
+      self = @
       @$el.parent().select2(
         multiple: true
         allowClear: true
         placeholder: "Search for a page"
         tokenSeparators: [',']
         query: (query) ->
-          $.ajax "#{App.API_ROOT}/store/126/campaign",
+          $.ajax "#{App.API_ROOT}/store/#{self.model.get("store-id")}/page",
             success: (data) ->
               query.callback(data)
         data:
@@ -29,13 +33,15 @@ define [
           "<span>#{page['name']}</span>"
         formatSelection: (page) ->
           "<span>#{page['name']}</span>"
-      )
+      ).on "change", (e) ->
+        # TODO: I have no idea where the endpoint is
+        # added:e.added, removed:e.removed
       false
 
     onClose: ->
       @$el.parent().select2("destroy")
 
-  class Views.TaggedProductInput extends Marionette.ItemView
+  Views.TaggedProductInput = Marionette.ItemView.extend
 
     template: false
 

@@ -18,11 +18,10 @@ define [
 
     getLayoutJSON: ->
       jsonFields = [
-            { var: "heroImageMobile", label: "Hero Image (Mobile)", type: "image" }
+            { var: "heroImageDesktop", label: "Hero Image (Desktop)", type: "image" },
+            { var: "heroImageMobile", label: "Hero Image (Mobile)", type: "image" },
             { var: "legalCopy", label: "Legal Copy", type: "textarea" },
-            { var: "facebookShare", label: "Facebook Share Copy", type: "text" },
-            { var: "twitterShare", label: "Twitter Share Copy", type: "text" },
-            { var: "emailShare", label: "Email Share Copy", type: "text" }
+            { var: "shareText", label: "Share Text", type: "text" },
           ]
       _.each jsonFields, (field) =>
         field.value = @model.get(field.var)
@@ -80,9 +79,9 @@ define [
             success: (data) ->
               targetField.url = data.url
               self.$(elem).attr('value', data.url)
+              self.$('img[alt="' + self.$(elem).attr('name') + '"]')
+                .attr('src', data.url)
         )
-
-        @$(elem).next().attr('src', event.target.result)
 
       fileReader.readAsDataURL(elem.files[0])
 
@@ -117,6 +116,7 @@ define [
 
     selectLayoutType: (event) ->
       layoutClicked = @$(event.currentTarget)
+      return if layoutClicked.hasClass('disabled')
       new_layout = @extractClassSuffix(@$(event.currentTarget), 'js-layout')
       @model.set('layout', new_layout)
       @render()

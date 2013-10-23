@@ -421,7 +421,7 @@ body {
       }
     }
     #layout-types {
-      height: 320px;
+      height: 150px;
       .layout-type {
         @include grid-column($columns: 12);
         @media #{$small} {
@@ -430,6 +430,9 @@ body {
         padding: 20px 0;
         border: 1px solid #eeeeee;
         text-align: center;
+        &.disabled {
+          opacity: 0.3;
+        }
         &.selected {
           border: 1px solid $action-color;
           background-color: lighten($action-color, 45%);
@@ -485,6 +488,22 @@ body {
       }
       .action {
         font-weight: bold;
+      }
+    }
+    #product-list {
+      width: 100%;
+      .image {
+        width: 180px;
+        height: 180px;
+        background-position: middle center;
+      }
+      [class*="icon-"] {
+        margin-left: 3px;
+      }
+      .row {
+        max-width: 100%;
+        margin-left: auto;
+        margin-right: auto;
       }
     }
     .products {

@@ -4,7 +4,7 @@ define(["marionette", "../views", "backbone.stickit"],
         Views.PagePreview = Marionette.Layout.extend({
             'template': "page/view",
             'triggers': {
-                "click .generate": "generate"
+                "click .publish": "publish"
             }
         });
 
