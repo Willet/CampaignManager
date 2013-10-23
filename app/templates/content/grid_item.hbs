@@ -1,5 +1,5 @@
 <div class="item {{#if selected}}selected{{/if}}">
-  <div class="image-container center text-center">
+  <div class="image-container center text-cetner" {{#if dominant-colour}}style="background-color:{{dominant-colour}}"{{/if}}>
     {{#if video}}
     <div class="image" style="background-image:url({{video-thumbnail}})" />
     {{else}}
