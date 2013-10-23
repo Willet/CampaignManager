@@ -12,7 +12,7 @@ define [
       "click dd": "updateActive"
 
     initialize: (opts) ->
-      @current_state = "list"
+      @current_state = "grid"
 
     updateActive: (event) ->
       @switchActive(@extractState(event.currentTarget))
