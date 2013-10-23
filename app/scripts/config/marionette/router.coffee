@@ -100,8 +100,16 @@ define [
         afterCallback.apply this, callbackArgs
       , this)
 
-      # Call our original route, replacing the callback that was originally
-      # passed in when Backbone.Router.route was invoked with our wrapped
-      # callback that calls the before and after callbacks as well as the
-      # original callback.
-      originalRoute.call this, route, name, wrappedCallback
+      # handle trailing slashes etc
+      route_variants = [
+        route,
+        route + '/',
+        route + '?:querystring',
+        route + '/?:querystring'
+      ]
+      for route_variant in route_variants
+        # Call our original route, replacing the callback that was originally
+        # passed in when Backbone.Router.route was invoked with our wrapped
+        # callback that calls the before and after callbacks as well as the
+        # original callback.
+        originalRoute.call this, route_variant, name, wrappedCallback
