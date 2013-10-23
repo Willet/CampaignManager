@@ -126,7 +126,6 @@ define [
   class Views.PageProductList extends Marionette.CollectionView
 
     template: false
-    tagName: 'tbody'
 
     initialize: (options) ->
       @itemViewOptions = { added: options['added'] }
@@ -139,8 +138,6 @@ define [
     # TODO: implement a sane version of "added"
     #       how do we figure out if a product is in a page...
     template: "page/product_item"
-    tagName: "tr"
-    className: "item list"
 
     serializeData: ->
       console.log @model
