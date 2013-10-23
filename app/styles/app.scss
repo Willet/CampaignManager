@@ -430,6 +430,9 @@ body {
         padding: 20px 0;
         border: 1px solid #eeeeee;
         text-align: center;
+        &.disabled {
+          opacity: 0.3;
+        }
         &.selected {
           border: 1px solid $action-color;
           background-color: lighten($action-color, 45%);

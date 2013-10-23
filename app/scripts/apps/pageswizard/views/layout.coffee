@@ -116,6 +116,7 @@ define [
 
     selectLayoutType: (event) ->
       layoutClicked = @$(event.currentTarget)
+      return if layoutClicked.hasClass('disabled')
       new_layout = @extractClassSuffix(@$(event.currentTarget), 'js-layout')
       @model.set('layout', new_layout)
       @render()
