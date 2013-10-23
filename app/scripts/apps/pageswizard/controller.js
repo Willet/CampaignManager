@@ -297,7 +297,7 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
 
                     // TODO: less fugly handler
                     layout.$('.publish.button').text("Publishing...");
-                    layout.$(layout.publishFail.el).hide();
+                    layout.$(layout.fail.el).hide();
 
                     // TODO: handle case where page_id is 'new'
                     req = $.ajax({
@@ -314,7 +314,7 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                     req.fail(function (request, status, error) {
                         // TODO: less fugly handler
                         layout.$('.publish.button').text("Publish Page");
-                        layout.$(layout.publishFail.el).show();
+                        layout.$(layout.fail.el).show();
                     });
                 });
 

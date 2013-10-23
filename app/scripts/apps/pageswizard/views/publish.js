@@ -4,7 +4,7 @@ define(["marionette", "../views", "backbone", "backbone.stickit"],
         var _ref;
         Views.PublishPage = Marionette.Layout.extend({
             'regions': {
-                'publishFail': '.fail'
+                'fail': '.fail'
             },
             template: "page/publish",
             initialize: function (opts) {
