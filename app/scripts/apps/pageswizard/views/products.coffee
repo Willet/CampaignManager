@@ -26,7 +26,7 @@ define [
       true
 
     searchProductChanged: (event) ->
-      @trigger('display:added-to-page')
+      @trigger('added-product')
       true
 
     triggers:
