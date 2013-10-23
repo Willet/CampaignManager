@@ -487,6 +487,20 @@ body {
         font-weight: bold;
       }
     }
+    #product-list {
+      width: 100%;
+      td .image {
+        width: 180px;
+        height: 180px;
+        background-position: middle center;
+      }
+      td:first-child {
+        width: 180px;
+      }
+      [class*="icon-"] {
+        margin-left: 3px;
+      }
+    }
     .products {
       font-size: 14px;
       border-radius: 3px;
