@@ -6,7 +6,7 @@ define [
   "select2"
 ], (Marionette, Entities, Views, $) ->
 
-  class Views.TaggedPagesInput extends Marionette.ItemView
+  Views.TaggedPagesInput = Marionette.ItemView.extend
 
     template: false
 
@@ -33,7 +33,7 @@ define [
           "<span>#{page['name']}</span>"
         formatSelection: (page) ->
           "<span>#{page['name']}</span>"
-      ).on("change", (e) ->
+      ).on "change", (e) ->
         # TODO: I have no idea where the endpoint is
         # added:e.added, removed:e.removed
       false
@@ -41,7 +41,7 @@ define [
     onClose: ->
       @$el.parent().select2("destroy")
 
-  class Views.TaggedProductInput extends Marionette.ItemView
+  Views.TaggedProductInput = Marionette.ItemView.extend
 
     template: false
 
