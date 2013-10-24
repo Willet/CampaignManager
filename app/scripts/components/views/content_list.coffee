@@ -8,12 +8,12 @@ define [
 
   ContentList.createView = (collection, actions = {}) ->
 
-    layout = new ContentViews.ContentIndexLayout initial_state: 'list'
+    layout = new ContentViews.ContentIndexLayout initial_state: 'grid'
     selectedCollection = new BackboneProjections.Filtered(collection, filter: ((m) -> m.get('selected') is true))
 
     contentList = new ContentViews.ContentList { collection: collection, actions: actions }
     contentListControls = new ContentViews.ContentListControls()
-    multiEditView = new ContentViews.ContentEditArea model: selectedCollection, actions: actions
+    multiEditView = new ContentViews.ContentEditArea model: selectedCollection, actions: actions, multiEdit: true
 
     #
     # Actions
@@ -113,10 +113,29 @@ define [
        models = _.clone(args.model.models)
        _.each(models, (m) -> m.set('selected', false))
 
+    # DIRTY HACK
+    multiEditView.on "content:b2b",
+      (args)  =>
+       args.model.collect((m) -> m.tag(["backtoblue"]))
+       models = _.clone(args.model.models)
+       _.each(models, (m) -> m.set('selected', false))
+
+    multiEditView.on "content:nob2b",
+      (args)  =>
+       args.model.collect((m) -> m.tag(null))
+       models = _.clone(args.model.models)
+       _.each(models, (m) -> m.set('selected', false))
+
     layout.on("content:select-all", => collection.selectAll())
     layout.on("content:unselect-all", => collection.unselectAll())
     layout.on("fetch:next-page", =>
       $.when(collection.getNextPage()).done =>
+        store_id = App.routeModels.get('store').get('id')
+        collection.collect (content) ->
+          products = content.get('tagged-products')
+          if products
+            products.collect (product) ->
+              App.request("fetch:product", store_id, product)
         layout.trigger("fetch:next-page:complete")
     )
 
@@ -127,7 +146,7 @@ define [
     layout.on "show", ->
       layout.list.show contentList
       layout.listControls.show contentListControls
-      #layout.multiedit.show multiEditView
+      layout.multiedit.show multiEditView
 
     return layout
 

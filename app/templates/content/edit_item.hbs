@@ -30,6 +30,13 @@
       </a>
     {{/if}}
   {{else}}
+  <!-- TODO: Remove B2B -->
+  <a class="js-nob2b b2b{{#if undecided}}active{{/if}}" title="Back to Blue">
+    <i class="">!B2B</i>
+  </a>
+  <a class="js-b2b b2b{{#if undecided}}active{{/if}}" title="Back to Blue">
+    <i class="">B2B</i>
+  </a>
   <a class="js-undecided undecided {{#if undecided}}active{{/if}}" title="Reset">
     <i class="icon-accessibility-question"></i>
   </a>

@@ -9,5 +9,5 @@ define([
     "entities/user",
     "exports"
 ], function (Base, Products, Content, Pages, Stores, Scrape, TileConfig, User, exports) {
-    return _.extend(exports, Base, Products, Content, Pages, Stores, Scrape, TileConfig, User);
+    return window.Entities = _.extend(exports, Base, Products, Content, Pages, Stores, Scrape, TileConfig, User);
 });

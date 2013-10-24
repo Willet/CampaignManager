@@ -541,6 +541,20 @@ body {
         margin-left: 0;
       }
       width: 16.4%;
+
+      $disabled-color: transparentize($action-color, 0.7);
+      &.disabled {
+        span {
+          background-color: $disabled-color;
+          &:after {
+            border-color: $disabled-color;
+            border-left-color: transparent;
+          }
+        }
+        &:after {
+          border-left-color: $disabled-color;
+        }
+      }
     }
   }
 }
@@ -583,4 +597,41 @@ body {
 }
 #content > div > .content {
   padding: 30px;
+}
+
+#product-list {
+  .item {
+    &.list {
+      height: 114px;
+      margin: 5px 0;
+      .image-container {
+        text-align: center;
+        background-color: #f4f4f4;
+        border-right: 1px solid $dark-base-color;
+      }
+      .title {
+        font-weight: bold;
+      }
+      .actions-container {
+        margin-top: 50px; /* really wish this could have been floated down */
+        .actions {
+          @include button-group-container;
+          text-align: center;
+          a {
+            @include button;
+            margin-bottom: 0;
+            background-color: #e9e9e9;
+            border-color: #d0d0d0;
+            color: #333333;
+          }
+        }
+      }
+    }
+  }
+
+}
+
+/* TODO: Remove */
+body .edit-area .actions a.b2b {
+  display: none;
 }
