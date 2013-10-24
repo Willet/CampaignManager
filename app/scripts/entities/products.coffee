@@ -1,16 +1,33 @@
 define [
-  "entities/base"
+  "entities/base",
+  "backbone.uniquemodel"
 ], (Base) ->
 
   Entities = Entities || {}
 
   class Entities.Product extends Base.Model
 
-    viewJSON: ->
-      json = @toJSON()
-      json['content-ids'] = @get('content-ids')?.viewJSON?()
-      json['default-image-id'] = @get('default-image-id')?.viewJSON?()
+    relations: [
+      {
+        type: Backbone.One
+        key: 'default-image-id'
+        relatedModel: 'Entities.Content'
+        map: (data, type) ->
+          new Entities.Content(id: data)
+      }
+    ]
+
+    toJSON: (opts) ->
+      json = _.clone(@attributes)
+      json['default-image-id'] = @get('default-image-id')?.get('id')
       json
+
+    viewJSON: (opts) ->
+      json = _.clone(@toJSON())
+      json['default-image-id'] = @get('default-image-id')?.viewJSON(nested: true)
+      json
+
+  Entities.Product = Backbone.UniqueModel(Entities.Product)
 
   class Entities.ProductCollection extends Base.Collection
 

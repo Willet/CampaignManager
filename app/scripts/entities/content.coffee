@@ -2,12 +2,38 @@ define [
   "app",
   "entities/base",
   "entities/products",
-  "underscore"
+  "underscore",
+  "backbone.uniquemodel"
 ], (App, Base, Entities, _) ->
 
   Entities = Entities || {}
 
   class Entities.Content extends Base.Model
+
+    relations: [
+      {
+        type: Backbone.Many
+        key: 'tagged-products'
+        collectionType: 'Entities.ProductCollection'
+        map: (fids, type) ->
+          # see https://github.com/dhruvaray/backbone-associations/issues/79
+          # a pull request I opened up to address how insane this code is
+          # in what should be a simple case
+          collection = type
+          fids = if _.isArray(fids) then fids else [fids]
+          type = if (type instanceof Backbone.Collection) then type.model else type
+          data = _.map fids, (fid) ->
+            if fid instanceof Backbone.Model
+              fid
+            else
+              new Entities.Product({id: fid})
+
+          if collection instanceof Backbone.Collection
+            return data
+          else
+            return new type(data)
+      }
+    ]
 
     types = {
       1: "images"
@@ -40,9 +66,15 @@ define [
       "#{App.API_ROOT}/store/#{@get('store-id')}/content/#{@get('id')}"
 
     parse: (data) ->
-      attrs = _.clone(data)
+      attrs = data
       attrs['active'] = if data['active'] == "true" then true else false
       attrs['approved'] = if data['approved'] == "true" then true else false
+
+      # make sure tagged-products exist (so that the relation exists)
+      unless attrs['tagged-products']
+        attrs['tagged-products'] = []
+      attrs = super(attrs)
+      ###
       attrs['tagged-products'] = []
       _.each data['tagged-products'], (product_id) ->
         product = App.request("product:entity", attrs['store-id'], product_id)
@@ -52,17 +84,26 @@ define [
       # trigger an event when related models are fetched
       xhrs = _.map(attrs['tagged-products'].models, ((product) -> product._fetch))
       $.when.apply($, xhrs).done(=> @trigger('related-fetched'))
+      ###
 
       attrs
 
-    toJSON: ->
-      json = super()
-      if @attributes['tagged-products']
-        json['tagged-products'] = @get('tagged-products').collect((m) -> m.get("id"))
+    toJSON: (options) ->
+      json = _.clone(@attributes)
+      if json['tagged-products']
+        if json['tagged-products'] instanceof Backbone.Collection
+          json['tagged-products'] = json['tagged-products'].collect((m) -> m.get('id'))
+        else
+          json['tagged-products'] = _.map(json['tagged-products'], (m) -> m.get('id'))
       json
 
-    viewJSON: ->
-      json = @toJSON()
+    viewJSON: (opts = {}) ->
+      json = _.clone(@toJSON())
+      # TODO: sucks that we have to undo toJSON for relational objects
+      if !opts['nested']
+        if @attributes['tagged-products']
+          if @get('tagged-products').collect
+            json['tagged-products'] = @get('tagged-products').collect((m) -> m.viewJSON(nested: true))
       json['selected'] = @get('selected')
       if @get('active')
         if @get('approved')
@@ -127,6 +168,7 @@ define [
           url: url
       }
 
+  Entities.Content = Backbone.UniqueModel(Entities.Content)
 
   class Entities.ContentCollection extends Base.Collection
     model: Entities.Content
@@ -145,64 +187,10 @@ define [
     viewJSON: ->
       @collect((m) -> m.viewJSON())
 
-  class Entities.ContentPageableCollection extends Base.Collection
+  class Entities.ContentPageableCollection extends Base.PageableCollection
+
     model: Entities.Content
-
-    initialize: ->
-      @resetPaging()
-      @queryParams = {}
-
-    selectAll: ->
-      @collect((m) -> m.set('selected', true))
-
-    unselectAll: ->
-      @collect((m) -> m.set('selected', false))
-
-    setFilter: (options) ->
-      for key, val of options
-        if val == ""
-          delete @queryParams[key]
-        else
-          @queryParams[key] = val
-      @reset()
-      @getNextPage()
-
-    updateSortOrder: (new_order) ->
-      @queryParams['order'] = new_order
-      @reset()
-      @getNextPage()
-
-    reset: (models, options) ->
-      super(models, options)
-      @resetPaging()
-
-    resetPaging: ->
-      @params =
-        results: 25
-      @finished = false
-
-    getNextPage: (opts) ->
-      unless @finished || @in_progress
-        @in_progress = true
-
-        # DEFER: could do an App.request here instead ... not sure if meaningful
-        collection = new Entities.ContentCollection
-        params = _.extend(@queryParams, @params)
-        collection.url = @url
-
-        xhr = collection.fetch
-          data: params
-          reset: true
-
-        $.when(
-          xhr
-        ).done(=>
-          @add(collection.models, at: @length)
-          @params['offset'] = xhr.responseJSON['meta']?['cursors']?['next']
-          @finished = true unless @params['offset']
-          @in_progress = false
-        )
-      xhr
+    collectionType: Entities.ContentCollection
 
   Entities
 

@@ -17,4 +17,5 @@ define [
     _action: (action, params = {}) ->
       $.getJSON(@url() + "/" + action, params)
 
+
   Base

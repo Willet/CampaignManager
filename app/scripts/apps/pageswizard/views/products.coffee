@@ -140,7 +140,6 @@ define [
     template: "page/product_item"
 
     serializeData: ->
-      console.log @model
       result = @model.viewJSON()
       result['added'] = @added
       result
@@ -151,6 +150,7 @@ define [
 
     initialize: (options) ->
       @added = options['added']
+      @model.on('nested-change', => @render())
 
     addToPage: (event) ->
       App.request("add_product:page:entity", {
