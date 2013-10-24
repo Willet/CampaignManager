@@ -199,7 +199,7 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                 var contents, content_list, layout, page,
                     _this = this;
                 page = App.routeModels.get('page');   // Why does this return an empty model?
-                contents = App.request("content:entities:paged", store_id, page_id);
+                contents = App.request("needs-review:content:entities:paged", store_id, page_id);
 
                 var fetchRelatedProducts = function(contents) {
                     App.execute("when:fetched", contents, function() {

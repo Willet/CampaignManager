@@ -48,7 +48,7 @@ define [
       contents.store_id = store_id
       contents.url = "#{App.API_ROOT}/store/#{store_id}/content"
 
-      filters = active: false, approved: false
+      filters = active: true, approved: false
 
       if store_id is "38"
         filters['tags'] = 'backtoblue'
