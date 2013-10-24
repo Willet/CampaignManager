@@ -56,6 +56,9 @@ require.config({
             deps: ['handlebars'],
             exports: 'JST'
         },
+        select2: { // otherwise it might bind to the wrong jquery object
+            deps: ['jquery']
+        },
         sinon: {
             exports: 'sinon'
         },
