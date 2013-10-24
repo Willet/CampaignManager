@@ -37,7 +37,8 @@ define [
       products = new Entities.ProductPageableCollection()
       products.store_id = store_id
       products.url = "#{App.API_ROOT}/store/#{store_id}/product/live"
-      products.getNextPage()
+      #products.getNextPage()
+      products.fetchAll()
       products
 
     getProductSet: (store_id, product_ids, params = {}) ->
@@ -53,7 +54,8 @@ define [
     getPageProducts: (store_id, page_id, params = {}) ->
       products = new Entities.ProductPageableCollection()
       products.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product"
-      products.getNextPage()
+      #products.getNextPage()
+      products.fetchAll()
       products
 
   App.reqres.setHandler "product:entities:set",

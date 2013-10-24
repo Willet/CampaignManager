@@ -16,6 +16,7 @@ define [
       "click #needs-review": "displayNeedsReview"
       "click #added-to-page": "displayAddedToPage"
       "change #search-product": "searchProductChanged"
+      "click .js-add-all": "addAllProducts"
 
     displayNeedsReview: (event) ->
       @trigger('display:needs-review')
@@ -39,6 +40,11 @@ define [
       # TODO: move this to the scrape model ?
       urlPattern = /(http|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
       url && url != "" && urlPattern.test(url)
+
+    addAllProducts: ->
+      event.stopPropagation()
+      _.defer(=> @productList.currentView.children.each((child) -> child.addToPageAlso()))
+      false
 
     addUrl: (event) ->
       if @validUrl(@$('#url').val())
@@ -152,7 +158,7 @@ define [
       @added = options['added']
       @model.on('nested-change', => @render())
 
-    addToPage: (event) ->
+    addToPageAlso: () ->
       App.request("add_product:page:entity", {
           store_id: App.routeModels.get('store').get('id')
           page_id: App.routeModels.get('page').get('id')
@@ -167,9 +173,12 @@ define [
         id: @model.get('id')
       )
 
-      event.stopPropagation()
       @added = true
       @render()
+
+    addToPage: (event) ->
+      event.stopPropagation()
+      @addToPageAlso()
       false
 
     removeFromPage: (event) ->
