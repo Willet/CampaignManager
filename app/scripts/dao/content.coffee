@@ -37,6 +37,9 @@ define [
       contents = new Entities.ContentPageableCollection()
       contents.store_id = store_id
       contents.url = "#{App.API_ROOT}/store/#{store_id}/content"
+      #if store_id is "38"
+      #  contents.setFilter({tags: 'backtoblue'})
+
       contents.getNextPage()
       contents
 
