@@ -1,9 +1,16 @@
 <div id="page-wizard-header">
   <ol class="steps">
     <li class="name"><span><a href="/{{store.id}}/pages/{{default page.id 'new'}}">Name</a></span></li>
-    <li class="layout"><span><a href="/{{store.id}}/pages/{{default page.id 'new'}}/layout">Layout</a></span></li>
-    <li class="products"><span><a href="/{{store.id}}/pages/{{default page.id 'new'}}/products">Products</a></span></li>
-    <li class="content"><span><a href="/{{store.id}}/pages/{{default page.id 'new'}}/content">Content</a></span></li>
-    <li class="generate"><span><a href="/{{store.id}}/pages/{{default page.id 'new'}}/generate">Generate</a></span></li>
+    {{#if page.id}}
+      <li class="layout"><span><a href="/{{store.id}}/pages/{{page.id}}/layout">Layout</a></span></li>
+      <li class="products"><span><a href="/{{store.id}}/pages/{{page.id}}/products">Products</a></span></li>
+      <li class="content"><span><a href="/{{store.id}}/pages/{{page.id}}/content">Content</a></span></li>
+      <li class="publish"><span><a href="/{{store.id}}/pages/{{page.id}}/publish">Publish</a></span></li>
+    {{else}}
+      <li class="layout disabled"><span><a>Layout</a></span></li>
+      <li class="products disabled"><span><a>Products</a></span></li>
+      <li class="content disabled"><span><a>Content</a></span></li>
+      <li class="publish disabled"><span><a>Publish</a></span></li>
+    {{/if}}
   </ol>
 </div>

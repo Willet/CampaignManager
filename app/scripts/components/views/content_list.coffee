@@ -13,7 +13,7 @@ define [
 
     contentList = new ContentViews.ContentList { collection: collection, actions: actions }
     contentListControls = new ContentViews.ContentListControls()
-    multiEditView = new ContentViews.ContentEditArea model: selectedCollection, actions: actions
+    multiEditView = new ContentViews.ContentEditArea model: selectedCollection, actions: actions, multiEdit: true
 
     #
     # Actions
@@ -130,6 +130,12 @@ define [
     layout.on("content:unselect-all", => collection.unselectAll())
     layout.on("fetch:next-page", =>
       $.when(collection.getNextPage()).done =>
+        store_id = App.routeModels.get('store').get('id')
+        collection.collect (content) ->
+          products = content.get('tagged-products')
+          if products
+            products.collect (product) ->
+              App.request("fetch:product", store_id, product)
         layout.trigger("fetch:next-page:complete")
     )
 
