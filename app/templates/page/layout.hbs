@@ -1,4 +1,9 @@
 <div class="content">
+  {{#if page.layout}}
+  <div class="actions row right text-right">
+    <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/products">Save &amp; Continue</a>
+  </div>
+  {{/if}}
   <h4>Layout</h4>
   <div class="page-edit layout">
     <div class="container">
@@ -79,9 +84,6 @@
           {{/is}}
         {{/each}}
       </form>
-    </div>
-    <div class="actions row">
-      <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/products">Save &amp; Continue</a>
     </div>
     {{/if}}
     </div>
