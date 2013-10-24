@@ -84,11 +84,12 @@ define [
             )
         if event.removed
           if @model
-            model = @model.get('tagged-products').get(event.removed.id)
+            product = @model.get('tagged-products').get(event.removed.id)
             @model.get('tagged-products').remove(product)
             @trigger('remove', model)
           else
             @collection.collect((m) =>
+              product = m.get('tagged-products').get(event.removed.id)
               m.get('tagged-products').remove(product)
               m.save()
             )
