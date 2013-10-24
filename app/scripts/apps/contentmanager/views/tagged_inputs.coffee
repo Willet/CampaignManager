@@ -41,15 +41,19 @@ define [
 
     initialize: (options) ->
       @store = options['store']
+      @storeId = options['store_id']
 
     onShow: ->
+      # BUG: If this is a part of a multi-edit, there will be a problem with
+      # accessing store / page
+      storeId = @store?.get('id') or @storeId
       @$el.parent().select2(
         multiple: true
         allowClear: true
         placeholder: "Search for a product"
         tokenSeparators: [',']
         ajax:
-          url: "#{App.API_ROOT}/store/#{@model.get("store-id")}/product"
+          url: "#{App.API_ROOT}/store/#{@storeId}/product/live"
           dataType: 'json'
           cache: true
           data: (term, page) ->
@@ -65,17 +69,29 @@ define [
         formatSelection: (product) ->
           "<span>#{product['name']}</span>"
       )
-      if @model.get("tagged-products")
+      if @model?.get("tagged-products")
         @$el.parent().select2('data', @model.get("tagged-products").toJSON())
       @$el.parent().on "change", (event, element) =>
         if event.added
-          model = new Entities.Product(event.added)
-          @model.get('tagged-products').add(model)
-          @trigger('add', model)
+          product = new Entities.Product(event.added)
+          if @model
+            @model.get('tagged-products').add(product)
+            @trigger('add', model)
+          else
+            @collection.collect((m) =>
+              m.get('tagged-products').add(product)
+              m.save()
+            )
         if event.removed
-          model = @model.get('tagged-products').get(event.removed.id)
-          @model.get('tagged-products').remove(model)
-          @trigger('remove', model)
+          if @model
+            model = @model.get('tagged-products').get(event.removed.id)
+            @model.get('tagged-products').remove(product)
+            @trigger('remove', model)
+          else
+            @collection.collect((m) =>
+              m.get('tagged-products').remove(product)
+              m.save()
+            )
       false
 
     addProduct: (product) ->

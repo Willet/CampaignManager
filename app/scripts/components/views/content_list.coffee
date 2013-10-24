@@ -13,7 +13,7 @@ define [
 
     contentList = new ContentViews.ContentList { collection: collection, actions: actions }
     contentListControls = new ContentViews.ContentListControls()
-    multiEditView = new ContentViews.ContentEditArea model: selectedCollection, actions: actions
+    multiEditView = new ContentViews.ContentEditArea model: selectedCollection, actions: actions, multiEdit: true
 
     #
     # Actions
