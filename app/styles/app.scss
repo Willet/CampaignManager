@@ -118,6 +118,11 @@ body {
       }
     }
   }
+  .edit-area.multiEdit {
+    position: fixed;
+    width: 25%;
+    left: 70%;
+  }
   .item {
     box-shadow: 0 1px 2px $dark-base-color;
     background-color: $light-base-color;

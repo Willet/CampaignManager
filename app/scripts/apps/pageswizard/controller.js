@@ -219,7 +219,7 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                     model: page
                 });
                 layout.on('display:needs-review', function() {
-                    contents = App.request("content:entities:paged", store_id, page_id);
+                    contents = App.request("needs-review:content:entities:paged", store_id, page_id);
                     fetchRelatedProducts(contents);
                     content_list = ContentList.createView(contents, { page: true, store_id: store_id });
                     layout.contentList.show(content_list);
