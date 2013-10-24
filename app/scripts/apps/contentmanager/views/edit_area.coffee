@@ -21,12 +21,26 @@ define [
 
     initialize: (options) ->
       @actions = options['actions']
+      @multiEdit = options['multiEdit']
 
     onShow: ->
 
     onRender: ->
-      @taggedProducts.show(new Views.TaggedProductInput(model: @model, store: @store))
-      @taggedPages.show(new Views.TaggedPagesInput(model: @model, store: @store))
+      taggedProductInputConfig = model: @model, store: @store
+      taggedPagesInputConfig = model: @model, store: @store
+
+      if @multiEdit
+          taggedProductInputConfig['collection'] = @model
+          taggedProductInputConfig['store_id'] = @actions['store_id']
+          delete taggedProductInputConfig['model']
+
+          taggedPagesInputConfig['collection'] = @model
+          taggedPagesInputConfig['store_id'] = @actions['store_id']
+          delete taggedPagesInputConfig['model']
+
+
+      @taggedProducts.show(new Views.TaggedProductInput(taggedProductInputConfig))
+      @taggedPages.show(new Views.TaggedPagesInput(taggedPagesInputConfig))
       @relayEvents(@taggedProducts.currentView, 'tagged-products')
       @relayEvents(@taggedPages.currentView, 'tagged-pages')
 
