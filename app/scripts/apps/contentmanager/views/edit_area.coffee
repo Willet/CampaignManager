@@ -18,6 +18,8 @@ define [
       "click .js-approve": "content:approve"
       "click .js-reject": "content:reject"
       "click .js-undecided": "content:undecided"
+      "click .js-b2b": "content:b2b" # DIRTY HACK
+      "click .js-nob2b": "content:nob2b" # DIRTY HACK
 
     initialize: (options) ->
       @actions = options['actions']

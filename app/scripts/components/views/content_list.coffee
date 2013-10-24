@@ -113,6 +113,19 @@ define [
        models = _.clone(args.model.models)
        _.each(models, (m) -> m.set('selected', false))
 
+    # DIRTY HACK
+    multiEditView.on "content:b2b",
+      (args)  =>
+       args.model.collect((m) -> m.tag(["backtoblue"]))
+       models = _.clone(args.model.models)
+       _.each(models, (m) -> m.set('selected', false))
+
+    multiEditView.on "content:nob2b",
+      (args)  =>
+       args.model.collect((m) -> m.tag(null))
+       models = _.clone(args.model.models)
+       _.each(models, (m) -> m.set('selected', false))
+
     layout.on("content:select-all", => collection.selectAll())
     layout.on("content:unselect-all", => collection.unselectAll())
     layout.on("fetch:next-page", =>

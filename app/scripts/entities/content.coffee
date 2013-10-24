@@ -32,6 +32,14 @@ define [
         approved: false
       )
 
+    tag: (tags) ->
+      unless _.isArray(tags) or _.isNull(tags)
+        tags = [tags]
+
+      @save(
+        tags: tags
+      )
+
     # TODO: should be a better way
     # since this belongs to collections from different paths
     # e.g. from inside the page, need to override to always use this path

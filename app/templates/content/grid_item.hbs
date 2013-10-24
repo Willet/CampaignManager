@@ -60,10 +60,10 @@
       </div>
     </span>
     <span class="status {{status}}">
-      <span class="prioritized"><i class="icon-general-up-arrow"></i> Prioritized</span>
-      <span class="approved"><i class="icon-general-checkmark"></i> Approved</span>
-      <span class="rejected"><i class="icon-general-error"></i> Rejected</span>
-      <span class="undecided"><i class="icon-accessibility-question"></i> Undecided</span>
+      <span class="prioritized">{{#if tags}}*{{/if}}<i class="icon-general-up-arrow"></i> Prioritized</span>
+      <span class="approved">{{#if tags}}*{{/if}}<i class="icon-general-checkmark"></i> Approved</span>
+      <span class="rejected">{{#if tags}}*{{/if}}<i class="icon-general-error"></i> Rejected</span>
+      <span class="undecided">{{#if tags}}*{{/if}}<i class="icon-accessibility-question"></i> Undecided</span>
     <div class="color" />
   </div>
   <div class="edit-area large-8 columns">
