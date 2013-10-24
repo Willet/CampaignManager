@@ -20,6 +20,11 @@ Will become the landing dashboard for Second Funnel.
 Begin local development via `grunt server`
 All assets will be live-reloaded! (javascript, css, etc...)
 
+If you get the error `EMFILE, too many open files` or 
+a similar error, type this into your terminal: `ulimit -n 20000`.
+You can add it to your .bashrc or shell configuration file to make
+it run every time you start a shell session.
+
 ## Deploying
 - `grunt build` in order to build the `dist` folder
 - dist folder can be tested via `grunt server:dist` (to verify compilation)
