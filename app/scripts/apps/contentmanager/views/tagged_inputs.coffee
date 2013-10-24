@@ -86,18 +86,18 @@ define [
           else
             @collection.collect((m) =>
               m.get('tagged-products').add(product)
-              m.save()
+              m.set('selected', false)
             )
         if event.removed
           if @model
             product = @model.get('tagged-products').get(event.removed.id)
             @model.get('tagged-products').remove(product)
-            @trigger('remove', model)
+            @trigger('remove', product)
           else
             @collection.collect((m) =>
               product = m.get('tagged-products').get(event.removed.id)
               m.get('tagged-products').remove(product)
-              m.save()
+              m.set('selected', false)
             )
       false
 
