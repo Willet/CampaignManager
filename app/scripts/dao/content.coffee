@@ -43,6 +43,21 @@ define [
       contents.getNextPage()
       contents
 
+    getNeedsReviewPagedContents: (store_id, params = {}) ->
+      contents = new Entities.ContentPageableCollection()
+      contents.store_id = store_id
+      contents.url = "#{App.API_ROOT}/store/#{store_id}/content"
+
+      filters = active: false, approved: false
+
+      #if store_id is "38"
+      #  filters['tags'] = 'backtoblue'
+
+      contents.setFilter(filters)
+
+      contents.getNextPage()
+      contents
+
     getAddedToPagePagedContents: (store_id, page_id, params = {}) ->
       contents = new Entities.ContentPageableCollection()
       contents.store_id = store_id
@@ -58,6 +73,10 @@ define [
   App.reqres.setHandler "content:entities:paged",
     (store_id, params) ->
       API.getPagedContents store_id, params
+
+  App.reqres.setHandler "needs-review:content:entities:paged",
+    (store_id, params) ->
+      API.getNeedsReviewPagedContents store_id, params
 
   App.reqres.setHandler "added-to-page:content:entities:paged",
     (store_id, page_id, params) ->
