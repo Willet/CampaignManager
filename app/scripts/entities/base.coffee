@@ -1,9 +1,10 @@
 define [
+  'app',
   'backbone',
   'backbone-associations',
   'jquery',
   'underscore'
-], (Backbone, BackboneAssociations, $, _) ->
+], (App, Backbone, BackboneAssociations, $, _) ->
 
   Base = Base || {}
 
@@ -95,6 +96,19 @@ define [
       @params =
         results: 25
       @finished = false
+
+    fetchAll: (opts) ->
+      unless @finished
+        xhr = @getNextPage()
+        xhr.promise().done(=>
+          @fetchAll()
+        )
+      else
+        _.defer(=>
+          @collect (product) ->
+            if product.get('default-image-id')
+              App.request("fetch:content", product.get('store-id'), product.get("default-image-id"))
+        )
 
     getNextPage: (opts) ->
       unless @finished || @in_progress
