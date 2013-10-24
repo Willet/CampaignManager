@@ -5,7 +5,7 @@ define [
   "select2"
 ], (Marionette, Views) ->
 
-  class Views.PageCreateProducts extends Marionette.Layout
+  Views.PageCreateProducts = Marionette.Layout.extend
 
     template: "page/products"
 
@@ -15,12 +15,17 @@ define [
       "keydown #url": "resetError"
       "click #needs-review": "displayNeedsReview"
       "click #added-to-page": "displayAddedToPage"
+      "change #search-product": "searchProductChanged"
 
     displayNeedsReview: (event) ->
       @trigger('display:needs-review')
       true
 
     displayAddedToPage: (event) ->
+      @trigger('display:added-to-page')
+      true
+
+    searchProductChanged: (event) ->
       @trigger('display:added-to-page')
       true
 
@@ -55,11 +60,13 @@ define [
     regions:
       "scrapeList": "#scrape-list"
       "productList": "#product-list"
+      "productAddedBySearch": ".product-added-search.success"
 
     initialize: (opts) ->
 
     onRender: (opts) ->
       @$(".steps .products").addClass("active")
+      @$(@productAddedBySearch.el).hide()
 
     onShow: (opts) ->
       # TODO: unhard-code this...
@@ -69,6 +76,7 @@ define [
         placeholder: "Search for a product"
         tokenSeparators: [',']
         ajax:
+          # TODO: un-hardcode
           url: "#{App.API_ROOT}/store/38/product"
           dataType: 'json'
           cache: true
@@ -95,6 +103,7 @@ define [
         )
         @trigger "added-product", event.added
         @$('#search-product').select2('val', null)
+        @$(@productAddedBySearch.el).fadeIn(200).delay(1500).fadeOut(400)
       false
 
     onClose: ->
@@ -131,7 +140,6 @@ define [
     template: "page/product_item"
 
     serializeData: ->
-      console.log @model
       result = @model.viewJSON()
       result['added'] = @added
       result
@@ -142,6 +150,7 @@ define [
 
     initialize: (options) ->
       @added = options['added']
+      @model.on('nested-change', => @render())
 
     addToPage: (event) ->
       App.request("add_product:page:entity", {

@@ -1,19 +1,24 @@
 define [
   'backbone',
+  'backbone-associations',
   'jquery',
   'underscore'
-], (Backbone, $, _) ->
+], (Backbone, BackboneAssociations, $, _) ->
 
   Base = Base || {}
 
-  class Base.Model extends Backbone.Model
+  class Base.Model extends Backbone.AssociatedModel
     blacklist: ['selected',]
 
+    initialize: ->
+      @isFetched = false
+      @on('request', => @isFetched = true)
+
     viewJSON: (opts) ->
-      _.clone(@attributes)
+      Backbone.AssociatedModel.prototype.toJSON.apply(@, arguments)
 
     toJSON: (opts) ->
-      _.omit(@attributes, @blacklist || {})
+      _.omit(Backbone.AssociatedModel.prototype.toJSON.apply(@, arguments), @blacklist || {})
 
     fetch: ->
       @_fetch = super(arguments...)
@@ -77,6 +82,7 @@ define [
       @getNextPage()
 
     updateSortOrder: (new_order) ->
+      @queryParams = {}
       @queryParams['order'] = new_order
       @reset()
       @getNextPage()
@@ -95,17 +101,19 @@ define [
         @in_progress = true
 
         # DEFER: could do an App.request here instead ... not sure if meaningful
-        collection = new @collectionType
-        params = _.extend(@queryParams, @params)
-        collection.url = @url
+        #collection = new @collectionType
+        #collection.model = @model
+        #collection.url = @url
 
-        xhr = collection.fetch
+        params = _.extend(@queryParams, @params)
+
+        xhr = @fetch
           data: params
-          reset: true
+          remove: false
         $.when(
           xhr
         ).done(=>
-          @add(collection.models, at: @length)
+          #@add(collection.models, at: @length)
           @params['offset'] = xhr.responseJSON['meta']?['cursors']?['next']
           @finished = true unless @params['offset']
           @in_progress = false

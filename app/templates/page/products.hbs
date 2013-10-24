@@ -1,9 +1,12 @@
 <div class="content">
+  <div class="actions row right text-right">
+    <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/content">Save &amp; Continue</a>
+  </div>
   <h4>Add Products</h4>
-  <div class="page-edit products">
+  <div class="page-edit products panel">
     <div class="container row">
       <div class="add-products">
-        <div class="row">
+        <!-- div class="row">
           <label class="large-2 columns inline">Add by URL</label>
           <span class="large-8 columns">
             <input id="url" type="text" placeholder="http://..." />
@@ -11,14 +14,14 @@
           <span class="large-2 columns text-left">
             <a href="#" id="add-url" class="small button">Add</a>
           </span>
-        </div>
+        </div -->
         <div class="row">
-          <label class="large-2 columns inline">Add by Search</label>
+          <label class="large-2 columns inline">Add a Product</label>
           <span class="large-8 columns">
             <input id="search-product" style="width:100%;" type="text" placeholder="Search for product" />
           </span>
           <span class="large-2 columns text-left">
-            <a href="#" id="add-product" class="small button">Add</a>
+            <span class="product-added-search success label">Added</span>
           </span>
         </div>
         <div class="row">
@@ -31,7 +34,7 @@
         </div>
       </div>
       <h4 class="text-left">Add or Remove Products</h4>
-      <p class="text-left">Review products that have been added to the page <!-- /or prioritize products to appear at the top of the page --></p>
+      <p class="text-left">Review and add products to this page</p>
       <div class="switch-toggle switch-2 panel radius">
       <form>
         <input id="needs-review" name="filter2" type="radio" checked>
@@ -52,9 +55,6 @@
         <a href="#" id="add-to-page" class="button small">Add To Page</a>
         <a href="#" id="remove-from-page" class="button small">Remove From Page</a>
       </div-->
-    </div>
-    <div class="actions row">
-      <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/content">Save &amp; Continue</a>
     </div>
   </div>
 </div>

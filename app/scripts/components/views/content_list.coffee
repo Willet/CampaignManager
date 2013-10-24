@@ -117,6 +117,12 @@ define [
     layout.on("content:unselect-all", => collection.unselectAll())
     layout.on("fetch:next-page", =>
       $.when(collection.getNextPage()).done =>
+        store_id = App.routeModels.get('store').get('id')
+        collection.collect (content) ->
+          products = content.get('tagged-products')
+          if products
+            products.collect (product) ->
+              App.request("fetch:product", store_id, product)
         layout.trigger("fetch:next-page:complete")
     )
 
