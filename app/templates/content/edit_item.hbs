@@ -6,12 +6,12 @@
   <label class="inline"><b>Tagged Products</b></label>
   <input type="text" class="js-tagged-products" style="width:100%" />
 </div>
-{{#unless actions.page}}
+{{#if actions.page}}
 <div>
   <label class="inline"><b>Tagged Pages</b></label>
   <input type="text" class="js-tagged-pages" style="width:100%" />
 </div>
-{{/unless}}
+{{/if}}
 <div class="actions">
   {{#if actions.page}}
     {{#if approved}}
