@@ -1,17 +1,17 @@
 <div class="content">
-    <div class="actions row right text-right">
+    <div class="actions right text-right">
       <a class="button small" href="/{{store.id}}/pages">Publish Later</a>
     </div>
     <h4>Publish Page</h4>
     <div class="page-edit panel">
         <p>
             The page will be live immediately:
-            <a href="http://{{store.public-base-url}}{{page.url}}/">
+            <a href="{{store.public-base-url}}{{page.url}}">
                 {{store.public-base-url}}{{page.url}}
             </a>
         </p>
         <p>
-            <span class="label">Note</span> It will overwrite the existing page.
+            It will overwrite the existing page.
         </p>
         <div class="actions row">
             <a class="publish js-next button small" href="">Publish Page</a>

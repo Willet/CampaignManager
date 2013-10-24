@@ -1,6 +1,6 @@
 <div class="content">
   {{#if page.layout}}
-  <div class="actions row right text-right">
+  <div class="actions right text-right">
     <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/products">Save &amp; Continue</a>
   </div>
   {{/if}}
@@ -48,7 +48,7 @@
                   {{#if value}}
                     <img alt="{{var}}" src='{{value}}' />
                   {{else}}
-                    <img alt="{{var}}" src="http://placehold.it/762x142?text=''" />
+                    <img alt="{{var}}" src="http://placehold.it/880x313&text=Image+Preview" />
                   {{/if}}
                 </span>
               </span>
@@ -88,4 +88,9 @@
     {{/if}}
     </div>
   </div>
+  {{#if page.layout}}
+  <div class="actions right text-right">
+    <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/products">Save &amp; Continue</a>
+  </div>
+  {{/if}}
 </div>

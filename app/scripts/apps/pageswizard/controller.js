@@ -164,6 +164,8 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
 
                     // reload list
                     layout.trigger('display:added-to-page');
+                    // also change the tab UI
+                    layout.$('#added-to-page').click();
                 });
                 product_list = new Views.PageProductList({collection: products, added: false});
                 layout.on('display:needs-review', function () {
