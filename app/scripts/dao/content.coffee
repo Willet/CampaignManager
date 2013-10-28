@@ -53,7 +53,7 @@ define [
       if store_id is "38"
         filters['tags'] = 'backtoblue'
 
-      contents.setFilter(filters)
+      #contents.setFilter(filters)
 
       contents.getNextPage()
       contents
