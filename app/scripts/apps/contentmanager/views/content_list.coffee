@@ -58,9 +58,9 @@ define [
             onGet: (observed) ->
               active = observed[0]
               approved = observed[1]
-              if active && approved
+              if (active == 'true' && approved == 'true') || (active == true && approved == true)
                 "approved"
-              else if active && !approved
+              else if active == 'true' && !(approved == 'true') || (active == true && approved == false)
                 "undecided"
               else
                 "rejected"
