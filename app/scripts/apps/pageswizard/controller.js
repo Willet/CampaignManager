@@ -118,6 +118,8 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                 page = App.routeModels.get('page');
                 scrapes = App.request("page:scrapes:entities", store_id, page_id);
                 products = App.request("product:entities:paged", store_id, page_id);
+                var products_in_page = App.request("added-to-page:product:entities:paged", store_id, page_id);
+                product_list = new Views.PageProductList({collection: products, added: true});
 
                 App.execute("when:fetched", products, function() {
                     // for each product, fetch their content image
@@ -161,20 +163,26 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                     // TODO: we should really only add this in the case
                     //       the products is of type 'added'
                     products.add(new_product);
+                    products_in_page.add(new_product);
 
                     // reload list
                     layout.trigger('display:added-to-page');
                     // also change the tab UI
                     layout.$('#added-to-page').click();
                 });
-                product_list = new Views.PageProductList({collection: products, added: false});
                 layout.on('display:needs-review', function () {
                     products = App.request("product:entities:paged", store_id, page_id);
+                    // TODO: this assumes the entire products list is grabbed for
+                    //       the ones in page (which hopefully is a safe assumption at this time)
+                    products = new BackboneProjections.Filtered(products, {
+                      filter: function (product) { return !products_in_page.get(product.get('id')); }
+                     });
                     product_list = new Views.PageProductList({collection: products, added: false});
                     layout.productList.show(product_list);
                 });
                 layout.on('display:added-to-page', function () {
                     products = App.request("added-to-page:product:entities:paged", store_id, page_id);
+                    products_in_page = products;
                     product_list = new Views.PageProductList({collection: products, added: true});
                     layout.productList.show(product_list);
                 });
@@ -199,7 +207,7 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                 var contents, content_list, layout, page,
                     _this = this;
                 page = App.routeModels.get('page');   // Why does this return an empty model?
-                contents = App.request("needs-review:content:entities:paged", store_id, page_id);
+                contents = App.request("added-to-page:content:entities:paged", store_id, page_id);
 
                 var fetchRelatedProducts = function(contents) {
                     App.execute("when:fetched", contents, function() {
