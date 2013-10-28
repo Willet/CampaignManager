@@ -43,7 +43,7 @@ define [
       if store_id is "38"
         filters['tags'] = 'backtoblue'
 
-      products.setFilter(filters, true)
+      products.setFilter(filters, false)
 
       #products.getNextPage()
       products.fetchAll()
