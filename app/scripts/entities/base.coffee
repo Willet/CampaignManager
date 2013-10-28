@@ -73,14 +73,16 @@ define [
       @resetPaging()
       @queryParams = {}
 
-    setFilter: (options) ->
+    setFilter: (options, noFetch) ->
       for key, val of options
         if val == ""
           delete @queryParams[key]
         else
           @queryParams[key] = val
       @reset()
-      @getNextPage()
+
+      if not noFetch
+        @getNextPage()
 
     updateSortOrder: (new_order) ->
       @queryParams = {}
