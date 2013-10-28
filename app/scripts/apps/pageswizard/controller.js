@@ -19,7 +19,7 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                 view.on('change:filter', function (filter) {
                     var filtered_pages;
                     filtered_pages = _.filter(all_models, function (m) {
-                        return (m.get("name") || "").search(filter) !== -1;
+                        return RegExp(filter, "i").test(m.get("name") || "");
                     });
                     return pages.reset(filtered_pages);
                 });
