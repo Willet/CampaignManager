@@ -40,6 +40,11 @@ define [
       2: "videos"
     }
 
+    defaults: {
+      active: true,
+      approved: false
+    }
+
     reject: ->
       @save(
         active: false
@@ -75,13 +80,13 @@ define [
 
     parse: (data) ->
       attrs = data
-      attrs['active'] = if data['active'] == "true" then true else false
-      attrs['approved'] = if data['approved'] == "true" then true else false
 
       # make sure tagged-products exist (so that the relation exists)
       unless attrs['tagged-products']
         attrs['tagged-products'] = []
       attrs = super(attrs)
+      attrs['active'] = if (attrs['active'] == "true" || attrs['active'] == true) then true else false
+      attrs['approved'] = if (attrs['approved'] == "true" || attrs['approved'] == true) then true else false
       ###
       attrs['tagged-products'] = []
       _.each data['tagged-products'], (product_id) ->
@@ -103,6 +108,8 @@ define [
           json['tagged-products'] = json['tagged-products'].collect((m) -> m.get('id'))
         else
           json['tagged-products'] = _.map(json['tagged-products'], (m) -> m.get('id'))
+      json['active'] = if (json['active'] == "true" || json['active'] == true) then true else false
+      json['approved'] = if (json['approved'] == "true" || json['approved'] == true) then true else false
       json
 
     viewJSON: (opts = {}) ->
@@ -113,6 +120,10 @@ define [
           if @get('tagged-products').collect
             json['tagged-products'] = @get('tagged-products').collect((m) -> m.viewJSON(nested: true))
       json['selected'] = @get('selected')
+      json['active'] = if (json['active'] == "true" || json['active'] == true) then true else false
+      json['approved'] = if (json['approved'] == "true" || json['approved'] == true) then true else false
+      @set('active', json['active'])
+      @set('approved', json['approved'])
       if @get('active')
         if @get('approved')
           json['approved'] = true

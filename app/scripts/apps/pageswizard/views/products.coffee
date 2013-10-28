@@ -156,7 +156,8 @@ define [
 
     initialize: (options) ->
       @added = options['added']
-      @model.on('nested-change', => @render())
+      throttled_render = _.throttle((=> @render()), 500, leading: false)
+      @model.on('nested-change', throttled_render)
 
     addToPageAlso: () ->
       App.request("add_product:page:entity", {
