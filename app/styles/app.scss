@@ -605,6 +605,7 @@ body {
     &.list {
       height: 114px;
       margin: 5px 0;
+      overflow: hidden;
       .image-container {
         text-align: center;
         background-color: #f4f4f4;
