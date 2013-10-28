@@ -37,6 +37,14 @@ define [
       products = new Entities.ProductPageableCollection()
       products.store_id = store_id
       products.url = "#{App.API_ROOT}/store/#{store_id}/product/live"
+
+      filters = {}
+
+      if store_id is "38"
+        filters['tags'] = 'backtoblue'
+
+      products.setFilter(filters, false)
+
       #products.getNextPage()
       products.fetchAll()
       products
