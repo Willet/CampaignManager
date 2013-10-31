@@ -58,8 +58,9 @@ define([
             });
         },
 
-        getTileConfigIDs: function (page_id, config) {
-            var tileConfigCollection, obj = {}, tileIDs = [];
+        // TODO: do we need config here?
+        getTileConfig: function (page_id, config) {
+            var tileConfigCollection, obj = {}, tileConfig;
 
             config = this.getFromConfig(config);
 
@@ -69,11 +70,40 @@ define([
             tileConfigCollection.url = App.API_ROOT + "/page/" + page_id + "/tile-config";
 
             tileConfigCollection.fetch({
+                async: false
+            }).done(function(results) {
+                tileConfig = tileConfigCollection;
+            });
+            return tileConfig;
+        },
+
+        // TODO: getTileConfigIDs lets the server do the filtering?
+        //       Should we keep it or get rid of it and instead use _.filter
+        //       with getTileConfig? (returns tile config for all tiles)
+        getTileConfigIDs: function (page_id, config) {
+            var tileConfigCollection, obj = {}, tileIDs = [];
+
+            config = this.getFromConfig(config);
+            obj[config.field] = config.id;
+            tileConfigCollection = new Entities.TileConfigCollection();
+            tileConfigCollection.url = App.API_ROOT + "/page/" + page_id + "/tile-config";
+
+            tileConfigCollection.fetch({
                 data: obj,
                 async: false
             }).done(function(results) {
                 tileIDs = tileConfigCollection.pluck('id');
             });
+
+            // turn everything into a number so we don't compare oranges to apples
+            tileIDs = _.map(tileIDs, Number)
+
+            // get rid of all falsy values except for 0, which -- who knows -- could
+            // be a valid ID
+            tileIDs = _.filter(tileIDs, function (val) {
+              return val == 0 || !!val
+                })
+
             return tileIDs;
         }
     }
@@ -86,9 +116,14 @@ define([
         API.deleteTileConfig(page_id, config);
     });
 
-    App.reqres.setHandler("tileconfig:getIDs", function (page_id, config) {
+    App.reqres.setHandler("tileconfig:entities", function (page_id, config) {
+        return API.getTileConfig();
+    });
+
+    App.reqres.setHandler("tileconfig:content:getIDs", function (page_id, config) {
         return API.getTileConfigIDs(page_id, config);
     });
+
 //    var API = {
 //        login: function (username, password) {
 //            var user = new Entities.User();

@@ -44,41 +44,30 @@ define [
       $.ajax url, type: "DELETE"
 
     prioritizeContent: (store_id, page_id, product_id, params={}) ->
-      # TODO: this method does way to much. Break it down
+      # TODO: this method does way too much. Break it down
       # TODO: better variable names
 
-      # CoffeeScript is dumb. Correct me if I'm wrong
-      currentPage = undefined
-
+      page = App.routeModels.get('page')
       url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}"
 
-      # get tile config IDs associated with product
-      newTileConfigIDs = App.request("tileconfig:getIDs",
+      # get tile config IDs associated with content
+      newTileConfigIDs = App.request("tileconfig:content:getIDs",
         page_id,
+        # content ID really, but I did not want to break the convention I noticed
         id: product_id
       )
 
+      page.fetch()
+      currentPrioritizedIDs = page.get('prioritized-tiles')
 
-      ($.ajax url, {
-        type: "GET"
-        async: false
-      }).done(
-          (result) ->
-            currentPage = result;
-        )
+      # append new to old
+      newPrioritizedIDs = currentPrioritizedIDs.concat(newTileConfigIDs)
 
+      # turn everything into a number so we don't compare oranges to apples
+      newPrioritizedIDs = _.map(newPrioritizedIDs, Number)
 
-      currentPrioritizedIDs = currentPage['prioritized-tiles']
-
-
-      newPrioritizedIDs = _.union(currentPrioritizedIDs, newTileConfigIDs);
-
-      newPrioritizedIDs = _.map(newPrioritizedIDs, Number);
-
-      newPrioritizedIDs = _.filter(newPrioritizedIDs,
-        (val) ->
-          return val == 0 || !!val
-      );
+      # get rid of duplicate IDs
+      newPrioritizedIDs = _.uniq(newPrioritizedIDs)
 
       $.ajax url, {
         type: "PATCH"
