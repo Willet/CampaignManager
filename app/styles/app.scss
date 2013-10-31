@@ -105,6 +105,106 @@ $selected-color: $body-font-color;
   }
 }
 
+/* PAGE CONTENT CREATE */
+.content-list-region {
+  @include grid-row();
+  margin: 0 auto;
+}
+
+.content-item {
+  @include grid-column($columns: 2);
+  list-style-type: none;
+  background-color: #f0f0f0;
+  box-shadow: inset 1px 1px #aaaaaa;
+  border: 1px solid #aaaaaa;
+  height: 180px;
+  overflow: hidden;
+  margin: 1.666%;
+  .content-image {
+    height: 100%;
+    background-size: contain;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+  .content-actions {
+    display: none;
+  }
+  &:hover {
+    .content-actions {
+      display: block;
+      vertical-align: middle;
+      background-color: rgba(0,0,0,0.3);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding-top: 32%;
+      > button {
+        width: 100%;
+        clear: both;
+      }
+    }
+  }
+}
+
+.page-step-actions {
+  @include clearfix();
+  float: right;
+}
+
+.content-options {
+  @include grid-row();
+  .filter-sort-order {
+    @include grid-column($columns: 12);
+    > label {
+      @include grid-column($columns: 2);
+    }
+    > select {
+      @include grid-column($columns: 10);
+    }
+  }
+  .filter-content-type {
+    @include grid-column($columns: 6);
+    > label {
+      @include grid-column($columns: 4);
+    }
+    > select {
+      @include grid-column($columns: 8);
+    }
+  }
+  .filter-content-source {
+    @include grid-column($columns: 6);
+    > label {
+      @include grid-column($columns: 4);
+    }
+    > select {
+      @include grid-column($columns: 8);
+    }
+  }
+  .filter-content-tags {
+    @include grid-column($columns: 12);
+    > label {
+      @include grid-column($columns: 2);
+    }
+    > input {
+      @include grid-column($columns: 10);
+    }
+  }
+}
+.content-item-actions {
+  @include grid-row();
+  text-align: right;
+  button {
+    @include button-size($padding: $button-sml);
+    width: 20%;
+  }
+}
+
+/* END PAGE CONTENT CREATE */
+
 body {
   [class*="icon-"] {
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.2), 1px 0 0 rgba(0, 0, 0, 0.2), -1px 0 0 rgba(0, 0, 0, 0.2), 0 2px 0 rgba(0, 0, 0, 0.1), 0 1px 0 rgba(0, 0, 0, 0.1), 0 2px 0 rgba(0, 0, 0, 0.2);

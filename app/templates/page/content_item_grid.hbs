@@ -1,0 +1,16 @@
+<div class="content-image" style="background-image: url('{{url}}');">
+</div>
+<div class="content-actions">
+  {{#if added}}
+    <button class="remove-content-button js-content-remove">
+      Remove <i class="icon-general-error"></i>
+    </button>
+  {{else}}
+    <button class="add-content-button js-content-add">
+      Add <i class="icon-general-checkmark"></i>
+    </button>
+  {{/if}}
+  <button class="prioritize-content-button js-content-prioritize">
+    Prioritize <i class="icon-general-up-arrow"></i>
+  </button>
+</div>

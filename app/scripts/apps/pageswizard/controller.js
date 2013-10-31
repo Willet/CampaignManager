@@ -212,21 +212,21 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                 };
                 fetchRelatedProducts(contents);
 
-                contentList = ContentList.createView(contents, { 'page': true, 'store_id': storeId });
+                content_list = new Views.PageCreateContentList({ collection: contents });
                 layout = new Views.PageCreateContent({
                     model: page
                 });
                 layout.on('display:needs-review', function() {
                     contents = App.request('needs-review:content:entities:paged', storeId, pageId);
                     fetchRelatedProducts(contents);
-                    contentList = ContentList.createView(contents, { 'page': true, 'store_id': storeId });
-                    layout.contentList.show(contentList);
+                    content_list = new Views.PageCreateContentList({ collection: contents });
+                    layout.contentList.show(content_list);
                 });
                 layout.on('display:added-to-page', function() {
                     contents = App.request('added-to-page:content:entities:paged', storeId, pageId);
                     fetchRelatedProducts(contents);
-                    contentList = ContentList.createView(contents, { 'page': true, 'store_id': storeId });
-                    layout.contentList.show(contentList);
+                    content_list = new Views.PageCreateContentList({ collection: contents });
+                    layout.contentList.show(content_list);
                 });
                 layout.on('render', function () {
                     layout.contentList.show(contentList);

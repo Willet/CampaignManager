@@ -1,33 +1,70 @@
 <div class="content">
-  <div class="actions right text-right">
+  <div class="page-step-actions">
     <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/publish">Save &amp; Continue</a>
   </div>
-  <h4>Select Content</h4>
+  <h2>Content</h2>
 
-  <div class="page-edit content">
+  <div class="filter-actions row">
+    <form class="switch-toggle switch-3 panel">
+      <input id="filter-suggested-content" name="filter" type="radio" checked>
+      <label for="filter-suggested-content">Suggested</label>
 
-    <div class="filter-actions row">
-      <div class="switch-toggle panel radius">
-      <form>
-        <input id="needs-review" name="filter2" type="radio" checked>
-        <label for="needs-review" class="js-needs-review">Needs Review</label>
+      <input id="filter-all-content" name="filter" type="radio">
+      <label for="filter-all-content">All</label>
 
-        <input id="added-to-page" name="filter2" type="radio">
-        <label for="added-to-page" class="js-added-to-page">Added to Page</label>
+      <input id="filter-added-content" name="filter" type="radio">
+      <label for="filter-added-content">Added</label>
 
-        <a class="button"></a>
-      </form>
-      </div>
-    </div>
-
-    <div class="content">
-      <div class="list columns large-12">
-        <!-- content list injected here -->
-      </div>
-    </div>
-
+      <a class="button"></a>
+    </form>
   </div>
-  <div class="actions right text-right">
+
+  <form class="content-options">
+    <fieldset class="content-filter-actions">
+      <legend>Filters</legend>
+      <div class="filter-sort-order">
+          <label>Sort</label>
+          <select id="js-filter-sort-order">
+            <option value="ascending">Most Recent First</option>
+            <option value="descending">Least Recent First</option>
+          </select>
+      </div>
+      <div class="filter-content-type">
+        <label>Type</label>
+        <select id="js-filter-content-type">
+          <option value="">All Content Types</option>
+          <option value="image">Images</option>
+          <option value="video">Videos</option>
+        </select>
+      </div>
+      <div class="filter-content-source">
+        <label>Source</label>
+        <select id="js-filter-content-type">
+          <option value="">All Sources</option>
+          <option value="instagram">Instagram</option>
+          <option value="tumblr">Tumblr</option>
+          <option value="facebook">Facebook</option>
+          <option value="youtube">Youtube</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="filter-content-tags">
+        <label>Tags</label>
+        <input id="js-filter-content-tags" type="text" />
+      </div>
+    </fieldset>
+  </form>
+
+  <div class="content-item-actions">
+    <button class="js-add-all-content">Add All</button>
+    <button class="js-add-selected-content">Add Selected</button>
+  </div>
+
+  <div class="content-list-region">
+    <!-- content list injected here -->
+  </div>
+
+  <div class="page-step-actions">
     <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/publish">Save &amp; Continue</a>
   </div>
 </div>

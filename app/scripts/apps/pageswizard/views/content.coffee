@@ -4,6 +4,26 @@ define [
   "backbone.stickit"
 ], (Marionette, Views) ->
 
+  class Views.PageCreateContentList extends Marionette.CollectionView
+
+    tagName: "ul"
+    className: "content-list"
+    template: false
+
+    getItemView: (item) ->
+      Views.PageCreateContentGridItem
+
+  class Views.PageCreateContentGridItem extends Marionette.ItemView
+
+    tagName: "li"
+    className: "content-item"
+    template: "page/content_item_grid"
+
+    triggers:
+      "click .js-content-prioritize": "prioritize:content"
+      "click .js-content-add": "add:content"
+      "click .js-content-remove": "remove:content"
+
   class Views.PageCreateContent extends Marionette.Layout
 
     template: "page/content"
@@ -31,7 +51,7 @@ define [
       "click .js-next": "save"
 
     regions:
-      "contentList": ".content > .list"
+      "contentList": ".content-list-region"
 
     initialize: (opts) ->
 
