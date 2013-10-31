@@ -44,23 +44,46 @@ define [
       $.ajax url, type: "DELETE"
 
     prioritizeContent: (store_id, page_id, product_id, params={}) ->
-      # TODO This method deals with tile configs, but it manipulates the page
-      #      model. Is this where it belongs?
-      #      (other possibility: dao/tile-config.js)
+      # TODO: this method does way to much. Break it down
+      # TODO: better variable names
+
+      # CoffeeScript is dumb. Correct me if I'm wrong
+      currentPage = undefined
+
       url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}"
 
       # get tile config IDs associated with product
-      tileConfigIDs = App.request("tileconfig:getIDs",
+      newTileConfigIDs = App.request("tileconfig:getIDs",
         page_id,
         id: product_id
       )
 
 
+      ($.ajax url, {
+        type: "GET"
+        async: false
+      }).done(
+          (result) ->
+            currentPage = result;
+        )
+
+
+      currentPrioritizedIDs = currentPage['prioritized-tiles']
+
+
+      newPrioritizedIDs = _.union(currentPrioritizedIDs, newTileConfigIDs);
+
+      newPrioritizedIDs = _.map(newPrioritizedIDs, Number);
+
+      newPrioritizedIDs = _.filter(newPrioritizedIDs,
+        (val) ->
+          return val == 0 || !!val
+      );
+
       $.ajax url, {
         type: "PATCH"
-        # TODO: This simply replaces. Make it append
         data:
-          JSON.stringify {"prioritized-tiles": tileConfigIDs}
+          JSON.stringify {"prioritized-tiles": newPrioritizedIDs}
       }
 
   App.reqres.setHandler "page:entities",
