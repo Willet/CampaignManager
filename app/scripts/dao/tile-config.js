@@ -56,6 +56,25 @@ define([
                     tileConfigCollection.at(i).destroy();
                 }
             });
+        },
+
+        getTileConfigIDs: function (page_id, config) {
+            var tileConfigCollection, obj = {}, tileIDs = [];
+
+            config = this.getFromConfig(config);
+
+            obj[config.field] = config.id;
+
+            tileConfigCollection = new Entities.TileConfigCollection();
+            tileConfigCollection.url = App.API_ROOT + "/page/" + page_id + "/tile-config";
+
+            tileConfigCollection.fetch({
+                data: obj,
+                async: false
+            }).done(function(results) {
+                tileIDs = tileConfigCollection.pluck('id');
+            });
+            return tileIDs;
         }
     }
 
@@ -67,6 +86,9 @@ define([
         API.deleteTileConfig(page_id, config);
     });
 
+    App.reqres.setHandler("tileconfig:getIDs", function (page_id, config) {
+        return API.getTileConfigIDs(page_id, config);
+    });
 //    var API = {
 //        login: function (username, password) {
 //            var user = new Entities.User();

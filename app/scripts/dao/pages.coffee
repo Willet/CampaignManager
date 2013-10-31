@@ -44,14 +44,23 @@ define [
       $.ajax url, type: "DELETE"
 
     prioritizeContent: (store_id, page_id, product_id, params={}) ->
+      # TODO This method deals with tile configs, but it manipulates the page
+      #      model. Is this where it belongs?
+      #      (other possibility: dao/tile-config.js)
       url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}"
-      console.log url
+
+      # get tile config IDs associated with product
+      tileConfigIDs = App.request("tileconfig:getIDs",
+        page_id,
+        id: product_id
+      )
+
+
       $.ajax url, {
         type: "PATCH"
-        # TODO: Do we store the product ID or the tile config ID?
         # TODO: This simply replaces. Make it append
         data:
-          JSON.stringify {"prioritized-tiles": [product_id]}
+          JSON.stringify {"prioritized-tiles": tileConfigIDs}
       }
 
   App.reqres.setHandler "page:entities",
@@ -87,5 +96,4 @@ define [
 
   App.reqres.setHandler "prioritize_content:page:entity",
     (params, options) ->
-      console.log params, options
       API.prioritizeContent params['store_id'], params['page_id'], params['content_id'], options
