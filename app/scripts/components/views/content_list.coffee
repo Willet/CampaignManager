@@ -51,6 +51,19 @@ define [
 
           args.view.render()
 
+    contentList.on "itemview:content:prioritize",
+      (view, args) =>
+        page = App.routeModels.get('page')
+
+        if actions['page']
+          App.request("prioritize_content:page:entity",
+            {
+              page_id: page.id
+              store_id: page.get('store-id')
+              content_id: args.model.get('id')
+            }
+          )
+
     contentList.on "itemview:content:reject",
       (view, args)  =>
           page = App.routeModels.get('page')

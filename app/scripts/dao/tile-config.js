@@ -33,7 +33,7 @@ define([
 
             tileConfigCollection = new Entities.TileConfigCollection();
             tileConfigCollection.url = App.API_ROOT + "/page/" + page_id + "/tile-config";
-            tileConfigCollection.create(obj)
+            tileConfigCollection.create(obj);
             //tileConfig.save();
         },
 

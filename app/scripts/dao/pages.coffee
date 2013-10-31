@@ -43,6 +43,17 @@ define [
       url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product/#{product_id}"
       $.ajax url, type: "DELETE"
 
+    prioritizeContent: (store_id, page_id, product_id, params={}) ->
+      url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}"
+      console.log url
+      $.ajax url, {
+        type: "PATCH"
+        # TODO: Do we store the product ID or the tile config ID?
+        # TODO: This simply replaces. Make it append
+        data:
+          JSON.stringify {"prioritized-tiles": [product_id]}
+      }
+
   App.reqres.setHandler "page:entities",
     (store_id, options) ->
       API.getPages store_id, options
@@ -73,3 +84,8 @@ define [
   App.reqres.setHandler "remove_content:page:entity",
     (params, options) ->
       API.removeContentFromPage params['store_id'], params['page_id'], params['content_id'], options
+
+  App.reqres.setHandler "prioritize_content:page:entity",
+    (params, options) ->
+      console.log params, options
+      API.prioritizeContent params['store_id'], params['page_id'], params['content_id'], options
