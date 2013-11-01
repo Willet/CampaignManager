@@ -315,7 +315,6 @@ module.exports = function (grunt) {
                             'robots.txt',
                             'images/**/*.{webp,gif,jpg,jpeg,png}',
                             'styles/fonts/**/*.*',
-                            'bower_components/sass-bootstrap/fonts/*.*'
                         ]
                     }
                 ]
@@ -419,7 +418,8 @@ module.exports = function (grunt) {
     grunt.registerTask('default', [
         'jshint',
         'test',
-        'build'
+        'build',
+        'sync'
     ]);
 
 };
