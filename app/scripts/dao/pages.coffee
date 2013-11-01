@@ -73,3 +73,15 @@ define [
   App.reqres.setHandler "remove_content:page:entity",
     (params, options) ->
       API.removeContentFromPage params['store_id'], params['page_id'], params['content_id'], options
+
+  App.reqres.setHandler "page:add_content",
+    (page, content, options) ->
+      API.addContentToPage page.get('store-id'), page.get('id'), content.get('id')
+
+  App.reqres.setHandler "page:remove_content",
+    (page, content, options) ->
+      API.removeContentFromPage page.get('store-id'), page.get('id'), content.get('id')
+
+  App.reqres.setHandler "page:prioritize_content",
+    (page, content, options) ->
+      API.prioritizeContent page.get('store-id'), page.get('id'), content.get('id')

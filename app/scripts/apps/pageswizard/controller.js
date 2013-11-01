@@ -216,17 +216,48 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                 layout = new Views.PageCreateContent({
                     model: page
                 });
-                layout.on('display:needs-review', function() {
-                    contents = App.request('needs-review:content:entities:paged', storeId, pageId);
-                    fetchRelatedProducts(contents);
-                    content_list = new Views.PageCreateContentList({ collection: contents });
-                    layout.contentList.show(content_list);
+
+                // Item View Actions
+                layout.on('content_list:itemview:add_content', function (list_view, item_view) {
+                    var content = item_view.model;
+                    App.request('page:add_content', page, content);
                 });
-                layout.on('display:added-to-page', function() {
-                    contents = App.request('added-to-page:content:entities:paged', storeId, pageId);
-                    fetchRelatedProducts(contents);
-                    content_list = new Views.PageCreateContentList({ collection: contents });
-                    layout.contentList.show(content_list);
+                layout.on('content_list:itemview:remove_content', function (list_view, item_view) {
+                    var content = item_view.model;
+                    App.request('page:remove_content', page, content);
+                });
+                layout.on('content_list:itemview:prioritize_content', function (list_view, item_view) {
+                    var content = item_view.model;
+                    App.request('page:prioritize_content', page, content);
+                });
+
+                // Displayed Content
+                layout.on('display:all-content', function() {
+                    // TODO: this introduces a race-condition on reset...
+                    //       since a new AJAX request, should cancel the effect of the others
+                    contents.reset();
+                    var new_contents = App.request("content:entities:paged", store_id, page_id);
+                    App.execute("when:fetched", new_contents, function() {
+                        contents.reset(new_contents.models);
+                    });
+                });
+                layout.on('display:suggested-content', function() {
+                    // TODO: this introduces a race-condition on reset...
+                    //       since a new AJAX request, should cancel the effect of the others
+                    contents.reset();
+                    var new_contents = App.request("needs-review:content:entities:paged", store_id, page_id);
+                    App.execute("when:fetched", new_contents, function() {
+                        contents.reset(new_contents.models);
+                    });
+                });
+                layout.on('display:added-content', function() {
+                    // TODO: this introduces a race-condition on reset...
+                    //       since a new AJAX request, should cancel the effect of the others
+                    contents.reset();
+                    var new_contents = App.request("added-to-page:content:entities:paged", store_id, page_id);
+                    App.execute("when:fetched", new_contents, function() {
+                        contents.reset(new_contents.models);
+                    });
                 });
                 layout.on('render', function () {
                     layout.contentList.show(contentList);

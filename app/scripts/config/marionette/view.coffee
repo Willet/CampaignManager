@@ -16,3 +16,6 @@ require [
         args.splice(1, 0, view)
 
         Marionette.triggerMethod.apply(@, args)
+
+    stopRelayEvents: (view) ->
+      @stopListening(view)
