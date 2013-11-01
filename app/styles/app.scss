@@ -167,6 +167,16 @@ body {
         background-repeat: no-repeat;
         background-position: center center;
       }
+      .image.video:before {
+        background-image: url('https://s3-us-west-2.amazonaws.com/static-misc-secondfunnel/images/Video-playbutton.png');
+        content: "";
+        width: 100%;
+        height: 66px;
+        position: absolute;
+        background-repeat: no-repeat;
+        left: calc(50% - 33px);
+        top: calc(50% - 33px);
+      }
     }
   }
   .edit-area {
@@ -222,12 +232,23 @@ body {
       }
       .image-container {
         height: 100%;
+        position: relative;
         .image {
           background-size: contain;
           width: 100%;
           height: 100%;
           background-repeat: no-repeat;
           background-position: center center;
+        }
+        .image.video:before {
+          background-image: url('https://s3-us-west-2.amazonaws.com/static-misc-secondfunnel/images/Video-playbutton.png');
+          content: "";
+          width: 100%;
+          height: 100%;
+          position: absolute;
+          background-repeat: no-repeat;
+          left: calc(50% - 33px);
+          top: calc(50% - 33px);
         }
       }
       &.selected {
