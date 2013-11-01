@@ -153,6 +153,7 @@ define [
     events:
       "click .js-add-to-page": "addToPage"
       "click .js-remove-from-page": "removeFromPage"
+      "click .js-prioritize-for-page": "prioritizeForPage"
 
     initialize: (options) ->
       @added = options['added']
@@ -181,6 +182,10 @@ define [
       event.stopPropagation()
       @addToPageAlso()
       false
+
+    prioritizeForPage (event) ->
+      event.stopPropagation()
+      # TODO add stuff here
 
     removeFromPage: (event) ->
       App.request("remove_product:page:entity", {

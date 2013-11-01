@@ -43,6 +43,38 @@ define [
       url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product/#{product_id}"
       $.ajax url, type: "DELETE"
 
+    prioritizeContent: (store_id, page_id, product_id, params={}) ->
+      # TODO: this method does way too much. Break it down
+      # TODO: better variable names
+
+      page = App.routeModels.get('page')
+      url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}"
+
+      # get tile config IDs associated with content
+      newTileConfigIDs = App.request("tileconfig:content:getIDs",
+        page_id,
+        # content ID really, but I did not want to break the convention I noticed
+        id: product_id
+      )
+
+      page.fetch()
+      currentPrioritizedIDs = page.get('prioritized-tiles')
+
+      # append new to old
+      newPrioritizedIDs = currentPrioritizedIDs.concat(newTileConfigIDs)
+
+      # turn everything into a number so we don't compare oranges to apples
+      newPrioritizedIDs = _.map(newPrioritizedIDs, Number)
+
+      # get rid of duplicate IDs
+      newPrioritizedIDs = _.uniq(newPrioritizedIDs)
+
+      $.ajax url, {
+        type: "PATCH"
+        data:
+          JSON.stringify {"prioritized-tiles": newPrioritizedIDs}
+      }
+
   App.reqres.setHandler "page:entities",
     (store_id, options) ->
       API.getPages store_id, options
@@ -73,3 +105,7 @@ define [
   App.reqres.setHandler "remove_content:page:entity",
     (params, options) ->
       API.removeContentFromPage params['store_id'], params['page_id'], params['content_id'], options
+
+  App.reqres.setHandler "prioritize_content:page:entity",
+    (params, options) ->
+      API.prioritizeContent params['store_id'], params['page_id'], params['content_id'], options
