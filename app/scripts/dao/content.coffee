@@ -37,9 +37,7 @@ define [
       contents = new Entities.ContentPageableCollection()
       contents.store_id = store_id
       contents.url = "#{App.API_ROOT}/store/#{store_id}/content"
-      if store_id is "38"
-        contents.setFilter({tags: 'backtoblue'})
-
+      contents.setFilter(params)
       contents.getNextPage()
       contents
 
@@ -49,11 +47,7 @@ define [
       contents.url = "#{App.API_ROOT}/store/#{store_id}/content"
 
       filters = active: true, approved: false
-
-      if store_id is "38"
-        filters['tags'] = 'backtoblue'
-
-      contents.setFilter(filters)
+      contents.setFilter(_.extend(filters, params))
 
       contents.getNextPage()
       contents
@@ -63,7 +57,7 @@ define [
       contents.store_id = store_id
       contents.page_id = page_id
       contents.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content"
-      contents.getNextPage()
+      contents.getNextPage(params)
       contents
 
   App.reqres.setHandler "content:entities",
@@ -75,7 +69,7 @@ define [
       API.getPagedContents store_id, params
 
   App.reqres.setHandler "needs-review:content:entities:paged",
-    (store_id, params) ->
+    (store_id, page_id, params) ->
       API.getNeedsReviewPagedContents store_id, params
 
   App.reqres.setHandler "added-to-page:content:entities:paged",

@@ -6,7 +6,7 @@ define [
 
   class Views.PageCreateContent extends Marionette.Layout
 
-    template: "page/content"
+    template: "page/content/main"
 
     regions:
       "contentList": ".content-list-region"
@@ -19,11 +19,24 @@ define [
 
     triggers:
       "click .js-next": "save"
+      "change #js-filter-sort-order": "change:filter"
+      "change #js-filter-content-type": "change:filter"
+      "change #js-filter-content-source": "change:filter"
+      "blur #js-filter-content-tags": "change:filter"
 
     events:
       "click #filter-suggested-content": "displaySuggestedContent"
       "click #filter-all-content": "displayAllContent"
       "click #filter-added-content": "displayAddedContent"
+
+    extractFilter: () ->
+      filter = {}
+      filter['source'] = @$('#js-filter-content-source').val()
+      filter['type'] = @$('#js-filter-content-type').val()
+      filter['tags'] = @$('#js-filter-content-tags').val()
+      filter['order'] = @$('#js-filter-sort-order').val()
+      _.each(_.keys(filter), (key) -> delete filter[key] if filter[key] == null || !/\S/.test(filter[key]))
+      return filter;
 
     displaySuggestedContent: (event) ->
       @trigger('display:suggested-content')
@@ -75,12 +88,26 @@ define [
 
     tagName: "li"
     className: "content-item"
-    template: "page/content_item_grid"
+    template: "page/content/item_grid"
 
     triggers:
       "click .js-content-prioritize": "prioritize_content"
       "click .js-content-add": "add_content"
       "click .js-content-remove": "remove_content"
 
+    serializeData: -> @model.viewJSON()
+
+  class Views.PageCreateContentListItem extends Marionette.ItemView
+
+    tagName: "li"
+    className: "content-item"
+    template: "page/content/item_list"
+
+    serializeData: -> @model.viewJSON()
+
+    triggers:
+      "click .js-content-prioritize": "prioritize_content"
+      "click .js-content-add": "add_content"
+      "click .js-content-remove": "remove_content"
 
   Views

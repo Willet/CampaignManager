@@ -232,11 +232,15 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                 });
 
                 // Displayed Content
+                layout.on('change:filter', function () {
+                    var filter = layout.extractFilter();
+                    contents.setFilter(filter);
+                });
                 layout.on('display:all-content', function() {
                     // TODO: this introduces a race-condition on reset...
                     //       since a new AJAX request, should cancel the effect of the others
                     contents.reset();
-                    var new_contents = App.request("content:entities:paged", store_id, page_id);
+                    var new_contents = App.request("content:entities:paged", store_id, page_id, layout.extractFilter());
                     App.execute("when:fetched", new_contents, function() {
                         contents.reset(new_contents.models);
                     });
@@ -245,7 +249,7 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                     // TODO: this introduces a race-condition on reset...
                     //       since a new AJAX request, should cancel the effect of the others
                     contents.reset();
-                    var new_contents = App.request("needs-review:content:entities:paged", store_id, page_id);
+                    var new_contents = App.request("needs-review:content:entities:paged", store_id, page_id, layout.extractFilter());
                     App.execute("when:fetched", new_contents, function() {
                         contents.reset(new_contents.models);
                     });
@@ -254,13 +258,16 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                     // TODO: this introduces a race-condition on reset...
                     //       since a new AJAX request, should cancel the effect of the others
                     contents.reset();
-                    var new_contents = App.request("added-to-page:content:entities:paged", store_id, page_id);
+                    var new_contents = App.request("added-to-page:content:entities:paged", store_id, page_id, layout.extractFilter());
                     App.execute("when:fetched", new_contents, function() {
                         contents.reset(new_contents.models);
                     });
                 });
                 layout.on('render', function () {
                     layout.contentList.show(contentList);
+                });
+                layout.on("fetch:next-page", function() {
+                    contents.getNextPage();
                 });
 
                 layout.on('save', function () {

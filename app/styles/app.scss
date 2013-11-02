@@ -120,6 +120,12 @@ $selected-color: $body-font-color;
   height: 180px;
   overflow: hidden;
   margin: 1.666%;
+  .content-type {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 5px;
+  }
   .content-image {
     height: 100%;
     background-size: contain;
