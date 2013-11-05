@@ -8,7 +8,7 @@ require.config({
         'backbone.viewmodel': 'lib/backbone.viewmodel',
         'backbone.uniquemodel': '../bower_components/backbone.uniquemodel/backbone.uniquemodel',
         'backbone-associations': '../bower_components/backbone-associations/backbone-associations',
-        handlebars: '../bower_components/handlebars.js/dist/handlebars',
+        handlebars: 'lib/handlebars-v1.1.1',
         marionette: '../bower_components/marionette/lib/backbone.marionette',
         moment: '../bower_components/moment/moment',
         requirejs: '../bower_components/requirejs/require',

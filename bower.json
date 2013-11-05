@@ -15,7 +15,7 @@
     "foundation": "~4.3.2",
     "requirejs": "~2.1.8",
     "foundation-icons": "*",
-    "handlebars.js": "git@github.com:wycats/handlebars.js.git#master",
+    "handlebars.js": "~1.1.1",
     "requirejs-text": "~2.0.10",
     "sinonjs": "~1.7.1",
     "backbone.uniquemodel": "*",
@@ -31,5 +31,8 @@
     "app/bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "resolutions": {
+    "handlebars.js": "master"
+  }
 }
