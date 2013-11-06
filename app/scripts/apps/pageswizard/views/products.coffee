@@ -7,7 +7,7 @@ define [
 
   Views.PageCreateProducts = Marionette.Layout.extend
 
-    template: "page/products"
+    template: "page/product/main"
 
     events:
       "click #add-url": "addUrl"
@@ -143,7 +143,7 @@ define [
 
     # TODO: implement a sane version of "added"
     #       how do we figure out if a product is in a page...
-    template: "page/product_item"
+    template: "page/product/item_grid"
 
     serializeData: ->
       result = @model.viewJSON()

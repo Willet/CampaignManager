@@ -5,7 +5,7 @@ define [
 
   class Views.PageHeader extends Marionette.Layout
 
-    template: "page/header"
+    template: "page/shared/header"
 
     initialize: (options) ->
       @page = options['page']

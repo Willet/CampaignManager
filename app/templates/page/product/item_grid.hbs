@@ -1,0 +1,16 @@
+<div class="product-image" style="background-image: url('{{images.medium.url}}{{video-thumbnail}}');">
+</div>
+<div class="product-actions">
+  {{#if added}}
+    <button class="remove-product-button js-product-remove">
+      Remove <i class="icon-general-error"></i>
+    </button>
+  {{else}}
+    <button class="add-product-button js-product-add">
+      Add <i class="icon-general-checkmark"></i>
+    </button>
+  {{/if}}
+  <button class="prioritize-product-button js-product-prioritize">
+    Prioritize <i class="icon-general-up-arrow"></i>
+  </button>
+</div>
