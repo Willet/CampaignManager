@@ -1,14 +1,15 @@
-define(["marionette"], function (Marionette) {
+define(['marionette'], function (Marionette) {
+    'use strict';
     var MainNav = Marionette.ItemView.extend({
-        template: "shared/nav",
+        template: 'shared/nav',
         events: {
-            "click .logout": "logout"
+            'click .logout': 'logout'
         },
-        initialize: function (opts) {
+        initialize: function () {
             var self = this,
                 ref = this.model.get('store');
-            if (ref != null) {
-                return ref.on("sync", function () {
+            if (ref !== null) {
+                return ref.on('sync', function () {
                     return self.render();
                 });
             }

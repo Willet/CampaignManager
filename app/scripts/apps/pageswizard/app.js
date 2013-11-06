@@ -1,20 +1,21 @@
-define(['app', 'exports', 'marionette', './views', 'entities', './controller', 'components/views/main_layout', 'components/views/main_nav', 'components/views/title_bar'],
-    function (App, PageWizard, Marionette, Views, Entities, Controller,
-              MainLayout, MainNav, TitleBar) {
+define(['app', 'exports', 'backbone', 'marionette', './views', 'entities', './controller', 'components/views/main_layout', 'components/views/main_nav', 'components/views/title_bar', 'underscore'],
+    function (App, PageWizard, Backbone, Marionette, Views, Entities, Controller,
+              MainLayout, MainNav, TitleBar, _) {
+        'use strict';
         PageWizard.Router = Marionette.AppRouter.extend({
             appRoutes: {
-                ":store_id/pages": "pagesIndex",
-                ":store_id/pages/:page_id": "pagesName",
-                ":store_id/pages/:page_id/layout": "pagesLayout",
-                ":store_id/pages/:page_id/products": "pagesProducts",
-                ":store_id/pages/:page_id/content": "pagesContent",
-                ":store_id/pages/:page_id/view": "pagesView",
-                ":store_id/pages/:page_id/publish": "publishView"
+                ':store_id/pages': 'pagesIndex',
+                ':store_id/pages/:page_id': 'pagesName',
+                ':store_id/pages/:page_id/layout': 'pagesLayout',
+                ':store_id/pages/:page_id/products': 'pagesProducts',
+                ':store_id/pages/:page_id/content': 'pagesContent',
+                ':store_id/pages/:page_id/view': 'pagesView',
+                ':store_id/pages/:page_id/publish': 'publishView'
             },
             setupModels: function (route, args) {
                 this.setupRouteModels(route, args);
                 this.store = App.routeModels.get('store');
-                return this.page = App.routeModels.get('page');
+                this.page = App.routeModels.get('page');
             },
             parameterMap: function (route, args) {
                 var i, match, matches, params, _i, _len;
@@ -51,29 +52,29 @@ define(['app', 'exports', 'marionette', './views', 'entities', './controller', '
                 }
                 return App.routeModels;
             },
-            routeModelNameMapping: function (param_name) {
-                switch (param_name) {
-                case ":store_id":
-                    return "store";
-                case ":page_id":
-                    return "page";
+            routeModelNameMapping: function (paramName) {
+                switch (paramName) {
+                case ':store_id':
+                    return 'store';
+                case ':page_id':
+                    return 'page';
                 default:
-                    return param_name;
+                    return paramName;
                 }
             },
             /**
              * Turns a "capture group" into its entity request name.
-             * @param {string} param_name
+             * @param {string} paramName
              * @returns {*}
              */
-            paramNameMapping: function (param_name) {
-                switch (param_name) {
-                case ":store_id":
-                    return "store:entity";
-                case ":page_id":
-                    return "page:entity";
+            paramNameMapping: function (paramName) {
+                switch (paramName) {
+                case ':store_id':
+                    return 'store:entity';
+                case ':page_id':
+                    return 'page:entity';
                 default:
-                    return param_name;
+                    return paramName;
                 }
             },
             before: function (route, args) {
@@ -86,7 +87,7 @@ define(['app', 'exports', 'marionette', './views', 'entities', './controller', '
                 var layout,
                     _this = this;
                 layout = new MainLayout();
-                layout.on("render", function () {
+                layout.on('render', function () {
                     layout.nav.show(new MainNav({
                         model: new Entities.Model({
                             store: _this.store,
@@ -103,19 +104,19 @@ define(['app', 'exports', 'marionette', './views', 'entities', './controller', '
             },
             setupLayoutForRoute: function (route) {
                 var layout;
-                if (route.indexOf(":store_id/pages/:page_id") === 0) {
-                    return layout = this.setupPageWizardLayout(route);
+                if (route.indexOf(':store_id/pages/:page_id') === 0) {
+                    layout = this.setupPageWizardLayout(route);
                 }
             },
             setupPageWizardLayout: function (route) {
                 var layout,
                     _this = this;
-                this.page_wizard_layout = layout = new Views.PageWizardLayout();
-                layout.on("render", function () {
+                this.pageWizardLayout = layout = new Views.PageWizardLayout();
+                layout.on('render', function () {
                     var routeSuffix;
                     routeSuffix = route.substring(_.lastIndexOf(route,
                         '/')).replace(/^\//, '');
-                    routeSuffix = routeSuffix === ":page_id" ? "name"
+                    routeSuffix = routeSuffix === ':page_id' ? 'name'
                         : routeSuffix;
                     return layout.header.show(new Views.PageHeader({
                         model: new Entities.Model({
@@ -127,13 +128,13 @@ define(['app', 'exports', 'marionette', './views', 'entities', './controller', '
                 });
                 this.controller.region.show(layout);
                 this.controller.setRegion(layout.content);
-                return this.page_wizard_layout;
+                return this.pageWizardLayout;
             }
         });
         App.addInitializer(function () {
             var controller, router;
             controller = new PageWizard.Controller();
-            return router = new PageWizard.Router({
+            router = new PageWizard.Router({
                 controller: controller
             });
         });

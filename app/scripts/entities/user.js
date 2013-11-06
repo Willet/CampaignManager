@@ -1,7 +1,7 @@
 define([
-    "app", "entities/base", "entities/products", "underscore"
+    'app', 'entities/base', 'entities/products', 'underscore'
 ], function (App, Base, Entities, _) {
-    "use strict";
+    'use strict';
     Entities = Entities || {};
 
     Entities.User = Base.Model.extend({
@@ -15,7 +15,7 @@ define([
             // TODO: Need to address security concerns of sending PW as plaintext
             login = $.ajax({
                 url: this.url + '/login/', // trailing slash required for some reason
-                contentType: "application/json",
+                contentType: 'application/json',
                 dataType: 'json',
                 type: 'POST',
                 crossDomain: true,
@@ -53,7 +53,7 @@ define([
         logout: function () {
             return $.ajax({
                 url: this.url + '/logout/',
-                contentType: "application/json",
+                contentType: 'application/json',
                 dataType: 'json',
                 type: 'POST'
             }).promise();

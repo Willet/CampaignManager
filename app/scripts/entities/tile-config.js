@@ -1,7 +1,7 @@
 define([
-    "app", "entities/base", "entities/products", "underscore"
-], function (App, Base, Entities, _) {
-    "use strict";
+    'app', 'entities/base', 'entities/products'
+], function (App, Base, Entities) {
+    'use strict';
     Entities = Entities || {};
 
     Entities.TileConfigCollection = Base.Collection.extend({

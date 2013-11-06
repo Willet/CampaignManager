@@ -1,10 +1,10 @@
-define(["marionette", "../views", "backbone.stickit"],
+define(['marionette', '../views', 'backbone.stickit'],
     function (Marionette, Views) {
-        "use strict";
+        'use strict';
         Views.PagePreview = Marionette.Layout.extend({
-            'template': "page/view",
+            'template': 'page/view',
             'triggers': {
-                "click .publish": "publish"
+                'click .publish': 'publish'
             }
         });
 

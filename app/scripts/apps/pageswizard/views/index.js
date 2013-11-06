@@ -1,19 +1,19 @@
-define(["marionette", "../views", "backbone.stickit"],
+define(['marionette', '../views', 'backbone.stickit'],
     function (Marionette, Views) {
-        "use strict";
+        'use strict';
 
         Views.PageIndex = Marionette.Layout.extend({
-            template: "page/index",
+            template: 'page/index',
             regions: {
-                'list': ".list"
+                'list': '.list'
             },
             events: {
                 'change select.sort-order': 'updateSortBy',
                 'keyup input#js-page-search': 'filterPages'
             },
             triggers: {
-                "click #new-page": "new-page",
-                "click #edit-most-recent": "edit-most-recent"
+                'click #new-page': 'new-page',
+                'click #edit-most-recent': 'edit-most-recent'
             },
             updateSortBy: function (event) {
                 var order;
@@ -33,7 +33,6 @@ define(["marionette", "../views", "backbone.stickit"],
             initialize: function (opts) {
                 this.collection = this.model;
                 this.store = opts.store;
-                return this.collection;
             },
             onShow: function () {
                 this.trigger('change:sort-order', 'last-modified');
@@ -45,7 +44,7 @@ define(["marionette", "../views", "backbone.stickit"],
         });
 
         Views.PageIndexList = Marionette.ItemView.extend({
-            template: "page/index_list",
+            template: 'page/index_list',
             serializeData: function () {
                 return {
                     pages: this.model.toJSON(),
@@ -56,11 +55,11 @@ define(["marionette", "../views", "backbone.stickit"],
                 var _this = this;
                 this.store = opts.store;
 
-                this.model.on("reset", function () {
-                    return _this.render();
+                this.model.on('reset', function () {
+                    _this.render();
                 });
-                return this.model.on("sort", function () {
-                    return _this.render();
+                this.model.on('sort', function () {
+                    _this.render();
                 });
             }
         });
