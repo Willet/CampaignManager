@@ -1,55 +1,53 @@
-define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', './views', 'components/views/content_list', 'entities'],
-    function (PageWizard, BackboneProjections, Marionette, $, _, Views,
+define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'underscore', './views', 'components/views/content_list', 'entities'],
+    function (App, PageWizard, BackboneProjections, Marionette, $, _, Views,
               ContentList, Entities) {
         'use strict';
 
         PageWizard.Controller = Marionette.Controller.extend({
-            pagesIndex: function (store_id) {
-                var all_models, pages, store, view,
-                    _this = this;
+            pagesIndex: function (storeId) {
+                var allModels, pages, store, view;
 
                 // gets a list of pages belonging to this store.
-                pages = App.request("page:entities", store_id);
-                store = App.request("store:entity", {store_id: store_id});
+                pages = App.request('page:entities', storeId);
+                store = App.request('store:entity', {'store_id': storeId});
                 view = new Views.PageIndex({
                     model: pages,
                     'store': store
                 });
-                all_models = null;
+                allModels = null;
                 view.on('change:filter', function (filter) {
-                    var filtered_pages;
-                    filtered_pages = _.filter(all_models, function (m) {
-                        return RegExp(filter, "i").test(m.get("name") || "");
+                    var filteredPages = _.filter(allModels, function (m) {
+                        return new RegExp(filter, 'i').test(m.get('name') || '');
                     });
-                    return pages.reset(filtered_pages);
+                    return pages.reset(filteredPages);
                 });
                 view.on('change:sort-order', function (order) {
                     return pages.updateSortBy(order,
                         order === 'last-modified');
                 });
                 view.on('edit-most-recent', function () {
-                    var most_recent;
-                    most_recent = _.max(all_models, function (m) {
+                    var mostRecent = _.max(allModels, function (m) {
                         return m.get('last-modified');
                     });
-                    return App.navigate("/" + store_id + "/pages/" + most_recent.id,
+                    return App.navigate('/' + storeId + '/pages/' + mostRecent.id,
                         {
                             trigger: true
                         });
                 });
                 view.on('new-page', function () {
-                    return App.navigate("/" + store_id + "/pages/new", {
+                    return App.navigate('/' + storeId + '/pages/new', {
                         trigger: true
                     });
                 });
-                App.execute("when:fetched", pages, function () {
-                    App.execute("when:fetched", store, function () {
-                        return all_models = _.clone(pages.models);
+                App.execute('when:fetched', pages, function () {
+                    App.execute('when:fetched', store, function () {
+                        allModels = _.clone(pages.models);
+                        return allModels;
                     });
                 });
                 return this.region.show(view);
             },
-            pagesName: function (store_id, page_id) {
+            pagesName: function () {
                 var layout, page, store,
                     self = this;
                 page = App.routeModels.get('page');
@@ -59,24 +57,24 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                     store: store
                 });
                 layout.on('save', function () {
-                    return $.when(page.save()).done(function (data) {
-                        // TODO: Should we only do this when page_id === 'new'?
+                    $.when(page.save()).done(function (data) {
+                        // TODO: Should we only do this when pageId === 'new'?
                         var store = data['store-id'],
-                            page = data['id'];
+                            page = data.id;
 
-                        return App.navigate("/" + store + "/pages/" + page + "/layout",
+                        App.navigate('/' + store + '/pages/' + page + '/layout',
                             {
                                 trigger: true
                             });
                     });
                 });
-                return App.execute("when:fetched", page, function () {
-                    return App.execute("when:fetched", store, function () {
-                        return self.region.show(layout);
+                App.execute('when:fetched', page, function () {
+                    App.execute('when:fetched', store, function () {
+                        self.region.show(layout);
                     });
                 });
             },
-            pagesLayout: function (store_id, page_id) {
+            pagesLayout: function () {
                 var layout, page;
                 page = App.routeModels.get('page');
                 layout = new Views.PageCreateLayout({
@@ -84,7 +82,7 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                 });
                 layout.on('layout:selected', function (newLayout) {
                     page.set('layout', newLayout);
-                    return layout.render();
+                    layout.render();
                 });
                 layout.on('save', function () {
                     _.each(layout.getFields(), function (v, k) {
@@ -96,33 +94,32 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                         }
                         page.set(k, v);
                     });
-                    return $.when(page.save())
+                    $.when(page.save())
                         .done(function (data) {
-                            // TODO: Should we only do this when page_id === 'new'?
+                            // TODO: Should we only do this when pageId === 'new'?
                             var store = data['store-id'],
-                                page = data['id'];
+                                page = data.id;
 
-                            return App.navigate("/" + store + "/pages/" + page + "/products",
+                            App.navigate('/' + store + '/pages/' + page + '/products',
                                 {
                                     trigger: true
                                 });
-                        }).fail(function (jqXHR, why) {
+                        }).fail(function () {
                             console.log(arguments);
                         });
                 });
-                return this.region.show(layout);
+                this.region.show(layout);
             },
-            pagesProducts: function (store_id, page_id) {
-                var layout, page, products, scrapes, product_list,
-                    _this = this;
+            pagesProducts: function (storeId, pageId) {
+                var layout, page, products, scrapes, productList;
                 page = App.routeModels.get('page');
-                scrapes = App.request("page:scrapes:entities", store_id, page_id);
-                products = App.request("product:entities:paged", store_id, page_id);
+                scrapes = App.request('page:scrapes:entities', storeId, pageId);
+                products = App.request('product:entities:paged', storeId, pageId);
 
-                App.execute("when:fetched", products, function() {
+                App.execute('when:fetched', products, function() {
                     // for each product, fetch their content image
                     products.collect(function(product) {
-                        App.request("fetch:content", store_id, product.get("default-image-id"));
+                        App.request('fetch:content', storeId, product.get('default-image-id'));
                     });
                 });
 
@@ -130,18 +127,18 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                 layout = new Views.PageCreateProducts({
                     model: page
                 });
-                layout.on("show", function () {
+                layout.on('show', function () {
                     var scrapeList;
                     scrapeList = new Views.PageScrapeList({
                         collection: scrapes
                     });
                     layout.scrapeList.show(scrapeList);
-                    layout.on("new:scrape", function (url) {
+                    layout.on('new:scrape', function (url) {
                         var scrape;
                         scrape = new Entities.Scrape({
-                            store_id: store_id,
-                            page_id: page_id,
-                            url: url
+                            'store_id': storeId,
+                            'page_id': pageId,
+                            'url': url
                         });
                         scrapes.add(scrape);
                         scrape.save();
@@ -149,112 +146,111 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                         //       for the best; backend has no way to check status
                         //       right now???
                         $.ajax(
-                            "http://scraper-test.elasticbeanstalk.com/scrapers/queue/store/#{store_id}/?url=#{url}"
+                            'http://scraper-test.elasticbeanstalk.com/scrapers/queue/store/#{storeId}/?url=#{url}'
                         );
                     });
-                    return scrapeList.on("itemview:remove", function (view) {
-                        return scrapes.remove(view.model);
+                    scrapeList.on('itemview:remove', function (view) {
+                        scrapes.remove(view.model);
                     });
                 });
-                layout.on('added-product', function (product_data) {
-                    var new_product = new Entities.Product(product_data);
+                layout.on('added-product', function (productData) {
+                    var newProduct = new Entities.Product(productData);
                     // TODO: we should really only add this in the case
                     //       the products is of type 'added'
-                    products.add(new_product);
+                    products.add(newProduct);
 
                     // reload list
                     layout.trigger('display:added-to-page');
                     // also change the tab UI
                     layout.$('#added-to-page').click();
                 });
-                product_list = new Views.PageProductList({collection: products, added: false});
+                productList = new Views.PageProductList({collection: products, added: false});
                 layout.on('display:needs-review', function () {
-                    products = App.request("product:entities:paged", store_id, page_id);
-                    product_list = new Views.PageProductList({collection: products, added: false});
-                    layout.productList.show(product_list);
+                    products = App.request('product:entities:paged', storeId, pageId);
+                    productList = new Views.PageProductList({collection: products, added: false});
+                    layout.productList.show(productList);
                 });
                 layout.on('display:added-to-page', function () {
-                    products = App.request("added-to-page:product:entities:paged", store_id, page_id);
-                    product_list = new Views.PageProductList({collection: products, added: true});
-                    layout.productList.show(product_list);
+                    products = App.request('added-to-page:product:entities:paged', storeId, pageId);
+                    productList = new Views.PageProductList({collection: products, added: true});
+                    layout.productList.show(productList);
                 });
                 layout.on('render', function () {
-                    layout.productList.show(product_list);
+                    layout.productList.show(productList);
                 });
                 layout.on('save', function () {
-                    return $.when(page.save()).done(function (data) {
-                        // TODO: Should we only do this when page_id === 'new'?
+                    $.when(page.save()).done(function (data) {
+                        // TODO: Should we only do this when pageId === 'new'?
                         var store = data['store-id'],
-                            page = data['id'];
+                            page = data.id;
 
-                        return App.navigate("/" + store + "/pages/" + page + "/content",
+                        App.navigate('/' + store + '/pages/' + page + '/content',
                             {
                                 trigger: true
                             });
                     });
                 });
-                return this.region.show(layout);
+                this.region.show(layout);
             },
-            pagesContent: function (store_id, page_id) {
-                var contents, content_list, layout, page,
-                    _this = this;
+            pagesContent: function (storeId, pageId) {
+                var contents, contentList, layout, page;
                 page = App.routeModels.get('page');   // Why does this return an empty model?
-                contents = App.request("needs-review:content:entities:paged", store_id, page_id);
+                contents = App.request('needs-review:content:entities:paged', storeId, pageId);
 
                 var fetchRelatedProducts = function(contents) {
-                    App.execute("when:fetched", contents, function() {
+                    App.execute('when:fetched', contents, function() {
                         // for each product, fetch their content image
                         contents.collect(function(content) {
                             var products = content.get('tagged-products');
                             if (products) {
                                 products.collect(function(product) {
-                                    App.request("fetch:product", store_id, product);
+                                    App.request('fetch:product', storeId, product);
                                 });
                             }
                         });
                     });
-                }
+                };
                 fetchRelatedProducts(contents);
 
-                content_list = ContentList.createView(contents, { page: true, store_id: store_id });
+                contentList = ContentList.createView(contents, { 'page': true, 'store_id': storeId });
                 layout = new Views.PageCreateContent({
                     model: page
                 });
                 layout.on('display:needs-review', function() {
-                    contents = App.request("needs-review:content:entities:paged", store_id, page_id);
+                    contents = App.request('needs-review:content:entities:paged', storeId, pageId);
                     fetchRelatedProducts(contents);
-                    content_list = ContentList.createView(contents, { page: true, store_id: store_id });
-                    layout.contentList.show(content_list);
+                    contentList = ContentList.createView(contents, { 'page': true, 'store_id': storeId });
+                    layout.contentList.show(contentList);
                 });
                 layout.on('display:added-to-page', function() {
-                    contents = App.request("added-to-page:content:entities:paged", store_id, page_id);
+                    contents = App.request('added-to-page:content:entities:paged', storeId, pageId);
                     fetchRelatedProducts(contents);
-                    content_list = ContentList.createView(contents, { page: true, store_id: store_id });
-                    layout.contentList.show(content_list);
+                    contentList = ContentList.createView(contents, { 'page': true, 'store_id': storeId });
+                    layout.contentList.show(contentList);
                 });
-                layout.on("render", function () {
-                    layout.contentList.show(content_list);
+                layout.on('render', function () {
+                    layout.contentList.show(contentList);
                 });
 
                 layout.on('save', function () {
-                    return $.when(page.save()).done(function (data) {
-                        // TODO: Should we only do this when page_id === 'new'?
+                    $.when(page.save()).done(function (data) {
+                        // TODO: Should we only do this when pageId === 'new'?
                         var store = data['store-id'],
-                            page = data['id'];
+                            page = data.id;
 
-                        return App.navigate("/" + store + "/pages/" + page + "/publish",
+                        App.navigate('/' + store + '/pages/' + page + '/publish',
                             {
                                 trigger: true
                             });
                     });
                 });
 
-                return this.region.show(layout);
+                this.region.show(layout);
             },
             /**
              * Shows in iframe with the page in it.
              */
-            pagesView: function (store_id, page_id, data) {
+            pagesView: function (storeId, pageId, data) {
                 // existence of bucket name is a signal that the page was
                 // successfully created.
 
@@ -291,23 +287,23 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                         };
                     };
 
-                return App.execute("when:fetched", page, function () {
-                    return App.execute("when:fetched", store, function () {
+                App.execute('when:fetched', page, function () {
+                    App.execute('when:fetched', store, function () {
                         $.ajax(data || getBucketInfo(page, store))
                             .done(function () {
                                 var view = new Views.PagePreview({
                                     model: new Entities.Model(data)
                                 });
-                                return self.region.show(view);
+                                self.region.show(view);
                             })
                             .fail(function () {
                                 // S3 emits 404 if page not generated
-                                return self.publishView.apply(self, args);
+                                self.publishView.apply(self, args);
                             });
                     });
                 });
             },
-            publishView: function (store_id, page_id) {
+            publishView: function (storeId, pageId) {
                 var page, store, layout, self = this;
                 page = App.routeModels.get('page');
                 store = App.routeModels.get('store');
@@ -316,37 +312,37 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                     model: page,
                     store: store
                 });
-                layout.on("publish", function () {
+                layout.on('publish', function () {
                     // TODO: move static_pages API under /graph/v1. ain't nobody got time for that today
-                    var req, base_url = App.API_ROOT
-                        .replace("/graph/v1", '/static_pages')
-                        .replace(":9000", ':8000');
+                    var req, baseUrl = App.API_ROOT
+                        .replace('/graph/v1', '/static_pages')
+                        .replace(':9000', ':8000');
 
                     // TODO: less fugly handler
-                    layout.$('.publish.button').text("Publishing...");
+                    layout.$('.publish.button').text('Publishing...');
                     layout.$(layout.fail.el).hide();
 
-                    // TODO: handle case where page_id is 'new'
+                    // TODO: handle case where pageId is 'new'
                     req = $.ajax({
-                        url: base_url + '/' + store_id + '/' + page_id + '/regenerate',
+                        url: baseUrl + '/' + storeId + '/' + pageId + '/regenerate',
                         type: 'POST',
                         dataType: 'jsonp'
                     });
-                    req.done(function (data, status, request) {
+                    req.done(function (data) {
                         // crude as it is, this is also an option
                         // window.open('http://' + data.result.bucket_name + '/' +
                         //     data.result.s3_path);
-                        self.pagesView(store_id, page_id, data);
+                        self.pagesView(storeId, pageId, data);
                     });
-                    req.fail(function (request, status, error) {
+                    req.fail(function () {
                         // TODO: less fugly handler
-                        layout.$('.publish.button').text("Publish Page");
+                        layout.$('.publish.button').text('Publish Page');
                         layout.$(layout.fail.el).show();
                     });
                 });
 
-                return App.execute("when:fetched", page, function () {
-                    return App.execute("when:fetched", store, function () {
+                App.execute('when:fetched', page, function () {
+                    App.execute('when:fetched', store, function () {
 
                         if (App.ENVIRONMENT === 'DEV') {
                             store.set(
@@ -362,7 +358,7 @@ define(['./app', 'backbone.projections', 'marionette', 'jquery', 'underscore', '
                             );
                         }
 
-                        return self.region.show(layout);
+                        self.region.show(layout);
                     });
                 });
             }

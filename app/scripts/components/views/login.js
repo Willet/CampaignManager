@@ -1,9 +1,9 @@
-define(["app", "marionette", 'jquery'], function (App, Marionette, $) {
-    "use strict";
+define(['app', 'marionette', 'jquery'], function (App, Marionette, $) {
+    'use strict';
     var Login = Marionette.Layout.extend({
-        template: "login",
+        template: 'login',
         events: {
-            "submit form": "login"
+            'submit form': 'login'
         },
         regions: {
             'loginFail': '.login-fail'
@@ -12,10 +12,10 @@ define(["app", "marionette", 'jquery'], function (App, Marionette, $) {
             var password, username, promise, self = this;
             event.preventDefault();
 
-            username = $(event.target).find("[name='username']").val();
-            password = $(event.target).find("[name='password']").val();
+            username = $(event.target).find('[name=\'username\']').val();
+            password = $(event.target).find('[name=\'password\']').val();
 
-            promise = App.request("user:login", username, password);
+            promise = App.request('user:login', username, password);
             promise.fail(function () {
                 self.$(self.loginFail.el).show();
             });

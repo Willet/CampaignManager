@@ -38,16 +38,16 @@ require.config({
             exports: 'Backbone.Stickit'
         },
         'backbone.viewmodel': {
-          deps: ['backbone'],
-          exports: 'Backbone.ViewModel'
+            deps: ['backbone'],
+            exports: 'Backbone.ViewModel'
         },
         'backbone.uniquemodel': {
-          deps: ['backbone'],
-          exports: 'Backbone.UniqueModel'
+            deps: ['backbone'],
+            exports: 'Backbone.UniqueModel'
         },
         'backbone-associations': {
-          deps: ['backbone'],
-          exports: 'Backbone.Associations'
+            deps: ['backbone'],
+            exports: 'Backbone.Associations'
         },
         'jquery': {
             exports: '$'
@@ -95,28 +95,28 @@ require.config({
 });
 
 require([
-    "app",
-    "jquery",
-    "global/click_handler",
-    "global/form_serialize",
-    "config/backbone/model",
-    "config/marionette/application",
-    "config/marionette/renderer",
-    "config/marionette/view",
-    "config/marionette/router",
-    "config/marionette/controller",
-    "dao/base",
-    "dao/pages",
-    "dao/scrape",
-    "dao/stores",
-    "dao/content",
-    "dao/products",
-    "dao/tile-config",
-    "dao/user",
+    'app',
+    'jquery',
+    'global/click_handler',
+    'global/form_serialize',
+    'config/backbone/model',
+    'config/marionette/application',
+    'config/marionette/renderer',
+    'config/marionette/view',
+    'config/marionette/router',
+    'config/marionette/controller',
+    'dao/base',
+    'dao/pages',
+    'dao/scrape',
+    'dao/stores',
+    'dao/content',
+    'dao/products',
+    'dao/tile-config',
+    'dao/user',
     // sub apps to load, they attach to the root application
-    "apps/main/app",
-    "apps/contentmanager/app",
-    "apps/pageswizard/app"
+    'apps/main/app',
+    'apps/contentmanager/app',
+    'apps/pageswizard/app'
 ], function (App, $) {
     'use strict';
     $().ready(function () {
