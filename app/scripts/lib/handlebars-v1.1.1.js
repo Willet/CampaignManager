@@ -24,6 +24,7 @@ THE SOFTWARE.
 
 @license
 */
+define([], function() {
 var Handlebars = (function() {
 // handlebars/safe-string.js
 var __module4__ = (function() {
@@ -679,7 +680,7 @@ var __module9__ = (function() {
 
   var $0 = $$.length - 1;
   switch (yystate) {
-  case 1: return new yy.ProgramNode($$[$0-1]); 
+  case 1: return new yy.ProgramNode($$[$0-1]);
   break;
   case 2:this.$ = new yy.ProgramNode([], $$[$0-1], $$[$0]);
   break;
@@ -695,7 +696,7 @@ var __module9__ = (function() {
   break;
   case 8:this.$ = [$$[$0]];
   break;
-  case 9: $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; 
+  case 9: $$[$0-1].push($$[$0]); this.$ = $$[$0-1];
   break;
   case 10:this.$ = new yy.BlockNode($$[$0-2], $$[$0-1].inverse, $$[$0-1], $$[$0]);
   break;
@@ -751,7 +752,7 @@ var __module9__ = (function() {
   break;
   case 36:this.$ = new yy.IdNode($$[$0]);
   break;
-  case 37: $$[$0-2].push({part: $$[$0], separator: $$[$0-1]}); this.$ = $$[$0-2]; 
+  case 37: $$[$0-2].push({part: $$[$0], separator: $$[$0-1]}); this.$ = $$[$0-2];
   break;
   case 38:this.$ = [{part: $$[$0]}];
   break;
@@ -1073,7 +1074,7 @@ var __module9__ = (function() {
                                        this.begin("mu");
                                      }
                                      if(yy_.yytext) return 14;
-                                   
+
   break;
   case 1:return 14;
   break;
@@ -1081,7 +1082,7 @@ var __module9__ = (function() {
                                      if(yy_.yytext.slice(-1) !== "\\") this.popState();
                                      if(yy_.yytext.slice(-1) === "\\") strip(0,1);
                                      return 14;
-                                   
+
   break;
   case 3:strip(0,4); this.popState(); return 15;
   break;
@@ -2587,3 +2588,6 @@ var __module0__ = (function(__dependency1__, __dependency2__, __dependency3__, _
 
   return __module0__;
 })();
+
+return Handlebars;
+});
