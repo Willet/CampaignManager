@@ -4,7 +4,7 @@
 export PATH=node_modules/.bin:${PATH}
 
 echo "Installing SASS and COMPASS"
-gem install sass compass || (echo "FAILED: verify you have latest version of NPM and Ruby installed" && exit)
+gem install sass compass rb-fsevent || (echo "FAILED: verify you have latest version of NPM and Ruby installed" && exit)
 
 echo "Installing Required Node Packages for DEV environment (package.json)"
 npm install || (echo "FAIL: Couldn't install node packages, try to get 'npm install' to work" && exit)
