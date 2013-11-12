@@ -44,36 +44,29 @@ define [
       $.ajax url, type: "DELETE"
 
     prioritizeContent: (store_id, page_id, product_id, params={}) ->
-      # TODO: this method does way too much. Break it down
-      # TODO: better variable names
 
       page = App.routeModels.get('page')
       url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}"
 
       # get tile config IDs associated with content
-      newTileConfigIDs = App.request("tileconfig:content:getIDs",
+      newTileConfigIDs = App.request("tileconfig:IDs",
         page_id,
-        # content ID really, but I did not want to break the convention I noticed
         id: product_id
       )
 
-      page.fetch()
-      currentPrioritizedIDs = page.get('prioritized-tiles')
-
-      # append new to old
+      currentPrioritizedIDs = page.get('prioritized-tiles') || []
       newPrioritizedIDs = currentPrioritizedIDs.concat(newTileConfigIDs)
 
       # turn everything into a number so we don't compare oranges to apples
+      # Yes, I tried to use parse, but I could not get it to work. The new IDs
+      # are not the problem. The problem is currntPrioritizedIDs.
       newPrioritizedIDs = _.map(newPrioritizedIDs, Number)
 
       # get rid of duplicate IDs
       newPrioritizedIDs = _.uniq(newPrioritizedIDs)
 
-      $.ajax url, {
-        type: "PATCH"
-        data:
-          JSON.stringify {"prioritized-tiles": newPrioritizedIDs}
-      }
+      page.set 'prioritized-tiles', _.uniq(newPrioritizedIDs)
+      page.save()
 
   App.reqres.setHandler "page:entities",
     (store_id, options) ->

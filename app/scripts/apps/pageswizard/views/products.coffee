@@ -183,8 +183,10 @@ define [
       @addToPageAlso()
       false
 
-    prioritizeForPage (event) ->
+    prioritizeForPage: (event) ->
+      event.preventDefault()
       event.stopPropagation()
+      this
       # TODO add stuff here
 
     removeFromPage: (event) ->
