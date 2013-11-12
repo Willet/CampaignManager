@@ -1,7 +1,7 @@
 <div class="product-image" style="background-image: url('{{images.medium.url}}{{video-thumbnail}}');">
 </div>
 <div class="product-actions">
-  {{#if added}}
+  {{#is page-status 'added'}}
     <button class="remove-product-button js-product-remove">
       Remove <i class="icon-general-error"></i>
     </button>
@@ -9,7 +9,7 @@
     <button class="add-product-button js-product-add">
       Add <i class="icon-general-checkmark"></i>
     </button>
-  {{/if}}
+  {{/is}}
   <button class="prioritize-product-button js-product-prioritize">
     Prioritize <i class="icon-general-up-arrow"></i>
   </button>

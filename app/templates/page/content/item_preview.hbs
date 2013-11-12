@@ -1,0 +1,26 @@
+<div class="content-preview">
+  <div class="content">
+    {{#is type 'video'}}
+      <iframe width="640" height="480" src="{{video-embed-url}}" frameborder="0" allowfullscreen></iframe>
+    {{else}}
+      <div class="content-image" style="background-image: url('{{images.large.url}}');"></div>
+    {{/is}}
+  </div>
+  <div class="content-info">
+    <label for="source" class="inline">Source</label>
+    <div class="content-source">
+      {{#is source 'facebook'}}
+      <i class="icon-social-facebook"></i> Facebook
+      {{/is}}
+      {{#is source 'instagram'}}
+      <i class="icon-social-instagram"></i> Instagram
+      {{/is}}
+      {{#is source 'youtube'}}
+      <i class="icon-social-youtube"></i> Youtube
+      {{/is}}
+    </div>
+    <label for="caption" class="inline">Caption</label>
+    <p class="caption">{{default caption "(No Caption)"}}</p>
+  </div>
+  <button class="close-button reveal-close small">Close</button>
+</div>

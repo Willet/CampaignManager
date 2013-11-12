@@ -1,6 +1,5 @@
 define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'underscore', './views', 'components/views/content_list', 'entities'],
-    function (App, PageWizard, BackboneProjections, Marionette, $, _, Views,
-              ContentList, Entities) {
+    function (App, PageWizard, BackboneProjections, Marionette, $, _, Views, ContentList, Entities) {
         'use strict';
 
         PageWizard.Controller = Marionette.Controller.extend({
@@ -202,6 +201,10 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                 layout.on('content_list:itemview:prioritize_content', function (listView, itemView) {
                     var content = itemView.model;
                     App.request('page:prioritize_content', page, content);
+                });
+                layout.on('content_list:itemview:preview_content', function (listView, itemView) {
+                    var content = itemView.model;
+                    App.modal.show(new Views.PageCreateContentPreview({model: content}));
                 });
 
                 // Displayed Content

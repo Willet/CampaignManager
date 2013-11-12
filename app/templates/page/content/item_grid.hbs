@@ -6,7 +6,7 @@
 <div class="content-image" style="background-image: url('{{images.medium.url}}{{video-thumbnail}}');">
 </div>
 <div class="content-actions">
-  {{#if added}}
+  {{#is page-status 'added'}}
     <button class="remove-content-button js-content-remove">
       Remove <i class="icon-general-error"></i>
     </button>
@@ -14,8 +14,11 @@
     <button class="add-content-button js-content-add">
       Add <i class="icon-general-checkmark"></i>
     </button>
-  {{/if}}
+  {{/is}}
   <button class="prioritize-content-button js-content-prioritize">
     Prioritize <i class="icon-general-up-arrow"></i>
+  </button>
+  <button class="preview-content-button js-content-preview">
+    Preview <i class="icon-accessibility-eyeball"></i>
   </button>
 </div>

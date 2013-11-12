@@ -75,6 +75,12 @@ define [
     onClose: ->
       $(window).off("scroll", @scrollFunction)
 
+  class Views.PageCreateContentPreview extends Marionette.ItemView
+
+    template: 'page/content/item_preview'
+
+    serializeData: -> @model.viewJSON()
+
   class Views.PageCreateContentList extends Marionette.CollectionView
 
     tagName: "ul"
@@ -94,6 +100,7 @@ define [
       "click .js-content-prioritize": "prioritize_content"
       "click .js-content-add": "add_content"
       "click .js-content-remove": "remove_content"
+      "click .js-content-preview": "preview_content"
 
     serializeData: -> @model.viewJSON()
 
