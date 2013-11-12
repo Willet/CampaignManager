@@ -49,7 +49,8 @@ module.exports = function (grunt) {
                 },
                 tasks: [],
                 files: [
-                    '<%= yeoman.tmp %>/styles/app.css' //{css,js,jpg,jpeg,svg,png,hbs}'
+                    '<%= yeoman.tmp %>/styles/app.css', //{css,js,jpg,jpeg,svg,png,hbs}'
+                    '<%= yeoman.tmp %>/scripts/**/*.js'
                 ]
             }
         },
@@ -333,6 +334,10 @@ module.exports = function (grunt) {
         concurrent: {
             server: {
                 tasks: [
+                    'watch:coffee',
+                    'watch:js',
+                    'watch:templates',
+                    'watch:images',
                     'watch:livereload',
                     'compass:watch',
                     'connect:livereload:keepalive'
