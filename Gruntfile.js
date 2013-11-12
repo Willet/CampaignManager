@@ -18,6 +18,12 @@ module.exports = function (grunt) {
             test: 'test',
             tmp: '.tmp'
         },
+        uglify: {
+            options: {
+                mangle: false,
+                exportAll: true
+            }
+        },
         watch: {
             coffee: {
                 files: ['<%= yeoman.app %>/scripts/**/*.coffee'],
@@ -322,7 +328,8 @@ module.exports = function (grunt) {
                 '<%= yeoman.dist %>/scripts/**/*.js',
                 '<%= yeoman.dist %>/styles/**/*.css',
                 '!<%= yeoman.dist %>/scripts/vendor/*'
-            ]
+            ],
+            uglify: true
         },
         concurrent: {
             server: {
@@ -402,6 +409,7 @@ module.exports = function (grunt) {
         'requirejs',
         'concat',
         'cssmin',
+        'uglify',
         'modernizr',
         'sync:dist',
         'rev',
