@@ -111,9 +111,8 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                 this.region.show(layout);
             },
             pagesProducts: function (storeId, pageId) {
-                var layout, page, products, scrapes, productList;
+                var layout, page, products, productList;
                 page = App.routeModels.get('page');
-                scrapes = App.request('page:scrapes:entities', storeId, pageId);
                 products = App.request('product:entities:paged', storeId, pageId);
 
                 App.execute('when:fetched', products, function() {
@@ -126,32 +125,6 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
 
                 layout = new Views.PageCreateProducts({
                     model: page
-                });
-                layout.on('show', function () {
-                    var scrapeList;
-                    scrapeList = new Views.PageScrapeList({
-                        collection: scrapes
-                    });
-                    layout.scrapeList.show(scrapeList);
-                    layout.on('new:scrape', function (url) {
-                        var scrape;
-                        scrape = new Entities.Scrape({
-                            'store_id': storeId,
-                            'page_id': pageId,
-                            'url': url
-                        });
-                        scrapes.add(scrape);
-                        scrape.save();
-                        // TODO: remove dirty hack that just queues it and hopes
-                        //       for the best; backend has no way to check status
-                        //       right now???
-                        $.ajax(
-                            'http://scraper-test.elasticbeanstalk.com/scrapers/queue/store/#{storeId}/?url=#{url}'
-                        );
-                    });
-                    scrapeList.on('itemview:remove', function (view) {
-                        scrapes.remove(view.model);
-                    });
                 });
                 layout.on('added-product', function (productData) {
                     var newProduct = new Entities.Product(productData);
