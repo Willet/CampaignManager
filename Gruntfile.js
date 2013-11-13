@@ -7,7 +7,7 @@ module.exports = function (grunt) {
     // load all grunt tasks
     require('load-grunt-tasks')(grunt);
 
-    //var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+    var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -81,6 +81,10 @@ module.exports = function (grunt) {
 
                         // Make directory browse-able.
                         middlewares.push(connect.directory(directory));
+
+                        // Setup a proxy for local development
+                        middlewares.push(proxySnippet);
+
                         return middlewares;
                     }
                 }
@@ -340,8 +344,7 @@ module.exports = function (grunt) {
                     'watch:templates',
                     'watch:images',
                     'watch:livereload',
-                    'compass:watch',
-                    'connect:livereload:keepalive'
+                    'compass:watch'
                 ],
                 options: {
                     logConcurrentOutput: true
@@ -389,7 +392,9 @@ module.exports = function (grunt) {
             'handlebars',
             'coffee',
             'jshint',
-            'concurrent:server'
+            'configureProxies',
+            'connect:livereload',
+            'concurrent:server',
         ]);
     });
 
