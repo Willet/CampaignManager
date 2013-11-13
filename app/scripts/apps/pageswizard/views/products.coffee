@@ -64,11 +64,12 @@ define [
       }
 
     regions:
-      "scrapeList": "#scrape-list"
-      "productList": "#product-list"
+      "productList": ".product-list-region"
       "productAddedBySearch": ".product-added-search.success"
 
     initialize: (opts) ->
+      @productList.on("show", ((view) => @relayEvents(view, 'product_list')))
+      @productList.on("close", ((view) => @stopRelayEvents(view)))
 
     onRender: (opts) ->
       @$(".steps .products").addClass("active")
@@ -132,6 +133,8 @@ define [
   class Views.PageProductList extends Marionette.CollectionView
 
     template: false
+    className: "product-list"
+    tagName: "ul"
 
     initialize: (options) ->
       @itemViewOptions = { added: options['added'] }
@@ -139,16 +142,27 @@ define [
     getItemView: (item) ->
       Views.PageProductGridItem
 
+  class Views.PageCreateProductPreview extends Marionette.ItemView
+
+    template: 'page/product/item_preview'
+
+    serializeData: -> @model.viewJSON()
+
   class Views.PageProductGridItem extends Marionette.Layout
 
     # TODO: implement a sane version of "added"
     #       how do we figure out if a product is in a page...
     template: "page/product/item_grid"
+    className: "product-item"
+    tagName: "li"
 
     serializeData: ->
       result = @model.viewJSON()
       result['added'] = @added
       result
+
+    triggers:
+      "click .js-product-preview": "preview_product"
 
     events:
       "click .js-add-to-page": "addToPage"

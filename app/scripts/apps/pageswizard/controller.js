@@ -136,6 +136,10 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                     // also change the tab UI
                     layout.$('#added-to-page').click();
                 });
+                layout.on('product_list:itemview:preview_product', function (listView, itemView) {
+                    var product = itemView.model;
+                    App.modal.show(new Views.PageCreateProductPreview({model: product}));
+                });
                 productList = new Views.PageProductList({collection: products, added: false});
                 layout.on('display:needs-review', function () {
                     products = App.request('product:entities:paged', storeId, pageId);

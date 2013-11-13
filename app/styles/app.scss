@@ -108,12 +108,12 @@ $selected-color: $body-font-color;
 
 /* PAGE CONTENT CREATE */
 
-.content-preview {
-  .content {
+.content-preview, .product-preview {
+  .content, .product {
     float: left;
     height: 480px;
   }
-  .content-info {
+  .content-info, .product-info {
     position: relative;
     left: 20px;
     label {
@@ -126,7 +126,7 @@ $selected-color: $body-font-color;
       text-shadow: none;
     }
   }
-  .content-image {
+  .content-image, .product-image {
     background-size: contain;
     height: 100%;
     background-repeat: no-repeat;
@@ -146,7 +146,7 @@ $selected-color: $body-font-color;
   margin: 0 auto;
 }
 
-.content-item {
+.content-item, .product-item {
   @include grid-column($columns: 2);
   list-style-type: none;
   background-color: #f0f0f0;
@@ -161,7 +161,7 @@ $selected-color: $body-font-color;
     left: 0;
     margin: 5px;
   }
-  .content-image {
+  .content-image, .product-image {
     height: 100%;
     background-size: contain;
     width: 100%;
@@ -169,12 +169,12 @@ $selected-color: $body-font-color;
     background-repeat: no-repeat;
     background-position: center center;
   }
-  .content-actions {
+  .content-actions, .product-actions {
     display: none;
   }
   &:hover {
     background-color: rgba(0,0,0,0.3);
-    .content-actions {
+    .content-actions, .product-actions {
       display: block;
       vertical-align: middle;
       position: absolute;
