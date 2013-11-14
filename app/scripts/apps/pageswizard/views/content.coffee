@@ -33,7 +33,7 @@ define [
       "click #filter-import-content": "displayImportContent"
 
     resetFilters: () ->
-      @$('#js-filter-sort-order').val('')
+      @$('#js-filter-sort-order').val('descending')
       @$('#js-filter-content-type').val('')
       @$('#js-filter-content-source').val('')
       @$('#js-filter-content-tags').val('')

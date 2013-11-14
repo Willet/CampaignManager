@@ -60,6 +60,10 @@ define [
       contents.getNextPage(params)
       contents
 
+  App.reqres.setHandler "store:content",
+    (store, params) ->
+      API.getPagedContents store.get('id'), params
+
   App.reqres.setHandler "content:entities",
     (store_id, params) ->
       API.getContents store_id, params

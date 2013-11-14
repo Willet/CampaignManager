@@ -115,7 +115,6 @@ define [
         #collection = new @collectionType
         #collection.model = @model
         #collection.url = @url
-
         params = _.extend(@queryParams, @params)
 
         xhr = @fetch

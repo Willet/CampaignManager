@@ -233,8 +233,9 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
             },
 
             pagesContent: function (storeId, pageId) {
-                var contents, contentList, layout, page;
+                var contents, contentList, layout, store, page;
                 page = App.routeModels.get('page');   // Why does this return an empty model?
+                store = App.routeModels.get('store');
                 contents = App.request('needs-review:content:entities:paged', storeId, pageId);
 
                 var fetchRelatedProducts = function(contents) {
@@ -294,7 +295,7 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                     // TODO: this introduces a race-condition on reset...
                     //       since a new AJAX request, should cancel the effect of the others
                     contents.reset();
-                    var newContents = App.request('content:entities:paged', storeId, pageId, layout.extractFilter());
+                    var newContents = App.request('store:content', store, layout.extractFilter());
                     App.execute('when:fetched', newContents, function() {
                         contents.reset(newContents.models);
                     });
