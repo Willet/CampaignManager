@@ -100,6 +100,7 @@ require([
     'global/click_handler',
     'global/form_serialize',
     'config/backbone/model',
+    'config/backbone/view',
     'config/marionette/application',
     'config/marionette/renderer',
     'config/marionette/view',
