@@ -11,6 +11,8 @@ define [
 
     triggers:
       "click .js-next": "save"
+      "click .js-grid-view": "grid-view"
+      "click .js-list-view": "list-view"
 
     events:
       "click #filter-import-product": "displayImportProduct"
@@ -145,12 +147,20 @@ define [
     initialize: (options) ->
       @itemViewOptions = { added: options['added'] }
 
-    getItemView: (item) ->
-      Views.PageProductGridItem
 
   class Views.PageCreateProductPreview extends Marionette.ItemView
 
     template: 'page/product/item_preview'
+
+    serializeData: -> @model.viewJSON()
+
+  class Views.PageProductListItem extends Marionette.Layout
+
+    # TODO: implement a sane version of "added"
+    #       how do we figure out if a product is in a page...
+    template: "page/product/item_list"
+    className: "product-item list-view"
+    tagName: "li"
 
     serializeData: -> @model.viewJSON()
 
@@ -159,7 +169,7 @@ define [
     # TODO: implement a sane version of "added"
     #       how do we figure out if a product is in a page...
     template: "page/product/item_grid"
-    className: "product-item"
+    className: "product-item grid-view"
     tagName: "li"
 
     serializeData: ->

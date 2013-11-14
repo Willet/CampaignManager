@@ -140,15 +140,13 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                     var product = itemView.model;
                     App.modal.show(new Views.PageCreateProductPreview({model: product}));
                 });
-                productList = new Views.PageProductList({collection: products, added: false});
-                layout.on('display:needs-review', function () {
-                    products = App.request('product:entities:paged', storeId, pageId);
-                    productList = new Views.PageProductList({collection: products, added: false});
+                productList = new Views.PageProductList({collection: products, added: false, itemView: Views.PageProductGridItem });
+                layout.on('grid-view', function (layoutView) {
+                    productList = new Views.PageProductList({collection: products, added: false, itemView: Views.PageProductGridItem });
                     layout.productList.show(productList);
                 });
-                layout.on('display:added-to-page', function () {
-                    products = App.request('added-to-page:product:entities:paged', storeId, pageId);
-                    productList = new Views.PageProductList({collection: products, added: true});
+                layout.on('list-view', function (layoutView) {
+                    productList = new Views.PageProductList({collection: products, added: false, itemView: Views.PageProductListItem });
                     layout.productList.show(productList);
                 });
                 // Displayed Product
