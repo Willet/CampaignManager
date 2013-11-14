@@ -19,45 +19,47 @@
     </form>
   </div>
 
-  <hr />
+  <div class="import-product">
+    <hr />
 
-  <form class="add-content">
-    <div class="add-by-url">
-      <label>Add By Url</label>
-      <input id="js-content-url" type="text" />
-      <button class="small">Add</button>
-    </div>
-  </form>
+    <form class="add-content">
+      <div class="add-by-url">
+        <label>Add By Url</label>
+        <input id="js-content-url" type="text" />
+        <button class="small">Add</button>
+      </div>
+    </form>
 
-  <div class="import-list row">
-    <div class="large-6 columns">
-      <span class="link">
-        <b>URL:</b>
-        <a href="{{url}}" target="_blank">http://gap.com/asdkjaskd/</a>
-      </span>
+    <div class="import-list row">
+      <div class="large-6 columns">
+        <span class="link">
+          <b>URL:</b>
+          <a href="{{url}}" target="_blank">http://gap.com/asdkjaskd/</a>
+        </span>
+      </div>
+      <div class="large-3 columns text-right status-{{status}}">
+        Finished
+      </div>
+      <div class="large-3 text-right columns action">
+        <button href="#" class="small refresh">Refresh</button>
+        <button href="#" class="small remove">Remove</button>
+      </div>
+      <div class="large-6 columns">
+        <span class="link">
+          <b>URL:</b>
+          <a href="{{url}}" target="_blank">http://www.gap.com/browse/product.do?pid=351401&locale=en_US&kwid=1&sem=false&sdReferer=http%3A%2F%2Fcampaign-test-local%3A9000%2F</a>
+        </span>
+      </div>
+      <div class="large-3 columns text-right status-{{status}}">
+        In Progress
+      </div>
+      <div class="large-3 text-right columns action">
+        <button href="#" class="small refresh">Refresh</button>
+        <button href="#" class="small remove">Remove</button>
+      </div>
     </div>
-    <div class="large-3 columns text-right status-{{status}}">
-      Finished
-    </div>
-    <div class="large-3 text-right columns action">
-      <button href="#" class="small refresh">Refresh</button>
-      <button href="#" class="small remove">Remove</button>
-    </div>
-    <div class="large-6 columns">
-      <span class="link">
-        <b>URL:</b>
-        <a href="{{url}}" target="_blank">http://www.gap.com/browse/product.do?pid=351401&locale=en_US&kwid=1&sem=false&sdReferer=http%3A%2F%2Fcampaign-test-local%3A9000%2F</a>
-      </span>
-    </div>
-    <div class="large-3 columns text-right status-{{status}}">
-      In Progress
-    </div>
-    <div class="large-3 text-right columns action">
-      <button href="#" class="small refresh">Refresh</button>
-      <button href="#" class="small remove">Remove</button>
-    </div>
+    <hr />
   </div>
-  <hr />
 
   <form class="product-options">
     <fieldset class="product-filter-actions">

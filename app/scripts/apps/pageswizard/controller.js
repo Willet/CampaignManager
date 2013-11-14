@@ -1,8 +1,9 @@
-define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'underscore', './views', 'components/views/content_list', 'entities'],
-    function (App, PageWizard, BackboneProjections, Marionette, $, _, Views, ContentList, Entities) {
+define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'underscore', './views', 'entities'],
+    function (App, PageWizard, BackboneProjections, Marionette, $, _, Views, Entities) {
         'use strict';
 
         PageWizard.Controller = Marionette.Controller.extend({
+
             pagesIndex: function (storeId) {
                 var allModels, pages, store, view;
 
@@ -46,6 +47,7 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                 });
                 return this.region.show(view);
             },
+
             pagesName: function () {
                 var layout, page, store,
                     self = this;
@@ -73,6 +75,7 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                     });
                 });
             },
+
             pagesLayout: function () {
                 var layout, page;
                 page = App.routeModels.get('page');
@@ -109,8 +112,10 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                 });
                 this.region.show(layout);
             },
+
             pagesProducts: function (storeId, pageId) {
-                var layout, page, products, productList;
+                var layout, store, page, products, productList;
+                store = App.routeModels.get('store');
                 page = App.routeModels.get('page');
                 products = App.request('product:entities:paged', storeId, pageId);
 
@@ -127,27 +132,52 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                 });
                 layout.on('added-product', function (productData) {
                     var newProduct = new Entities.Product(productData);
-                    // TODO: we should really only add this in the case
-                    //       the products is of type 'added'
-                    products.add(newProduct);
-
                     // reload list
                     layout.trigger('display:added-to-page');
                     // also change the tab UI
                     layout.$('#added-to-page').click();
+                    // TODO: we should really only add this in the case
+                    //       the products is of type 'added'
+                    products.add(newProduct);
+                });
+                layout.on('product_list:itemview:remove', function (listView, itemView) {
+                    var product = itemView.model;
+                    App.request('page:add_product', page, product);
+                });
+                layout.on('product_list:itemview:remove', function (listView, itemView) {
+                    // TODO: SHOULD BE
+                    var product = itemView.model;
+                    App.request('page:remove_product', page, product);
+                    /* MOVE THIS
+                    App.request("remove_product:page:entity", {
+                        store_id: store.get('id'),
+                        page_id: page.get('id'),
+                        product_id: itemView.model.get('id')
+                    });
+                    App.request("tileconfig:approve", {
+                        store_id: store.get('id'),
+                        page_id: page.get('id'),
+                        template: 'product',
+                        id: itemView.model.get('id')
+                    });
+                    */
                 });
                 layout.on('product_list:itemview:preview_product', function (listView, itemView) {
                     var product = itemView.model;
                     App.modal.show(new Views.PageCreateProductPreview({model: product}));
                 });
                 productList = new Views.PageProductList({collection: products, added: false, itemView: Views.PageProductGridItem });
-                layout.on('grid-view', function (layoutView) {
-                    productList = new Views.PageProductList({collection: products, added: false, itemView: Views.PageProductGridItem });
-                    layout.productList.show(productList);
+                layout.on('grid-view', function () {
+                    productList.itemView = Views.PageProductGridItem;
+                    productList.render();
+                    //productList = new Views.PageProductList({collection: products, added: false, itemView: Views.PageProductGridItem });
+                    //layout.productList.show(productList);
                 });
-                layout.on('list-view', function (layoutView) {
-                    productList = new Views.PageProductList({collection: products, added: false, itemView: Views.PageProductListItem });
-                    layout.productList.show(productList);
+                layout.on('list-view', function () {
+                    productList.itemView = Views.PageProductListItem;
+                    productList.render();
+                    //productList = new Views.PageProductList({collection: products, added: false, itemView: Views.PageProductListItem });
+                    //layout.productList.show(productList);
                 });
                 // Displayed Product
                 layout.on('change:filter', function () {
@@ -158,7 +188,8 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                     // TODO: this introduces a race-condition on reset...
                     //       since a new AJAX request, should cancel the effect of the others
                     products.reset();
-                    var newProducts = App.request('product:entities:paged', storeId, pageId, layout.extractFilter());
+                    var newProducts = App.request('store:products', store, {filter: layout.extractFilter() });
+                    // var newProducts = App.request('product:entities:paged', storeId, pageId, layout.extractFilter());
                     App.execute('when:fetched', newProducts, function() {
                         products.reset(newProducts.models);
                     });
@@ -167,7 +198,8 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                     // TODO: this introduces a race-condition on reset...
                     //       since a new AJAX request, should cancel the effect of the others
                     products.reset();
-                    var newProducts = App.request('needs-review:product:entities:paged', storeId, pageId, layout.extractFilter());
+                    var newProducts = App.request('page:products', page, {filter: layout.extractFilter() });
+                    //var newProducts = App.request('needs-review:product:entities:paged', storeId, pageId, layout.extractFilter());
                     App.execute('when:fetched', newProducts, function() {
                         products.reset(newProducts.models);
                     });
@@ -176,7 +208,8 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                     // TODO: this introduces a race-condition on reset...
                     //       since a new AJAX request, should cancel the effect of the others
                     products.reset();
-                    var newProducts = App.request('added-to-page:product:entities:paged', storeId, pageId, layout.extractFilter());
+                    var newProducts = App.request('page:products', page, {filter: layout.extractFilter() });
+                    // var newProducts = App.request('added-to-page:product:entities:paged', storeId, pageId, layout.extractFilter());
                     App.execute('when:fetched', newProducts, function() {
                         products.reset(newProducts.models);
                     });
@@ -198,6 +231,7 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                 });
                 this.region.show(layout);
             },
+
             pagesContent: function (storeId, pageId) {
                 var contents, contentList, layout, page;
                 page = App.routeModels.get('page');   // Why does this return an empty model?
@@ -223,12 +257,12 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                     model: page
                 });
 
-                layout.on('grid-view', function(layoutView) {
+                layout.on('grid-view', function() {
                     contentList = new Views.PageCreateContentList({ collection: contents, itemView: Views.PageCreateContentGridItem });
                     layout.contentList.show(contentList);
                 });
 
-                layout.on('list-view', function(layoutView) {
+                layout.on('list-view', function() {
                     contentList = new Views.PageCreateContentList({ collection: contents, itemView: Views.PageCreateContentListItem });
                     layout.contentList.show(contentList);
                 });
@@ -305,6 +339,7 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
 
                 this.region.show(layout);
             },
+
             /**
              * Shows in iframe with the page in it.
              */
@@ -361,6 +396,7 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                     });
                 });
             },
+
             publishView: function (storeId, pageId) {
                 var page, store, layout, self = this;
                 page = App.routeModels.get('page');
@@ -372,6 +408,7 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                 });
                 layout.on('publish', function () {
                     // TODO: move static_pages API under /graph/v1. ain't nobody got time for that today
+                    // TODO: HACK!!!
                     var req, baseUrl = App.API_ROOT
                         .replace('/graph/v1', '/static_pages')
                         .replace(':9000', ':8000');
@@ -421,5 +458,6 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                 });
             }
         });
+
         return PageWizard;
     });

@@ -89,3 +89,11 @@ define [
   App.reqres.setHandler "fetch:product",
     (store_id, product, params) ->
       API.fetchProduct store_id, product, params
+
+  App.reqres.setHandler "store:products",
+    (store, params) ->
+      API.getProducts store.get('id'), params
+
+  App.reqres.setHandler "page:products",
+    (page, params) ->
+      API.getPageProducts page.get('store-id'), page.get('id'), params

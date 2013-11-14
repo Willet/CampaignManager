@@ -28,16 +28,22 @@ define [
 
     displayImportProduct: (event) ->
       @trigger('display:import-product')
+      @$('.import-product').show()
+      @$('.product-options').hide()
       # we need it to trigger into the page for visual reasons
       true
 
     displayAddedProduct: (event) ->
       @trigger('display:added-product')
+      @$('.import-product').hide()
+      @$('.product-options').show()
       # we need it to trigger into the page for visual reasons
       true
 
     displayAllProduct: (event) ->
       @trigger('display:all-product')
+      @$('.import-product').hide()
+      @$('.product-options').show()
       # we need it to trigger into the page for visual reasons
       true
 
@@ -82,6 +88,7 @@ define [
     onRender: (opts) ->
       @$(".steps .products").addClass("active")
       @$(@productAddedBySearch.el).hide()
+      @displayImportProduct()
 
     onShow: (opts) ->
       # TODO: unhard-code this...
@@ -172,62 +179,15 @@ define [
     className: "product-item grid-view"
     tagName: "li"
 
-    serializeData: ->
-      result = @model.viewJSON()
-      result['added'] = @added
-      result
+    serializeData: -> @model.viewJSON()
 
     triggers:
       "click .js-product-preview": "preview_product"
-
-    events:
-      "click .js-add-to-page": "addToPage"
-      "click .js-remove-from-page": "removeFromPage"
+      "click .js-add-to-page": "add"
+      "click .js-remove-from-page": "remove"
 
     initialize: (options) ->
-      @added = options['added']
       throttled_render = _.throttle((=> @render()), 500, leading: false)
       @model.on('nested-change', throttled_render)
-
-    addToPageAlso: () ->
-      App.request("add_product:page:entity", {
-          store_id: App.routeModels.get('store').get('id')
-          page_id: App.routeModels.get('page').get('id')
-          product_id: @model.get('id')
-        }
-      )
-
-      page = App.routeModels.get('page')
-      App.request("tileconfig:approve",
-        page.get('id'),
-        template: 'product',
-        id: @model.get('id')
-      )
-
-      @added = true
-      @render()
-
-    addToPage: (event) ->
-      event.stopPropagation()
-      @addToPageAlso()
-      false
-
-    removeFromPage: (event) ->
-      App.request("remove_product:page:entity", {
-          store_id: App.routeModels.get('store').get('id')
-          page_id: App.routeModels.get('page').get('id')
-          product_id: @model.get('id')
-        }
-      )
-      page = App.routeModels.get('page')
-      App.request("tileconfig:approve",
-        page.get('id'),
-        template: 'product',
-        id: @model.get('id')
-      )
-      event.stopPropagation()
-      @added = false
-      @render()
-      false
 
   Views
