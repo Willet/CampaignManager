@@ -146,7 +146,7 @@ $selected-color: $body-font-color;
   margin: 0 auto;
 }
 
-.content-item, .product-item {
+.content-item.grid-view, .product-item {
   @include grid-column($columns: 2);
   list-style-type: none;
   background-color: #f0f0f0;
@@ -196,13 +196,69 @@ $selected-color: $body-font-color;
   }
 }
 
+.content-item.list-view {
+  @include grid-column($columns: 12);
+  list-style-type: none;
+  background-color: #f0f0f0;
+  box-shadow: inset 1px 1px #aaaaaa;
+  border: 1px solid #aaaaaa;
+  height: 240px;
+  overflow: hidden;
+  margin: 1.666%;
+  .content-type {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 5px;
+  }
+  .content-image {
+    float: left;
+  }
+  .content-info {
+    position: relative;
+    left: 10px;
+  }
+  .content-actions {
+    > button {
+      @include grid-column($columns: 2);
+      background-color: #444;
+      border: 0;
+      margin: 3px;
+      font-size: 12px;
+      &:hover {
+        color: $action-color;
+      }
+    }
+  }
+}
+
 .page-step-actions {
   @include clearfix();
   float: right;
 }
 
+.add-content {
+  @include grid-row();
+  .add-by-url {
+    @include grid-column($columns: 12);
+    > label {
+      line-height: 22px;
+      @include grid-column($columns: 2);
+    }
+    > input {
+      @include grid-column($columns: 8);
+    }
+    > button {
+      @include grid-column($columns: 2);
+    }
+  }
+}
+
 .content-options, .product-options {
   @include grid-row();
+  label {
+    line-height: 22px;
+  }
   .filter-sort-order {
     @include grid-column($columns: 12);
     > label {

@@ -151,6 +151,38 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                     productList = new Views.PageProductList({collection: products, added: true});
                     layout.productList.show(productList);
                 });
+                // Displayed Product
+                layout.on('change:filter', function () {
+                    var filter = layout.extractFilter();
+                    products.setFilter(filter);
+                });
+                layout.on('display:all-product', function() {
+                    // TODO: this introduces a race-condition on reset...
+                    //       since a new AJAX request, should cancel the effect of the others
+                    products.reset();
+                    var newProducts = App.request('product:entities:paged', storeId, pageId, layout.extractFilter());
+                    App.execute('when:fetched', newProducts, function() {
+                        products.reset(newProducts.models);
+                    });
+                });
+                layout.on('display:import-product', function() {
+                    // TODO: this introduces a race-condition on reset...
+                    //       since a new AJAX request, should cancel the effect of the others
+                    products.reset();
+                    var newProducts = App.request('needs-review:product:entities:paged', storeId, pageId, layout.extractFilter());
+                    App.execute('when:fetched', newProducts, function() {
+                        products.reset(newProducts.models);
+                    });
+                });
+                layout.on('display:added-product', function() {
+                    // TODO: this introduces a race-condition on reset...
+                    //       since a new AJAX request, should cancel the effect of the others
+                    products.reset();
+                    var newProducts = App.request('added-to-page:product:entities:paged', storeId, pageId, layout.extractFilter());
+                    App.execute('when:fetched', newProducts, function() {
+                        products.reset(newProducts.models);
+                    });
+                });
                 layout.on('render', function () {
                     layout.productList.show(productList);
                 });
@@ -188,9 +220,19 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                 };
                 fetchRelatedProducts(contents);
 
-                contentList = new Views.PageCreateContentList({ collection: contents });
+                contentList = new Views.PageCreateContentList({ collection: contents, itemView: Views.PageCreateContentGridItem });
                 layout = new Views.PageCreateContent({
                     model: page
+                });
+
+                layout.on('grid-view', function(layoutView) {
+                    contentList = new Views.PageCreateContentList({ collection: contents, itemView: Views.PageCreateContentGridItem });
+                    layout.contentList.show(contentList);
+                });
+
+                layout.on('list-view', function(layoutView) {
+                    contentList = new Views.PageCreateContentList({ collection: contents, itemView: Views.PageCreateContentListItem });
+                    layout.contentList.show(contentList);
                 });
 
                 // Item View Actions

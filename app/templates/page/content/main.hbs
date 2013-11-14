@@ -5,9 +5,12 @@
   <h2>Content</h2>
 
   <div class="filter-actions row">
-    <form class="switch-toggle switch-3 panel">
+    <form class="switch-toggle switch-4 panel">
       <input id="filter-suggested-content" name="filter" type="radio" checked>
       <label for="filter-suggested-content">Suggested</label>
+
+      <input id="filter-import-content" name="filter" type="radio">
+      <label for="filter-import-content">Import</label>
 
       <input id="filter-all-content" name="filter" type="radio">
       <label for="filter-all-content">All</label>
@@ -46,18 +49,37 @@
         <input id="js-filter-content-tags" type="text" />
       </div>
     </fieldset>
-    <div class="filter-sort-order">
-      <label>Sort</label>
-      <select id="js-filter-sort-order">
-        <option value="ascending">Most Recent First</option>
-        <option value="descending">Least Recent First</option>
-      </select>
-    </div>
+    <fieldset class="content-sort-actions">
+      <legend>Sort</legend>
+      <div class="filter-sort-order">
+        <label>Sort</label>
+        <select id="js-filter-sort-order">
+          <option value="ascending">Most Recent First</option>
+          <option value="descending">Least Recent First</option>
+        </select>
+      </div>
+    </fieldset>
   </form>
 
-  <div class="content-item-actions">
-    <button class="js-select-all">Select All</button>
-    <button class="js-add-selected">Add Selected</button>
+  <form class="add-content row">
+    <fieldset>
+      <legend>Add New Content</legend>
+      <div class="add-by-url">
+        <label>Add By Url</label>
+        <input id="js-content-url" type="text" />
+        <button class="small">Add</button>
+      </div>
+    </fieldset>
+  </form>
+
+  <div class="container row" style="line-height: 22px;">
+    <div class="content-view-actions" style="float:left;">
+      <a class="js-grid-view">Grid</a> | <a class="js-list-view">List</a>
+    </div>
+    <div class="content-item-actions">
+      <button class="js-select-all">Select All</button>
+      <button class="js-add-selected">Add Selected</button>
+    </div>
   </div>
 
   <div class="content-list-region">

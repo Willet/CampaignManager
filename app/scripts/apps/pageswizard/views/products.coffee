@@ -9,29 +9,35 @@ define [
 
     template: "page/product/main"
 
-    events:
-      "click #add-url": "addUrl"
-      "click #add-product": "addProduct"
-      "keydown #url": "resetError"
-      "click #needs-review": "displayNeedsReview"
-      "click #added-to-page": "displayAddedToPage"
-      "change #search-product": "searchProductChanged"
-      "click .js-add-all": "addAllProducts"
-
-    displayNeedsReview: (event) ->
-      @trigger('display:needs-review')
-      true
-
-    displayAddedToPage: (event) ->
-      @trigger('display:added-to-page')
-      true
-
-    searchProductChanged: (event) ->
-      @trigger('added-product')
-      true
-
     triggers:
       "click .js-next": "save"
+
+    events:
+      "click #filter-import-product": "displayImportProduct"
+      "click #filter-all-product": "displayAllProduct"
+      "click #filter-added-product": "displayAddedProduct"
+
+    extractFilter: () ->
+      filter = {}
+      filter['tags'] = @$('#js-filter-product-tags').val()
+      filter['order'] = @$('#js-filter-sort-order').val()
+      _.each(_.keys(filter), (key) -> delete filter[key] if filter[key] == null || !/\S/.test(filter[key]))
+      return filter;
+
+    displayImportProduct: (event) ->
+      @trigger('display:import-product')
+      # we need it to trigger into the page for visual reasons
+      true
+
+    displayAddedProduct: (event) ->
+      @trigger('display:added-product')
+      # we need it to trigger into the page for visual reasons
+      true
+
+    displayAllProduct: (event) ->
+      @trigger('display:all-product')
+      # we need it to trigger into the page for visual reasons
+      true
 
     resetError: (event) ->
       $(event.currentTarget).removeClass("error")

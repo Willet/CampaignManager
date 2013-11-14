@@ -23,11 +23,14 @@ define [
       "change #js-filter-content-type": "change:filter"
       "change #js-filter-content-source": "change:filter"
       "blur #js-filter-content-tags": "change:filter"
+      "click .js-grid-view": "grid-view"
+      "click .js-list-view": "list-view"
 
     events:
       "click #filter-suggested-content": "displaySuggestedContent"
       "click #filter-all-content": "displayAllContent"
       "click #filter-added-content": "displayAddedContent"
+      "click #filter-import-content": "displayImportContent"
 
     extractFilter: () ->
       filter = {}
@@ -40,16 +43,29 @@ define [
 
     displaySuggestedContent: (event) ->
       @trigger('display:suggested-content')
+      @$('.content-options').show()
+      @$('.add-content').hide()
       # we need it to trigger into the page for visual reasons
       true
 
     displayAddedContent: (event) ->
       @trigger('display:added-content')
+      @$('.content-options').show()
+      @$('.add-content').hide()
       # we need it to trigger into the page for visual reasons
       true
 
     displayAllContent: (event) ->
       @trigger('display:all-content')
+      @$('.content-options').show()
+      @$('.add-content').hide()
+      # we need it to trigger into the page for visual reasons
+      true
+
+    displayImportContent: (event) ->
+      @trigger('display:import-content')
+      @$('.content-options').hide()
+      @$('.add-content').show()
       # we need it to trigger into the page for visual reasons
       true
 
@@ -66,6 +82,9 @@ define [
       @$('.loading').show()
       @trigger("fetch:next-page")
       false
+
+    onRender: ->
+      @displaySuggestedContent()
 
     onShow: (opts) ->
       # TODO: remove dangling pointer to the view that is shown
@@ -87,13 +106,11 @@ define [
     className: "content-list"
     template: false
 
-    getItemView: (item) ->
-      Views.PageCreateContentGridItem
 
   class Views.PageCreateContentGridItem extends Marionette.ItemView
 
     tagName: "li"
-    className: "content-item"
+    className: "content-item grid-view"
     template: "page/content/item_grid"
 
     triggers:
@@ -107,7 +124,7 @@ define [
   class Views.PageCreateContentListItem extends Marionette.ItemView
 
     tagName: "li"
-    className: "content-item"
+    className: "content-item list-view"
     template: "page/content/item_list"
 
     serializeData: -> @model.viewJSON()
@@ -116,5 +133,6 @@ define [
       "click .js-content-prioritize": "prioritize_content"
       "click .js-content-add": "add_content"
       "click .js-content-remove": "remove_content"
+      "click .js-content-preview": "preview_content"
 
   Views
