@@ -32,6 +32,12 @@ define [
       "click #filter-added-content": "displayAddedContent"
       "click #filter-import-content": "displayImportContent"
 
+    resetFilters: () ->
+      @$('#js-filter-sort-order').val('')
+      @$('#js-filter-content-type').val('')
+      @$('#js-filter-content-source').val('')
+      @$('#js-filter-content-tags').val('')
+
     extractFilter: () ->
       filter = {}
       filter['source'] = @$('#js-filter-content-source').val()
@@ -43,6 +49,7 @@ define [
 
     displaySuggestedContent: (event) ->
       @trigger('display:suggested-content')
+      @resetFilters()
       @$('.content-options').show()
       @$('.add-content').hide()
       # we need it to trigger into the page for visual reasons
@@ -50,6 +57,7 @@ define [
 
     displayAddedContent: (event) ->
       @trigger('display:added-content')
+      @resetFilters()
       @$('.content-options').show()
       @$('.add-content').hide()
       # we need it to trigger into the page for visual reasons
@@ -57,6 +65,7 @@ define [
 
     displayAllContent: (event) ->
       @trigger('display:all-content')
+      @resetFilters()
       @$('.content-options').show()
       @$('.add-content').hide()
       # we need it to trigger into the page for visual reasons
@@ -64,6 +73,7 @@ define [
 
     displayImportContent: (event) ->
       @trigger('display:import-content')
+      @resetFilters()
       @$('.content-options').hide()
       @$('.add-content').show()
       # we need it to trigger into the page for visual reasons
