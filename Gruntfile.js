@@ -139,7 +139,7 @@ module.exports = function (grunt) {
             ],
             options: {
                 jshintrc: '.jshintrc'
-            },
+            }
         },
         handlebars: {
             compile: {
@@ -354,7 +354,7 @@ module.exports = function (grunt) {
                 'sync:styles'
             ],
             dist: [
-                'compass:dist',
+                'compass:dist'
             ]
         },
         bower: {
@@ -394,7 +394,7 @@ module.exports = function (grunt) {
             'jshint',
             'configureProxies',
             'connect:livereload',
-            'concurrent:server',
+            'concurrent:server'
         ]);
     });
 
