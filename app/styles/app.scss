@@ -147,6 +147,9 @@ $selected-color: $body-font-color;
 }
 
 .content-item.grid-view, .product-item {
+  &.selected {
+    background-color: transparentize($action-color, 0.4)
+  }
   @include grid-column($columns: 2);
   list-style-type: none;
   background-color: #f0f0f0;
@@ -173,7 +176,6 @@ $selected-color: $body-font-color;
     display: none;
   }
   &:hover {
-    background-color: rgba(0,0,0,0.3);
     .content-actions, .product-actions {
       display: block;
       vertical-align: middle;

@@ -129,6 +129,16 @@ define [
       "click .js-content-remove": "remove_content"
       "click .js-content-preview": "preview_content"
 
+    events:
+      "click": "selectItem"
+
+    selectItem: (event) ->
+      @model.set('selected', !@model.get('selected'))
+      if @model.get('selected')
+        @$el.addClass('selected')
+      else
+        @$el.removeClass('selected')
+
     serializeData: -> @model.viewJSON()
 
   class Views.PageCreateContentListItem extends Marionette.ItemView

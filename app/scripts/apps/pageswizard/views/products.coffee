@@ -186,8 +186,19 @@ define [
       "click .js-add-to-page": "add"
       "click .js-remove-from-page": "remove"
 
+    events:
+      "click": "selectItem"
+
     initialize: (options) ->
       throttled_render = _.throttle((=> @render()), 500, leading: false)
       @model.on('nested-change', throttled_render)
+
+    selectItem: (event) ->
+      @model.set('selected', !@model.get('selected'))
+      if @model.get('selected')
+        @$el.addClass('selected')
+      else
+        @$el.removeClass('selected')
+
 
   Views
