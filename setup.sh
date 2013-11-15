@@ -13,7 +13,7 @@ echo "Installing Yeoman"
 npm install -g yo grunt grunt-exec bower || (echo "FAIL: Couldn't install yeoman, try to get 'npm install yo' to work" && exit)
 
 echo "Grabbing remote packages (bower.json)"
-bower install || (echo "FAIL: Could not succesfully grab css/js packages. 'bower install'" && exit)
+bower --allow-root install || (echo "FAIL: Could not succesfully grab css/js packages. 'bower install'" && exit)
 
 echo ""
 echo "'grunt server' to run the server locally with live reload etc!"
