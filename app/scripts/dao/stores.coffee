@@ -21,10 +21,10 @@ define [
         data: params
       stores
 
-  App.reqres.setHandler "store:entities",
+  App.reqres.setHandler "store:all",
     (params) ->
       API.getStores params
 
-  App.reqres.setHandler "store:entity",
+  App.reqres.setHandler "store:get",
     (params, options) ->
       API.getStore params['store_id'], options

@@ -27,61 +27,65 @@ define [
       page.url = -> "#{App.API_ROOT}/store/#{store_id}/page/#{@get('id') || ""}"
       page
 
-    addContentToPage: (store_id, page_id, content_id, params = {}) ->
+    addContent: (store_id, page_id, content_id, params = {}) ->
       url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/#{content_id}"
       $.ajax url, type: "PUT"
 
-    removeContentFromPage: (store_id, page_id, content_id, params = {}) ->
+    removeContent: (store_id, page_id, content_id, params = {}) ->
       url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/#{content_id}"
       $.ajax url, type: "DELETE"
 
-    addProductToPage: (store_id, page_id, product_id, params = {}) ->
+    addProduct: (store_id, page_id, product_id, params = {}) ->
       url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product/#{product_id}"
       $.ajax url, type: "PUT"
 
-    removeProductFromPage: (store_id, page_id, product_id, params = {}) ->
+    removeProduct: (store_id, page_id, product_id, params = {}) ->
       url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product/#{product_id}"
       $.ajax url, type: "DELETE"
 
-  App.reqres.setHandler "page:entities",
-    (store_id, options) ->
-      API.getPages store_id, options
+  App.reqres.setHandler "page:all",
+    (store, options) ->
+      API.getPages store.get('id'), options
 
-  App.reqres.setHandler "page:entity",
+  App.reqres.setHandler "page:get",
     (params, options) ->
       if params['page_id'] == 'new'
         API.newPage params['store_id'], options
       else
         API.getPage params['store_id'], params['page_id'], options
 
-  App.reqres.setHandler "new:page:entity",
+  App.reqres.setHandler "page:new",
     (params, options) ->
       API.newPage params['store_id'], options
 
-  App.reqres.setHandler "add_product:page:entity",
-    (params, options) ->
-      API.addProductToPage params['store_id'], params['page_id'], params['product_id'], options
-
-  App.reqres.setHandler "remove_product:page:entity",
-    (params, options) ->
-      API.removeProductFromPage params['store_id'], params['page_id'], params['product_id'], options
-
-  App.reqres.setHandler "add_content:page:entity",
-    (params, options) ->
-      API.addContentToPage params['store_id'], params['page_id'], params['content_id'], options
-
-  App.reqres.setHandler "remove_content:page:entity",
-    (params, options) ->
-      API.removeContentFromPage params['store_id'], params['page_id'], params['content_id'], options
+  #
+  # Page - Content Methods
+  #
 
   App.reqres.setHandler "page:add_content",
     (page, content, options) ->
-      API.addContentToPage page.get('store-id'), page.get('id'), content.get('id')
+      API.addContent page.get('store-id'), page.get('id'), content.get('id')
 
   App.reqres.setHandler "page:remove_content",
     (page, content, options) ->
-      API.removeContentFromPage page.get('store-id'), page.get('id'), content.get('id')
+      API.removeContent page.get('store-id'), page.get('id'), content.get('id')
 
   App.reqres.setHandler "page:prioritize_content",
     (page, content, options) ->
       API.prioritizeContent page.get('store-id'), page.get('id'), content.get('id')
+
+  #
+  # Page - Product Methods
+  #
+
+  App.reqres.setHandler "page:add_product",
+    (page, content, options) ->
+      API.addProduct page.get('store-id'), page.get('id'), product.get('id')
+
+  App.reqres.setHandler "page:remove_product",
+    (page, content, options) ->
+      API.removeProduct page.get('store-id'), page.get('id'), product.get('id')
+
+  App.reqres.setHandler "page:prioritize_product",
+    (page, product, options) ->
+      API.prioritizeProduct page.get('store-id'), page.get('id'), product.get('id')

@@ -27,7 +27,7 @@ define [
       App.execute "when:fetched", store, =>
         layout.nav.show(new MainNav(model: new Entities.Model(store: store, page: 'content')))
 
-      contents = App.request "content:entities:paged", store_id
+      contents = App.request "content:all", store_id
       contents.getNextPage()
 
       App.execute "when:fetched", [contents], =>

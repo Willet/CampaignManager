@@ -8,8 +8,8 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                 var allModels, pages, store, view;
 
                 // gets a list of pages belonging to this store.
-                pages = App.request('page:entities', storeId);
-                store = App.request('store:entity', {'store_id': storeId});
+                pages = App.request('page:all', storeId);
+                store = App.request('store:get', {'store_id': storeId});
                 view = new Views.PageIndex({
                     model: pages,
                     'store': store
@@ -113,232 +113,200 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                 this.region.show(layout);
             },
 
-            pagesProducts: function (storeId, pageId) {
-                var layout, store, page, products, productList;
+            pagesProducts: function (storeId) {
+                var layout, store, page, products, productList, _this = this;
                 store = App.routeModels.get('store');
                 page = App.routeModels.get('page');
-                products = App.request('product:entities:paged', storeId, pageId);
+                App.execute('when:fetched', [store, page], function() {
+                    products = App.request('page:products', page);
 
-                App.execute('when:fetched', products, function() {
-                    // for each product, fetch their content image
-                    products.collect(function(product) {
-                        App.request('fetch:content', storeId, product.get('default-image-id'));
-                    });
-                });
-
-
-                layout = new Views.PageCreateProducts({
-                    model: page
-                });
-                layout.on('added-product', function (productData) {
-                    var newProduct = new Entities.Product(productData);
-                    // reload list
-                    layout.trigger('display:added-to-page');
-                    // also change the tab UI
-                    layout.$('#added-to-page').click();
-                    // TODO: we should really only add this in the case
-                    //       the products is of type 'added'
-                    products.add(newProduct);
-                });
-                layout.on('product_list:itemview:remove', function (listView, itemView) {
-                    var product = itemView.model;
-                    App.request('page:add_product', page, product);
-                });
-                layout.on('product_list:itemview:remove', function (listView, itemView) {
-                    // TODO: SHOULD BE
-                    var product = itemView.model;
-                    App.request('page:remove_product', page, product);
-                    /* MOVE THIS
-                    App.request("remove_product:page:entity", {
-                        store_id: store.get('id'),
-                        page_id: page.get('id'),
-                        product_id: itemView.model.get('id')
-                    });
-                    App.request("tileconfig:approve", {
-                        store_id: store.get('id'),
-                        page_id: page.get('id'),
-                        template: 'product',
-                        id: itemView.model.get('id')
-                    });
-                    */
-                });
-                layout.on('product_list:itemview:preview_product', function (listView, itemView) {
-                    var product = itemView.model;
-                    App.modal.show(new Views.PageCreateProductPreview({model: product}));
-                });
-                productList = new Views.PageProductList({collection: products, added: false, itemView: Views.PageProductGridItem });
-                layout.on('grid-view', function () {
-                    productList.itemView = Views.PageProductGridItem;
-                    productList.render();
-                    //productList = new Views.PageProductList({collection: products, added: false, itemView: Views.PageProductGridItem });
-                    //layout.productList.show(productList);
-                });
-                layout.on('list-view', function () {
-                    productList.itemView = Views.PageProductListItem;
-                    productList.render();
-                    //productList = new Views.PageProductList({collection: products, added: false, itemView: Views.PageProductListItem });
-                    //layout.productList.show(productList);
-                });
-                // Displayed Product
-                layout.on('change:filter', function () {
-                    var filter = layout.extractFilter();
-                    products.setFilter(filter);
-                });
-                layout.on('display:all-product', function() {
-                    // TODO: this introduces a race-condition on reset...
-                    //       since a new AJAX request, should cancel the effect of the others
-                    products.reset();
-                    var newProducts = App.request('store:products', store, {filter: layout.extractFilter() });
-                    // var newProducts = App.request('product:entities:paged', storeId, pageId, layout.extractFilter());
-                    App.execute('when:fetched', newProducts, function() {
-                        products.reset(newProducts.models);
-                    });
-                });
-                layout.on('display:import-product', function() {
-                    // TODO: this introduces a race-condition on reset...
-                    //       since a new AJAX request, should cancel the effect of the others
-                    products.reset();
-                    var newProducts = App.request('page:products', page, {filter: layout.extractFilter() });
-                    //var newProducts = App.request('needs-review:product:entities:paged', storeId, pageId, layout.extractFilter());
-                    App.execute('when:fetched', newProducts, function() {
-                        products.reset(newProducts.models);
-                    });
-                });
-                layout.on('display:added-product', function() {
-                    // TODO: this introduces a race-condition on reset...
-                    //       since a new AJAX request, should cancel the effect of the others
-                    products.reset();
-                    var newProducts = App.request('page:products', page, {filter: layout.extractFilter() });
-                    // var newProducts = App.request('added-to-page:product:entities:paged', storeId, pageId, layout.extractFilter());
-                    App.execute('when:fetched', newProducts, function() {
-                        products.reset(newProducts.models);
-                    });
-                });
-                layout.on('render', function () {
-                    layout.productList.show(productList);
-                });
-                layout.on('save', function () {
-                    $.when(page.save()).done(function (data) {
-                        // TODO: Should we only do this when pageId === 'new'?
-                        var store = data['store-id'],
-                            page = data.id;
-
-                        App.navigate('/' + store + '/pages/' + page + '/content',
-                            {
-                                trigger: true
-                            });
-                    });
-                });
-                this.region.show(layout);
-            },
-
-            pagesContent: function (storeId, pageId) {
-                var contents, contentList, layout, store, page;
-                page = App.routeModels.get('page');   // Why does this return an empty model?
-                store = App.routeModels.get('store');
-                contents = App.request('needs-review:content:entities:paged', storeId, pageId);
-
-                var fetchRelatedProducts = function(contents) {
-                    App.execute('when:fetched', contents, function() {
+                    App.execute('when:fetched', products, function() {
                         // for each product, fetch their content image
-                        contents.collect(function(content) {
-                            var products = content.get('tagged-products');
-                            if (products) {
-                                products.collect(function(product) {
-                                    App.request('fetch:product', storeId, product);
-                                });
-                            }
+                        products.collect(function(product) {
+                            App.request('fetch:content', storeId, product.get('default-image-id'));
                         });
                     });
-                };
-                fetchRelatedProducts(contents);
 
-                contentList = new Views.PageCreateContentList({ collection: contents, itemView: Views.PageCreateContentGridItem });
-                layout = new Views.PageCreateContent({
-                    model: page
+
+                    layout = new Views.PageCreateProducts({
+                        model: page
+                    });
+                    layout.on('added-product', function (productData) {
+                        var newProduct = new Entities.Product(productData);
+                        // reload list
+                        layout.trigger('display:added-to-page');
+                        // also change the tab UI
+                        layout.$('#added-to-page').click();
+                        // TODO: we should really only add this in the case
+                        //       the products is of type 'added'
+                        products.add(newProduct);
+                    });
+                    layout.on('product_list:itemview:remove', function (listView, itemView) {
+                        var product = itemView.model;
+                        App.request('page:add_product', page, product);
+                    });
+                    layout.on('product_list:itemview:remove', function (listView, itemView) {
+                        var product = itemView.model;
+                        App.request('page:remove_product', page, product);
+                    });
+                    layout.on('product_list:itemview:preview_product', function (listView, itemView) {
+                        var product = itemView.model;
+                        App.modal.show(new Views.PageCreateProductPreview({model: product}));
+                    });
+                    productList = new Views.PageProductList({collection: products, added: false, itemView: Views.PageProductGridItem });
+                    layout.on('grid-view', function () {
+                        productList.itemView = Views.PageProductGridItem;
+                        productList.render();
+                    });
+                    layout.on('list-view', function () {
+                        productList.itemView = Views.PageProductListItem;
+                        productList.render();
+                    });
+                    // Displayed Product
+                    layout.on('change:filter', function () {
+                        var filter = layout.extractFilter();
+                        products.setFilter(filter);
+                    });
+                    layout.on('display:all-product', function() {
+                        // TODO: this introduces a race-condition on reset...
+                        //       since a new AJAX request, should cancel the effect of the others
+                        products.reset();
+                        var newProducts = App.request('store:products', store, {filter: layout.extractFilter() });
+                        App.execute('when:fetched', newProducts, function() {
+                            products.reset(newProducts.models);
+                        });
+                    });
+                    layout.on('display:import-product', function() {
+                        // TODO: this introduces a race-condition on reset...
+                        //       since a new AJAX request, should cancel the effect of the others
+                        products.reset();
+                        var newProducts = App.request('page:products', page, {filter: layout.extractFilter() });
+                        App.execute('when:fetched', newProducts, function() {
+                            products.reset(newProducts.models);
+                        });
+                    });
+                    layout.on('display:added-product', function() {
+                        // TODO: this introduces a race-condition on reset...
+                        //       since a new AJAX request, should cancel the effect of the others
+                        products.reset();
+                        var newProducts = App.request('page:products', page, {filter: layout.extractFilter() });
+                        App.execute('when:fetched', newProducts, function() {
+                            products.reset(newProducts.models);
+                        });
+                    });
+                    layout.on('save', function () {
+                        $.when(page.save()).done(function (data) {
+                            // TODO: Should we only do this when pageId === 'new'?
+                            var store = data['store-id'],
+                                page = data.id;
+
+                            App.navigate('/' + store + '/pages/' + page + '/content',
+                                {
+                                    trigger: true
+                                });
+                        });
+                    });
+                    layout.on('render', function () {
+                        layout.productList.show(productList);
+                    });
+                    _this.region.show(layout);
                 });
+            },
 
-                layout.on('grid-view', function() {
+            pagesContent: function (storeId) {
+                var contents, contentList, layout, store, page, _this = this;
+                page = App.routeModels.get('page');   // Why does this return an empty model?
+                store = App.routeModels.get('store');
+                App.execute('when:fetched', [store, page], function() {
+                    contents = App.request('content:all', store);
+
                     contentList = new Views.PageCreateContentList({ collection: contents, itemView: Views.PageCreateContentGridItem });
-                    layout.contentList.show(contentList);
-                });
-
-                layout.on('list-view', function() {
-                    contentList = new Views.PageCreateContentList({ collection: contents, itemView: Views.PageCreateContentListItem });
-                    layout.contentList.show(contentList);
-                });
-
-                // Item View Actions
-                layout.on('content_list:itemview:add_content', function (listView, itemView) {
-                    var content = itemView.model;
-                    App.request('page:add_content', page, content);
-                });
-                layout.on('content_list:itemview:remove_content', function (listView, itemView) {
-                    var content = itemView.model;
-                    App.request('page:remove_content', page, content);
-                });
-                layout.on('content_list:itemview:prioritize_content', function (listView, itemView) {
-                    var content = itemView.model;
-                    App.request('page:prioritize_content', page, content);
-                });
-                layout.on('content_list:itemview:preview_content', function (listView, itemView) {
-                    var content = itemView.model;
-                    App.modal.show(new Views.PageCreateContentPreview({model: content}));
-                });
-
-                // Displayed Content
-                layout.on('change:filter', function () {
-                    var filter = layout.extractFilter();
-                    contents.setFilter(filter);
-                });
-                layout.on('display:all-content', function() {
-                    // TODO: this introduces a race-condition on reset...
-                    //       since a new AJAX request, should cancel the effect of the others
-                    contents.reset();
-                    var newContents = App.request('store:content', store, layout.extractFilter());
-                    App.execute('when:fetched', newContents, function() {
-                        contents.reset(newContents.models);
+                    layout = new Views.PageCreateContent({
+                        model: page
                     });
-                });
-                layout.on('display:suggested-content', function() {
-                    // TODO: this introduces a race-condition on reset...
-                    //       since a new AJAX request, should cancel the effect of the others
-                    contents.reset();
-                    var newContents = App.request('needs-review:content:entities:paged', storeId, pageId, layout.extractFilter());
-                    App.execute('when:fetched', newContents, function() {
-                        contents.reset(newContents.models);
-                    });
-                });
-                layout.on('display:added-content', function() {
-                    // TODO: this introduces a race-condition on reset...
-                    //       since a new AJAX request, should cancel the effect of the others
-                    contents.reset();
-                    var newContents = App.request('added-to-page:content:entities:paged', storeId, pageId, layout.extractFilter());
-                    App.execute('when:fetched', newContents, function() {
-                        contents.reset(newContents.models);
-                    });
-                });
-                layout.on('render', function () {
-                    layout.contentList.show(contentList);
-                });
-                layout.on('fetch:next-page', function() {
-                    contents.getNextPage();
-                });
 
-                layout.on('save', function () {
-                    $.when(page.save()).done(function (data) {
-                        // TODO: Should we only do this when pageId === 'new'?
-                        var store = data['store-id'],
-                            page = data.id;
-
-                        App.navigate('/' + store + '/pages/' + page + '/publish',
-                            {
-                                trigger: true
-                            });
+                    layout.on('grid-view', function() {
+                        contentList = new Views.PageCreateContentList({ collection: contents, itemView: Views.PageCreateContentGridItem });
+                        layout.contentList.show(contentList);
                     });
-                });
 
-                this.region.show(layout);
+                    layout.on('list-view', function() {
+                        contentList = new Views.PageCreateContentList({ collection: contents, itemView: Views.PageCreateContentListItem });
+                        layout.contentList.show(contentList);
+                    });
+
+                    // Item View Actions
+                    layout.on('content_list:itemview:add_content', function (listView, itemView) {
+                        var content = itemView.model;
+                        App.request('page:add_content', page, content);
+                    });
+                    layout.on('content_list:itemview:remove_content', function (listView, itemView) {
+                        var content = itemView.model;
+                        App.request('page:remove_content', page, content);
+                    });
+                    layout.on('content_list:itemview:prioritize_content', function (listView, itemView) {
+                        var content = itemView.model;
+                        App.request('page:prioritize_content', page, content);
+                    });
+                    layout.on('content_list:itemview:preview_content', function (listView, itemView) {
+                        var content = itemView.model;
+                        App.modal.show(new Views.PageCreateContentPreview({model: content}));
+                    });
+
+                    // Displayed Content
+                    layout.on('change:filter', function () {
+                        var filter = layout.extractFilter();
+                        contents.setFilter(filter);
+                    });
+                    layout.on('display:all-content', function() {
+                        // TODO: this introduces a race-condition on reset...
+                        //       since a new AJAX request, should cancel the effect of the others
+                        contents.reset();
+                        var newContents = App.request('store:content', store, layout.extractFilter());
+                        App.execute('when:fetched', newContents, function() {
+                            contents.reset(newContents.models);
+                        });
+                    });
+                    layout.on('display:suggested-content', function() {
+                        // TODO: this introduces a race-condition on reset...
+                        //       since a new AJAX request, should cancel the effect of the others
+                        contents.reset();
+                        var newContents = App.request('page:content', page, layout.extractFilter());
+                        App.execute('when:fetched', newContents, function() {
+                            contents.reset(newContents.models);
+                        });
+                    });
+                    layout.on('display:added-content', function() {
+                        // TODO: this introduces a race-condition on reset...
+                        //       since a new AJAX request, should cancel the effect of the others
+                        contents.reset();
+                        var newContents = App.request('page:content', page, layout.extractFilter());
+                        App.execute('when:fetched', newContents, function() {
+                            contents.reset(newContents.models);
+                        });
+                    });
+                    layout.on('render', function () {
+                        layout.contentList.show(contentList);
+                    });
+                    layout.on('fetch:next-page', function() {
+                        contents.getNextPage();
+                    });
+
+                    layout.on('save', function () {
+                        $.when(page.save()).done(function (data) {
+                            // TODO: Should we only do this when pageId === 'new'?
+                            var store = data['store-id'],
+                                page = data.id;
+
+                            App.navigate('/' + store + '/pages/' + page + '/publish',
+                                {
+                                    trigger: true
+                                });
+                        });
+                    });
+
+                    _this.region.show(layout);
+                });
             },
 
             /**

@@ -7,16 +7,16 @@ define [
   API =
     fetchContent: (store_id, content, params = {}) ->
       content.store_id = store_id
-      content.url = "#{App.API_ROOT}/store/#{store_id}/content/#{content.id}"
+      content.url = "#{App.API_ROOT}/store/#{store_id}/content/#{content.get('id')}"
       unless content.isFetched # don't fetch multiple times
         content.fetch
           reset: true
           data: params
       content
 
-    getContent: (store_id, content_id, params = {}) ->
-      content = new Entities.Content({id: content_id, 'store-id': store_id})
-      content.store_id = store_id
+    getContent: (store, content_id, params = {}) ->
+      content = new Entities.Content({id: content_id, 'store-id': store.get('id')})
+      content.store_id = store.get('id')
       content.url = "#{App.API_ROOT}/store/#{store_id}/content/#{content_id}"
       unless content.isFetched # don't fetch multiple times
         content.fetch
@@ -25,15 +25,6 @@ define [
       content
 
     getContents: (store_id, params = {}) ->
-      contents = new Entities.ContentCollection()
-      contents.store_id = store_id
-      contents.url = "#{App.API_ROOT}/store/#{store_id}/content"
-      contents.fetch
-        reset: true
-        data: params
-      contents
-
-    getPagedContents: (store_id, params = {}) ->
       contents = new Entities.ContentPageableCollection()
       contents.store_id = store_id
       contents.url = "#{App.API_ROOT}/store/#{store_id}/content"
@@ -41,18 +32,7 @@ define [
       contents.getNextPage()
       contents
 
-    getNeedsReviewPagedContents: (store_id, params = {}) ->
-      contents = new Entities.ContentPageableCollection()
-      contents.store_id = store_id
-      contents.url = "#{App.API_ROOT}/store/#{store_id}/content"
-
-      filters = active: true, approved: false
-      contents.setFilter(_.extend(filters, params))
-
-      contents.getNextPage()
-      contents
-
-    getAddedToPagePagedContents: (store_id, page_id, params = {}) ->
+    getPageContents: (store_id, page_id, params = {}) ->
       contents = new Entities.ContentPageableCollection()
       contents.store_id = store_id
       contents.page_id = page_id
@@ -62,29 +42,21 @@ define [
 
   App.reqres.setHandler "store:content",
     (store, params) ->
-      API.getPagedContents store.get('id'), params
+      API.getContents store.get('id'), params
 
-  App.reqres.setHandler "content:entities",
-    (store_id, params) ->
-      API.getContents store_id, params
+  App.reqres.setHandler "content:get",
+    (store, content, params) ->
+      API.getContent store, content.get('id'), params
 
-  App.reqres.setHandler "content:entities:paged",
-    (store_id, params) ->
-      API.getPagedContents store_id, params
-
-  App.reqres.setHandler "needs-review:content:entities:paged",
-    (store_id, page_id, params) ->
-      API.getNeedsReviewPagedContents store_id, params
-
-  App.reqres.setHandler "added-to-page:content:entities:paged",
-    (store_id, page_id, params) ->
-      API.getAddedToPagePagedContents store_id, page_id, params
-
-  App.reqres.setHandler "content:entity",
-    (store_id, content_id, params) ->
-      API.getContent store_id, content_id, params
+  App.reqres.setHandler "content:all",
+    (store, params) ->
+      API.getContents store.get('id'), params
 
   App.reqres.setHandler "fetch:content",
     (store_id, content, params) ->
       API.fetchContent store_id, content, params
+
+  App.reqres.setHandler "page:content",
+    (page, params) ->
+      API.getPageContents page.get('store-id'), page.get('id'), params
 

@@ -51,6 +51,7 @@ define [
 
     getProductSet: (store_id, product_ids, params = {}) ->
       products = new Entities.ProductCollection(_.map(product_ids, (id) -> {'id': id, 'store-id': store_id}))
+      products.store_id = store_id
       if products.size() > 0
         products.url = "#{App.API_ROOT}/store/#{store_id}/product/live"
         products.fetch
@@ -61,10 +62,18 @@ define [
     # DEFER: decide on where to put related models etc
     getPageProducts: (store_id, page_id, params = {}) ->
       products = new Entities.ProductPageableCollection()
+      products.store_id = store_id
+      products.page_id = page_id
       products.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product"
       #products.getNextPage()
       products.fetchAll()
       products
+
+    addProduct: (page, product, params = {}) ->
+      $()
+
+    addProducts: (page, products, params = {}) ->
+
 
   App.reqres.setHandler "product:entities:set",
     (store_id, product_ids, params) ->
@@ -97,3 +106,7 @@ define [
   App.reqres.setHandler "page:products",
     (page, params) ->
       API.getPageProducts page.get('store-id'), page.get('id'), params
+
+  App.reqres.setHandler "page:add_products",
+    (page, products, params) ->
+      API.addProducts page, products, params

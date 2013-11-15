@@ -23,7 +23,7 @@ define(['app', 'exports', 'backbone', 'marionette', './views', 'entities', './co
                 matches = route.match(/:[a-zA-Z_-]+/g);
                 for (i = _i = 0, _len = matches.length; _i < _len; i = ++_i) {
                     match = matches[i];
-                    params[match.replace(/^:/, '')] = args[i];
+                    params[match.replace(/^:/, '').replace(/-/,'_')] = args[i];
                 }
                 return params;
             },
@@ -70,9 +70,9 @@ define(['app', 'exports', 'backbone', 'marionette', './views', 'entities', './co
             paramNameMapping: function (paramName) {
                 switch (paramName) {
                 case ':store_id':
-                    return 'store:entity';
+                    return 'store:get';
                 case ':page_id':
-                    return 'page:entity';
+                    return 'page:get';
                 default:
                     return paramName;
                 }

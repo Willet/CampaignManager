@@ -117,13 +117,8 @@ define [
       )
       @$('#search-product').on "change", (event, element) =>
         # TODO: move this out of the VIEW
-        App.request("add_product:page:entity", {
-            store_id: @model.get('store-id')
-            page_id: @model.get('id')
-            product_id: event.added.id
-          }
-        )
-        @trigger "added-product", event.added
+        App.request("page:add_product", page, product)
+        @trigger "added-product", product
         @$('#search-product').select2('val', null)
         @$(@productAddedBySearch.el).fadeIn(200).delay(1500).fadeOut(400)
       false

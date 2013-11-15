@@ -64,8 +64,8 @@ define [
     # extract the App request it should make
     paramNameMapping: (param_name) ->
       switch param_name
-        when ":store_id" then "store:entity"
-        when ":page_id" then "page:entity"
+        when ":store_id" then "store:get"
+        when ":page_id" then "page:get"
         else param_name
 
     before: (route, args) ->
