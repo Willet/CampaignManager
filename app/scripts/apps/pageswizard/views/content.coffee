@@ -25,6 +25,10 @@ define [
       "blur #js-filter-content-tags": "change:filter"
       "click .js-grid-view": "grid-view"
       "click .js-list-view": "list-view"
+      "click .js-select-all": "select-all"
+      "click .js-select-none": "select-none"
+      "click .js-add-selected": "add-selected"
+      "click .js-remove-selected": "remove-selected"
 
     events:
       "click #filter-suggested-content": "displaySuggestedContent"
@@ -79,10 +83,6 @@ define [
       # we need it to trigger into the page for visual reasons
       true
 
-    autoLoadNextPage: (event) ->
-      distanceToBottom = 75
-      if ($(document).scrollTop() + $(window).height()) > $(document).height() - distanceToBottom
-        @nextPage()
 
     initialize: (options) ->
       @contentList.on("show", ((view) => @relayEvents(view, 'content_list')))
@@ -94,15 +94,21 @@ define [
       false
 
     onRender: ->
-      @displaySuggestedContent()
 
     onShow: (opts) ->
       # TODO: remove dangling pointer to the view that is shown
       @scrollFunction = => @autoLoadNextPage()
       $(window).on("scroll", @scrollFunction)
+      @displaySuggestedContent()
+
+    autoLoadNextPage: (event) ->
+      distanceToBottom = 75
+      if ($(document).scrollTop() + $(window).height()) > $(document).height() - distanceToBottom
+        @nextPage()
 
     onClose: ->
       $(window).off("scroll", @scrollFunction)
+
 
   class Views.PageCreateContentPreview extends Marionette.ItemView
 
@@ -110,11 +116,17 @@ define [
 
     serializeData: -> @model.viewJSON()
 
+
   class Views.PageCreateContentList extends Marionette.CollectionView
 
     tagName: "ul"
     className: "content-list"
     template: false
+
+    initialize: ->
+      @allSelected = false
+
+    itemViewOptions: -> { selected: @allSelected }
 
 
   class Views.PageCreateContentGridItem extends Marionette.ItemView
@@ -132,14 +144,21 @@ define [
     events:
       "click": "selectItem"
 
-    selectItem: (event) ->
-      @model.set('selected', !@model.get('selected'))
+    serializeData: -> @model.viewJSON()
+
+    onRender: ->
+      @updateDOM()
+
+    updateDOM: () ->
       if @model.get('selected')
         @$el.addClass('selected')
       else
         @$el.removeClass('selected')
 
-    serializeData: -> @model.viewJSON()
+    selectItem: (event) ->
+      @model.set('selected', !@model.get('selected'))
+      @updateDOM()
+
 
   class Views.PageCreateContentListItem extends Marionette.ItemView
 
@@ -154,5 +173,6 @@ define [
       "click .js-content-add": "add_content"
       "click .js-content-remove": "remove_content"
       "click .js-content-preview": "preview_content"
+
 
   Views

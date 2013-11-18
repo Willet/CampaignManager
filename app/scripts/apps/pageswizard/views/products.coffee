@@ -13,6 +13,7 @@ define [
       "click .js-next": "save"
       "click .js-grid-view": "grid-view"
       "click .js-list-view": "list-view"
+      "click .js-select-all": "select-all"
 
     events:
       "click #filter-import-product": "displayImportProduct"
@@ -147,8 +148,9 @@ define [
     tagName: "ul"
 
     initialize: (options) ->
-      @itemViewOptions = { added: options['added'] }
+      @allSelected = false
 
+    itemViewOptions: -> { selected: @allSelected }
 
   class Views.PageCreateProductPreview extends Marionette.ItemView
 
@@ -174,8 +176,6 @@ define [
     className: "product-item grid-view"
     tagName: "li"
 
-    serializeData: -> @model.viewJSON()
-
     triggers:
       "click .js-product-preview": "preview_product"
       "click .js-add-to-page": "add"
@@ -188,12 +188,19 @@ define [
       throttled_render = _.throttle((=> @render()), 500, leading: false)
       @model.on('nested-change', throttled_render)
 
-    selectItem: (event) ->
-      @model.set('selected', !@model.get('selected'))
+    serializeData: -> @model.viewJSON()
+
+    onRender: ->
+      @updateDOM()
+
+    updateDOM: () ->
       if @model.get('selected')
         @$el.addClass('selected')
       else
         @$el.removeClass('selected')
 
+    selectItem: (event) ->
+      @model.set('selected', !@model.get('selected'))
+      @updateDOM()
 
   Views

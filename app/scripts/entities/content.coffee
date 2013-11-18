@@ -176,7 +176,7 @@ define [
           url: url
       }
 
-  Entities.Content = Backbone.UniqueModel(Entities.Content)
+  #Entities.Content = Backbone.UniqueModel(Entities.Content)
 
   class Entities.ContentCollection extends Base.Collection
     model: Entities.Content

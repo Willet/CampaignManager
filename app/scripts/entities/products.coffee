@@ -33,7 +33,7 @@ define [
       json['default-image-id'] = @get('default-image-id')?.viewJSON(nested: true)
       json
 
-  Entities.Product = Backbone.UniqueModel(Entities.Product)
+  #Entities.Product = Backbone.UniqueModel(Entities.Product)
 
   class Entities.ProductCollection extends Base.Collection
 

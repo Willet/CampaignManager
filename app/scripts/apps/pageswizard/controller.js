@@ -127,9 +127,12 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                         });
                     });
 
-
                     layout = new Views.PageCreateProducts({
                         model: page
+                    });
+                    layout.on('select-all', function() {
+                        products.collect(function(model) { model.set('selected', true); });
+                        productList.render();
                     });
                     layout.on('added-product', function (productData) {
                         var newProduct = new Entities.Product(productData);
@@ -172,8 +175,10 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                         //       since a new AJAX request, should cancel the effect of the others
                         products.reset();
                         var newProducts = App.request('store:products', store, {filter: layout.extractFilter() });
+                        productList.showLoading();
                         App.execute('when:fetched', newProducts, function() {
                             products.reset(newProducts.models);
+                            productList.hideLoading();
                         });
                     });
                     layout.on('display:import-product', function() {
@@ -213,7 +218,7 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                 });
             },
 
-            pagesContent: function (storeId) {
+            pagesContent: function () {
                 var contents, contentList, layout, store, page, _this = this;
                 page = App.routeModels.get('page');   // Why does this return an empty model?
                 store = App.routeModels.get('store');
@@ -257,6 +262,30 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                     layout.on('change:filter', function () {
                         var filter = layout.extractFilter();
                         contents.setFilter(filter);
+                    });
+                    layout.on('select-all', function() {
+                        contents.collect(function(model) { model.set('selected', true); });
+                        contentList.render();
+                    });
+                    layout.on('select-none', function() {
+                        contents.collect(function(model) { model.set('selected', false); });
+                        contentList.render();
+                    });
+                    layout.on('add-selected', function() {
+                        var selected = contents.filter(function(model) { return model.get('selected'); });
+                        _.each(selected, function(model) {
+                            App.request('page:add_content', page, model);
+                            model.set('selected', false);
+                        });
+                        contentList.render();
+                    });
+                    layout.on('remove-selected', function() {
+                        var selected = contents.filter(function(model) { return model.get('selected'); });
+                        _.each(selected, function(model) {
+                            App.request('page:remove_content', page, model);
+                            model.set('selected', false);
+                        });
+                        contentList.render();
                     });
                     layout.on('display:all-content', function() {
                         // TODO: this introduces a race-condition on reset...
