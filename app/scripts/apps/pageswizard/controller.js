@@ -405,26 +405,10 @@ define(['app', './app', 'backbone.projections', 'marionette', 'jquery', 'undersc
                     store: store
                 });
                 layout.on('publish', function () {
-                    // TODO: move static_pages API under /graph/v1. ain't nobody got time for that today
-                    // TODO: HACK!!!
-                    var req, baseUrl = App.API_ROOT
-                        .replace('/graph/v1', '/static_pages')
-                        .replace(':9000', ':8000');
-
-                    // TODO: less fugly handler
-                    layout.$('.publish.button').text('Publishing...');
-                    layout.$(layout.fail.el).hide();
-
-                    // TODO: handle case where pageId is 'new'
-                    req = $.ajax({
-                        url: baseUrl + '/' + storeId + '/' + pageId + '/regenerate',
-                        type: 'POST',
-                        dataType: 'jsonp'
-                    });
+                    var req = App.request('page:publish', page);
                     req.done(function (data) {
                         // crude as it is, this is also an option
-                        // window.open('http://' + data.result.bucket_name + '/' +
-                        //     data.result.s3_path);
+                        // window.open('http://' + data.result.bucket_name + '/' + data.result.s3_path);
                         self.pagesView(storeId, pageId, data);
                     });
                     req.fail(function () {

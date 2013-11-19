@@ -1,6 +1,6 @@
 define [
   "marionette",
-  "../views",
+  "exports",
   "backbone.stickit",
   "select2"
 ], (Marionette, Views) ->

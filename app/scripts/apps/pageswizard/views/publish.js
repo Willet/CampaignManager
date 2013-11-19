@@ -16,8 +16,13 @@ define(['marionette', '../views', 'backbone', 'backbone.stickit'],
                     store: this.store.toJSON()
                 };
             },
-            triggers: {
+            events: {
                 'click .js-next': 'publish'
+            },
+            publish: function() {
+                this.$('.publish.button').text('Publishing...');
+                this.$(this.fail.el).hide();
+                this.trigger('publish');
             },
             onRender: function () {
                 this.stickit();
