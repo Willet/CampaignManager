@@ -99,6 +99,7 @@ require([
     'jquery',
     'global/click_handler',
     'global/form_serialize',
+    'config/ie',
     'config/backbone/model',
     'config/backbone/view',
     'config/marionette/application',
