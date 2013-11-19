@@ -1,7 +1,7 @@
-define(['marionette', '../views', 'backbone', 'backbone.stickit'],
-    function (Marionette, Views) {
+define(['app', '../views', 'backbone', 'backbone.stickit'],
+    function (App, Views) {
         'use strict';
-        Views.PublishPage = Marionette.Layout.extend({
+        Views.PublishPage = App.Views.Layout.extend({
             'regions': {
                 'fail': '.fail'
             },

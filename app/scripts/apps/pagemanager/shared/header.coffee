@@ -1,9 +1,9 @@
 define [
-  "marionette",
-  "../views"
-], (Marionette, Views) ->
+  'app',
+  '../views'
+], (App, Views) ->
 
-  class Views.PageHeader extends Marionette.Layout
+  class Views.PageHeader extends App.Views.Layout
 
     template: "page/shared/header"
 

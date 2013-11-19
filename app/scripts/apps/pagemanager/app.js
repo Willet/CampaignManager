@@ -1,8 +1,8 @@
 define(['app', 'exports', 'backbone', 'marionette', './views', 'entities', './controller', 'components/views/main_layout', 'components/views/main_nav', 'components/views/title_bar', 'underscore'],
-    function (App, PageWizard, Backbone, Marionette, Views, Entities, Controller,
+    function (App, PageManager, Backbone, Marionette, Views, Entities, Controller,
               MainLayout, MainNav, TitleBar, _) {
         'use strict';
-        PageWizard.Router = Marionette.AppRouter.extend({
+        PageManager.Router = Marionette.AppRouter.extend({
             appRoutes: {
                 ':store_id/pages': 'pagesIndex',
                 ':store_id/pages/:page_id': 'pagesName',
@@ -105,19 +105,17 @@ define(['app', 'exports', 'backbone', 'marionette', './views', 'entities', './co
             setupLayoutForRoute: function (route) {
                 var layout;
                 if (route.indexOf(':store_id/pages/:page_id') === 0) {
-                    layout = this.setupPageWizardLayout(route);
+                    layout = this.setupPageManagerLayout(route);
                 }
             },
-            setupPageWizardLayout: function (route) {
+            setupPageManagerLayout: function (route) {
                 var layout,
                     _this = this;
-                this.pageWizardLayout = layout = new Views.PageWizardLayout();
+                this.pageManagerLayout = layout = new Views.PageManagerLayout();
                 layout.on('render', function () {
                     var routeSuffix;
-                    routeSuffix = route.substring(_.lastIndexOf(route,
-                        '/')).replace(/^\//, '');
-                    routeSuffix = routeSuffix === ':page_id' ? 'name'
-                        : routeSuffix;
+                    routeSuffix = route.substring(_.lastIndexOf(route, '/')).replace(/^\//, '');
+                    routeSuffix = routeSuffix === ':page_id' ? 'name' : routeSuffix;
                     return layout.header.show(new Views.PageHeader({
                         model: new Entities.Model({
                             page: routeSuffix
@@ -128,15 +126,15 @@ define(['app', 'exports', 'backbone', 'marionette', './views', 'entities', './co
                 });
                 this.controller.region.show(layout);
                 this.controller.setRegion(layout.content);
-                return this.pageWizardLayout;
+                return this.pageManagerLayout;
             }
         });
         App.addInitializer(function () {
             var controller, router;
-            controller = new PageWizard.Controller();
-            router = new PageWizard.Router({
+            controller = new PageManager.Controller();
+            router = new PageManager.Router({
                 controller: controller
             });
         });
-        return PageWizard;
+        return PageManager;
     });

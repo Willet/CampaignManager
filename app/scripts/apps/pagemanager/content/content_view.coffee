@@ -1,10 +1,10 @@
 define [
-  "marionette",
-  "../views",
-  "backbone.stickit"
-], (Marionette, Views) ->
+  'app',
+  '../views',
+  'backbone.stickit'
+], (App, Views) ->
 
-  class Views.PageCreateContent extends Marionette.Layout
+  class Views.PageCreateContent extends App.Views.Layout
 
     template: "page/content/main"
 
@@ -110,14 +110,14 @@ define [
       $(window).off("scroll", @scrollFunction)
 
 
-  class Views.PageCreateContentPreview extends Marionette.ItemView
+  class Views.PageCreateContentPreview extends App.Views.ItemView
 
     template: 'page/content/item_preview'
 
     serializeData: -> @model.viewJSON()
 
 
-  class Views.PageCreateContentList extends Marionette.CollectionView
+  class Views.PageCreateContentList extends App.Views.CollectionView
 
     tagName: "ul"
     className: "content-list"
@@ -129,7 +129,7 @@ define [
     itemViewOptions: -> { selected: @allSelected }
 
 
-  class Views.PageCreateContentGridItem extends Marionette.ItemView
+  class Views.PageCreateContentGridItem extends App.Views.ItemView
 
     tagName: "li"
     className: "content-item grid-view"
@@ -160,7 +160,7 @@ define [
       @updateDOM()
 
 
-  class Views.PageCreateContentListItem extends Marionette.ItemView
+  class Views.PageCreateContentListItem extends App.Views.ItemView
 
     tagName: "li"
     className: "content-item list-view"

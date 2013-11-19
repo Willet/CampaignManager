@@ -99,6 +99,7 @@ require([
     'jquery',
     'global/click_handler',
     'global/form_serialize',
+    'controllers/base_controller',
     'config/base/views/collectionview',
     'config/base/views/compositeview',
     'config/base/views/itemview',
@@ -121,7 +122,7 @@ require([
     // sub apps to load, they attach to the root application
     'apps/main/app',
     'apps/contentmanager/app',
-    'apps/pageswizard/app'
+    'apps/pagemanager/app'
 ], function (App, $) {
     'use strict';
     $().ready(function () {

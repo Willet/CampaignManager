@@ -1,6 +1,6 @@
-define(['marionette', '../views', './header'], function (Marionette, Views) {
+define(['app', '../views', './header'], function (App, Views) {
     'use strict';
-    Views.PageWizardLayout = Marionette.Layout.extend({
+    Views.PageManagerLayout = App.Views.Layout.extend({
         template: 'page/shared/wizard_layout',
         id: 'page_wizard',
         regions: {

@@ -1,10 +1,10 @@
 define [
-  "marionette",
-  "../views",
-  "backbone.stickit"
-], (Marionette, Views) ->
+  'app',
+  '../views',
+  'backbone.stickit'
+], (App, Views) ->
 
-  class Views.PageCreateLayout extends Marionette.Layout
+  class Views.PageCreateLayout extends App.Views.Layout
 
     template: "page/layout"
 

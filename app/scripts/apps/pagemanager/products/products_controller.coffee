@@ -1,11 +1,12 @@
-
 define [
   'app',
   '../app',
   './products_view'
-], (App, PageWizard, Views) ->
+], (App, PageManager, Views) ->
 
-  class PageWizard.Products.Controller extends App.Controllers.Base
+  PageManager.Products ?= {}
+
+  class PageManager.Products.Controller extends App.Controllers.Base
 
     productListType: Views.PageProductGridItem
 
@@ -21,20 +22,20 @@ define [
         itemView: @getProductListType()
 
     initialize: ->
-      @layout = @getLayoutView()
       store = App.routeModels.get("store")
       page = App.routeModels.get("page")
+      console.log page.attributes, store.attributes
 
       layout = new Views.PageCreateProducts(model: page)
 
-      productList = @getProductList products, Views.PageProductGridItem
+      products = App.request("page:products", page)
+      @setProductListType Views.PageProductGridItem
 
-      App.execute "when:fetched", [store, page], ->
-        products = App.request("page:products", page)
-        App.execute "when:fetched", products, ->
-          # for each product, fetch their default content image
-          products.collect (product) ->
-            App.request "fetch:content", storeId, product.get("default-image-id")
+      #App.execute "when:fetched", products, ->
+      #  # for each product, fetch their default content image
+      #  products.collect (product) ->
+      #    if product.get('default-image-id')
+      #      App.request "fetch:content", store.get('id'), product.get("default-image-id")
 
       layout.on "select-all", ->
         products.collect (model) ->
@@ -59,11 +60,11 @@ define [
         product = itemView.model
         App.modal.show new Views.PageCreateProductPreview(model: product)
 
-      layout.on "grid-view", ->
+      layout.on "grid-view", =>
         @setProductListType Views.PageProductGridItem
         layout.productList.show @getProductList(products)
 
-      layout.on "list-view", ->
+      layout.on "list-view", =>
         @setProductListType Views.PageProductListItem
         layout.productList.show @getProductList(products)
 
@@ -71,15 +72,16 @@ define [
         filter = layout.extractFilter()
         products.setFilter filter
 
-      layout.on "display:all-product", ->
+      layout.on "display:all-product", =>
         products = App.request "store:products", store, { filter: layout.extractFilter() }
         layout.productList.show @getProductList(products)
 
-      layout.on "display:import-product", ->
-        products = App.request "page:products:imported", page, { filter: layout.extractFilter() }
+      layout.on "display:import-product", =>
+        products = App.request "store:products", store, { filter: layout.extractFilter() }
+        # TODO: products = App.request "page:products:imported", page, { filter: layout.extractFilter() }
         layout.productList.show @getProductList(products)
 
-      layout.on "display:added-product", ->
+      layout.on "display:added-product", =>
         products = App.request "page:products", page, { filter: layout.extractFilter() }
         layout.productList.show @getProductList(products)
 
@@ -91,7 +93,7 @@ define [
           App.navigate "/" + store + "/pages/" + page + "/content",
             trigger: true
 
-      @listenTo layout, 'show', ->
+      @listenTo layout, 'show', =>
         layout.productList.show @getProductList(products)
 
-      @region.show layout
+      @show layout

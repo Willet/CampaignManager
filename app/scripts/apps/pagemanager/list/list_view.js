@@ -1,8 +1,8 @@
-define(['marionette', '../views', 'backbone.stickit'],
-    function (Marionette, Views) {
+define(['app', '../views', 'backbone.stickit'],
+    function (App, Views) {
         'use strict';
 
-        Views.PageIndex = Marionette.Layout.extend({
+        Views.PageIndex = App.Views.Layout.extend({
             template: 'page/index',
             regions: {
                 'list': '.list'
@@ -43,7 +43,7 @@ define(['marionette', '../views', 'backbone.stickit'],
             }
         });
 
-        Views.PageIndexList = Marionette.ItemView.extend({
+        Views.PageIndexList = App.Views.ItemView.extend({
             template: 'page/index_list',
             serializeData: function () {
                 return {

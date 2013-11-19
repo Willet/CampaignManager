@@ -6,7 +6,7 @@ define [
 
   API =
     getStore: (store_id, params = {}) ->
-      store = new Entities.Store()
+      store = new Entities.Store({id: store_id})
       store.url = "#{App.API_ROOT}/store/#{store_id}"
       store.fetch
         reset: true

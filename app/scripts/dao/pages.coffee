@@ -6,7 +6,7 @@ define [
 
   API =
     getPage: (store_id, page_id, params = {}) ->
-      page = new Entities.Page()
+      page = new Entities.Page({ id: page_id, 'store-id': store_id })
       page.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}"
       page.fetch
         reset: true

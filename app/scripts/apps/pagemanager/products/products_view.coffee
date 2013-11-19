@@ -1,11 +1,11 @@
 define [
-  "marionette",
-  "exports",
-  "backbone.stickit",
-  "select2"
-], (Marionette, Views) ->
+  'app'
+  'exports',
+  'backbone.stickit',
+  'select2'
+], (App, Views) ->
 
-  Views.PageCreateProducts = Marionette.Layout.extend
+  Views.PageCreateProducts = App.Views.Layout.extend
 
     template: "page/product/main"
 
@@ -127,7 +127,7 @@ define [
     onClose: ->
       @$('#search-product').select2("destroy")
 
-  class Views.PageScrapeItem extends Marionette.ItemView
+  class Views.PageScrapeItem extends App.Views.ItemView
 
     template: "page/scrape_item"
 
@@ -137,11 +137,11 @@ define [
     serializeData: ->
       @model.viewJSON()
 
-  class Views.PageScrapeList extends Marionette.CollectionView
+  class Views.PageScrapeList extends App.Views.CollectionView
 
     itemView: Views.PageScrapeItem
 
-  class Views.PageProductList extends Marionette.CollectionView
+  class Views.PageProductList extends App.Views.CollectionView
 
     template: false
     className: "product-list"
@@ -152,13 +152,13 @@ define [
 
     itemViewOptions: -> { selected: @allSelected }
 
-  class Views.PageCreateProductPreview extends Marionette.ItemView
+  class Views.PageCreateProductPreview extends App.Views.ItemView
 
     template: 'page/product/item_preview'
 
     serializeData: -> @model.viewJSON()
 
-  class Views.PageProductListItem extends Marionette.Layout
+  class Views.PageProductListItem extends App.Views.Layout
 
     # TODO: implement a sane version of "added"
     #       how do we figure out if a product is in a page...
@@ -168,7 +168,8 @@ define [
 
     serializeData: -> @model.viewJSON()
 
-  class Views.PageProductGridItem extends Marionette.Layout
+
+  class Views.PageProductGridItem extends App.Views.Layout
 
     # TODO: implement a sane version of "added"
     #       how do we figure out if a product is in a page...
@@ -192,6 +193,7 @@ define [
 
     onRender: ->
       @updateDOM()
+      @$el.attr('data-id', @model.get('id'))
 
     updateDOM: () ->
       if @model.get('selected')
