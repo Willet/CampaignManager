@@ -204,6 +204,18 @@ define [
       @model.set('selected', !@model.get('selected'))
       @updateDOM()
 
+    class Views.ProductScrapersView extends App.Views.Layout
+
+      template: false
+
+      regions:
+        add: '.scrape-add-region'
+        list: '.scrape-list-region'
+
+    class Views.ProductScrapeAddView extends App.Views.ItemView
+
+      template: false
+
     class Views.ProductScrapeList extends App.Views.CollectionView
 
       template: false

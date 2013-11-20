@@ -10,13 +10,7 @@ define [
   'components/views/main_nav',
   'components/views/title_bar'
   'entities',
-  './controller'
-  './views/content_list',
-  './views/edit_area',
-  './views/index_layout',
-  './views/list_controls',
-  './views/quick_view',
-  './views/tagged_inputs',
+  './list/list_controller'
 ], (App, ContentManager, BackboneProjections, Marionette, $, _, Views, MainLayout, MainNav, TitleBar, Entities) ->
 
   class ContentManager.Router extends Marionette.AppRouter

@@ -4,6 +4,8 @@ define [
   'entities'
 ], (App, ContentManager, Entities) ->
 
+  ContentManager.List ?= {}
+
   class ContentManager.List.ContentIndexLayout extends App.Views.Layout
 
     template: 'content/index'
