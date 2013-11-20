@@ -89,7 +89,6 @@ define [
       @contentList.on("close", ((view) => @stopRelayEvents(view)))
 
     nextPage: ->
-      @$('.loading').show()
       @trigger("fetch:next-page")
       false
 

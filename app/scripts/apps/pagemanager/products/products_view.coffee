@@ -5,9 +5,13 @@ define [
   'select2'
 ], (App, Views) ->
 
-  Views.PageCreateProducts = App.Views.Layout.extend
+  class Views.PageCreateProducts extends App.Views.Layout
 
     template: "page/product/main"
+
+    regions:
+      productList: ".product-list-region"
+      importRegion: ".import-product-region"
 
     triggers:
       "click .js-next": "save"
@@ -19,6 +23,10 @@ define [
       "click #filter-import-product": "displayImportProduct"
       "click #filter-all-product": "displayAllProduct"
       "click #filter-added-product": "displayAddedProduct"
+
+    initialize: (opts) ->
+      @productList.on("show", ((view) => @relayEvents(view, 'product_list')))
+      @productList.on("close", ((view) => @stopRelayEvents(view)))
 
     extractFilter: () ->
       filter = {}
@@ -48,29 +56,6 @@ define [
       # we need it to trigger into the page for visual reasons
       true
 
-    resetError: (event) ->
-      $(event.currentTarget).removeClass("error")
-
-    validUrl: (url) ->
-      # TODO: move this to the scrape model ?
-      urlPattern = /(http|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
-      url && url != "" && urlPattern.test(url)
-
-    addAllProducts: ->
-      event.stopPropagation()
-      _.defer(=> @productList.currentView.children.each((child) -> child.addToPageAlso()))
-      false
-
-    addUrl: (event) ->
-      if @validUrl(@$('#url').val())
-        @trigger "new:scrape", @$('#url').val()
-        @$('#url').val("")
-      else
-        @$('#url').addClass("error")
-        # figure out what to do
-      event.stopPropagation()
-      false
-
     serializeData: ->
       return {
         page: @model.toJSON()
@@ -78,17 +63,9 @@ define [
         "title": @model.get("name")
       }
 
-    regions:
-      "productList": ".product-list-region"
-      "productAddedBySearch": ".product-added-search.success"
-
-    initialize: (opts) ->
-      @productList.on("show", ((view) => @relayEvents(view, 'product_list')))
-      @productList.on("close", ((view) => @stopRelayEvents(view)))
-
     onRender: (opts) ->
       @$(".steps .products").addClass("active")
-      @$(@productAddedBySearch.el).hide()
+      @importRegion.show new Views.ProductScrapersView()
       @displayImportProduct()
 
     onShow: (opts) ->
@@ -204,28 +181,50 @@ define [
       @model.set('selected', !@model.get('selected'))
       @updateDOM()
 
-    class Views.ProductScrapersView extends App.Views.Layout
+  class Views.ProductScrapersView extends App.Views.Layout
 
-      template: false
+    template: 'page/product/import'
 
-      regions:
-        add: '.scrape-add-region'
-        list: '.scrape-list-region'
+    regions:
+      addRegion: '.import-add-region'
+      listRegion: '.import-list-region'
 
-    class Views.ProductScrapeAddView extends App.Views.ItemView
+    onRender: ->
+      @addRegion.show(new Views.ProductScrapeAddView())
+      @listRegion.show(new Views.ProductScrapeList(collection: @options.collection))
 
-      template: false
+  class Views.ProductScrapeAddView extends App.Views.ItemView
 
-    class Views.ProductScrapeList extends App.Views.CollectionView
+    template: 'page/product/import_add'
 
-      template: false
-      className: 'scrape-list'
-      tagName: 'ul'
+    resetError: (event) ->
+      $(event.currentTarget).removeClass("error")
 
-    class Views.ProductScrapeItem extends App.Views.ItemView
+    addUrl: (event) ->
+      if @validUrl(@$('#url').val())
+        @trigger "new:scrape", @$('#url').val()
+        @$('#url').val("")
+      else
+        @$('#url').addClass("error")
+        # figure out what to do
+      event.stopPropagation()
+      false
 
-      template: 'page/product/scrape_item'
-      className: 'scrape-item'
-      tagName: 'li'
+    validUrl: (url) ->
+      # TODO: move this to the scrape model ?
+      urlPattern = /(http|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
+      url && url != "" && urlPattern.test(url)
+
+  class Views.ProductScrapeList extends App.Views.CollectionView
+
+    template: false
+    className: 'import-list'
+    tagName: 'ul'
+
+  class Views.ProductScrapeItem extends App.Views.ItemView
+
+    template: 'page/product/import_item'
+    className: 'import-item'
+    tagName: 'li'
 
   Views

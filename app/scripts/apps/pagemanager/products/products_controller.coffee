@@ -35,7 +35,6 @@ define [
     initialize: ->
       store = App.routeModels.get("store")
       page = App.routeModels.get("page")
-      console.log page.attributes, store.attributes
 
       layout = new Views.PageCreateProducts(model: page)
 
