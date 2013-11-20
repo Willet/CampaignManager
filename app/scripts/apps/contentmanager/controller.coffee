@@ -1,4 +1,5 @@
 define [
+  'app',
   './app',
   'backbone.projections',
   'marionette',
@@ -15,24 +16,23 @@ define [
   './views/list_controls',
   './views/quick_view',
   './views/tagged_inputs',
-], (ContentManager, BackboneProjections, Marionette, $, _, Views, MainLayout, MainNav, ContentList, Entities) ->
+], (App, ContentManager, BackboneProjections, Marionette, $, _, Views, MainLayout, MainNav, ContentList, Entities) ->
 
-  class ContentManager.Controller extends Marionette.Controller
+  class ContentManager.Controller extends App.Controllers.Base
 
-    contentIndex: (store_id) ->
-      layout = new MainLayout()
-      App.layout.show layout
-
+    contentIndex: () ->
       store = App.routeModels.get('store')
+      contents = App.request "content:all", store
+
+      layout = new MainLayout()
+
       App.execute "when:fetched", store, =>
         layout.nav.show(new MainNav(model: new Entities.Model(store: store, page: 'content')))
 
-      contents = App.request "content:all", store_id
-      contents.getNextPage()
-
-      App.execute "when:fetched", [contents], =>
-
+      App.execute "when:fetched", contents, =>
         layout.content.show ContentList.createView(contents)
-        App.setTitle "Content"
+
+      App.setTitle "Content"
+      @show layout
 
   ContentManager

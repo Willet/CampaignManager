@@ -1,17 +1,34 @@
 define [
-  'exports'
-  'backbone.projections',
-  'underscore',
-  'apps/contentmanager/views',
-  'app'
-], (ContentList, BackboneProjections, _, ContentViews, App) ->
+  'app',
+  './app',
+  './list_views',
+  '../views',
+  'backboneprojections'
+], (App, ContentManager, Views, ContentViews, BackboneProjections) ->
 
-  ContentList.createView = (collection, actions = {}) ->
+  class ContentManager.Controller extends App.Controllers.Base
+
+    contentIndex: () ->
+      store = App.routeModels.get 'store'
+      contents = App.request "content:all", store
+
+      layout = new MainLayout()
+
+      App.execute "when:fetched", store, =>
+        layout.nav.show(new MainNav(model: new Entities.Model(store: store, page: 'content')))
+
+      App.execute "when:fetched", contents, =>
+        layout.content.show @getContentListView(contents)
+
+      App.setTitle "Content"
+      @show layout
+
+  getContentListView: (contents) ->
 
     layout = new ContentViews.ContentIndexLayout initial_state: 'grid'
-    selectedCollection = new BackboneProjections.Filtered(collection, filter: ((m) -> m.get('selected') is true))
+    selectedCollection = new BackboneProjections.Filtered(contents, filter: ((m) -> m.get('selected') is true))
 
-    contentList = new ContentViews.ContentList { collection: collection, actions: actions }
+    contentList = new ContentViews.ContentList { collection: contents, actions: actions }
     contentListControls = new ContentViews.ContentListControls()
     multiEditView = new ContentViews.ContentEditArea model: selectedCollection, actions: actions, multiEdit: true
 
@@ -19,15 +36,7 @@ define [
     # Actions
     #
 
-    layout.on 'change:sort-order', (new_order) -> collection.updateSortOrder(new_order)
-
-    # hide/show multi-edit on grid/list view
-    contentListControls.on 'change:state',
-      (state) =>
-        if state == 'grid'
-          layout.multiedit.$el.css('display', 'block')
-        else
-          layout.multiedit.$el.css('display', 'none')
+    layout.on 'change:sort-order', (new_order) -> contents.updateSortOrder(new_order)
 
     contentList.on 'itemview:content:approve',
       (view, args) =>
@@ -90,16 +99,9 @@ define [
 
     layout.on('content:select-all', => collection.selectAll())
     layout.on('content:unselect-all', => collection.unselectAll())
-    layout.on('fetch:next-page',
-      () =>
-        $.when(collection.getNextPage()).done =>
-          store_id = App.routeModels.get('store').get('id')
-          collection.collect (content) ->
-            products = content.get('tagged-products')
-            if products
-              products.collect (product) ->
-                App.request('fetch:product', store_id, product)
-          layout.trigger('fetch:next-page:complete')
+    layout.on('fetch:next-page', () =>
+        collection.getNextPage()
+        layout.trigger('fetch:next-page:complete')
     )
 
     layout.on 'show', ->
@@ -109,4 +111,4 @@ define [
 
     return layout
 
-  ContentList
+  ContentManager
