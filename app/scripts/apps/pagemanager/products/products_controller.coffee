@@ -21,6 +21,17 @@ define [
         collection: products
         itemView: @getProductListViewType()
 
+    # TODO: an idea, so it is more like sub-page switching
+    #       maybe a router mechanism to handle this as well???
+    #       real question is how do you still be DRY
+    #       maybe instead the View (getProductListView)
+    #       switches on the Type, in order to build the
+    #       correct view ? instead of the view
+    #       itself determing how it is layered together
+    getImportListView: (products) -> null
+    getAllListView: (products) -> null
+    getAddedListView: (products) -> null
+
     initialize: ->
       store = App.routeModels.get("store")
       page = App.routeModels.get("page")

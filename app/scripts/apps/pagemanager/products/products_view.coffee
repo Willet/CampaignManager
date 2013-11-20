@@ -168,7 +168,6 @@ define [
 
     serializeData: -> @model.viewJSON()
 
-
   class Views.PageProductGridItem extends App.Views.Layout
 
     # TODO: implement a sane version of "added"
@@ -204,5 +203,17 @@ define [
     selectItem: (event) ->
       @model.set('selected', !@model.get('selected'))
       @updateDOM()
+
+    class Views.ProductScrapeList extends App.Views.CollectionView
+
+      template: false
+      className: 'scrape-list'
+      tagName: 'ul'
+
+    class Views.ProductScrapeItem extends App.Views.ItemView
+
+      template: 'page/product/scrape_item'
+      className: 'scrape-item'
+      tagName: 'li'
 
   Views
