@@ -1,7 +1,8 @@
 define [
+  "app",
   "entities/base",
   "backbone.uniquemodel"
-], (Base) ->
+], (App, Base) ->
 
   Entities = Entities || {}
 
@@ -13,7 +14,12 @@ define [
         key: 'default-image-id'
         relatedModel: 'Entities.Content'
         map: (data, type) ->
-          new Entities.Content(id: data)
+          unless typeof data is 'object'
+            content = new type({id: data})
+            App.request('fetch:content', @get('store-id') || @collection.store_id, content)
+          else
+            content = data
+          content
       }
     ]
 
@@ -27,7 +33,7 @@ define [
       json['default-image-id'] = @get('default-image-id')?.viewJSON(nested: true)
       json
 
-  Entities.Product = Backbone.UniqueModel(Entities.Product)
+  #Entities.Product = Backbone.UniqueModel(Entities.Product)
 
   class Entities.ProductCollection extends Base.Collection
 

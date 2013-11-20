@@ -10,13 +10,7 @@ define [
   'components/views/main_nav',
   'components/views/title_bar'
   'entities',
-  './controller'
-  './views/content_list',
-  './views/edit_area',
-  './views/index_layout',
-  './views/list_controls',
-  './views/quick_view',
-  './views/tagged_inputs',
+  './list/list_controller'
 ], (App, ContentManager, BackboneProjections, Marionette, $, _, Views, MainLayout, MainNav, TitleBar, Entities) ->
 
   class ContentManager.Router extends Marionette.AppRouter
@@ -64,8 +58,8 @@ define [
     # extract the App request it should make
     paramNameMapping: (param_name) ->
       switch param_name
-        when ":store_id" then "store:entity"
-        when ":page_id" then "page:entity"
+        when ":store_id" then "store:get"
+        when ":page_id" then "page:get"
         else param_name
 
     before: (route, args) ->

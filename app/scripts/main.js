@@ -97,9 +97,15 @@ require.config({
 require([
     'app',
     'jquery',
+    'global/ajax_setup',
     'global/click_handler',
     'global/form_serialize',
+    'controllers/base_controller',
     'config/ie',
+    'config/base/views/collectionview',
+    'config/base/views/compositeview',
+    'config/base/views/itemview',
+    'config/base/views/layout',
     'config/backbone/model',
     'config/backbone/view',
     'config/marionette/application',
@@ -118,7 +124,7 @@ require([
     // sub apps to load, they attach to the root application
     'apps/main/app',
     'apps/contentmanager/app',
-    'apps/pageswizard/app'
+    'apps/pagemanager/app'
 ], function (App, $) {
     'use strict';
     $().ready(function () {

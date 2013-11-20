@@ -87,17 +87,6 @@ define [
       attrs = super(attrs)
       attrs['active'] = if (attrs['active'] == "true" || attrs['active'] == true) then true else false
       attrs['approved'] = if (attrs['approved'] == "true" || attrs['approved'] == true) then true else false
-      ###
-      attrs['tagged-products'] = []
-      _.each data['tagged-products'], (product_id) ->
-        product = App.request("product:entity", attrs['store-id'], product_id)
-        attrs['tagged-products'].push(product)
-      attrs['tagged-products'] = new Entities.ProductCollection(attrs['tagged-products'])
-
-      # trigger an event when related models are fetched
-      xhrs = _.map(attrs['tagged-products'].models, ((product) -> product._fetch))
-      $.when.apply($, xhrs).done(=> @trigger('related-fetched'))
-      ###
 
       attrs
 
@@ -187,7 +176,7 @@ define [
           url: url
       }
 
-  Entities.Content = Backbone.UniqueModel(Entities.Content)
+  #Entities.Content = Backbone.UniqueModel(Entities.Content)
 
   class Entities.ContentCollection extends Base.Collection
     model: Entities.Content

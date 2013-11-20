@@ -2,10 +2,23 @@ define('app',
     ['marionette', 'jquery', 'underscore', 'entities', 'components/regions/reveal', 'exports'],
     function (Marionette, $, _, Entities, Reveal, exports) {
         'use strict';
-        var App, CurrentPage;
-        App = window.App = new Marionette.Application();
+        var App = window.App = new Marionette.Application();
         App.APP_ROOT = window.APP_ROOT;
         App.ENVIRONMENT = '';
+        App.Views = {};
+        App.Controllers = {};
+
+        App.rootRoute = 'login';
+
+        App.addRegions({
+            modal: {
+                selector: '#modal',
+                regionType: Reveal.RevealDialog
+            },
+            layout: '#layout',
+            header: 'header',
+            footer: 'footer'
+        });
 
         if (window.location.hostname === '127.0.0.1' ||
             window.location.hostname === 'localhost') {  // dev
@@ -22,17 +35,6 @@ define('app',
             App.API_ROOT = 'http://test.secondfunnel.com/graph/v1';
         }
 
-        App.addRegions({
-            modal: {
-                selector: '#modal',
-                regionType: Reveal.RevealDialog
-            },
-            layout: '#layout',
-            header: 'header',
-            footer: 'footer'
-        });
-        CurrentPage = Entities.Model.extend({});
-        App.currentPage = new CurrentPage();
         App.addInitializer(function () {
             $(document).ajaxError(function (event, xhr) {
                 if (xhr.status === 401) {
@@ -40,36 +42,15 @@ define('app',
                     return App.redirectToLogin();
                 }
             });
+        });
 
-            App.pageInfo = new Entities.Model({
-                title: 'Loading',
-                page: ''
-            });
-        });
-        $.ajaxSetup({
-            // there are records online that indicate this works, but...
-            beforeSend: function (request) {
-                request.setRequestHeader('ApiKey', 'secretword');
-                request.withCredentials = true;
-                request.xhrFields = {
-                    withCredentials: true
-                };
-                return request;
-            },
-            // ... it took these to work, at least for chrome.
-            withCredentials: true,
-            xhrFields: {
-                withCredentials: true
-            }
-        });
         App.on('initialize:after', function () {
             this.startHistory();
             if (!this.getCurrentRoute()) {
-                return this.navigate(App.APP_ROOT, {
-                    trigger: true
-                });
+                return this.navigate(App.rootRoute, { trigger: true });
             }
         });
+
         App.commands.setHandler('when:fetched', function (entities, callback) {
             var xhrs;
             xhrs = _.chain([entities]).flatten().pluck('_fetch').value();
@@ -77,12 +58,27 @@ define('app',
                 return callback();
             });
         });
+
+        App.reqres.setHandler('default:region', function() {
+            return App.layout;
+        });
+
+        App.commands.setHandler('register:instance', function (instance, id) {
+            App.register(instance, id);
+        });
+
+        App.commands.setHandler('unregister:instance', function (instance, id) {
+            App.unregister(instance, id);
+        });
+
         App.redirectToLogin = function () {
             App.navigate('', { trigger: true });
         };
-        App.setTitle = function (title) {
-            return App.pageInfo.set('title', title);
-        };
+
+        // because exports is required (otherwise too many cyclic dependencies)
+        // may be able to REVERSE the direction, and make everything else export.
+        // but it is a fair bit of work at the current point in time
         _.extend(exports, App);
+
         return App;
     });

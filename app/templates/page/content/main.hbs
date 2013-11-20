@@ -1,0 +1,94 @@
+<div class="content">
+  <div class="page-step-actions">
+    <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/publish">Save &amp; Continue</a>
+  </div>
+  <h2>Content</h2>
+
+  <div class="filter-actions row">
+    <form class="switch-toggle switch-4 panel">
+      <input id="filter-suggested-content" name="filter" type="radio" checked>
+      <label for="filter-suggested-content">Suggested</label>
+
+      <input id="filter-import-content" name="filter" type="radio">
+      <label for="filter-import-content">Import</label>
+
+      <input id="filter-all-content" name="filter" type="radio">
+      <label for="filter-all-content">All</label>
+
+      <input id="filter-added-content" name="filter" type="radio">
+      <label for="filter-added-content">Added</label>
+
+      <a class="button"></a>
+    </form>
+  </div>
+
+  <form class="content-options">
+    <fieldset class="content-filter-actions">
+      <legend>Filters</legend>
+      <div class="filter-content-type">
+        <label>Type</label>
+        <select id="js-filter-content-type">
+          <option value="">All Content Types</option>
+          <option value="image">Images</option>
+          <option value="video">Videos</option>
+        </select>
+      </div>
+      <div class="filter-content-source">
+        <label>Source</label>
+        <select id="js-filter-content-source">
+          <option value="">All Sources</option>
+          <option value="instagram">Instagram</option>
+          <option value="tumblr">Tumblr</option>
+          <option value="facebook">Facebook</option>
+          <option value="youtube">Youtube</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="filter-content-tags">
+        <label>Tags</label>
+        <input id="js-filter-content-tags" type="text" />
+      </div>
+    </fieldset>
+    <fieldset class="content-sort-actions">
+      <legend>Sort</legend>
+      <div class="filter-sort-order">
+        <label>Sort</label>
+        <select id="js-filter-sort-order">
+          <option value="descending">Most Recent First</option>
+          <option value="ascending">Least Recent First</option>
+        </select>
+      </div>
+    </fieldset>
+  </form>
+
+  <form class="add-content row">
+    <fieldset>
+      <legend>Add New Content</legend>
+      <div class="add-by-url">
+        <label>Add By Url</label>
+        <input id="js-content-url" type="text" />
+        <button class="small">Add</button>
+      </div>
+    </fieldset>
+  </form>
+
+  <div class="container row" style="line-height: 22px;">
+    <div class="content-view-actions" style="float:left;">
+      <a class="js-grid-view">Grid</a> | <a class="js-list-view">List</a>
+    </div>
+    <div class="content-item-actions">
+      <button class="js-select-none">Clear Selection</button>
+      <button class="js-select-all">Select All</button>
+      <button class="js-add-selected">Add Selected</button>
+      <button class="js-remove-selected">Remove Selected</button>
+    </div>
+  </div>
+
+  <div class="content-list-region">
+    <!-- content list injected here -->
+  </div>
+
+  <div class="page-step-actions">
+    <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/publish">Save &amp; Continue</a>
+  </div>
+</div>

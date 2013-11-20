@@ -1,0 +1,60 @@
+<div class="content">
+  <div class="page-step-actions">
+    <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/publish">Save &amp; Continue</a>
+  </div>
+  <h2>Product</h2>
+
+  <div class="filter-actions row">
+    <form class="switch-toggle switch-3 panel">
+      <input id="filter-import-product" name="filter" type="radio" checked>
+      <label for="filter-import-product">Import</label>
+
+      <input id="filter-all-product" name="filter" type="radio">
+      <label for="filter-all-product">All</label>
+
+      <input id="filter-added-product" name="filter" type="radio">
+      <label for="filter-added-product">Added</label>
+
+      <a class="button"></a>
+    </form>
+  </div>
+
+  <div class="import-product-region">
+  </div>
+
+  <form class="product-options">
+    <fieldset class="product-filter-actions">
+      <legend>Filters</legend>
+      <div class="filter-product-tags">
+        <label>Tags</label>
+        <input id="js-filter-product-tags" type="text" />
+      </div>
+    </fieldset>
+    <fieldset class="filter-sort-actions">
+      <legend>Sort</legend>
+      <label>Sort</label>
+      <select id="js-filter-sort-order">
+        <option value="ascending">Most Recent First</option>
+        <option value="descending">Least Recent First</option>
+      </select>
+    </fieldset>
+  </form>
+
+  <div class="container row" style="line-height: 22px;">
+    <div class="content-view-actions" style="float:left;">
+      <a class="js-grid-view">Grid</a> | <a class="js-list-view">List</a>
+    </div>
+    <div class="product-item-actions">
+      <button class="js-select-all">Select All</button>
+      <button class="js-add-selected">Add Selected</button>
+    </div>
+  </div>
+
+  <div class="product-list-region">
+    <!-- product list injected here -->
+  </div>
+
+  <div class="page-step-actions">
+    <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/publish">Save &amp; Continue</a>
+  </div>
+</div>

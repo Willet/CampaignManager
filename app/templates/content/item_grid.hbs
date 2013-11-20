@@ -1,0 +1,18 @@
+<div class="content-type">
+  {{#is type 'video'}}
+  <i class="icon-general-video"></i>
+  {{/is}}
+</div>
+<div class="content-image" style="background-image: url('{{images.medium.url}}{{video-thumbnail}}');">
+</div>
+<div class="content-actions">
+  <button class="approve-content-button js-content-approve">
+    Approve <i class="icon-general-checkmark"></i>
+  </button>
+  <button class="reject-content-button js-content-reject">
+    Reject <i class="icon-general-remove"></i>
+  </button>
+  <button class="preview-content-button js-content-preview">
+    Preview <i class="icon-accessibility-eyeball"></i>
+  </button>
+</div>

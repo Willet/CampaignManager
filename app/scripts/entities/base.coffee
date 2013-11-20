@@ -46,10 +46,6 @@ define [
 
   class Base.Collection extends Backbone.Collection
 
-    comparator: (model) ->
-      # auto-sort by id on grabbing the collection
-      model.get("id")
-
     viewJSON: ->
       @collect((m) -> m.viewJSON())
 
@@ -71,9 +67,10 @@ define [
 
     initialize: ->
       @resetPaging()
-      @queryParams = {}
+      @queryParams = { order: "descending" }
 
     setFilter: (options, fetch=true) ->
+      @queryParams = {}
       for key, val of options
         if val == ""
           delete @queryParams[key]
@@ -88,15 +85,9 @@ define [
       if fetch
         @getNextPage()
 
-    updateSortOrder: (new_order) ->
-      @queryParams = {}
-      @queryParams['order'] = new_order
-      @reset()
-      @getNextPage()
-
     reset: (models, options) ->
-      super(models, options)
       @resetPaging()
+      super(models, options)
 
     resetPaging: ->
       @params =
@@ -109,12 +100,6 @@ define [
         xhr.promise().done(=>
           @fetchAll()
         )
-      else
-        _.defer(=>
-          @collect (product) ->
-            if product.get('default-image-id')
-              App.request("fetch:content", product.get('store-id'), product.get("default-image-id"))
-        )
 
     getNextPage: (opts) ->
       unless @finished || @in_progress
@@ -124,7 +109,6 @@ define [
         #collection = new @collectionType
         #collection.model = @model
         #collection.url = @url
-
         params = _.extend(@queryParams, @params)
 
         xhr = @fetch
