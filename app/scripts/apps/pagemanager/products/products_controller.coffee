@@ -88,9 +88,7 @@ define [
       layout.on "save", ->
         # TODO: there should be a better way to do this...
         $.when(page.save()).done (data) ->
-          store = data["store-id"]
-          page = data.id
-          App.navigate "/" + store + "/pages/" + page + "/content",
+          App.navigate "/" + store.get('id') + "/pages/" + page.get('id') + "/content",
             trigger: true
 
       @listenTo layout, 'show', =>

@@ -40,6 +40,12 @@ define [
       contents.getNextPage(params)
       contents
 
+    approveContent: (content, params) ->
+      content.approve()
+
+    rejectContent: (content, params) ->
+      content.reject()
+
   App.reqres.setHandler "store:content",
     (store, params) ->
       API.getContents store.get('id'), params
@@ -51,6 +57,14 @@ define [
   App.reqres.setHandler "content:all",
     (store, params) ->
       API.getContents store.get('id'), params
+
+  App.reqres.setHandler 'content:approve',
+    (content, params) ->
+      API.approveContent content, params
+
+  App.reqres.setHandler 'content:reject',
+    (content, params) ->
+      API.rejectContent content, params
 
   App.reqres.setHandler "fetch:content",
     (store_id, content, params) ->
