@@ -101,6 +101,7 @@ require([
     'global/click_handler',
     'global/form_serialize',
     'controllers/base_controller',
+    'config/ie',
     'config/base/views/collectionview',
     'config/base/views/compositeview',
     'config/base/views/itemview',
