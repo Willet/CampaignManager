@@ -20,7 +20,6 @@ define [
       App.execute "when:fetched", contents, =>
         layout.content.show @getContentListView(contents)
 
-      App.setTitle "Content"
       @show layout
 
   getContentListView: (contents) ->

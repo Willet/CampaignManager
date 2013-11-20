@@ -97,6 +97,7 @@ require.config({
 require([
     'app',
     'jquery',
+    'global/ajax_setup',
     'global/click_handler',
     'global/form_serialize',
     'controllers/base_controller',

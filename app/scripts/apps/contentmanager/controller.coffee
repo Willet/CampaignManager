@@ -32,7 +32,6 @@ define [
       App.execute "when:fetched", contents, =>
         layout.content.show ContentList.createView(contents)
 
-      App.setTitle "Content"
       @show layout
 
   ContentManager
