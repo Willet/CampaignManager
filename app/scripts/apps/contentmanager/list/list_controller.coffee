@@ -11,70 +11,77 @@ define [
 
     contentIndex: () ->
       store = App.routeModels.get 'store'
-      contents = App.request "content:all", store
+      contents = App.request 'content:all', store
+      App.execute 'when:fetched', contents, =>
+        @show @getContentLayout(contents)
 
-      layout = new MainLayout()
+    getContentLayout: (contents) ->
 
-      App.execute "when:fetched", store, =>
-        layout.nav.show(new MainNav(model: new Entities.Model(store: store, page: 'content')))
-
-      App.execute "when:fetched", contents, =>
-        layout.content.show @getContentListView(contents)
-
-      @show layout
-
-    getContentListView: (contents) ->
-
-      layout = new ContentViews.ContentIndexLayout initial_state: 'grid'
       selectedCollection = new BackboneProjections.Filtered(contents, filter: ((m) -> m.get('selected') is true))
 
-      contentList = new ContentViews.ContentList { collection: contents }
-      contentListControls = new ContentViews.ContentListControls()
-      multiEditView = new ContentViews.ContentEditArea model: selectedCollection, multiEdit: true
+      layout = new Views.ListLayout()
 
-      #
-      # Actions
-      #
 
       layout.on 'change:sort-order', (new_order) -> contents.updateSortOrder(new_order)
+      layout.on('content:select-all', => collection.selectAll())
+      layout.on('content:unselect-all', => collection.unselectAll())
+      layout.on('fetch:next-page', () =>
+          contents.getNextPage()
+          layout.trigger('fetch:next-page:complete')
+      )
 
-      contentList.on 'itemview:content:approve',
+      layout.on 'show', =>
+        layout.list.show @getContentList(contents)
+        layout.listControls.show @getContentListControls()
+        layout.multiedit.show @getMultiEditView(selectedCollection)
+
+      return layout
+
+    getContentList: (contents) ->
+      contentList = new Views.ContentList { collection: contents, itemView: Views.ContentGridItem }
+      contentList.on 'itemview:approve_content',
         (view, args) =>
           content = args.model
           App.request('content:approve', content)
           args.view.render()
 
-      contentList.on 'itemview:content:reject',
+      contentList.on 'itemview:reject_content',
         (view, args)  =>
           content = args.model
           App.request('content:reject', content)
           args.view.render()
 
-      contentList.on 'itemview:content:undecided',
+      contentList.on 'itemview:undecide_content',
         (view, args)  =>
           content = args.model
           App.request('content:undecide', content)
           args.view.render()
 
+      # DEFER: NOT USED
       contentList.on 'itemview:edit:tagged-products:add',
         (view, editArea, tagger, product) ->
           view.model.get('tagged-products').add(product)
           view.model.save()
 
+      # DEFER: NOT USED
       contentList.on 'itemview:edit:tagged-products:remove',
         (view, editArea, tagger, product) ->
           view.model.get('tagged-products').remove(product)
           view.model.save()
 
+      # DEFER: NOT USED
       contentList.on 'itemview:content:select-toggle',
         (view, args)  =>
           content = args.model
           content.set('selected', !args.model.get('selected'))
 
-      contentList.on 'itemview:content:preview',
+      contentList.on 'itemview:preview_content',
         (view, args) =>
           content = args.model
-          App.modal.show(new ContentViews.ContentQuickView({model: content}))
+          App.modal.show new Views.ContentPreview(model: content)
+
+    getMultiEditView: (selectedCollection) ->
+      multiEditView = new Views.ContentEditArea model: selectedCollection, multiEdit: true
 
       multiEditView.on 'content:approve',
         (args)  =>
@@ -97,18 +104,9 @@ define [
           contentModels = _.clone(args.model.models)
           _.each(contentModels, (m) -> m.set('selected', false))
 
-      layout.on('content:select-all', => collection.selectAll())
-      layout.on('content:unselect-all', => collection.unselectAll())
-      layout.on('fetch:next-page', () =>
-          collection.getNextPage()
-          layout.trigger('fetch:next-page:complete')
-      )
+      return multiEditView
 
-      layout.on 'show', ->
-        layout.list.show contentList
-        layout.listControls.show contentListControls
-        layout.multiedit.show multiEditView
-
-      return layout
+    getContentListControls: () ->
+      contentListControls = new Views.ContentListControls()
 
   ContentManager

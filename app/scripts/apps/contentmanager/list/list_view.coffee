@@ -1,17 +1,16 @@
 define [
   'app',
   '../app',
+  '../views',
   'entities'
-], (App, ContentManager, Entities) ->
+], (App, ContentManager, Views, Entities) ->
 
-  ContentManager.List ?= {}
-
-  class ContentManager.List.ContentIndexLayout extends App.Views.Layout
+  class Views.ListLayout extends App.Views.Layout
 
     template: 'content/index'
 
     regions:
-      "list": "#list"
+      "list": ".content-list-region"
       "listControls": "#list-controls"
       "multiedit": ".edit-area"
 
@@ -83,9 +82,9 @@ define [
     onClose: ->
       $(window).off("scroll", @scrollFunction)
 
-  class ContentManager.List.ContentListControls extends App.Views.ItemView
+  class Views.ContentListControls extends App.Views.ItemView
 
-    template: "content/list_controls"
+    template: "content/filter_controls"
 
     events:
       "click dd": "updateActive"
@@ -110,13 +109,13 @@ define [
       @current_state = new_state
       @trigger('change:state', @current_state)
 
-  class ContentManager.List.ContentQuickView extends App.Views.ItemView
+  class Views.ContentPreview extends App.Views.ItemView
 
-    template: "content/quick_view"
+    template: "content/item_preview"
 
     serializeData: -> @model.viewJSON()
 
-  ContentManager.List.TaggedPagesInput = App.Views.ItemView.extend
+  Views.TaggedPagesInput = App.Views.ItemView.extend
 
     template: false
 
@@ -151,7 +150,7 @@ define [
     onClose: ->
       @$el.parent().select2("destroy")
 
-  ContentManager.List.TaggedProductInput = App.Views.ItemView.extend
+  Views.TaggedProductInput = App.Views.ItemView.extend
 
     template: false
 
@@ -227,7 +226,7 @@ define [
     onClose: ->
       @$el.parent().select2("destroy")
 
-  class ContentManager.List.ContentEditArea extends App.Views.Layout
+  class Views.ContentEditArea extends App.Views.Layout
 
     template: "content/edit_item"
 
@@ -255,14 +254,13 @@ define [
       taggedPagesInputConfig = model: @model, store: @store
 
       if @multiEdit
-          taggedProductInputConfig['collection'] = @model
-          taggedProductInputConfig['store_id'] = @actions['store_id']
-          delete taggedProductInputConfig['model']
+        taggedProductInputConfig['collection'] = @model
+        #taggedProductInputConfig['store_id'] = @actions['store_id']
+        delete taggedProductInputConfig['model']
 
-          taggedPagesInputConfig['collection'] = @model
-          taggedPagesInputConfig['store_id'] = @actions['store_id']
-          delete taggedPagesInputConfig['model']
-
+        taggedPagesInputConfig['collection'] = @model
+        #taggedPagesInputConfig['store_id'] = @actions['store_id']
+        delete taggedPagesInputConfig['model']
 
       @taggedProducts.show(new Views.TaggedProductInput(taggedProductInputConfig))
       @taggedPages.show(new Views.TaggedPagesInput(taggedPagesInputConfig))
@@ -271,35 +269,37 @@ define [
 
     onClose: ->
 
-  class ContentManager.List.ContentList extends App.Views.CollectionView
+  class Views.ContentList extends App.Views.CollectionView
 
     template: false
+    tagName: "ul"
+    className: "content-list"
 
-    initialize: (options) ->
-      @itemViewOptions = { actions: options.actions }
+  class Views.ContentListItem extends App.Views.ItemView
 
-    getItemView: (item) ->
-      Views.ContentGridItem
-
-  class ContentManager.List.ContentGridItem extends App.Views.Layout
-
-    template: "content/grid_item"
-
-    regions:
-      "editArea": ".edit-area"
+    tagName: "li"
+    className: "content-item list-view"
+    template: "content/item_list"
 
     triggers:
-      "click .js-select": "content:select-toggle"
-      "click .overlay": "content:select-toggle"
-      "click .js-approve": "content:approve"
-      "click .js-approve-for-page": "content:approve"
-      "click .js-reject": "content:reject"
-      "click .js-reject-for-page": "content:reject"
-      "click .js-undecided": "content:undecided"
-      "click .js-prioritize": "content:prioritize"
-      "click .js-prioritize-for-page": "content:prioritize"
-      "click .js-remove-from-page": "content:reject"
-      "click .js-view": "content:preview"
+      "click .js-content-select": "content:select-toggle"
+      "click .js-content-approve": "content:approve"
+      "click .js-content-reject": "content:reject"
+      "click .js-content-undecided": "content:undecided"
+      "click .js-content-preview": "content:preview"
+
+  class Views.ContentGridItem extends App.Views.ItemView
+
+    tagName: "li"
+    className: "content-item grid-view"
+    template: "content/item_grid"
+
+    triggers:
+      "click .js-content-select": "content:select-toggle"
+      "click .js-content-approve": "approve_content"
+      "click .js-content-reject": "reject_content"
+      "click .js-content-undecided": "undecide_content"
+      "click .js-content-preview": "preview_content"
 
     bindings:
       '.js-selected':
@@ -333,22 +333,7 @@ define [
           }
         ]
 
-    initialize: (options) ->
-      @actions = { actions: options.actions }
-      @model.on('nested-change', => @render())
-      @model.on('sync:tagged-products', => @render())
-
-    serializeData: -> _.extend(@model.viewJSON(), @actions)
-
-    stopPropagation: (event) ->
-      event.stopPropagation()
-      false
-
     onRender: ->
-      @editArea.show(new Views.ContentEditArea(model: @model, actions: @actions))
-      @relayEvents(@editArea.currentView, 'edit')
       @stickit()
 
-    onShow: ->
-
-  ContentManager.List
+  Views

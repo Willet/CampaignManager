@@ -1,0 +1,36 @@
+<div class="content-image">
+  <img src="{{images.medium.url}}{{video-thumbnail}}"/>
+</div>
+<div class="content-info">
+  <label for="source" class="inline">Source</label>
+  <div class="content-source">
+    {{#is source 'facebook'}}
+    <i class="icon-social-facebook"></i> Facebook
+    {{/is}}
+    {{#is source 'instagram'}}
+    <i class="icon-social-instagram"></i> Instagram
+    {{/is}}
+    {{#is source 'youtube'}}
+    <i class="icon-social-youtube"></i> Youtube
+    {{/is}}
+  </div>
+  <label for="caption" class="inline">Caption</label>
+  <p class="caption">{{default caption "(No Caption)"}}</p>
+  <div class="content-actions">
+   {{#is page-status 'added'}}
+     <button class="remove-content-button js-content-remove">
+       Remove <i class="icon-general-error"></i>
+     </button>
+   {{else}}
+     <button class="add-content-button js-content-add">
+       Add <i class="icon-general-checkmark"></i>
+     </button>
+   {{/is}}
+   <button class="prioritize-content-button js-content-prioritize">
+     Prioritize <i class="icon-general-up-arrow"></i>
+   </button>
+   <button class="preview-content-button js-content-preview">
+     Preview <i class="icon-accessibility-eyeball"></i>
+   </button>
+  </div>
+</div>
