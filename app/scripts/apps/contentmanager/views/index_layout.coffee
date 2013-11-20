@@ -1,11 +1,11 @@
 define [
-  "marionette",
-  "entities",
-  "../views",
-  "jquery"
-], (Marionette, Entities, Views, $) ->
+  'app',
+  'entities',
+  '../views',
+  'jquery'
+], (App, Entities, Views, $) ->
 
-  class Views.ContentIndexLayout extends Marionette.Layout
+  class Views.ContentIndexLayout extends App.Views.Layout
 
     template: 'content/index'
 

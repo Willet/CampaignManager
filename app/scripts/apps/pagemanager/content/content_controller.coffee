@@ -9,29 +9,34 @@ define [
 
   class PageManager.Content.Controller extends App.Controllers.Base
 
+    contentListViewType: Views.PageCreateContentGridItem
+
+    setContentListViewType: (viewType) ->
+      @contentListViewType = viewType
+
+    getContentListViewType: ->
+      @contentListViewType
+
+    getContentListView: (contents) ->
+      new Views.PageCreateContentList
+        collection: contents
+        itemView: @getContentListViewType()
+
     initialize: ->
       page = App.routeModels.get 'page'
       store = App.routeModels.get 'store'
       contents = App.request 'content:all', store
 
-      contentList = new Views.PageCreateContentList
-        collection: contents
-        itemView: Views.PageCreateContentGridItem
-
       layout = new Views.PageCreateContent
         model: page
 
-      layout.on 'grid-view', () ->
-        contentList = new Views.PageCreateContentList
-          collection: contents
-          itemView: Views.PageCreateContentGridItem
-        layout.contentList.show contentList
+      layout.on 'grid-view', () =>
+        @setContentListViewType Views.PageCreateContentGridItem
+        layout.contentList.show @getContentListView(contents)
 
-      layout.on 'list-view', () ->
-        contentList = new Views.PageCreateContentListc
-          collection: contents
-          itemView: Views.PageCreateContentListItem
-        layout.contentList.show contentList
+      layout.on 'list-view', () =>
+        @setContentListViewType Views.PageCreateContentListItem
+        layout.contentList.show @getContentListView(contents)
 
       # Item View Actions
       layout.on 'content_list:itemview:add_content', (listView, itemView) ->
@@ -55,54 +60,42 @@ define [
         filter = layout.extractFilter()
         contents.setFilter(filter)
 
-      layout.on 'select-all', () ->
+      layout.on 'select-all', () =>
         contents.collect((model) -> model.set('selected', true))
-        contentList.render()
+        layout.contentList.show @getContentListView(contents)
 
-      layout.on 'select-none', () ->
+      layout.on 'select-none', () =>
         contents.collect((model) -> model.set('selected', false))
-        contentList.render()
+        layout.contentList.show @getContentListView(contents)
 
-      layout.on 'add-selected', () ->
+      layout.on 'add-selected', () =>
         selected = contents.filter((model) -> model.get('selected'))
         _.each selected, (model) ->
           App.request 'page:add_content', page, model
           model.set 'selected', false
-        contentList.render()
+        layout.contentList.show @getContentListView(contents)
 
-      layout.on 'remove-selected', () ->
+      layout.on 'remove-selected', () =>
         selected = contents.filter((model) -> return model.get('selected'))
         _.each selected, (model) ->
           App.request 'page:remove_content', page, model
           model.set 'selected', false
-        contentList.render()
+        layout.contentList.show @getContentListView(contents)
 
-      layout.on 'display:all-content', () ->
-        # TODO: this introduces a race-condition on reset...
-        #       since a new AJAX request, should cancel the effect of the others
-        contents.reset()
-        newContents = App.request('store:content', store, layout.extractFilter())
-        App.execute 'when:fetched', newContents, () ->
-          contents.reset(newContents.models)
+      layout.on 'display:all-content', () =>
+        contents = App.request 'store:content', store, layout.extractFilter()
+        layout.contentList.show @getContentListView(contents)
 
-      layout.on 'display:suggested-content', () ->
-        # TODO: this introduces a race-condition on reset...
-        #       since a new AJAX request, should cancel the effect of the others
-        contents.reset()
-        newContents = App.request('page:content', page, layout.extractFilter())
-        App.execute 'when:fetched', newContents, () ->
-          contents.reset(newContents.models)
+      layout.on 'display:suggested-content', () =>
+        contents = App.request 'page:content', page, layout.extractFilter()
+        layout.contentList.show @getContentListView(contents)
 
-      layout.on 'display:added-content', () ->
-        # TODO: this introduces a race-condition on reset...
-        #       since a new AJAX request, should cancel the effect of the others
-        contents.reset()
-        newContents = App.request('page:content', page, layout.extractFilter())
-        App.execute 'when:fetched', newContents, () ->
-          contents.reset(newContents.models)
+      layout.on 'display:added-content', () =>
+        contents = App.request 'page:content', page, layout.extractFilter()
+        layout.contentList.show @getContentListView(contents)
 
-      layout.on 'render', () ->
-        layout.contentList.show(contentList)
+      @listenTo layout, 'show', =>
+        layout.contentList.show @getContentListView(contents)
 
       layout.on 'fetch:next-page', () ->
         contents.getNextPage()

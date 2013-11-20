@@ -1,12 +1,12 @@
 define [
-  "marionette",
-  "entities",
-  "../views",
-  "jquery",
-  "select2"
-], (Marionette, Entities, Views, $) ->
+  'app',
+  'entities',
+  '../views',
+  'jquery',
+  'select2'
+], (App, Entities, Views, $) ->
 
-  Views.TaggedPagesInput = Marionette.ItemView.extend
+  Views.TaggedPagesInput = App.Views.ItemView.extend
 
     template: false
 
@@ -41,7 +41,7 @@ define [
     onClose: ->
       @$el.parent().select2("destroy")
 
-  Views.TaggedProductInput = Marionette.ItemView.extend
+  Views.TaggedProductInput = App.Views.ItemView.extend
 
     template: false
 

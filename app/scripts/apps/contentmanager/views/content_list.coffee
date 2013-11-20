@@ -1,11 +1,11 @@
 define [
-  "marionette",
-  "entities",
-  "../views",
-  "backbone.stickit"
-], (Marionette, Entities, Views) ->
+  'app',
+  'entities',
+  '../views',
+  'backbone.stickit'
+], (App, Entities, Views) ->
 
-  class Views.ContentList extends Marionette.CollectionView
+  class Views.ContentList extends App.Views.CollectionView
 
     template: false
 
@@ -15,7 +15,7 @@ define [
     getItemView: (item) ->
       Views.ContentGridItem
 
-  class Views.ContentGridItem extends Marionette.Layout
+  class Views.ContentGridItem extends App.Views.Layout
 
     template: "content/grid_item"
 

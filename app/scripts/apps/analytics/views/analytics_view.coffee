@@ -1,8 +1,8 @@
 define [
-  "marionette"
-], (Marionette) ->
+  'app'
+], (App) ->
 
-  class AnalyticsIndex extends Marionette.Layout
+  class AnalyticsIndex extends App.Views.Layout
 
     template: "analytics/index"
 

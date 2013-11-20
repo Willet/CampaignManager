@@ -1,10 +1,10 @@
 define [
-  "marionette",
-  "entities",
-  "../views"
-], (Marionette, Entities, Views) ->
+  'app',
+  'entities',
+  '../views'
+], (App, Entities, Views) ->
 
-  class Views.ContentListControls extends Marionette.ItemView
+  class Views.ContentListControls extends App.Views.ItemView
 
     template: "content/list_controls"
 

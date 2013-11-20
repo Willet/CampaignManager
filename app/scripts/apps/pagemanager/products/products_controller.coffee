@@ -13,13 +13,13 @@ define [
     setProductListType: (viewType) ->
       @productListType = viewType
 
-    getProductListType: ->
+    getProductListViewType: ->
       @productListType
 
-    getProductList: (products) ->
+    getProductListView: (products) ->
       new Views.PageProductList
         collection: products
-        itemView: @getProductListType()
+        itemView: @getProductListViewType()
 
     initialize: ->
       store = App.routeModels.get("store")
@@ -62,11 +62,11 @@ define [
 
       layout.on "grid-view", =>
         @setProductListType Views.PageProductGridItem
-        layout.productList.show @getProductList(products)
+        layout.productList.show @getProductListView(products)
 
       layout.on "list-view", =>
         @setProductListType Views.PageProductListItem
-        layout.productList.show @getProductList(products)
+        layout.productList.show @getProductListView(products)
 
       layout.on "change:filter", ->
         filter = layout.extractFilter()
@@ -74,16 +74,16 @@ define [
 
       layout.on "display:all-product", =>
         products = App.request "store:products", store, { filter: layout.extractFilter() }
-        layout.productList.show @getProductList(products)
+        layout.productList.show @getProductListView(products)
 
       layout.on "display:import-product", =>
         products = App.request "store:products", store, { filter: layout.extractFilter() }
         # TODO: products = App.request "page:products:imported", page, { filter: layout.extractFilter() }
-        layout.productList.show @getProductList(products)
+        layout.productList.show @getProductListView(products)
 
       layout.on "display:added-product", =>
         products = App.request "page:products", page, { filter: layout.extractFilter() }
-        layout.productList.show @getProductList(products)
+        layout.productList.show @getProductListView(products)
 
       layout.on "save", ->
         # TODO: there should be a better way to do this...
@@ -94,6 +94,6 @@ define [
             trigger: true
 
       @listenTo layout, 'show', =>
-        layout.productList.show @getProductList(products)
+        layout.productList.show @getProductListView(products)
 
       @show layout
