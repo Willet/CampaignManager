@@ -118,8 +118,8 @@ define [
           json['approved'] = true
           json['state'] = 'approved'
         else
-          json['undecided'] = true
-          json['state'] = 'undecided'
+          json['new'] = true
+          json['state'] = 'new'
       else
         json['rejected'] = true
         json['state'] = 'rejected'

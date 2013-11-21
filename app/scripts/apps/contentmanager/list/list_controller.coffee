@@ -23,12 +23,11 @@ define [
 
 
       layout.on 'change:sort-order', (new_order) -> contents.updateSortOrder(new_order)
-      layout.on('content:select-all', => collection.selectAll())
-      layout.on('content:unselect-all', => collection.unselectAll())
-      layout.on('fetch:next-page', () =>
+      layout.on 'content:select-all', => collection.selectAll()
+      layout.on 'content:unselect-all', => collection.unselectAll()
+      layout.on 'fetch:next-page', () =>
           contents.getNextPage()
           layout.trigger('fetch:next-page:complete')
-      )
 
       layout.on 'show', =>
         layout.list.show @getContentList(contents)
