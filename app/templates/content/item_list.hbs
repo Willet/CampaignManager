@@ -17,17 +17,18 @@
   <label for="caption" class="inline">Caption</label>
   <p class="caption">{{default caption "(No Caption)"}}</p>
   <div class="content-actions">
-   {{#is page-status 'added'}}
-     <button class="remove-content-button js-content-remove">
-       Remove <i class="icon-general-error"></i>
-     </button>
-   {{else}}
-     <button class="add-content-button js-content-add">
-       Add <i class="icon-general-checkmark"></i>
-     </button>
-   {{/is}}
-   <button class="preview-content-button js-content-preview">
-     Preview <i class="icon-accessibility-eyeball"></i>
-   </button>
+  {{#isnt state 'approved'}}
+  <button class="approve-content-button js-content-approve">
+    Approve <i class="icon-general-checkmark"></i>
+  </button>
+  {{/isnt}}
+  {{#isnt state 'rejected'}}
+  <button class="reject-content-button js-content-reject">
+    Reject <i class="icon-general-remove"></i>
+  </button>
+  {{/isnt}}
+  <button class="preview-content-button js-content-preview">
+    Preview <i class="icon-accessibility-eyeball"></i>
+  </button>
   </div>
 </div>
