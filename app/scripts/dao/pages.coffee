@@ -15,6 +15,7 @@ define [
 
     getPages: (store_id, params = {}) ->
       pages = new Entities.PageCollection()
+      pages.store_id = store_id
       pages.url = "#{App.API_ROOT}/store/#{store_id}/page"
       pages.fetch
         reset: true
@@ -72,7 +73,7 @@ define [
       API.newPage params['store_id'], options
 
   App.reqres.setHandler 'page:publish', (page, options) ->
-    Api.publishPage page, options
+    API.publishPage page, options
 
   #
   # Page - Content Methods

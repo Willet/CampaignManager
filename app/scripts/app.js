@@ -8,7 +8,7 @@ define('app',
         App.Views = {};
         App.Controllers = {};
 
-        App.rootRoute = 'login';
+        App.rootRoute = '';
 
         App.addRegions({
             modal: {

@@ -36,7 +36,7 @@ define [
       App.request('user:logout')
 
     storeShow: (store_id) ->
-      App.navigate("#{Backbone.history.getFragment()}/pages", trigger: true, replace: true)
+      App.navigate("/#{store_id}/pages", trigger: true, replace: true)
 
     notFound: (opts) ->
       App.layout.show(new NotFound())

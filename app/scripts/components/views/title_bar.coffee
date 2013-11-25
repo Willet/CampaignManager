@@ -27,7 +27,6 @@ define [
         type: 'POST'
         crossDomain: true
 
-      # Again, wrong way to do things
-      window.location = '/'
+      App.navigate('/', trigger: true)
 
   return TitleBar
