@@ -28,6 +28,8 @@ define [
         @model.trigger("grid-item:deselected",@model)
 
     triggers:
+      "click .js-grid-view": "grid-view"
+      "click .js-list-view": "list-view"
       "click .js-select-all": "content:select-all"
       "click .js-unselect-all": "content:unselect-all"
 

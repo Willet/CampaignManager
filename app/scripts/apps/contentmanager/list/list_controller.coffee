@@ -9,7 +9,22 @@ define [
 
   class ContentManager.Controller extends App.Controllers.Base
 
+    contentListViewType: Views.ContentGridItem
+
+    setContentListViewType: (viewType) ->
+      @contentListViewType = viewType
+
+    getContentListViewType: ->
+      @contentListViewType
+
+    getContentListView: (contents) ->
+      new Views.ContentList
+        collection: contents
+        itemView: @getContentListViewType()
+
     contentIndex: () ->
+      # Called everytime page is loaded
+      # Similar to 'initialize' method
       store = App.routeModels.get 'store'
       contents = App.request 'content:all', store
       App.execute 'when:fetched', contents, =>
@@ -21,6 +36,13 @@ define [
 
       layout = new Views.ListLayout()
 
+      layout.on 'grid-view', () =>
+        @setContentListViewType Views.ContentGridItem
+        layout.list.show @getContentList(contents)
+
+      layout.on 'list-view', () =>
+        @setContentListViewType Views.ContentListItem
+        layout.list.show @getContentList(contents)
 
       layout.on 'change:sort-order', (new_order) -> contents.updateSortOrder(new_order)
       layout.on 'content:select-all', => collection.selectAll()
@@ -37,7 +59,7 @@ define [
       return layout
 
     getContentList: (contents) ->
-      contentList = new Views.ContentList { collection: contents, itemView: Views.ContentGridItem }
+      contentList = @getContentListView(contents)
       contentList.on 'itemview:approve_content',
         (view, args) =>
           content = args.model
