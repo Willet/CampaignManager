@@ -322,16 +322,9 @@ define [
         attributes: [
           {
             name: 'class'
-            observe: ['active', 'approved']
+            observe: 'status'
             onGet: (observed) ->
-              active = observed[0]
-              approved = observed[1]
-              if active && approved
-                "approved"
-              else if active && !approved
-                "undecided"
-              else
-                "rejected"
+              return observed # Is this necessary?
           }
         ]
 
