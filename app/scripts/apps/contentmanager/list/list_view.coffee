@@ -28,6 +28,8 @@ define [
         @model.trigger("grid-item:deselected",@model)
 
     triggers:
+      "click .js-grid-view": "grid-view"
+      "click .js-list-view": "list-view"
       "click .js-select-all": "content:select-all"
       "click .js-unselect-all": "content:unselect-all"
 
@@ -283,10 +285,10 @@ define [
 
     triggers:
       "click .js-content-select": "content:select-toggle"
-      "click .js-content-approve": "content:approve"
-      "click .js-content-reject": "content:reject"
-      "click .js-content-undecided": "content:undecided"
-      "click .js-content-preview": "content:preview"
+      "click .js-content-approve": "approve_content"
+      "click .js-content-reject": "reject_content"
+      "click .js-content-undecided": "undecide_content"
+      "click .js-content-preview": "preview_content"
 
   class Views.ContentGridItem extends App.Views.ItemView
 
