@@ -1,8 +1,9 @@
 define [
   "app",
   "dao/base",
-  "entities"
-], (App, Base, Entities) ->
+  "entities",
+  "jquery"
+], (App, Base, Entities, $) ->
 
   API =
     fetchContent: (store_id, content, params = {}) ->
@@ -49,10 +50,13 @@ define [
       contents
 
     approveContent: (content, params) ->
-      content.approve()
+      $.ajax("#{content.url()}/approve", type: "POST")
 
     rejectContent: (content, params) ->
-      content.reject()
+      $.ajax("#{content.url()}/reject", type: "POST")
+
+    undecideContent: (content, params) ->
+      $.ajax("#{content.url()}/undecide", type: "POST")
 
   App.reqres.setHandler "store:content",
     (store, params) ->
@@ -73,6 +77,10 @@ define [
   App.reqres.setHandler 'content:reject',
     (content, params) ->
       API.rejectContent content, params
+
+  App.reqres.setHandler 'content:undecide',
+    (content, params) ->
+      API.undecideContent content, params
 
   App.reqres.setHandler "fetch:content",
     (store_id, content, params) ->
