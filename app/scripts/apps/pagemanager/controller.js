@@ -30,6 +30,10 @@ define(['app', './app', './views', 'marionette'],
 
             publishView: function () {
                 new PageManager.Publish.Controller({region: this.region});
+            },
+
+            previewView: function () {
+                new PageManager.Preview.Controller({region: this.region});
             }
         });
 
