@@ -50,21 +50,28 @@ define [
       contents
 
     approveContent: (content, params) ->
-      content.sync('create', content, $.ajax("#{content.url()}/approve", type: "POST")
+      content.sync 'approve', content,
+        method: 'POST'
+        url: "#{content.url()}/approve"
+        data: {}
+        success: (json) ->
+          content.set(json)
 
     rejectContent: (content, params) ->
-      content.sync, 'reject', content,
+      content.sync 'reject', content,
+        method: 'POST'
         url: "#{content.url()}/reject"
         data: {}
         success: (json) ->
-          console.log arguments
+          content.set(json)
 
     undecideContent: (content, params) ->
-      content.sync, 'undecide', content,
+      content.sync 'undecide', content,
+        method: 'POST'
         url: "#{content.url()}/undecide"
         data: {}
         success: (json) ->
-          console.log arguments
+          content.set(json)
 
   App.reqres.setHandler "store:content",
     (store, params) ->
