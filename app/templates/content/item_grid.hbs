@@ -6,12 +6,12 @@
 <div class="content-image" style="background-image: url('{{images.medium.url}}{{video-thumbnail}}');">
 </div>
 <div class="content-actions">
-  {{#isnt state 'approved'}}
+  {{#isnt status 'approved'}}
   <button class="approve-content-button js-content-approve">
     Approve <i class="icon-general-checkmark"></i>
   </button>
   {{/isnt}}
-  {{#isnt state 'rejected'}}
+  {{#isnt status 'rejected'}}
   <button class="reject-content-button js-content-reject">
     Reject <i class="icon-general-remove"></i>
   </button>
@@ -20,6 +20,6 @@
     Preview <i class="icon-accessibility-eyeball"></i>
   </button>
 </div>
-<div class="content-state content-state-{{state}}">
-  {{titleize state}}
+<div class="content-state content-state-{{status}}">
+  {{titleize status}}
 </div>

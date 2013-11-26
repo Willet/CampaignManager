@@ -17,12 +17,12 @@
   <label for="caption" class="inline">Caption</label>
   <p class="caption">{{default caption "(No Caption)"}}</p>
   <div class="content-actions">
-  {{#isnt state 'approved'}}
+  {{#isnt status 'approved'}}
   <button class="approve-content-button js-content-approve">
     Approve <i class="icon-general-checkmark"></i>
   </button>
   {{/isnt}}
-  {{#isnt state 'rejected'}}
+  {{#isnt status 'rejected'}}
   <button class="reject-content-button js-content-reject">
     Reject <i class="icon-general-remove"></i>
   </button>

@@ -41,26 +41,22 @@ define [
     }
 
     defaults: {
-      active: true,
-      approved: false
+      status: 'needs-review'
     }
 
     reject: ->
       @save(
-        active: false
-        approved: false
+        status: 'rejected'
       )
 
     approve: ->
       @save(
-        active: true
-        approved: true
+        status: 'approved'
       )
 
     undecided: ->
       @save(
-        active: true
-        approved: false
+        status: 'needs-review'
       )
 
     tag: (tags) ->
@@ -85,8 +81,6 @@ define [
       unless attrs['tagged-products']
         attrs['tagged-products'] = []
       attrs = super(attrs)
-      attrs['active'] = if (attrs['active'] == "true" || attrs['active'] == true) then true else false
-      attrs['approved'] = if (attrs['approved'] == "true" || attrs['approved'] == true) then true else false
 
       attrs
 
@@ -97,8 +91,6 @@ define [
           json['tagged-products'] = json['tagged-products'].collect((m) -> m.get('id'))
         else
           json['tagged-products'] = _.map(json['tagged-products'], (m) -> m.get('id'))
-      json['active'] = if (json['active'] == "true" || json['active'] == true) then true else false
-      json['approved'] = if (json['approved'] == "true" || json['approved'] == true) then true else false
       json
 
     viewJSON: (opts = {}) ->
@@ -109,20 +101,6 @@ define [
           if @get('tagged-products').collect
             json['tagged-products'] = @get('tagged-products').collect((m) -> m.viewJSON(nested: true))
       json['selected'] = @get('selected')
-      json['active'] = if (json['active'] == "true" || json['active'] == true) then true else false
-      json['approved'] = if (json['approved'] == "true" || json['approved'] == true) then true else false
-      @set('active', json['active'])
-      @set('approved', json['approved'])
-      if @get('active')
-        if @get('approved')
-          json['approved'] = true
-          json['state'] = 'approved'
-        else
-          json['new'] = true
-          json['state'] = 'new'
-      else
-        json['rejected'] = true
-        json['state'] = 'rejected'
       if @get('original-url') && /youtube/i.test(@get('original-url'))
         json['video'] = true
         video_id = @get('original-url').match(/v=(.+)/)[1]
