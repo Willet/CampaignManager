@@ -40,6 +40,14 @@ define [
       contents.getNextPage(params)
       contents
 
+    getPageSuggestedContent: (store_id, page_id, params = {}) ->
+      contents = new Entities.ContentPageableCollection()
+      contents.store_id = store_id
+      contents.page_id = page_id
+      contents.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/suggested"
+      contents.getNextPage(params)
+      contents
+
     approveContent: (content, params) ->
       content.approve()
 
@@ -74,3 +82,7 @@ define [
     (page, params) ->
       API.getPageContents page.get('store-id'), page.get('id'), params
 
+  App.reqres.setHandler "page:suggested_content",
+    # handles App.request(^ that)
+    (page, params) ->
+      API.getPageSuggestedContent page.get('store-id'), page.get('id'), params
