@@ -4,10 +4,10 @@ define([
     'use strict';
     Entities = Entities || {};
 
+    Entities.TileConfig = Base.Model.extend({});
+
     Entities.TileConfigCollection = Base.Collection.extend({
-        parse: function(response) {
-            return response.results;
-        }
+        model: Entities.TileConfig
     });
 
     return Entities;

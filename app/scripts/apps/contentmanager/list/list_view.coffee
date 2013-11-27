@@ -318,15 +318,9 @@ define [
           onGet: (observed) ->
             if observed then "selected" else ""
         ]
-      '.status':
-        attributes: [
-          {
-            name: 'class'
-            observe: 'status'
-            onGet: (observed) ->
-              return observed # Is this necessary?
-          }
-        ]
+
+    initialize: ->
+      @model.on('change:status', => @render())
 
     onRender: ->
       @stickit()
