@@ -2,6 +2,7 @@ define([
     'app', 'dao/base', 'entities'
 ], function (App, Base, Entities) {
     'use strict';
+
     var API = {
         getFromConfig: function(config) {
             var id, field, template;
@@ -59,7 +60,30 @@ define([
                     tileConfigCollection.at(i).destroy();
                 }
             });
+        },
+
+        prioritizeTile: function(page, tileconfig) {
+            tileconfig.sync('deprioritize', tileconfig, {
+                method: 'POST',
+                url: tileconfig.url() + '/deprioritize',
+                data: {},
+                success: function(json) {
+                    tileconfig.set(json);
+                }
+            });
+        },
+
+        deprioritizeTile: function(page, tileconfig) {
+            tileconfig.sync('prioritize', tileconfig, {
+                method: 'POST',
+                url: tileconfig.url() + '/prioritize',
+                data: {},
+                success: function(json) {
+                    tileconfig.set(json);
+                }
+            });
         }
+
     };
 
     App.reqres.setHandler('tileconfig:approve', function(pageId, config) {
@@ -68,6 +92,14 @@ define([
 
     App.reqres.setHandler('tileconfig:reject', function(pageId, config) {
         API.deleteTileConfig(pageId, config);
+    });
+
+    App.reqres.setHandler('tileconfig:prioritize', function(page, tileconfig) {
+        API.prioritizeTile(page, tileconfig);
+    });
+
+    App.reqres.setHandler('tileconfig:deprioritize', function(page, tileconfig) {
+        API.deprioritizeTile(page, tileconfig);
     });
 
 //    var API = {
