@@ -44,6 +44,9 @@ define [
         @setContentListViewType Views.ContentListItem
         layout.list.show @getContentList(contents)
 
+      layout.on 'change:filter-content-status', (status) ->
+        contents.setFilter({'status': status})
+
       layout.on 'change:sort-order', (new_order) -> contents.updateSortOrder(new_order)
       layout.on 'content:select-all', => collection.selectAll()
       layout.on 'content:unselect-all', => collection.unselectAll()
