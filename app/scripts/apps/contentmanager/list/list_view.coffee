@@ -16,9 +16,10 @@ define [
 
     events:
       "click dd": "updateActive"
-      "change #sort-order": "updateSortOrder"
-      "change #filter-page": "filterPage"
-      "change #filter-content-type": "filterContentType"
+      "change #js-sort-order": "updateSortOrder"
+      "change #js-filter-page": "filterPage"
+      "change #js-filter-content-type": "filterContentType"
+      "click .js-filter-content-status": "filterContentStatus"
 
     toggleSelected: (event) ->
       @model.set(selected: !@model.get('selected'))
@@ -38,6 +39,9 @@ define [
 
     filterContentType: (event) ->
       @trigger("change:filter-content-type", @$(event.currentTarget).val())
+
+    filterContentStatus: (event) ->
+      @trigger("change:filter-content-status", @$(event.currentTarget).val())
 
     filterPage: (event) ->
       @trigger("change:filter-page", @$(event.currentTarget).val())
