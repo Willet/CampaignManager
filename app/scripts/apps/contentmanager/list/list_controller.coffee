@@ -46,7 +46,6 @@ define [
 
       layout.on 'change:filter-content-status', (status) ->
         contents.setFilter({'status': status})
-        setTimeout ( -> console.log [model.attributes.status for model in contents.models]), 1000
 
       layout.on 'change:sort-order', (new_order) -> contents.updateSortOrder(new_order)
       layout.on 'content:select-all', => collection.selectAll()
