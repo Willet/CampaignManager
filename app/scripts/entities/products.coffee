@@ -11,26 +11,18 @@ define [
     relations: [
       {
         type: Backbone.One
-        key: 'default-image-id'
+        key: 'default-image'
         relatedModel: 'Entities.Content'
-        map: (data, type) ->
-          unless typeof data is 'object'
-            content = new type({id: data})
-            App.request('fetch:content', @get('store-id') || @collection.store_id, content)
-          else
-            content = data
-          content
       }
     ]
 
     toJSON: (opts) ->
       json = _.clone(@attributes)
-      json['default-image-id'] = @get('default-image-id')?.get('id')
       json
 
     viewJSON: (opts) ->
       json = _.clone(@toJSON())
-      json['default-image-id'] = @get('default-image-id')?.viewJSON(nested: true)
+      json['default-image'] = @get('default-image')?.viewJSON(nested: true)
       json
 
   #Entities.Product = Backbone.UniqueModel(Entities.Product)

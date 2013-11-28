@@ -33,12 +33,13 @@ define [
       contents
 
     getPageContents: (store_id, page_id, params = {}) ->
-      contents = new Entities.ContentPageableCollection()
-      contents.store_id = store_id
-      contents.page_id = page_id
-      contents.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content"
-      contents.getNextPage(params)
-      contents
+      content = new Entities.TileConfigCollection()
+      content.store_id = store_id
+      content.page_id = page_id
+      content.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/tile-config"
+      content.setFilter(template: 'content')
+      content.getNextPage()
+      content
 
     getPageSuggestedContent: (store_id, page_id, params = {}) ->
       contents = new Entities.ContentPageableCollection()
@@ -46,6 +47,14 @@ define [
       contents.page_id = page_id
       contents.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/suggested"
       contents.getNextPage(params)
+      contents
+
+    getAllContentPage: (store_id, page_id, params = {}) ->
+      contents = new Entities.ContentPageableCollection()
+      contents.store_id = store_id
+      contents.page_id = page_id
+      contents.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/all"
+      contents.getNextPage()
       contents
 
     approveContent: (content, params) ->
@@ -81,6 +90,10 @@ define [
   App.reqres.setHandler "page:content",
     (page, params) ->
       API.getPageContents page.get('store-id'), page.get('id'), params
+
+  App.reqres.setHandler "page:content:all",
+    (page, params) ->
+      API.getAllContentPage page.get('store-id'), page.get('id'), params
 
   App.reqres.setHandler "page:suggested_content",
     # handles App.request(^ that)

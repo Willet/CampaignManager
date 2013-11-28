@@ -165,7 +165,11 @@ define [
       throttled_render = _.throttle((=> @render()), 500, leading: false)
       @model.on('nested-change', throttled_render)
 
-    serializeData: -> @model.viewJSON()
+    serializeData: ->
+      if @model.get('products')
+        @model.get('products').first().viewJSON()
+      else
+        @model.viewJSON()
 
     onRender: ->
       @updateDOM()

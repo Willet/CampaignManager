@@ -83,7 +83,7 @@ define [
         layout.contentList.show @getContentListView(contents)
 
       layout.on 'display:all-content', () =>
-        contents = App.request 'store:content', store, layout.extractFilter()
+        contents = App.request 'page:content:all', page, layout.extractFilter()
         layout.contentList.show @getContentListView(contents)
 
       layout.on 'display:suggested-content', () =>

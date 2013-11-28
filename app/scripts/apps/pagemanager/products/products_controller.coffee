@@ -41,12 +41,6 @@ define [
       products = App.request("page:products", page)
       @setProductListType Views.PageProductGridItem
 
-      #App.execute "when:fetched", products, ->
-      #  # for each product, fetch their default content image
-      #  products.collect (product) ->
-      #    if product.get('default-image-id')
-      #      App.request "fetch:content", store.get('id'), product.get("default-image-id")
-
       layout.on "select-all", ->
         products.collect (model) ->
           model.set "selected", true
@@ -83,7 +77,8 @@ define [
         products.setFilter filter
 
       layout.on "display:all-product", =>
-        products = App.request "store:products", store, { filter: layout.extractFilter() }
+        console.log "ALL"
+        products = App.request "page:products:all", page, { filter: layout.extractFilter() }
         layout.productList.show @getProductListView(products)
 
       layout.on "display:import-product", =>

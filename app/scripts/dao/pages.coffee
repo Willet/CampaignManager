@@ -54,8 +54,9 @@ define [
         url: baseUrl + '/' + storeId + '/' + pageId + '/regenerate',
         type: 'POST',
         dataType: 'jsonp'
-        });
+        })
       return req
+
 
   App.reqres.setHandler "page:all",
     (store, options) ->

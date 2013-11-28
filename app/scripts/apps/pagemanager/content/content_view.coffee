@@ -143,7 +143,11 @@ define [
     events:
       "click": "selectItem"
 
-    serializeData: -> @model.viewJSON()
+    serializeData: ->
+      if @model.get('content')
+        @model.get('content').first().viewJSON()
+      else
+        @model.viewJSON()
 
     onRender: ->
       @updateDOM()
@@ -165,7 +169,11 @@ define [
     className: "content-item list-view"
     template: "page/content/item_list"
 
-    serializeData: -> @model.viewJSON()
+    serializeData: ->
+      if @model.get('content')
+        @model.get('content').first().viewJSON()
+      else
+        @model.viewJSON()
 
     triggers:
       "click .js-content-prioritize": "prioritize_content"

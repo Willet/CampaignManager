@@ -59,20 +59,23 @@ define [
           data: _.extend(id: product_ids, params)
       products
 
-    # DEFER: decide on where to put related models etc
-    getPageProducts: (store_id, page_id, params = {}) ->
+    getAllProductPage: (store_id, page_id, params = {}) ->
       products = new Entities.ProductPageableCollection()
       products.store_id = store_id
       products.page_id = page_id
-      products.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product"
-      #products.getNextPage()
-      products.fetchAll()
+      products.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product/all"
+      products.getNextPage()
       products
 
-    addProduct: (page, product, params = {}) ->
-      $()
-
-    addProducts: (page, products, params = {}) ->
+    # DEFER: decide on where to put related models etc
+    getPageProducts: (store_id, page_id, params = {}) ->
+      products = new Entities.TileConfigCollection()
+      products.store_id = store_id
+      products.page_id = page_id
+      products.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/tile-config"
+      products.setFilter(template: 'product')
+      products.getNextPage()
+      products
 
 
   App.reqres.setHandler "product:entities:set",
@@ -102,6 +105,10 @@ define [
   App.reqres.setHandler "store:products",
     (store, params) ->
       API.getProducts store.get('id'), params
+
+  App.reqres.setHandler "page:products:all",
+    (page, params) ->
+      API.getAllProductPage page.get('store-id'), page.get('id'), params
 
   App.reqres.setHandler "page:products",
     (page, params) ->
