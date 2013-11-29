@@ -32,8 +32,8 @@ define [
           App.layout.show(new Login())
 
     logout: (opts) ->
-      # App.layout.show(new Login())
-      App.request('user:logout')
+      App.request('user:logout').done () ->
+          App.navigate('/', trigger: true)
 
     storeShow: (store_id) ->
       App.navigate("/#{store_id}/pages", trigger: true, replace: true)
