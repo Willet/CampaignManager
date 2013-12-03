@@ -31,18 +31,14 @@ define [
         .done (data) ->
           if data.objects.length
             username = data.objects[0].username
-            console.log "user is #{username}"
             # length 0 if username is not a store slug
             $.get(App.API_ROOT + '/store/?slug=' + username)
               .done (data) ->
                 if data.results.length
-                  console.log "is slug"
                   self.storeShow data.results[0].id  # store id, e.g. 126
                 else
-                  console.log "is not slug"
                   self.storeShow 38  # defaults to gap
           else  # no user info = not logged in
-            console.log "not logged in"
             App.layout.show(new Login())
 
     logout: (opts) ->
