@@ -18,7 +18,6 @@ define [
       "click dd": "updateActive"
       "change #js-sort-order": "updateSortOrder"
       "change #js-filter-page": "filterPage"
-      "change #js-filter-content-type": "filterContentType"
       "click .js-filter-content-status": "filterContentStatus"
 
     toggleSelected: (event) ->
@@ -37,11 +36,14 @@ define [
     initialize: (opts) ->
       @current_state = opts['initial_state']
 
-    filterContentType: (event) ->
-      @trigger("change:filter-content-type", @$(event.currentTarget).val())
-
+    # event triggered when all/needs review/approved/rejected tabs are clicked
     filterContentStatus: (event) ->
-      @trigger("change:filter-content-status", @$(event.currentTarget).val())
+      status = @$(event.currentTarget).val()
+
+      # 'all' cannot filter by type, source, and tags
+      @$('.content-filter-actions').prop('disabled', not status)
+
+      @trigger("change:filter-content-status", status)
 
     filterPage: (event) ->
       @trigger("change:filter-page", @$(event.currentTarget).val())
@@ -82,6 +84,10 @@ define [
       @scrollFunction = => @autoLoadNextPage()
       $(window).on("scroll", @scrollFunction)
       @$('.loading').hide()
+
+      # 'all' cannot filter by type, source, and tags
+      @$('.content-filter-actions').prop('disabled', true)
+
       @on "fetch:next-page:complete", =>
         @$('.loading').hide()
 
@@ -94,12 +100,28 @@ define [
 
     events:
       "click dd": "updateActive"
+      "change #js-filter-content-type": "filterContentType"
+      "change #js-filter-content-source": "filterContentSource"
+      "keyup #js-filter-content-tags": "filterContentTags"
 
     initialize: (opts) ->
       @current_state = "grid"
 
     updateActive: (event) ->
       @switchActive(@extractState(event.currentTarget))
+
+    filterContentType: (event) ->
+      # event val e.g. 'image'
+      @trigger("change:filter-content-type", @$(event.currentTarget).val())
+
+    filterContentSource: (event) ->
+      # add query "source=
+      # event val e.g. 'facebook'
+      @trigger("change:filter-content-source", @$(event.currentTarget).val())
+
+    filterContentTags: (event) ->
+      # event val e.g. 'a, b, c'
+      @trigger("change:filter-content-tags", @$(event.currentTarget).val())
 
     extractState: (element) ->
       if result = element.className.match(/js-tab-([a-zA-Z-_]+)/)

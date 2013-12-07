@@ -10,13 +10,22 @@ define [
   class ContentManager.Controller extends App.Controllers.Base
 
     contentListViewType: Views.ContentGridItem
+    filters:  # default filters (type, source, tags, ...)
+      'type': ''
+      'status': 'needs-review'
+      'source': ''
+
+    addFilters: (newFilters={}) ->
+      _.extend @filters, newFilters
 
     setContentListViewType: (viewType) ->
       @contentListViewType = viewType
 
+    # @returns {ContentGridItem}
     getContentListViewType: ->
       @contentListViewType
 
+    # @returns a grid view or a list view, depending on how "this" is configured
     getContentListView: (contents) ->
       new Views.ContentList
         collection: contents
@@ -31,32 +40,49 @@ define [
         @show @getContentLayout(contents)
 
     getContentLayout: (contents) ->
+      self = @
 
-      selectedCollection = new BackboneProjections.Filtered(contents, filter: ((m) -> m.get('selected') is true))
+      selectedCollection = new BackboneProjections.Filtered(contents,
+        filter: ((m) -> m.get('selected') is true))
 
       layout = new Views.ListLayout()
 
+      # swap the current view (whatever it is) with a grid view.
       layout.on 'grid-view', () =>
         @setContentListViewType Views.ContentGridItem
         layout.list.show @getContentList(contents)
 
+      # swap the current view (whatever it is) with a list view.
       layout.on 'list-view', () =>
         @setContentListViewType Views.ContentListItem
         layout.list.show @getContentList(contents)
 
       layout.on 'change:filter-content-status', (status) ->
-        contents.setFilter({'status': status})
+        self.filters.status = status
+        contents.setFilter(self.filters)
 
       layout.on 'change:sort-order', (new_order) -> contents.updateSortOrder(new_order)
       layout.on 'content:select-all', => collection.selectAll()
       layout.on 'content:unselect-all', => collection.unselectAll()
       layout.on 'fetch:next-page', () =>
-          contents.getNextPage()
-          layout.trigger('fetch:next-page:complete')
+        contents.getNextPage()
+        layout.trigger('fetch:next-page:complete')
 
       layout.on 'show', =>
         layout.list.show @getContentList(contents)
-        layout.listControls.show @getContentListControls()
+
+        listControls = @getContentListControls()
+        listControls.on 'change:filter-content-type', (contentType) ->
+          contents.setFilter self.addFilters('type': contentType or '')
+
+        listControls.on 'change:filter-content-source', (contentSource) ->
+          contents.setFilter self.addFilters('source': contentSource or '')
+
+        listControls.on 'change:filter-content-tags', (contentTags) ->
+          console.log contentTags
+          # contents.setFilter self.addFilters('tags': contentTags or null)
+
+        layout.listControls.show listControls
         layout.multiedit.show @getMultiEditView(selectedCollection)
 
       return layout
@@ -99,6 +125,7 @@ define [
           content = args.model
           content.set('selected', !args.model.get('selected'))
 
+      # previews the selected content.
       contentList.on 'itemview:preview_content',
         (view, args) =>
           content = args.model
