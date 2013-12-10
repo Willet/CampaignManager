@@ -167,7 +167,13 @@ define [
 
     serializeData: ->
       if @model.get('products')
-        @model.get('products').first().viewJSON()
+        # TODO: change it so that the viewJSON of a tile
+        #       is more inline with a product/content etc..
+        #       maybe a Polymorphic Model???
+        result = @model.get('products').first().viewJSON()
+        result['prioritized'] = @model.get('prioritized')
+        result['status'] = 'added'
+        result
       else
         @model.viewJSON()
 

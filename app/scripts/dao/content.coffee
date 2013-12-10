@@ -33,10 +33,10 @@ define [
       contents
 
     getPageContents: (store_id, page_id, params = {}) ->
-      content = new Entities.TileConfigCollection()
+      content = new Entities.ContentPageableCollection()
       content.store_id = store_id
       content.page_id = page_id
-      content.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/tile-config"
+      content.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content"
       content.setFilter(template: 'content')
       content.getNextPage()
       content
