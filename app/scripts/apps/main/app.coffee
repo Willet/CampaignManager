@@ -24,12 +24,22 @@ define [
   class Main.Controller extends Marionette.Controller
 
     login: (opts) ->
-      $.get(App.API_ROOT + '/store')
-        .done ->
-          # TODO: use @storeShow
-          App.navigate('/38/pages', {trigger: true})
-        .fail ->
-          App.layout.show(new Login())
+      self = @
+      # length 0 if not logged in (HTTP 200)
+      # .objects = length 1 if logged in (HTTP 200)
+      $.get(App.API_ROOT + '/user/?format=json')
+        .done (data) ->
+          if data.objects.length
+            username = data.objects[0].username
+            # length 0 if username is not a store slug
+            $.get(App.API_ROOT + '/store/?slug=' + username)
+              .done (data) ->
+                if data.results.length
+                  self.storeShow data.results[0].id  # store id, e.g. 126
+                else
+                  self.storeShow 38  # defaults to gap
+          else  # no user info = not logged in
+            App.layout.show(new Login())
 
     logout: (opts) ->
       App.request('user:logout').done () ->

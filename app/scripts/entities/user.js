@@ -39,11 +39,19 @@ define([
                 // Should we create a store instance?
                 window.App.store = store;
 
-                // Default to store 38 (Gap) for demo ...
-                navigateUrl = '38/pages';
-                App.navigate(navigateUrl, {
-                    trigger: true
-                });
+                $.getJSON(App.API_ROOT + '/store/?slug=' + that.get('username'))
+                    .done(function (data) {
+                        if (data.results.length) {
+                            // store id, e.g. 126
+                            navigateUrl = data.results[0].id + '/pages';
+                        } else {
+                            // Default to store 38 (Gap) for now...
+                            navigateUrl = '38/pages';
+                        }
+                        App.navigate(navigateUrl, {
+                            trigger: true
+                        });
+                    });
             });
 
             // allow more deferreds to be set
