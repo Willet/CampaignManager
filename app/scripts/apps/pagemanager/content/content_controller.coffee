@@ -2,8 +2,9 @@
 define [
   'app',
   '../app',
-  './content_view'
-], (App, PageManager, Views) ->
+  './content_view',
+  'entities'
+], (App, PageManager, Views, Entities) ->
 
   PageManager.Content ?= {}
 
@@ -18,9 +19,14 @@ define [
       @contentListViewType
 
     getContentListView: (contents) ->
-      new Views.PageCreateContentList
-        collection: contents
-        itemView: @getContentListViewType()
+      if contents.model is Entities.Content
+        new Views.PageCreateContentList
+          collection: contents
+          itemView: @getContentListViewType()
+      else if contents.model is Entities.TileConfig
+        new Views.PageCreateTileConfigList
+          collection: contents
+          itemView: @getContentListViewType()
 
     initialize: ->
       page = App.routeModels.get 'page'
@@ -96,7 +102,7 @@ define [
         layout.contentList.show @getContentListView(contents)
 
       layout.on 'display:added-content', () =>
-        contents = App.request 'page:content', page, layout.extractFilter()
+        contents = App.request 'page:tileconfig', page, _.extend(layout.extractFilter(), template: 'content')
         layout.contentList.show @getContentListView(contents)
 
       @listenTo layout, 'show', =>

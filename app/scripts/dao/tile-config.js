@@ -4,6 +4,13 @@ define([
     'use strict';
 
     var API = {
+        getPageTiles: function(storeId, pageId, params) {
+            var tileconfigs = new Entities.TileConfigCollection();
+            tileconfigs.pageId = pageId;
+            tileconfigs.url = App.API_ROOT + '/store/' + storeId + '/page/' + pageId + '/tile-config';
+            tileconfigs.setFilter(params);
+            return tileconfigs;
+        },
         getFromConfig: function(config) {
             var id, field, template;
             config = config || {};
@@ -100,6 +107,10 @@ define([
 
     App.reqres.setHandler('tileconfig:deprioritize', function(page, tileconfig) {
         API.deprioritizeTile(page, tileconfig);
+    });
+
+    App.reqres.setHandler('page:tileconfig', function(page, params) {
+        return API.getPageTiles(page.get('store-id'), page.get('id'), params);
     });
 
 //    var API = {
