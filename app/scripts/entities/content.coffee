@@ -44,21 +44,6 @@ define [
       status: 'needs-review'
     }
 
-    reject: ->
-      @save(
-        status: 'rejected'
-      )
-
-    approve: ->
-      @save(
-        status: 'approved'
-      )
-
-    undecided: ->
-      @save(
-        status: 'needs-review'
-      )
-
     tag: (tags) ->
       unless _.isArray(tags) or _.isNull(tags)
         tags = [tags]

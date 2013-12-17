@@ -26,7 +26,7 @@ define [
           layout.$('.publish.button').text('Publish Page')
           layout.$(layout.fail.el).show()
 
-      App.execute 'when:fetched', store, () =>
+      App.execute 'when:fetched', [store, page], () =>
         if App.ENVIRONMENT is 'DEV'
           store.set('public-base-url', store.get('public-base-url', '').replace(/(https?:\/\/)/, '$1dev-'))
         else if App.ENVIRONMENT is 'TEST'

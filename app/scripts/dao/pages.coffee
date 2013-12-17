@@ -32,6 +32,10 @@ define [
       url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/#{content_id}"
       $.ajax url, type: "PUT"
 
+    addAllContent: (store_id, page_id, content_list, params = {}) ->
+      url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/add_all"
+      $.ajax url, type: "PUT", data: JSON.stringify(content_list)
+
     removeContent: (store_id, page_id, content_id, params = {}) ->
       url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/#{content_id}"
       $.ajax url, type: "DELETE"
@@ -83,6 +87,10 @@ define [
   App.reqres.setHandler "page:add_content",
     (page, content, options) ->
       API.addContent page.get('store-id'), page.get('id'), content.get('id')
+
+  App.reqres.setHandler "page:add_all_content",
+    (page, content_list, options) ->
+      API.addAllContent page.get('store-id'), page.get('id'), content_list
 
   App.reqres.setHandler "page:remove_content",
     (page, content, options) ->

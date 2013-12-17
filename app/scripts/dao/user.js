@@ -12,7 +12,9 @@ define([
         },
         logout: function () {
             // any instance of the User entity logs out the current user only
-            return (new Entities.User()).logout();
+            var user = new Entities.User();
+            user.url = App.API_ROOT + '/user';
+            return user.logout();
         }
     };
 

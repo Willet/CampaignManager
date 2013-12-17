@@ -1,8 +1,9 @@
 define [
   "app",
   "dao/base",
-  "entities"
-], (App, Base, Entities) ->
+  "entities",
+  "jquery"
+], (App, Base, Entities, $) ->
 
   API =
     fetchContent: (store_id, content, params = {}) ->
@@ -58,10 +59,28 @@ define [
       contents
 
     approveContent: (content, params) ->
-      content.approve()
+      content.sync 'approve', content,
+        method: 'POST'
+        url: "#{content.url()}/approve"
+        data: {}
+        success: (json) ->
+          content.set(json)
 
     rejectContent: (content, params) ->
-      content.reject()
+      content.sync 'reject', content,
+        method: 'POST'
+        url: "#{content.url()}/reject"
+        data: {}
+        success: (json) ->
+          content.set(json)
+
+    undecideContent: (content, params) ->
+      content.sync 'undecide', content,
+        method: 'POST'
+        url: "#{content.url()}/undecide"
+        data: {}
+        success: (json) ->
+          content.set(json)
 
   App.reqres.setHandler "store:content",
     (store, params) ->
@@ -82,6 +101,10 @@ define [
   App.reqres.setHandler 'content:reject',
     (content, params) ->
       API.rejectContent content, params
+
+  App.reqres.setHandler 'content:undecide',
+    (content, params) ->
+      API.undecideContent content, params
 
   App.reqres.setHandler "fetch:content",
     (store_id, content, params) ->

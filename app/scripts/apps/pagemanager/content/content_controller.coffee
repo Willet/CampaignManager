@@ -70,9 +70,14 @@ define [
 
       layout.on 'add-selected', () =>
         selected = contents.filter((model) -> model.get('selected'))
+        content_list = _.map(_.pluck(selected, 'id'), (value) -> 
+          parseInt(value, 10);
+        );
+
         _.each selected, (model) ->
-          App.request 'page:add_content', page, model
           model.set 'selected', false
+
+        App.request 'page:add_all_content', page, content_list
         layout.contentList.show @getContentListView(contents)
 
       layout.on 'remove-selected', () =>

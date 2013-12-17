@@ -10,7 +10,8 @@ define(['app', 'exports', 'backbone', 'marionette', './views', 'entities', './co
                 ':store_id/pages/:page_id/products': 'pagesProducts',
                 ':store_id/pages/:page_id/content': 'pagesContent',
                 ':store_id/pages/:page_id/view': 'pagesView',
-                ':store_id/pages/:page_id/publish': 'publishView'
+                ':store_id/pages/:page_id/publish': 'publishView',
+                ':store_id/pages/:page_id/preview': 'previewView'
             },
             setupModels: function (route, args) {
                 this.setupRouteModels(route, args);
