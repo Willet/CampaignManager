@@ -278,9 +278,9 @@ define [
     onShow: ->
 
     onRender: ->
-      store_id = App.routeModels.get('store').id
-      taggedProductInputConfig = model: @model, store: store_id
-      taggedPagesInputConfig = model: @model, store: store_id
+      storeID = App.routeModels.get('store').id
+      taggedProductInputConfig = model: @model, store: storeID
+      taggedPagesInputConfig = model: @model, store: storeID
 
       if @multiEdit
         taggedProductInputConfig['collection'] = @model
