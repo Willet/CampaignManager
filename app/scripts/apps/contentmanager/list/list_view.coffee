@@ -328,6 +328,8 @@ define [
       "click .js-content-reject": "reject_content"
       "click .js-content-undecided": "undecide_content"
       "click .js-content-preview": "preview_content"
+      "click .js-content-edit": "edit_content"
+      "click .js-content-approve-edit": "approve_content edit_content"
 
     bindings:
       '.js-selected':

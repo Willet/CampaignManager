@@ -6,7 +6,15 @@
 <div class="content-image" style="background-image: url('{{images.medium.url}}{{video-thumbnail}}');">
 </div>
 <div class="content-actions">
+  {{#is status 'approved'}}
+  <button class="tag-content-button js-content-edit">
+    Tag  <!-- TODO add icon -->
+  </button>
+  {{/is}}
   {{#isnt status 'approved'}}
+  <button class="approve-tag-content-button js-content-approve-edit">
+    Approve & tag
+  </button>
   <button class="approve-content-button js-content-approve">
     Approve <i class="icon-general-checkmark"></i>
   </button>
