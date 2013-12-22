@@ -8,7 +8,7 @@ define [
 
   Entities = Entities || {}
 
-  class Entities.Content extends Base.Model
+  class Entities.BaseContent extends Base.Model
 
     relations: [
       {
@@ -157,6 +157,35 @@ define [
 
     viewJSON: ->
       @collect((m) -> m.viewJSON())
+
+  class Entities.Content extends Entities.BaseContent
+
+    relations: [
+      {
+        type: Backbone.Many
+        key: 'tagged-products'
+        collectionType: 'Entities.ProductCollection'
+        map: (fids, type) ->
+          storeId = window.App.routeModels.get('store').id
+
+          collection = type
+          fids = if _.isArray(fids) then fids else [fids]
+          type = if (type instanceof Backbone.Collection) then type.model else type
+          data = _.map fids, (fid) ->
+            unless fid instanceof Backbone.Model
+              fid = App.request('product:entity', storeId, fid)
+            else
+              App.request('fetch:product',
+                storeId,
+                fid
+              )
+
+          unless collection instanceof Backbone.Model
+            data = new type(data)
+
+          data
+      }
+    ]
 
   class Entities.ContentPageableCollection extends Base.PageableCollection
 

@@ -886,8 +886,9 @@ body {
 
 }
 
-/* TODO: Remove ... Remove?*/
-body .edit-area .actions a.b2b {
-  display: none;
+.tag-content,.select2-drop{
+  max-width: 100%;
+  position: absolute;
+  top: 1em;
+  right: 1em;
 }
-

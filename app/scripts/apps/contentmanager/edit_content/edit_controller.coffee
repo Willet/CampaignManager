@@ -1,13 +1,10 @@
 define [
   'app',
   '../app',
+  'entities/content'
   './edit_views'
-], (App, ContentManager, Views) ->
+], (App, ContentManager, ContentEntities, Views) ->
 
-  ContentManager.products ?= {}
-
-  # TODO find out how I can change name to ContentManager.EditContent.Controller
-  # TODO should I extend Marionette.Controller or App.Controllers.Base?
   class ContentManager.Controller extends App.Controllers.Base
 
     productListType: Views.PageProductGridItem
@@ -15,10 +12,16 @@ define [
     initialize: (model) ->
       store = App.routeModels.get('store')
       page = App.routeModels.get('page')
+#      smartContent = new ContentEntities.ProductAwareContent(
+#        model.toJSON()
+#      )
+#      App.request('fetch:content', store.id, smartContent)
+      @layout = new Views.EditContentLayout
+        model: model
 
-      layout = new Views.editContentLayout
-        model: page
+      @layout.on 'closeEditView', =>
+        @layout.close()
 
-      products = App.request('page:products', page)
+      App.modal.show @layout
 
-      layout.on 'tagged-content-product'
+  ContentManager.Controller

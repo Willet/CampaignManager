@@ -1,30 +1,58 @@
 define [
   'app',
   '../views',
-  'jquery'
-], (App, Views, $) ->
-  # TODO the name is long but it follows the convention followed in some places
-  # keep or change?
-  class Views.EditContentView extends App.Views.Layout
+  'jquery',
+  'underscore'
+], (App, Views, $, _) ->
+  class Views.EditContentLayout extends App.Views.Layout
     template: 'content/edit/index'
 
     regions:
       taggedProducts: '.tagged-products'
-      addTaggedProducts: '.tag-products'
+      addTaggedProducts: '.tag-content'
+
+    triggers:
+      'click .reveal-close .reveal-modal-bg' : 'closeEditView'
 
     serializeData: -> @model.viewJSON()
 
-    onShow: ->
-      # TODO move somewhere else
-      storeId = App.routeModels.get('store').id
+    initialize: ->
+      @storeId = App.routeModels.get('store').id
+      @['tagged-products'] = @model.get('tagged-products').models
 
-      $('.tag-products').select2(
+
+    # Move this block to a separate file maybe
+    onShow: ->
+
+      formatProduct = (product) =>
+        unless product instanceof Backbone.Model
+          product = new Entities.Product($.extend(product, {'store-id': @storeId}))
+        imageUrl = product.viewJSON()['default-image-id']?.images?.thumb.url || null
+        identifier = "product-#{product.get('id')}"
+        console.log product
+
+        # replace image url when model is fetched if it wasn't ready when we rendered
+        if imageUrl == null
+          imageUrl = 'http://placehold.it/20/eee/000&text=X'
+          setTimeout ->
+              if (imageUrl = product.viewJSON()['default-image-id']?.images?.thumb.url || null)
+                $(".#{identifier} img").attr('src', imageUrl)
+            , 1000
+
+        image = "<img src=\"#{imageUrl}\">"
+        name = "<span>#{product.get("name")}</span>"
+        "<span class=\"#{identifier}\">#{image} #{name}</span>"
+
+      $el = $('.tag-content')
+      $el.select2(
         multiple: true
+        width: '350px'
         allowClear: true
         placeholder: "Search for a product"
         tokenSeparators: [',']
+
         ajax:
-          url: "#{App.API_ROOT}/store/#{storeId}/product/live"
+          url: "#{App.API_ROOT}/store/#{@storeId}/product/live"
           dataType: 'json'
           cache: true
           data: (term, page) ->
@@ -35,32 +63,34 @@ define [
             return {
               results: data['results']
             }
-        formatResult: (product) ->
-          "<span>#{product['name']}</span>"
-        formatSelection: (product) ->
-          "<span>#{product['name']}</span>"
+
+        formatResult: formatProduct
+        formatSelection: formatProduct
       )
-      if @model?.get("tagged-products")
-        @$el.parent().select2('data', @model.get("tagged-products").toJSON())
-      @$el.parent().on "change", (event, element) =>
+      $el.select2('data', @['tagged-products'])
+      $el.on "change", (event, element) =>
+        @save = true
         if event.added
-          product = new Entities.Product(event.added)
-          if @model
-            @model.get('tagged-products').add(product)
-            @trigger('add', model)
-          else
-            @collection.collect((m) =>
-              m.get('tagged-products').add(product)
-              m.set('selected', false)
+          unless event.added instanceof Entities.Product
+            product = new Entities.Product $.extend(event.added,
+              'store-id': @storeId
             )
-    onclose: ->
+          @['tagged-products'].push(product)
+        else if event.removed
+          removedId = event.removed.id
+          @['tagged-products'] = _.filter(@['tagged-products'], (product) ->
+            removedId != product.get('id')
+          )
+
+    onClose: =>
+      if @save
+        # This is stupid and dangerous but it's the best we have right now
+        # (there seems to be a bug in backbone-associations)
+        temp = @model.attributes['tagged-products']
+        @model.attributes['tagged-products'] = (@['tagged-products'])
+        @model.save()
+        @model.attributes['tagged-products'] = temp
+        @model.fetch()
       $('.tag-products').select2('destroy')
-
-
-  class Views.EditContentProducts extends App.Views.CompositeView
-    template: 'content/edit/products'
-
-  class Views.EditContentDisplay extends App.Views.ItemView
-    template: 'content/edit/preview'
 
   Views

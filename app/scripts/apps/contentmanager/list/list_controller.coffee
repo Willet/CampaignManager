@@ -3,12 +3,12 @@ define [
   '../app',
   './list_view',
   '../views',
-  '../edit_content/edit_views',
+  '../edit_content/edit_controller',
   'backbone.projections',
   'components/views/main_layout', 'components/views/main_nav', 'components/views/title_bar',
   'marionette',
   '../edit_content/edit_controller'
-], (App, ContentManager, Views, ContentViews, EditViews, BackboneProjections, MainLayout, MainNav, Marionette) ->
+], (App, ContentManager, Views, ContentViews, EditController, BackboneProjections, MainLayout, MainNav, Marionette) ->
 
   class ContentManager.Controller extends App.Controllers.Base
 
@@ -111,9 +111,7 @@ define [
       contentList.on 'itemview:edit_content',
         (view, args) =>
           content = args.model
-          App.modal.show new EditViews.EditContentView({
-            model: content
-          })
+          controller = new EditController content
 
       # DEFER: NOT USED
       contentList.on 'itemview:edit:tagged-products:add',
@@ -167,8 +165,5 @@ define [
 
     getContentListControls: () ->
       contentListControls = new Views.ContentListControls()
-
-    editContentLayout: ->
-      console.log 'test'
 
   ContentManager

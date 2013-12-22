@@ -1,13 +1,10 @@
-<div class="contentPreview">
-  <button class="close-button reveal-close small">Close</button>
-  <div class="content">
-    {{#is type 'video'}}
-      <iframe width="640" height="480" src="{{video-embed-url}}" frameborder="0" allowfullscreen></iframe>
-    {{else}}
-      <img src="{{images.large.url}}"/>
-    {{/is}}
-  </div>
-    <div class="edit-content-display" id="content-edit-content"> Test </div>
-    <div class="tagged-products" id="products"> Test2 </div>
-    <div class="tag-products"></div>
+<div class="content-preview">
+  <button class="close-button reveal-close medium">Close</button>
+  {{#log images}}{{/log}}
+  {{#is type 'video'}}
+    <iframe width="640" height="480" src="{{video-embed-url}}" frameborder="0" allowfullscreen></iframe>
+  {{else}}
+    <img src="{{images.large.url}}"/>
+  {{/is}}
+  <div class="tag-content"></div>
 </div>
