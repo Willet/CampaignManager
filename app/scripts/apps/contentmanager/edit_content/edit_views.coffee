@@ -29,11 +29,13 @@ define [
           product = new Entities.Product($.extend(product, {'store-id': @storeId}))
         imageUrl = product.viewJSON()['default-image-id']?.images?.thumb.url || null
         identifier = "product-#{product.get('id')}"
-        console.log product
 
         # replace image url when model is fetched if it wasn't ready when we rendered
         if imageUrl == null
           imageUrl = 'http://placehold.it/20/eee/000&text=X'
+          # Yes, this is a horrible idea. However, we don't have a CID as the model
+          # has not been fetched yet, and I can't think of a better way. Needless to
+          # say, feel free to modify if you can think of something less idiotic.
           setTimeout ->
               if (imageUrl = product.viewJSON()['default-image-id']?.images?.thumb.url || null)
                 $(".#{identifier} img").attr('src', imageUrl)
@@ -69,13 +71,15 @@ define [
       )
       $el.select2('data', @['tagged-products'])
       $el.on "change", (event, element) =>
-        @save = true
+
+        @saveModel = true
         if event.added
           unless event.added instanceof Entities.Product
             product = new Entities.Product $.extend(event.added,
               'store-id': @storeId
             )
           @['tagged-products'].push(product)
+
         else if event.removed
           removedId = event.removed.id
           @['tagged-products'] = _.filter(@['tagged-products'], (product) ->
@@ -83,9 +87,10 @@ define [
           )
 
     onClose: =>
-      if @save
+      if @saveModel
         # This is stupid and dangerous but it's the best we have right now
-        # (there seems to be a bug in backbone-associations)
+        # (there seems to be a bug in backbone-associations that adds models to
+        #  a collection in a very wrong way)
         temp = @model.attributes['tagged-products']
         @model.attributes['tagged-products'] = (@['tagged-products'])
         @model.save()

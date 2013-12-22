@@ -7,15 +7,9 @@ define [
 
   class ContentManager.Controller extends App.Controllers.Base
 
-    productListType: Views.PageProductGridItem
-
     initialize: (model) ->
       store = App.routeModels.get('store')
       page = App.routeModels.get('page')
-#      smartContent = new ContentEntities.ProductAwareContent(
-#        model.toJSON()
-#      )
-#      App.request('fetch:content', store.id, smartContent)
       @layout = new Views.EditContentLayout
         model: model
 
