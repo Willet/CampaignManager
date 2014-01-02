@@ -83,7 +83,6 @@ define [
           # contents.setFilter self.addFilters('tags': contentTags or null)
 
         layout.listControls.show listControls
-        layout.multiedit.show @getMultiEditView(selectedCollection)
 
       return layout
 
@@ -130,32 +129,6 @@ define [
         (view, args) =>
           content = args.model
           App.modal.show new Views.ContentPreview(model: content)
-
-    getMultiEditView: (selectedCollection) ->
-      multiEditView = new Views.ContentEditArea model: selectedCollection, multiEdit: true
-
-      multiEditView.on 'content:approve',
-        (args)  =>
-          contentCollection = args.model
-          contentCollection.collect((m) -> App.request('content:approve', m))
-          contentModels = _.clone(args.model.models)
-          _.each(contentModels, (m) -> m.set('selected', false))
-
-      multiEditView.on 'content:reject',
-        (args)  =>
-          contentCollection = args.model
-          contentCollection.collect((m) -> App.request('content:reject', m))
-          contentModels = _.clone(args.model.models)
-          _.each(contentModels, (m) -> m.set('selected', false))
-
-      multiEditView.on 'content:undecided',
-        (args)  =>
-          contentCollection = args.model
-          contentCollection.collect((m) -> App.request('content:undecide', m))
-          contentModels = _.clone(args.model.models)
-          _.each(contentModels, (m) -> m.set('selected', false))
-
-      return multiEditView
 
     getContentListControls: () ->
       contentListControls = new Views.ContentListControls()
