@@ -1,9 +1,8 @@
 define [
   "app",
   "entities/base",
-  "entities/products",
-  "underscore",
-  "backbone.uniquemodel"
+  "entities",
+  "underscore"
 ], (App, Base, Entities, _) ->
 
   Entities = Entities || {}
@@ -42,6 +41,8 @@ define [
 
     defaults: {
       status: 'needs-review'
+      'tile-configs': []
+      'tagged-products': []
     }
 
     tag: (tags) ->
@@ -63,9 +64,10 @@ define [
       attrs = data
 
       # make sure tagged-products exist (so that the relation exists)
-      unless attrs['tagged-products']
-        attrs['tagged-products'] = []
       attrs = super(attrs)
+
+      tile_configs = _.map(data['tile-configs'], (m) -> new Entities.TileConfig(m, {parse: true}))
+      attrs['tile-configs'] = new Entities.TileConfigCollection(tile_configs)
 
       attrs
 
@@ -76,6 +78,9 @@ define [
           json['tagged-products'] = json['tagged-products'].collect((m) -> m.get('id'))
         else
           json['tagged-products'] = _.map(json['tagged-products'], (m) -> m.get('id'))
+      if json['tile-configs']
+        if json['tile-configs'] instanceof Backbone.Collection
+          json['tile-configs'] = json['tile-configs'].collect((m) -> m.toJSON())
       json
 
     viewJSON: (opts = {}) ->
@@ -93,6 +98,8 @@ define [
         json['video-thumbnail'] = "http://i1.ytimg.com/vi/#{video_id}/mqdefault.jpg"
       else if @get('url')
         json['images'] = @imageFormatsJSON(@get('url'))
+      if @get('tile-configs') and @get('tile-configs').first()
+        json['tileconfig'] = @get('tile-configs').first().toJSON()
       json
 
     imageFormatsJSON: (url) ->
@@ -139,7 +146,6 @@ define [
           url: url
       }
 
-  #Entities.Content = Backbone.UniqueModel(Entities.Content)
 
   class Entities.ContentCollection extends Base.Collection
     model: Entities.Content

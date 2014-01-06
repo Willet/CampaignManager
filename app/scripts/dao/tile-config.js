@@ -32,80 +32,34 @@ define([
                 'template': template
             };
         },
-        addTileConfig: function(pageId, config) {
-            var tileConfigCollection,
-                obj = {},
-                template = 'template';
-
-            config = this.getFromConfig(config);
-
-            obj[template] = config[template];
-            obj[config.field] = [config.id];
-
-            tileConfigCollection = new Entities.TileConfigCollection();
-            tileConfigCollection.url = App.API_ROOT + '/page/' + pageId + '/tile-config';
-            tileConfigCollection.create(obj);
-            //tileConfig.save();
-        },
-
-        deleteTileConfig: function(pageId, config) {
-            var tileConfigCollection, obj = {};
-
-            config = this.getFromConfig(config);
-
-            obj[config.field] = config.id;
-
-            tileConfigCollection = new Entities.TileConfigCollection();
-            tileConfigCollection.url = App.API_ROOT + '/page/' + pageId + '/tile-config';
-
-            tileConfigCollection.fetch({
-                data: obj
-            }).done(function() {
-                //http://stackoverflow.com/questions/10858935/cleanest-way-to-destroy-every-model-in-a-collection-in-backbone
-                var i;
-                for (i = tileConfigCollection.length -1; i >= 0; i--) {
-                    tileConfigCollection.at(i).destroy();
-                }
-            });
-        },
 
         prioritizeTile: function(page, tileconfig) {
-            tileconfig.sync('deprioritize', tileconfig, {
+            var tileconfigUrl = App.API_ROOT + '/store/' + page.get('store-id') + '/page/' + page.get('id') + '/tile-config/' + tileconfig.get('id');
+            tileconfig.sync('prioritize', tileconfig, {
                 method: 'POST',
-                url: tileconfig.url() + '/deprioritize',
-                data: {},
-                success: function(json) {
-                    tileconfig.set(json);
-                }
+                url: tileconfigUrl + '/prioritize',
+                data: {}
             });
         },
 
         deprioritizeTile: function(page, tileconfig) {
-            tileconfig.sync('prioritize', tileconfig, {
+            var tileconfigUrl = App.API_ROOT + '/store/' + page.get('store-id') + '/page/' + page.get('id') + '/tile-config/' + tileconfig.get('id');
+            tileconfig.sync('deprioritize', tileconfig, {
                 method: 'POST',
-                url: tileconfig.url() + '/prioritize',
-                data: {},
-                success: function(json) {
-                    tileconfig.set(json);
-                }
+                url: tileconfigUrl + '/deprioritize',
+                data: {}
             });
         }
 
     };
 
-    App.reqres.setHandler('tileconfig:approve', function(pageId, config) {
-        API.addTileConfig(pageId, config);
-    });
-
-    App.reqres.setHandler('tileconfig:reject', function(pageId, config) {
-        API.deleteTileConfig(pageId, config);
-    });
-
     App.reqres.setHandler('tileconfig:prioritize', function(page, tileconfig) {
+        tileconfig.set('prioritized', true);
         API.prioritizeTile(page, tileconfig);
     });
 
     App.reqres.setHandler('tileconfig:deprioritize', function(page, tileconfig) {
+        tileconfig.set('prioritized', false);
         API.deprioritizeTile(page, tileconfig);
     });
 
@@ -113,20 +67,4 @@ define([
         return API.getPageTiles(page.get('store-id'), page.get('id'), params);
     });
 
-//    var API = {
-//        login: function (username, password) {
-//            var user = new Entities.User();
-//            user.url = App.API_ROOT + '/user'; //
-//            user.login(username, password);
-//            return user;
-//        },
-//        logout: function () {
-//
-//        }
-//    };
-//
-//    App.reqres.setHandler('user:login', function (username, password) {
-//        var user = API.login(username, password);
-//        App.user = user;
-//    });
 });

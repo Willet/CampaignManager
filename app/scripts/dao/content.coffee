@@ -38,7 +38,6 @@ define [
       content.store_id = store_id
       content.page_id = page_id
       content.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content"
-      content.setFilter(template: 'content')
       content.getNextPage()
       content
 

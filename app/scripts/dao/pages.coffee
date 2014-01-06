@@ -32,6 +32,10 @@ define [
       url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/#{content_id}"
       $.ajax url, type: "PUT"
 
+    prioritizeContent: (store_id, page_id, content_id, params = {}) ->
+      url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/#{content_id}/prioritize"
+      $.ajax url, type: "POST"
+
     addAllContent: (store_id, page_id, content_list, params = {}) ->
       url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/add_all"
       $.ajax url, type: "PUT", data: JSON.stringify(content_list)
@@ -43,6 +47,10 @@ define [
     addProduct: (store_id, page_id, product_id, params = {}) ->
       url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product/#{product_id}"
       $.ajax url, type: "PUT"
+
+    prioritizeProduct: (store_id, page_id, product_id, params = {}) ->
+      url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product/#{product_id}/prioritize"
+      $.ajax url, type: "POST"
 
     removeProduct: (store_id, page_id, product_id, params = {}) ->
       url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product/#{product_id}"

@@ -128,6 +128,14 @@ define [
     itemViewOptions: -> { selected: @allSelected }
 
 
+  pageContentModelSerialization = ->
+      isAdded = @model.get('tile-configs').find((m) -> (m.get('template') == 'image'))
+      page_status = if isAdded then 'added' else null
+      return _.extend(@model.viewJSON(),
+        {
+          'page-status': @model.get('page-status') || page_status
+        })
+
   class Views.PageCreateContentGridItem extends App.Views.ItemView
 
     tagName: "li"
@@ -136,12 +144,15 @@ define [
 
     triggers:
       "click .js-content-prioritize": "prioritize_content"
+      "click .js-content-deprioritize": "deprioritize_content"
       "click .js-content-add": "add_content"
       "click .js-content-remove": "remove_content"
       "click .js-content-preview": "preview_content"
 
     events:
       "click": "selectItem"
+
+    serializeData: pageContentModelSerialization
 
     onRender: ->
       @updateDOM()
@@ -163,66 +174,13 @@ define [
     className: "content-item list-view"
     template: "page/content/item_list"
 
-    triggers:
-      "click .js-content-prioritize": "prioritize_content"
-      "click .js-content-add": "add_content"
-      "click .js-content-remove": "remove_content"
-      "click .js-content-preview": "preview_content"
-
-
-  class Views.PageCreateTileConfigList extends App.Views.CollectionView
-
-    tagName: "ul"
-    className: "content-list"
-    template: false
-
-    initialize: ->
-      @allSelected = false
-
-    itemViewOptions: -> { selected: @allSelected }
-
-
-  class Views.PageCreateTileConfigGridItem extends App.Views.ItemView
-
-    tagName: "li"
-    className: "content-item grid-view"
-    template: "page/content/item_grid"
+    serializeData: pageContentModelSerialization
 
     triggers:
       "click .js-content-prioritize": "prioritize_content"
       "click .js-content-add": "add_content"
       "click .js-content-remove": "remove_content"
       "click .js-content-preview": "preview_content"
-
-    events:
-      "click": "selectItem"
-
-    onRender: ->
-      @updateDOM()
-
-    updateDOM: () ->
-      if @model.get('selected')
-        @$el.addClass('selected')
-      else
-        @$el.removeClass('selected')
-
-    selectItem: (event) ->
-      @model.set('selected', !@model.get('selected'))
-      @updateDOM()
-
-
-  class Views.PageCreateTileConfigListItem extends App.Views.ItemView
-
-    tagName: "li"
-    className: "content-item list-view"
-    template: "page/content/item_list"
-
-    triggers:
-      "click .js-content-prioritize": "prioritize_content"
-      "click .js-content-add": "add_content"
-      "click .js-content-remove": "remove_content"
-      "click .js-content-preview": "preview_content"
-
 
 
   Views

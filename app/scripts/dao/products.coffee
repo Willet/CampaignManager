@@ -67,13 +67,11 @@ define [
       products.getNextPage()
       products
 
-    # DEFER: decide on where to put related models etc
     getPageProducts: (store_id, page_id, params = {}) ->
-      products = new Entities.TileConfigCollection()
+      products = new Entities.ProductPageableCollection()
       products.store_id = store_id
       products.page_id = page_id
-      products.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/tile-config"
-      products.setFilter(template: 'product')
+      products.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/products"
       products.getNextPage()
       products
 

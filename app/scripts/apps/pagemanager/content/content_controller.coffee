@@ -19,19 +19,15 @@ define [
       @contentListViewType
 
     getContentListView: (contents) ->
-      if contents.model is Entities.Content
-        new Views.PageCreateContentList
-          collection: contents
-          itemView: @getContentListViewType()
-      else if contents.model is Entities.TileConfig
-        new Views.PageCreateTileConfigList
-          collection: contents
-          itemView: @getContentListViewType()
+      new Views.PageCreateContentList
+        collection: contents
+        itemView: @getContentListViewType()
 
     initialize: ->
       page = App.routeModels.get 'page'
       store = App.routeModels.get 'store'
       contents = App.request 'content:all', store
+      content_type = null
 
       layout = new Views.PageCreateContent
         model: page
@@ -47,15 +43,26 @@ define [
       # Item View Actions
       layout.on 'content_list:itemview:add_content', (listView, itemView) ->
         content = itemView.model
+        content.set('page-status', 'added')
+        itemView.render()
         App.request 'page:add_content', page, content
 
       layout.on 'content_list:itemview:remove_content', (listView, itemView) ->
         content = itemView.model
+        content.set('page-status', 'removed')
+        itemView.render()
         App.request 'page:remove_content', page, content
 
       layout.on 'content_list:itemview:prioritize_content', (listView, itemView) ->
         content = itemView.model
         App.request 'page:prioritize_content', page, content
+        itemView.render()
+
+      layout.on 'content_list:itemview:deprioritize_content', (listView, itemView) ->
+        content = itemView.model
+        tileconfig = content.get('tile-configs').first()
+        App.request 'tileconfig:deprioritize', page, tileconfig
+        itemView.render()
 
       layout.on 'content_list:itemview:preview_content', (listView, itemView) ->
         content = itemView.model
@@ -76,7 +83,7 @@ define [
 
       layout.on 'add-selected', () =>
         selected = contents.filter((model) -> model.get('selected'))
-        content_list = _.map(_.pluck(selected, 'id'), (value) -> 
+        content_list = _.map(_.pluck(selected, 'id'), (value) ->
           parseInt(value, 10);
         );
 
@@ -94,15 +101,18 @@ define [
         layout.contentList.show @getContentListView(contents)
 
       layout.on 'display:all-content', () =>
+        content_type = 'all-content'
         contents = App.request 'page:content:all', page, layout.extractFilter()
         layout.contentList.show @getContentListView(contents)
 
       layout.on 'display:suggested-content', () =>
+        content_type = 'suggested-content'
         contents = App.request 'page:suggested_content', page, layout.extractFilter()
         layout.contentList.show @getContentListView(contents)
 
       layout.on 'display:added-content', () =>
-        contents = App.request 'page:tileconfig', page, _.extend(layout.extractFilter(), template: 'content')
+        content_type = 'added-content'
+        contents = App.request 'page:content', page, layout.extractFilter()
         layout.contentList.show @getContentListView(contents)
 
       @listenTo layout, 'show', =>
