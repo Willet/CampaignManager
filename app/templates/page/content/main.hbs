@@ -1,22 +1,31 @@
 <div class="content">
-  <div class="page-step-actions">
-    <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/publish">Save &amp; Continue</a>
-  </div>
-  <h2>Content</h2>
+  <h4>Content</h4>
 
   <div class="filter-actions row">
     <form class="switch-toggle switch-4 panel">
       <input id="filter-suggested-content" name="filter" type="radio" checked>
-      <label for="filter-suggested-content">Suggested</label>
+      <label for="filter-suggested-content"
+             title="Show content based on the products on this page.">
+          Suggested
+      </label>
 
       <input id="filter-import-content" name="filter" type="radio">
-      <label for="filter-import-content">Import</label>
+      <label for="filter-import-content"
+             title="Show tools for importing content that is not in the database yet.">
+          Import
+      </label>
 
       <input id="filter-all-content" name="filter" type="radio">
-      <label for="filter-all-content">All</label>
+      <label for="filter-all-content"
+             title="Show content in the database.">
+          All
+      </label>
 
       <input id="filter-added-content" name="filter" type="radio">
-      <label for="filter-added-content">Added</label>
+      <label for="filter-added-content"
+             title="Show content added to this page.">
+          Added
+      </label>
 
       <a class="button"></a>
     </form>
