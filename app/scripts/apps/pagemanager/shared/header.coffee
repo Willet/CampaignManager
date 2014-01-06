@@ -20,12 +20,12 @@ define [
       }
 
     bindings:
-      '.steps .name':
+      '.steps .name':  # given this thing,
         attributes: [
           {
-            name: 'class'
-            observe: 'page'
-            onGet: (val, options) ->
+            name: 'class'  # change the attribute of this thing
+            observe: 'page'  # if @(this variable)
+            onGet: (val, options) ->  # changes to (val)
               if val == "name" then "active" else ""
           }
         ],

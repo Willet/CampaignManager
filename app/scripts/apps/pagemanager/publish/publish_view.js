@@ -27,8 +27,6 @@ define(['app', '../views', 'backbone', 'backbone.stickit'],
             onRender: function () {
                 this.stickit();
                 this.$('.fail').hide();
-
-                return this.$('.steps .publish').addClass('active');
             }
         });
 

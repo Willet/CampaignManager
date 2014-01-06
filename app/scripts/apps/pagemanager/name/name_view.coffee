@@ -33,7 +33,6 @@ define [
 
     onRender: (opts) ->
       @stickit()
-      @$(".steps .main").addClass("active")
 
     onShow: (opts) ->
 
