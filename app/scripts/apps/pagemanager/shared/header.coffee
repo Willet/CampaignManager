@@ -19,13 +19,18 @@ define [
         store: @store.toJSON()
       }
 
+    events:
+      'click .steps li a': ->
+        # persist changes to the page object when the user changes step
+        @page.save()
+
     bindings:
       '.steps .name':  # given this thing,
         attributes: [
           {
-            name: 'class'  # change the attribute of this thing
-            observe: 'page'  # if @(this variable)
-            onGet: (val, options) ->  # changes to (val)
+            name: 'class'  # change the attribute of this thing, i.e. $('.steps .name').prop('class')
+            observe: 'page'  # if @(this variable), i.e. this.page
+            onGet: (val, options) ->  # i.e. $(...).prop('class', what this returns)
               if val == "name" then "active" else ""
           }
         ],

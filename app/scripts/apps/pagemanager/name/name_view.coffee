@@ -21,10 +21,10 @@ define [
       "click .js-next": "save"
 
     bindings:
-      'input[for=name]':
+      'input[name=name]':
         observe: 'name'
         events: ['blur']
-      'input[for=url]':
+      'input[name=url]':
         observe: 'url'
         events: ['blur']
 
