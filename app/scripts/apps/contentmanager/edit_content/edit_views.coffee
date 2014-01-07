@@ -82,23 +82,12 @@ define [
         else if event.removed
           removedId = event.removed.id
 
-          @model.get('tagged-products').filter((product) ->
-            removedId != product.get('id')
-          );
+          @model.get('tagged-products').remove(removedId);
 
     onClose: =>
       if @saveModel
-        # This is stupid and dangerous but it's the best we have right now
-        # (there seems to be a bug in backbone-associations that adds models to
-        #  a collection in a very wrong way)
-#        temp = @model.attributes['tagged-products']
-#        @model.set('tagged-products', @['tagged-products']);
         @model.save();
-#        @model.fetch();
-#        @model.attributes['tagged-products'] = (@['tagged-products'])
-#        @model.save();
-#        @model.attributes['tagged-products'] = temp
-#        @model.fetch()
+
       $('.tag-products').select2('destroy')
 
   Views
