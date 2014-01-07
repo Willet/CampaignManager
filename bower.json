@@ -19,7 +19,7 @@
     "requirejs-text": "~2.0.10",
     "sinonjs": "~1.7.1",
     "backbone.uniquemodel": "*",
-    "backbone-associations": "~0.5.3"
+    "backbone-associations": "~0.5.4"
   },
   "authors": [
     "Alex Riedler <alex@riedler.ca>"

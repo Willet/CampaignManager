@@ -18,7 +18,6 @@ define [
 
     initialize: ->
       @storeId = App.routeModels.get('store').id
-      @['tagged-products'] = @model.get('tagged-products').models
 
 
     # Move this block to a separate file maybe
@@ -69,7 +68,7 @@ define [
         formatResult: formatProduct
         formatSelection: formatProduct
       )
-      $el.select2('data', @['tagged-products'])
+      $el.select2('data', @model.get('tagged-products').models)
       $el.on "change", (event, element) =>
 
         @saveModel = true
@@ -78,24 +77,28 @@ define [
             product = new Entities.Product $.extend(event.added,
               'store-id': @storeId
             )
-          @['tagged-products'].push(product)
+          @model.get('tagged-products').add(id: product.get('id'));
 
         else if event.removed
           removedId = event.removed.id
-          @['tagged-products'] = _.filter(@['tagged-products'], (product) ->
+
+          @model.get('tagged-products').filter((product) ->
             removedId != product.get('id')
-          )
+          );
 
     onClose: =>
       if @saveModel
         # This is stupid and dangerous but it's the best we have right now
         # (there seems to be a bug in backbone-associations that adds models to
         #  a collection in a very wrong way)
-        temp = @model.attributes['tagged-products']
-        @model.attributes['tagged-products'] = (@['tagged-products'])
-        @model.save()
-        @model.attributes['tagged-products'] = temp
-        @model.fetch()
+#        temp = @model.attributes['tagged-products']
+#        @model.set('tagged-products', @['tagged-products']);
+        @model.save();
+#        @model.fetch();
+#        @model.attributes['tagged-products'] = (@['tagged-products'])
+#        @model.save();
+#        @model.attributes['tagged-products'] = temp
+#        @model.fetch()
       $('.tag-products').select2('destroy')
 
   Views

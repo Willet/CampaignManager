@@ -172,15 +172,20 @@ define [
           fids = if _.isArray(fids) then fids else [fids]
           type = if (type instanceof Backbone.Collection) then type.model else type
           data = _.map fids, (fid) ->
-            unless fid instanceof Backbone.Model
-              fid = App.request('product:entity', storeId, fid)
-            else
+            if fid instanceof Backbone.Model
               App.request('fetch:product',
                 storeId,
                 fid
               )
+            else if _.isObject(fid)
+              fid = App.request('product:entity', storeId, fid.id)
+            else
+              fid = App.request('product:entity', storeId, fid)
 
           unless collection instanceof Backbone.Model
+            if (data.length == 1)
+              data = data[0]
+
             data = new type(data)
 
           data
