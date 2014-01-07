@@ -75,29 +75,7 @@ define [
       # `fetchAll` or `getNextPage` after `setFilter` because it is in the
       # middle of finishing the `setFilter` call
       if fetch
-        @fetchAll()
-
-    getNextPage: (opts) ->  # naming convention. gets one page.
-      unless @finished || @in_progress
-        @in_progress = true
-
-        params = _.extend(@queryParams, @params)
-
-        xhr = @fetch
-          data: params
-          remove: false
-        $.when(xhr)
-          .done =>
-            @finished = true
-            @in_progress = false
-      xhr
-
-    fetchAll: (opts) ->
-      unless @finished
-        xhr = @getNextPage()
-        xhr.promise()
-          .done =>
-            @fetchAll()
+        @fetch('data': @queryParams)
 
 
   class Base.PageableCollection extends Base.Collection
