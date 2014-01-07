@@ -126,7 +126,6 @@ define [
 
     onRender: (opts) ->
       @stickit()
-      @$(".steps .layout").addClass("active")
 
     onShow: (opts) ->
 

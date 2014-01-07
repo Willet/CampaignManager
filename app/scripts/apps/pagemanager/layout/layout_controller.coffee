@@ -10,6 +10,7 @@ define [
 
     initialize: ->
       page = App.routeModels.get 'page'
+      store = App.routeModels.get 'store'
 
       layout = new Views.PageCreateLayout
         model: page

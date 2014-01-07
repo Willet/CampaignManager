@@ -71,7 +71,7 @@ define [
     setupMainLayout: () ->
       layout = new MainLayout()
       layout.on "render", =>
-        layout.nav.show(new MainNav(model: new Entities.Model(store: @store, page: 'pages')))
+        layout.nav.show(new MainNav(model: new Entities.Model(store: @store, page: 'content')))
         layout.titlebar.show(new TitleBar(model: new Entities.Model()))
 
       @controller.setRegion layout.content

@@ -48,6 +48,7 @@ define [
       filter['type'] = @$('#js-filter-content-type').val()
       filter['tags'] = @$('#js-filter-content-tags').val()
       filter['order'] = @$('#js-filter-sort-order').val()
+      filter['status'] = 'approved'
       _.each(_.keys(filter), (key) -> delete filter[key] if filter[key] == null || !/\S/.test(filter[key]))
       return filter;
 

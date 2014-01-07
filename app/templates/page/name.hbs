@@ -1,14 +1,11 @@
 <div class="content">
-  <div class="actions right text-right">
-    <a class="js-next button small" href="/{{store-id}}/pages/{{page.id}}/layout">Save &amp; Continue</a>
-  </div>
   <h4>Name</h4>
   <div class="page-edit">
     <div class="container row">
       <div class="row">
         <label class="large-2 columns inline">Page Name</label>
         <span class="large-10 columns no-padding">
-          <input type="text" for="name" placeholder="(Untitled)" />
+          <input type="text" name="name" placeholder="(Untitled)" />
         </span>
       </div>
       <div class="row">
@@ -17,7 +14,7 @@
           <span class="prefix">{{store.public-base-url}}</span>
         </span>
         <span class="large-7 columns no-padding">
-          <input type="text" for="url" />
+          <input type="text" name="url" />
         </span>
       </div>
     </div>
