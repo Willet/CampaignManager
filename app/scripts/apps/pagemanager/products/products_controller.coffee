@@ -52,13 +52,24 @@ define [
         # also change the tab UI
         layout.$("#added-to-page").click()
 
-      layout.on "product_list:itemview:remove", (listView, itemView) ->
+      layout.on "product_list:itemview:add_product", (listView, itemView) ->
         product = itemView.model
         App.request "page:add_product", page, product
 
-      layout.on "product_list:itemview:remove", (listView, itemView) ->
+      layout.on "product_list:itemview:remove_product", (listView, itemView) ->
         product = itemView.model
         App.request "page:remove_product", page, product
+
+      layout.on 'product_list:itemview:prioritize_product', (listView, itemView) ->
+        product = itemView.model
+        App.request 'page:prioritize_product', page, product
+        itemView.render()
+
+      layout.on 'product_list:itemview:deprioritize_product', (listView, itemView) ->
+        product = itemView.model
+        tileconfig = content.get('tile-configs').first()
+        App.request 'tileconfig:deprioritize', page, tileconfig
+        itemView.render()
 
       layout.on "product_list:itemview:preview_product", (listView, itemView) ->
         product = itemView.model

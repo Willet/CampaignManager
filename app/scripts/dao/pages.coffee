@@ -113,11 +113,11 @@ define [
   #
 
   App.reqres.setHandler "page:add_product",
-    (page, content, options) ->
+    (page, product, options) ->
       API.addProduct page.get('store-id'), page.get('id'), product.get('id')
 
   App.reqres.setHandler "page:remove_product",
-    (page, content, options) ->
+    (page, product, options) ->
       API.removeProduct page.get('store-id'), page.get('id'), product.get('id')
 
   App.reqres.setHandler "page:prioritize_product",

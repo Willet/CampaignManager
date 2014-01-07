@@ -1,8 +1,9 @@
 define [
   "app",
   "entities/base",
+  "entities",
   "backbone.uniquemodel"
-], (App, Base) ->
+], (App, Base, Entities) ->
 
   Entities = Entities || {}
 
@@ -15,6 +16,17 @@ define [
         relatedModel: 'Entities.Content'
       }
     ]
+
+    parse: (data) ->
+      attrs = data
+
+      # make sure default-image exist (so that the relation exists)
+      attrs = super(attrs)
+
+      tile_configs = _.map(data['tile-configs'], (m) -> new Entities.TileConfig(m, {parse: true}))
+      attrs['tile-configs'] = new Entities.TileConfigCollection(tile_configs)
+
+      attrs
 
     toJSON: (opts) ->
       json = _.clone(@attributes)

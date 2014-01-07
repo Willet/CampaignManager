@@ -71,7 +71,7 @@ define [
       products = new Entities.ProductPageableCollection()
       products.store_id = store_id
       products.page_id = page_id
-      products.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/products"
+      products.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product"
       products.getNextPage()
       products
 

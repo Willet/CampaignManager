@@ -135,28 +135,41 @@ define [
 
     serializeData: -> @model.viewJSON()
 
+  pageProductModelSerialization = ->
+      isAdded = @model.get('tile-configs').find((m) -> (m.get('template') == 'image'))
+      page_status = if isAdded then 'added' else null
+      return _.extend(@model.viewJSON(),
+        {
+          'page-status': @model.get('page-status') || page_status
+        })
+
   class Views.PageProductListItem extends App.Views.Layout
 
-    # TODO: implement a sane version of "added"
-    #       how do we figure out if a product is in a page...
     template: "page/product/item_list"
     className: "product-item list-view"
     tagName: "li"
 
-    serializeData: -> @model.viewJSON()
+    triggers:
+      "click .js-product-prioritize": "prioritize_product"
+      "click .js-product-deprioritize": "deprioritize_product"
+      "click .js-product-add": "add_product"
+      "click .js-product-remove": "remove_product"
+      "click .js-product-preview": "preview_product"
+
+    serializeData: pageProductModelSerialization
 
   class Views.PageProductGridItem extends App.Views.Layout
 
-    # TODO: implement a sane version of "added"
-    #       how do we figure out if a product is in a page...
     template: "page/product/item_grid"
     className: "product-item grid-view"
     tagName: "li"
 
     triggers:
+      "click .js-product-prioritize": "prioritize_product"
+      "click .js-product-deprioritize": "deprioritize_product"
+      "click .js-product-add": "add_product"
+      "click .js-product-remove": "remove_product"
       "click .js-product-preview": "preview_product"
-      "click .js-add-to-page": "add"
-      "click .js-remove-from-page": "remove"
 
     events:
       "click": "selectItem"
@@ -165,17 +178,7 @@ define [
       throttled_render = _.throttle((=> @render()), 500, leading: false)
       @model.on('nested-change', throttled_render)
 
-    serializeData: ->
-      if @model.get('products')
-        # TODO: change it so that the viewJSON of a tile
-        #       is more inline with a product/content etc..
-        #       maybe a Polymorphic Model???
-        result = @model.get('products').first().viewJSON()
-        result['prioritized'] = @model.get('prioritized')
-        result['status'] = 'added'
-        result
-      else
-        @model.viewJSON()
+    serializeData: pageProductModelSerialization
 
     onRender: ->
       @updateDOM()
