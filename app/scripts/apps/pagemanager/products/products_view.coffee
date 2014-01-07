@@ -18,6 +18,7 @@ define [
       "click .js-grid-view": "grid-view"
       "click .js-list-view": "list-view"
       "click .js-select-all": "select-all"
+      "change #js-filter-sort-order": "change:filter"
 
     events:
       "click #filter-import-product": "displayImportProduct"
@@ -37,22 +38,22 @@ define [
 
     displayImportProduct: (event) ->
       @trigger('display:import-product')
-      @$('.import-product').show()
-      @$('.product-options').hide()
+      @$('.import-product-region').show()
+      @$('.product-filter-actions').hide()
       # we need it to trigger into the page for visual reasons
       true
 
     displayAddedProduct: (event) ->
       @trigger('display:added-product')
-      @$('.import-product').hide()
-      @$('.product-options').show()
+      @$('.import-product-region').hide()
+      @$('.product-filter-actions').show()
       # we need it to trigger into the page for visual reasons
       true
 
     displayAllProduct: (event) ->
       @trigger('display:all-product')
-      @$('.import-product').hide()
-      @$('.product-options').show()
+      @$('.import-product-region').hide()
+      @$('.product-filter-actions').show()
       # we need it to trigger into the page for visual reasons
       true
 
