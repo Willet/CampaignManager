@@ -33,6 +33,7 @@
     "tests"
   ],
   "resolutions": {
-    "handlebars.js": "~1.1.1"
+    "handlebars.js": "~1.1.1",
+    "backbone": "~1.0.0"
   }
 }
