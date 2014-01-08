@@ -272,6 +272,7 @@ define [
       "click .js-content-reject": "reject_content"
       "click .js-content-undecided": "undecide_content"
       "click .js-content-preview": "preview_content"
+      "click .js-content-edit": "edit_content"
 
   class Views.ContentGridItem extends App.Views.ItemView
 
