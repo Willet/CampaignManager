@@ -64,7 +64,6 @@ define [
       }
 
     onRender: (opts) ->
-      @$(".steps .products").addClass("active")
       @importRegion.show new Views.ProductScrapersView()
       @displayImportProduct()
 
