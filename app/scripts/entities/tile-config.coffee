@@ -11,7 +11,7 @@ define ['app', 'entities/base', 'entities'], (App, Base, Entities) ->
         data.prioritized = false
       data
 
-  class Entities.TileConfigCollection extends Base.Collection
+  class Entities.TileConfigCollection extends Base.PageableCollection
 
     model: Entities.TileConfig
 
