@@ -37,7 +37,7 @@ define [
       "click #filter-import-content": "displayImportContent"
 
     resetFilters: () ->
-      @$('#js-filter-sort-order').val('order-descending')
+      @$('#js-filter-sort-order option[value="order"][data-direction="descending"]').prop('selected', 'selected')
       @$('#js-filter-content-type').val('')
       @$('#js-filter-content-source').val('')
       @$('#js-filter-content-tags').val('')
@@ -50,11 +50,9 @@ define [
 
       # differentiate two kinds of UI "sort by": import/post dates,
       # only one of which can be used to sort the list at any given time
-      sortOrder = @$('#js-filter-sort-order').val()
-      if sortOrder
-        sortKey = sortOrder[..sortOrder.lastIndexOf("-") - 1]
-        sortDirection = sortOrder[sortOrder.lastIndexOf("-") + 1..]
-        filter[sortKey] = sortDirection
+      sortKey = @$('#js-filter-sort-order').val()
+      sortDirection = @$('#js-filter-sort-order option:selected').data('direction')
+      filter[sortKey] = sortDirection
 
       filter['status'] = 'approved'
       _.each(_.keys(filter), (key) -> delete filter[key] if filter[key] == null || !/\S/.test(filter[key]))
