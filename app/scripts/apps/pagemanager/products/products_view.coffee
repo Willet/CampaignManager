@@ -134,16 +134,6 @@ define [
 
     serializeData: -> @model.viewJSON()
 
-  class Views.PageProductListItem extends App.Views.Layout
-
-    # TODO: implement a sane version of "added"
-    #       how do we figure out if a product is in a page...
-    template: "page/product/item_list"
-    className: "product-item list-view"
-    tagName: "li"
-
-    serializeData: -> @model.viewJSON()
-
   class Views.PageProductGridItem extends App.Views.Layout
 
     # TODO: implement a sane version of "added"
@@ -179,6 +169,16 @@ define [
     selectItem: (event) ->
       @model.set('selected', !@model.get('selected'))
       @updateDOM()
+
+  class Views.PageProductListItem extends Views.PageProductGridItem
+
+    # TODO: implement a sane version of "added"
+    #       how do we figure out if a product is in a page...
+    template: "page/product/item_list"
+    className: "product-item list-view"
+    tagName: "li"
+
+    serializeData: -> @model.viewJSON()
 
   class Views.ProductScrapersView extends App.Views.Layout
 

@@ -1,1 +1,28 @@
-TODO
+<div class="product-image">
+  <img src="{{#if default-image-id}}{{default-image-id.images.medium.url}}{{else}}http://placehold.it/180x240&text=No%20Image%20Available{{/if}}" />
+</div>
+<div class="product-wrapper">
+  <div class="product-info">
+    <label for="name" class="inline">Name</label> <a href="{{url}}">{{default name "(No Name)"}}</a>
+    <label for="price" class="inline">Price</label> <b>{{default price "(Price Missing)"}}</b>
+    <label for="description" class="inline">Description</label>
+    <p class="description">{{default description "(No Description)"}}</p>
+  </div>
+  <div class="product-actions">
+    {{#is page-status 'added'}}
+    <button class="remove-product-button js-product-remove">
+      Remove <i class="icon-general-error"></i>
+    </button>
+    {{else}}
+    <button class="add-product-button js-product-add">
+      Add <i class="icon-general-checkmark"></i>
+    </button>
+    {{/is}}
+    <button class="prioritize-product-button js-product-prioritize">
+      Prioritize <i class="icon-general-up-arrow"></i>
+    </button>
+    <button class="preview-product-button js-product-preview">
+      Preview <i class="icon-accessibility-eyeball"></i>
+    </button>
+  </div>
+</div>
