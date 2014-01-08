@@ -83,16 +83,16 @@ define [
         products.setFilter filter
 
       layout.on "display:all-product", =>
-        products = App.request "store:products", store, { filter: layout.extractFilter() }
+        products = App.request "store:products", store, layout.extractFilter()
         layout.productList.show @getProductListView(products)
 
       layout.on "display:import-product", =>
-        products = App.request "store:products", store, { filter: layout.extractFilter() }
+        products = App.request "store:products", store, layout.extractFilter()
         # TODO: products = App.request "page:products:imported", page, { filter: layout.extractFilter() }
         layout.productList.show @getProductListView(products)
 
       layout.on "display:added-product", =>
-        products = App.request "page:products", page, { filter: layout.extractFilter() }
+        products = App.request "page:products", page, layout.extractFilter()
         layout.productList.show @getProductListView(products)
 
       layout.on "save", ->
