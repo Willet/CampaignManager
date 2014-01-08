@@ -63,8 +63,10 @@
       <div class="filter-sort-order">
         <label>Sort</label>
         <select id="js-filter-sort-order">
-          <option value="descending">Most Recent First</option>
-          <option value="ascending">Least Recent First</option>
+          <option value="order" data-direction="descending">Import date (most recent first)</option>
+          <option value="order" data-direction="ascending">Import date (most recent last)</option>
+          <option value="time-posted" data-direction="descending">Post date (most recent first)</option>
+          <option value="time-posted" data-direction="ascending">Post date (most recent last)</option>
         </select>
       </div>
     </fieldset>

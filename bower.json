@@ -6,7 +6,7 @@
     "backbone.stickit": "NYTimes/backbone.stickit#~0.6.3",
     "jquery": "~2.0.3",
     "moment": "~2.2.1",
-    "select2": "~3.4.3",
+    "select2": "~3.4.5",
     "swag": "~0.3.1",
     "underscore": "~1.5.2",
     "modernizr": "~2.6.2",
@@ -19,7 +19,7 @@
     "requirejs-text": "~2.0.10",
     "sinonjs": "~1.7.1",
     "backbone.uniquemodel": "*",
-    "backbone-associations": "~0.5.3"
+    "backbone-associations": "~0.5.4"
   },
   "authors": [
     "Alex Riedler <alex@riedler.ca>"
@@ -33,6 +33,7 @@
     "tests"
   ],
   "resolutions": {
-    "handlebars.js": "~1.1.1"
+    "handlebars.js": "~1.1.1",
+    "backbone": "~1.0.0"
   }
 }
