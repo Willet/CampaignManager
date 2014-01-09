@@ -7,7 +7,7 @@ define([
         getPageTiles: function(storeId, pageId, params) {
             var tileconfigs = new Entities.TileConfigCollection();
             tileconfigs.pageId = pageId;
-            tileconfigs.url = App.API_ROOT + '/store/' + storeId + '/page/' + pageId + '/tile-config';
+            tileconfigs.url = App.API_ROOT + '/page/' + pageId + '/tile-config';
             tileconfigs.setFilter(params);
             return tileconfigs;
         },
@@ -34,7 +34,7 @@ define([
         },
 
         prioritizeTile: function(page, tileconfig) {
-            var tileconfigUrl = App.API_ROOT + '/store/' + page.get('store-id') + '/page/' + page.get('id') + '/tile-config/' + tileconfig.get('id');
+            var tileconfigUrl = App.API_ROOT + '/page/' + page.get('id') + '/tile-config/' + tileconfig.get('id');
             tileconfig.sync('prioritize', tileconfig, {
                 method: 'POST',
                 url: tileconfigUrl + '/prioritize',
@@ -43,7 +43,7 @@ define([
         },
 
         deprioritizeTile: function(page, tileconfig) {
-            var tileconfigUrl = App.API_ROOT + '/store/' + page.get('store-id') + '/page/' + page.get('id') + '/tile-config/' + tileconfig.get('id');
+            var tileconfigUrl = App.API_ROOT + '/page/' + page.get('id') + '/tile-config/' + tileconfig.get('id');
             tileconfig.sync('deprioritize', tileconfig, {
                 method: 'POST',
                 url: tileconfigUrl + '/deprioritize',
