@@ -45,6 +45,43 @@ define [
       'tagged-products': []
     }
 
+    initialize: ->
+      super(arguments)
+      @computedFields = new Backbone.ComputedFields(this);
+
+    getPageTile: ->
+      # Get the regular content tile if it exists from the list of tile-configs
+      tileConfigs = @get('tile-configs')
+      pageTile = tileConfigs.filter((m) -> m.get('template') == 'image')
+      pageTile[0]
+
+    computed: {
+      'page-tile':
+        toJSON: false
+        depends: ['tile-configs']
+        get: (fields) ->
+          return @getPageTile()
+
+      'page-status':
+        toJSON: false
+        depends: ['tile-configs']
+        get: (fields) ->
+          if @getPageTile()
+            return 'added'
+          else
+            return null
+
+      'page-prioritized':
+        toJSON: false
+        depends: ['tile-configs']
+        get: (fields) ->
+          tileConfig = @getPageTile()
+          if tileConfig
+            return tileConfig.get('prioritized')
+          else
+            return false
+    }
+
     tag: (tags) ->
       unless _.isArray(tags) or _.isNull(tags)
         tags = [tags]

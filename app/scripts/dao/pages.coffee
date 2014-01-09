@@ -28,33 +28,33 @@ define [
       page.url = -> "#{App.API_ROOT}/store/#{store_id}/page/#{@get('id') || ""}"
       page
 
-    addContent: (store_id, page_id, content_id, params = {}) ->
-      url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/#{content_id}"
-      $.ajax url, type: "PUT"
+    addContent: (page, content, params = {}) ->
+      url = "#{App.API_ROOT}/store/#{page.get('store-id')}/page/#{page.get('id')}/content/#{content.get('id')}"
+      content.save({}, { method: 'PUT', url: url })
 
-    prioritizeContent: (store_id, page_id, content_id, params = {}) ->
-      url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/#{content_id}/prioritize"
-      $.ajax url, type: "POST"
+    removeContent: (page, content, params = {}) ->
+      url = "#{App.API_ROOT}/store/#{page.get('store-id')}/page/#{page.get('id')}/content/#{content.get('id')}"
+      content.save({}, { method: 'DELETE', url: url })
+
+    prioritizeContent: (page, content, params = {}) ->
+      url = "#{App.API_ROOT}/store/#{page.get('store-id')}/page/#{page.get('id')}/content/#{content.get('id')}/prioritize"
+      product.save({}, { method: 'POST', url: url })
 
     addAllContent: (store_id, page_id, content_list, params = {}) ->
       url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/add_all"
       $.ajax url, type: "PUT", data: JSON.stringify(content_list)
 
-    removeContent: (store_id, page_id, content_id, params = {}) ->
-      url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/#{content_id}"
-      $.ajax url, type: "DELETE"
+    addProduct: (page, product, params = {}) ->
+      url = "#{App.API_ROOT}/store/#{page.get('store-id')}/page/#{page.get('id')}/product/#{product.get('id')}"
+      product.save({}, { method: 'PUT', url: url })
 
-    addProduct: (store_id, page_id, product_id, params = {}) ->
-      url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product/#{product_id}"
-      $.ajax url, type: "PUT"
+    removeProduct: (page, product, params = {}) ->
+      url = "#{App.API_ROOT}/store/#{page.get('store-id')}/page/#{page.get('id')}/product/#{product.get('id')}"
+      product.save({}, { method: 'DELETE', url: url })
 
-    prioritizeProduct: (store_id, page_id, product_id, params = {}) ->
-      url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product/#{product_id}/prioritize"
-      $.ajax url, type: "POST"
-
-    removeProduct: (store_id, page_id, product_id, params = {}) ->
-      url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product/#{product_id}"
-      $.ajax url, type: "DELETE"
+    prioritizeProduct: (page, product, params = {}) ->
+      url = "#{App.API_ROOT}/store/#{page.get('store-id')}/page/#{page.get('id')}/product/#{product.get('id')}/prioritize"
+      product.save({}, { method: 'POST', url: url })
 
     publishPage: (page, options) ->
       # TODO: move static_pages API under /graph/v1. ain't nobody got time for that today
@@ -94,7 +94,7 @@ define [
 
   App.reqres.setHandler "page:add_content",
     (page, content, options) ->
-      API.addContent page.get('store-id'), page.get('id'), content.get('id')
+      API.addContent page, content, options
 
   App.reqres.setHandler "page:add_all_content",
     (page, content_list, options) ->
@@ -102,11 +102,11 @@ define [
 
   App.reqres.setHandler "page:remove_content",
     (page, content, options) ->
-      API.removeContent page.get('store-id'), page.get('id'), content.get('id')
+      API.removeContent page, content, options
 
   App.reqres.setHandler "page:prioritize_content",
     (page, content, options) ->
-      API.prioritizeContent page.get('store-id'), page.get('id'), content.get('id')
+      API.prioritizeContent page, content, options
 
   #
   # Page - Product Methods
@@ -114,12 +114,12 @@ define [
 
   App.reqres.setHandler "page:add_product",
     (page, product, options) ->
-      API.addProduct page.get('store-id'), page.get('id'), product.get('id')
+      API.addProduct page, product, options
 
   App.reqres.setHandler "page:remove_product",
     (page, product, options) ->
-      API.removeProduct page.get('store-id'), page.get('id'), product.get('id')
+      API.removeProduct page, product, options
 
   App.reqres.setHandler "page:prioritize_product",
     (page, product, options) ->
-      API.prioritizeProduct page.get('store-id'), page.get('id'), product.get('id')
+      API.prioritizeProduct page, product, options

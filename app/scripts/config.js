@@ -11,6 +11,7 @@ require.config({
         'backbone.viewmodel': 'lib/backbone.viewmodel',
         'backbone.uniquemodel': '../bower_components/backbone.uniquemodel/backbone.uniquemodel',
         'backbone-associations': '../bower_components/backbone-associations/backbone-associations',
+        'backbone.computedfields': '../bower_components/backbone.computedfields/lib/backbone.computedfields',
         handlebars: 'lib/handlebars-v1.1.1',
         marionette: '../bower_components/marionette/lib/backbone.marionette',
         moment: '../bower_components/moment/moment',
@@ -51,6 +52,9 @@ require.config({
         'backbone-associations': {
             deps: ['backbone'],
             exports: 'Backbone.Associations'
+        },
+        'backbone.computedfields': {
+            deps: ['backbone']
         },
         'jquery': {
             exports: '$'
