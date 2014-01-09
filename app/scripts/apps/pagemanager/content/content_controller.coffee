@@ -26,7 +26,7 @@ define [
     initialize: ->
       page = App.routeModels.get 'page'
       store = App.routeModels.get 'store'
-      contents = App.request 'content:all', store
+      contents = App.request 'page:suggested_content', page
       content_type = null
 
       layout = new Views.PageCreateContent
@@ -43,14 +43,10 @@ define [
       # Item View Actions
       layout.on 'content_list:itemview:add_content', (listView, itemView) ->
         content = itemView.model
-        content.set('page-status', 'added')
-        itemView.render()
         App.request 'page:add_content', page, content
 
       layout.on 'content_list:itemview:remove_content', (listView, itemView) ->
         content = itemView.model
-        content.set('page-status', 'removed')
-        itemView.render()
         App.request 'page:remove_content', page, content
 
       layout.on 'content_list:itemview:prioritize_content', (listView, itemView) ->
@@ -60,9 +56,7 @@ define [
 
       layout.on 'content_list:itemview:deprioritize_content', (listView, itemView) ->
         content = itemView.model
-        tileconfig = content.get('tile-configs').first()
-        App.request 'tileconfig:deprioritize', page, tileconfig
-        itemView.render()
+        App.request 'page:deprioritize_content', page, content
 
       layout.on 'content_list:itemview:preview_content', (listView, itemView) ->
         content = itemView.model

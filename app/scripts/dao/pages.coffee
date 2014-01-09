@@ -38,7 +38,11 @@ define [
 
     prioritizeContent: (page, content, params = {}) ->
       url = "#{App.API_ROOT}/store/#{page.get('store-id')}/page/#{page.get('id')}/content/#{content.get('id')}/prioritize"
-      product.save({}, { method: 'POST', url: url })
+      content.save({}, { method: 'POST', url: url })
+
+    deprioritizeContent: (page, content, params = {}) ->
+      url = "#{App.API_ROOT}/store/#{page.get('store-id')}/page/#{page.get('id')}/content/#{content.get('id')}/deprioritize"
+      content.save({}, { method: 'POST', url: url })
 
     addAllContent: (store_id, page_id, content_list, params = {}) ->
       url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/add_all"
@@ -54,6 +58,10 @@ define [
 
     prioritizeProduct: (page, product, params = {}) ->
       url = "#{App.API_ROOT}/store/#{page.get('store-id')}/page/#{page.get('id')}/product/#{product.get('id')}/prioritize"
+      product.save({}, { method: 'POST', url: url })
+
+    deprioritizeProduct: (page, product, params = {}) ->
+      url = "#{App.API_ROOT}/store/#{page.get('store-id')}/page/#{page.get('id')}/product/#{product.get('id')}/deprioritize"
       product.save({}, { method: 'POST', url: url })
 
     publishPage: (page, options) ->
@@ -108,6 +116,10 @@ define [
     (page, content, options) ->
       API.prioritizeContent page, content, options
 
+  App.reqres.setHandler "page:deprioritize_content",
+    (page, content, options) ->
+      API.deprioritizeContent page, content, options
+
   #
   # Page - Product Methods
   #
@@ -123,3 +135,7 @@ define [
   App.reqres.setHandler "page:prioritize_product",
     (page, product, options) ->
       API.prioritizeProduct page, product, options
+
+  App.reqres.setHandler "page:deprioritize_product",
+    (page, product, options) ->
+      API.deprioritizeProduct page, product, options

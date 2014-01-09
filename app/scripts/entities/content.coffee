@@ -57,13 +57,11 @@ define [
 
     computed: {
       'page-tile':
-        toJSON: false
         depends: ['tile-configs']
         get: (fields) ->
           return @getPageTile()
 
       'page-status':
-        toJSON: false
         depends: ['tile-configs']
         get: (fields) ->
           if @getPageTile()
@@ -72,7 +70,6 @@ define [
             return null
 
       'page-prioritized':
-        toJSON: false
         depends: ['tile-configs']
         get: (fields) ->
           tileConfig = @getPageTile()
@@ -109,12 +106,12 @@ define [
       attrs
 
     toJSON: (options) ->
-      json = _.clone(@attributes)
+      json = super(arguments)
       if json['tagged-products']
         if json['tagged-products'] instanceof Backbone.Collection
           json['tagged-products'] = json['tagged-products'].collect((m) -> m.get('id'))
         else
-          json['tagged-products'] = _.map(json['tagged-products'], (m) -> m.get('id'))
+          json['tagged-products'] = _.map(json['tagged-products'], (m) -> m['id'])
       if json['tile-configs']
         if json['tile-configs'] instanceof Backbone.Collection
           json['tile-configs'] = json['tile-configs'].collect((m) -> m.toJSON())

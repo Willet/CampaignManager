@@ -161,6 +161,10 @@ define [
 
     serializeData: pageContentModelSerialization
 
+    initialize: ->
+      @model.on 'sync', =>
+        @render()
+
     onRender: ->
       @updateDOM()
 

@@ -63,13 +63,10 @@ define [
       layout.on 'product_list:itemview:prioritize_product', (listView, itemView) ->
         product = itemView.model
         App.request 'page:prioritize_product', page, product
-        itemView.render()
 
       layout.on 'product_list:itemview:deprioritize_product', (listView, itemView) ->
         product = itemView.model
-        tileconfig = content.get('tile-configs').first()
-        App.request 'tileconfig:deprioritize', page, tileconfig
-        itemView.render()
+        App.request 'page:deprioritize_product', page, product
 
       layout.on "product_list:itemview:preview_product", (listView, itemView) ->
         product = itemView.model

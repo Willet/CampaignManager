@@ -14,6 +14,7 @@ define [
         type: Backbone.One
         key: 'default-image-id'
         relatedModel: 'Entities.BaseContent'
+        ###
         map: (data, type) ->
           unless typeof data is 'object'
             content = new type({id: data})
@@ -21,6 +22,7 @@ define [
           else
             content = data
           content
+        ###
       }
     ]
 
