@@ -51,15 +51,28 @@ define [
     publishPage: (page, options) ->
       # TODO: move static_pages API under /graph/v1. ain't nobody got time for that today
       # TODO: this will not work in production?
-      baseUrl = App.API_ROOT.replace('/graph/v1', '/static_pages').replace(':9000', ':8000');
+      baseUrl = App.API_ROOT.replace('/graph/v1', '/static_pages');
       storeId = page.get('store-id')
       pageId = page.get('id')
-      req = $.ajax({
-        url: baseUrl + '/' + storeId + '/' + pageId + '/regenerate',
-        type: 'POST',
-        dataType: 'jsonp'
-        });
-      return req
+
+      ops = new $.Deferred()
+
+      $.when(
+        $.ajax(
+          url: "#{App.API_ROOT}/store/#{storeId}/intentrank/#{pageId}/"
+          type: 'POST'
+          dataType: 'jsonp'
+        ),
+        $.ajax(
+          url: "#{baseUrl}/#{storeId}/#{pageId}/regenerate"
+          type: 'POST'
+          dataType: 'jsonp'
+        )
+      ).done((wat) =>
+        ops.resolve wat
+      )
+
+      ops
 
   App.reqres.setHandler "page:all",
     (store, options) ->
