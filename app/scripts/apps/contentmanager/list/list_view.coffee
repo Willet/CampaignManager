@@ -35,15 +35,16 @@ define [
 
     initialize: (opts) ->
       @current_state = opts['initial_state']
+      @status = ''
 
     # event triggered when all/needs review/approved/rejected tabs are clicked
     filterContentStatus: (event) ->
-      status = @$(event.currentTarget).val()
+      @status = @$(event.currentTarget).val()
 
       # 'all' cannot filter by type, source, and tags
       @$('.content-filter-actions').prop('disabled', not status)
 
-      @trigger("change:filter-content-status", status)
+      @trigger("change:filter-content-status", @status)
 
     filterPage: (event) ->
       @trigger("change:filter-page", @$(event.currentTarget).val())
@@ -100,24 +101,31 @@ define [
 
     events:
       "click dd": "updateActive"
-      "change #js-filter-content-type": "filterContentType"
-      "change #js-filter-content-source": "filterContentSource"
       "keyup #js-filter-content-tags": "filterContentTags"
+      "change #js-filter-content-type": "changeFilter"
+      "change #js-filter-content-source": "changeFilter"
+      "change #js-filter-sort-order": "changeFilter"
 
     initialize: (opts) ->
       @current_state = "grid"
 
+    changeFilter: () ->
+      filter = {}
+      filter['type'] = @$('#js-filter-content-type').val()
+      filter['source'] = @$('#js-filter-content-source').val()
+      filter['tags'] = @$('#js-filter-content-tags').val()
+
+      # differentiate two kinds of UI "sort by": import/post dates,
+      # only one of which can be used to sort the list at any given time
+      sortKey = @$('#js-filter-sort-order').val()
+      sortDirection = @$('#js-filter-sort-order option:selected').data('direction')
+      filter[sortKey] = sortDirection
+
+      _.each(_.keys(filter), (key) -> delete filter[key] if filter[key] == null || !/\S/.test(filter[key]))
+      @trigger("change:filter", filter)
+
     updateActive: (event) ->
       @switchActive(@extractState(event.currentTarget))
-
-    filterContentType: (event) ->
-      # event val e.g. 'image'
-      @trigger("change:filter-content-type", @$(event.currentTarget).val())
-
-    filterContentSource: (event) ->
-      # add query "source=
-      # event val e.g. 'facebook'
-      @trigger("change:filter-content-source", @$(event.currentTarget).val())
 
     filterContentTags: (event) ->
       # event val e.g. 'a, b, c'
