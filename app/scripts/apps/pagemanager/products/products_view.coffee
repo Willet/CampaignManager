@@ -19,6 +19,7 @@ define [
       "click .js-list-view": "list-view"
       "click .js-select-all": "select-all"
       "change #js-filter-sort-order": "change:filter"
+      "change #js-filter-category": "change:filter"
 
     events:
       "click #filter-import-product": "displayImportProduct"
@@ -33,6 +34,7 @@ define [
       filter = {}
       filter['tags'] = @$('#js-filter-product-tags').val()
       filter['order'] = @$('#js-filter-sort-order').val()
+      filter['category'] = @$('#js-filter-category').val()
       _.each(_.keys(filter), (key) -> delete filter[key] if filter[key] == null || !/\S/.test(filter[key]))
       return filter;
 
@@ -62,6 +64,7 @@ define [
         page: @model.toJSON()
         "store-id": @model.get("store-id")
         "title": @model.get("name")
+        "categories": @model.get("categories", [])
       }
 
     onRender: (opts) ->

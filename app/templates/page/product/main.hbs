@@ -35,6 +35,15 @@
         <label>Tags</label>
         <input id="js-filter-product-tags" type="text" />
       </div>
+      <div class="filter-product-category">
+        <label>Category</label>
+        <select id="js-filter-category">
+          <option value="">All Categories</option>
+          {{#each categories}}
+            <option value="{{this.id}}">{{this.name}}</option>
+          {{/each}}
+        </select>
+      </div>
     </fieldset>
     <fieldset class="filter-sort-actions">
       <legend>Sort</legend>
