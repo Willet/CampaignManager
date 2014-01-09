@@ -107,7 +107,7 @@ define [
 
     resetPaging: ->
       @params =
-        results: 100
+        results: 25
       @finished = false
 
     fetchAll: (opts) ->

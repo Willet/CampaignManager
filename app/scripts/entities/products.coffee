@@ -14,7 +14,6 @@ define [
         type: Backbone.One
         key: 'default-image-id'
         relatedModel: 'Entities.BaseContent'
-        ###
         map: (data, type) ->
           unless typeof data is 'object'
             content = new type({id: data})
@@ -22,7 +21,6 @@ define [
           else
             content = data
           content
-        ###
       }
     ]
 
@@ -37,7 +35,7 @@ define [
     getPageTile: ->
       # Get the regular content tile if it exists from the list of tile-configs
       tileConfigs = @get('tile-configs')
-      pageTile = tileConfigs.filter((m) -> m.get('template') == 'image')
+      pageTile = tileConfigs.filter((m) -> m.get('template') == 'product')
       pageTile[0]
 
     computed: {
@@ -81,7 +79,7 @@ define [
 
     viewJSON: (opts) ->
       json = _.clone(@toJSON())
-      json['default-image'] = @get('default-image')?.viewJSON(nested: true)
+      json['default-image'] = @get('default-image-id')?.viewJSON(nested: true)
       json
 
   #Entities.Product = Backbone.UniqueModel(Entities.Product)

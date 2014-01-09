@@ -132,8 +132,6 @@ define [
         json['video-thumbnail'] = "http://i1.ytimg.com/vi/#{video_id}/mqdefault.jpg"
       else if @get('url')
         json['images'] = @imageFormatsJSON(@get('url'))
-      if @get('tile-configs') and @get('tile-configs').first()
-        json['tileconfig'] = @get('tile-configs').first().toJSON()
       json
 
     imageFormatsJSON: (url) ->

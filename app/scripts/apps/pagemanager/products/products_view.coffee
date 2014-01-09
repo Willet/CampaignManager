@@ -154,6 +154,7 @@ define [
     initialize: (options) ->
       throttled_render = _.throttle((=> @render()), 500, leading: false)
       @model.on('nested-change', throttled_render)
+      @model.on 'sync', throttled_render
 
     serializeData: -> @model.viewJSON()
 
