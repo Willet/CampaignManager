@@ -19,10 +19,6 @@ define [
         req = App.request 'page:publish', page
         req.done (data) ->
           App.navigate('/' + store.get('id') + '/pages/' + page.get('id') + '/preview', { trigger: true })
-        req.fail () ->
-          # TODO: move this into the view (as it should be)
-          layout.$('.publish.button').text('Publish Page')
-          layout.$(layout.fail.el).show()
 
       App.execute 'when:fetched', [store, page], () =>
         if App.ENVIRONMENT is 'DEV'

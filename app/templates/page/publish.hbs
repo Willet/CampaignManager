@@ -1,22 +1,16 @@
 <div class="content">
     <h4>Publish Page</h4>
-    <div class="page-edit panel">
+    <div class="page-edit">
+        <hr>
+
+        <h5>This page is being prepared for you.</h5>
         <p>
-            The page will be live immediately:
-            <a href="{{store.public-base-url}}{{page.url}}">
-                {{store.public-base-url}}{{page.url}}
-            </a>
-        </p>
-        <p>
-            It will overwrite the existing page.
+            If you have added new content to the page, it will be live in about 10 minutes.
         </p>
         <div class="actions row">
-            <button class="publish js-next button small">Publish Page</button>
-            <a class="button small" href="/{{store.id}}/pages">Publish Later</a>
-        </div>
-        <div class="row fail">
-            <span class="alert label">Error</span>
-            Could not publish page. Please try again later.
+            <a class="button" target="_blank" href="{{store.public-base-url}}{{page.url}}">
+                View live page
+            </a>
         </div>
     </div>
 </div>
