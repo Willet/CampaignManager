@@ -34,5 +34,9 @@
   ],
   "resolutions": {
     "handlebars.js": "~1.1.1"
+  },
+  "devDependencies": {
+    "mocha": "~1.16.2",
+    "chai": "~1.8.1"
   }
 }
