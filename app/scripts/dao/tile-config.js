@@ -35,20 +35,12 @@ define([
 
         prioritizeTile: function(page, tileconfig) {
             var tileconfigUrl = App.API_ROOT + '/store/' + page.get('store-id') + '/page/' + page.get('id') + '/tile-config/' + tileconfig.get('id');
-            tileconfig.sync('prioritize', tileconfig, {
-                method: 'POST',
-                url: tileconfigUrl + '/prioritize',
-                data: {}
-            });
+            tileconfig.save({}, { method: 'POST', url: tileconfigUrl + '/prioritize' });
         },
 
         deprioritizeTile: function(page, tileconfig) {
             var tileconfigUrl = App.API_ROOT + '/store/' + page.get('store-id') + '/page/' + page.get('id') + '/tile-config/' + tileconfig.get('id');
-            tileconfig.sync('deprioritize', tileconfig, {
-                method: 'POST',
-                url: tileconfigUrl + '/deprioritize',
-                data: {}
-            });
+            tileconfig.save({}, { method: 'POST', url: tileconfigUrl + '/deprioritize' });
         }
 
     };

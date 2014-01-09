@@ -26,6 +26,44 @@ define [
       }
     ]
 
+    defaults: {
+      'tile-configs': []
+    }
+
+    initialize: ->
+      super(arguments)
+      @computedFields = new Backbone.ComputedFields(this);
+
+    getPageTile: ->
+      # Get the regular content tile if it exists from the list of tile-configs
+      tileConfigs = @get('tile-configs')
+      pageTile = tileConfigs.filter((m) -> m.get('template') == 'image')
+      pageTile[0]
+
+    computed: {
+      'page-tile':
+        depends: ['tile-configs']
+        get: (fields) ->
+          return @getPageTile()
+
+      'page-status':
+        depends: ['tile-configs']
+        get: (fields) ->
+          if @getPageTile()
+            return 'added'
+          else
+            return null
+
+      'page-prioritized':
+        depends: ['tile-configs']
+        get: (fields) ->
+          tileConfig = @getPageTile()
+          if tileConfig
+            return tileConfig.get('prioritized')
+          else
+            return false
+    }
+
     parse: (data) ->
       attrs = data
 

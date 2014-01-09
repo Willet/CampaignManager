@@ -135,14 +135,6 @@ define [
     itemViewOptions: -> { selected: @allSelected }
 
 
-  pageContentModelSerialization = ->
-      isAdded = @model.get('tile-configs').find((m) -> (m.get('template') == 'image'))
-      page_status = if isAdded then 'added' else null
-      return _.extend(@model.viewJSON(),
-        {
-          'page-status': @model.get('page-status') || page_status
-        })
-
   class Views.PageCreateContentGridItem extends App.Views.ItemView
 
     tagName: "li"
@@ -159,7 +151,7 @@ define [
     events:
       "click": "selectItem"
 
-    serializeData: pageContentModelSerialization
+    serializeData: -> @model.viewJSON()
 
     initialize: ->
       @model.on 'sync', =>
@@ -185,7 +177,7 @@ define [
     className: "content-item list-view"
     template: "page/content/item_list"
 
-    serializeData: pageContentModelSerialization
+    serializeData: -> @model.viewJSON()
 
     triggers:
       "click .js-content-prioritize": "prioritize_content"
