@@ -254,11 +254,6 @@ $selected-color: $body-font-color;
 
 .product-item.list-view {
   height: auto;
-  span {
-    font-weight: bolder;
-    font-size: 0px;
-    color: #000;
-  }
   .product-wrapper {
      @include grid-column($columns: 9);
    }
