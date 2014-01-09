@@ -18,8 +18,6 @@ define [
       layout.on 'publish', () ->
         req = App.request 'page:publish', page
         req.done (data) ->
-          # crude as it is, this is also an option
-          # window.open('http://' + data.result.bucket_name + '/' + data.result.s3_path);
           App.navigate('/' + store.get('id') + '/pages/' + page.get('id') + '/preview', { trigger: true })
         req.fail () ->
           # TODO: move this into the view (as it should be)
