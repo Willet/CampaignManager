@@ -18,6 +18,7 @@ define [
       "click .js-grid-view": "grid-view"
       "click .js-list-view": "list-view"
       "click .js-select-all": "select-all"
+      "change #js-filter-sort-order": "change:filter"
 
     events:
       "click #filter-import-product": "displayImportProduct"
@@ -37,22 +38,22 @@ define [
 
     displayImportProduct: (event) ->
       @trigger('display:import-product')
-      @$('.import-product').show()
-      @$('.product-options').hide()
+      @$('.import-product-region').show()
+      @$('.product-filter-actions').hide()
       # we need it to trigger into the page for visual reasons
       true
 
     displayAddedProduct: (event) ->
       @trigger('display:added-product')
-      @$('.import-product').hide()
-      @$('.product-options').show()
+      @$('.import-product-region').hide()
+      @$('.product-filter-actions').show()
       # we need it to trigger into the page for visual reasons
       true
 
     displayAllProduct: (event) ->
       @trigger('display:all-product')
-      @$('.import-product').hide()
-      @$('.product-options').show()
+      @$('.import-product-region').hide()
+      @$('.product-filter-actions').show()
       # we need it to trigger into the page for visual reasons
       true
 
@@ -134,29 +135,6 @@ define [
 
     serializeData: -> @model.viewJSON()
 
-  pageProductModelSerialization = ->
-      isAdded = @model.get('tile-configs').find((m) -> (m.get('template') == 'image'))
-      page_status = if isAdded then 'added' else null
-      return _.extend(@model.viewJSON(),
-        {
-          'page-status': @model.get('page-status') || page_status
-        })
-
-  class Views.PageProductListItem extends App.Views.Layout
-
-    template: "page/product/item_list"
-    className: "product-item list-view"
-    tagName: "li"
-
-    triggers:
-      "click .js-product-prioritize": "prioritize_product"
-      "click .js-product-deprioritize": "deprioritize_product"
-      "click .js-product-add": "add_product"
-      "click .js-product-remove": "remove_product"
-      "click .js-product-preview": "preview_product"
-
-    serializeData: pageProductModelSerialization
-
   class Views.PageProductGridItem extends App.Views.Layout
 
     template: "page/product/item_grid"
@@ -177,7 +155,7 @@ define [
       throttled_render = _.throttle((=> @render()), 500, leading: false)
       @model.on('nested-change', throttled_render)
 
-    serializeData: pageProductModelSerialization
+    serializeData: -> @model.viewJSON()
 
     onRender: ->
       @updateDOM()
@@ -192,6 +170,14 @@ define [
     selectItem: (event) ->
       @model.set('selected', !@model.get('selected'))
       @updateDOM()
+
+  class Views.PageProductListItem extends Views.PageProductGridItem
+
+    template: "page/product/item_list"
+    className: "product-item list-view"
+    tagName: "li"
+
+    serializeData: -> @model.viewJSON()
 
   class Views.ProductScrapersView extends App.Views.Layout
 

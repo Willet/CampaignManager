@@ -146,7 +146,7 @@ $selected-color: $body-font-color;
   margin: 0 auto;
 }
 
-.content-item.grid-view, .product-item {
+.content-item.grid-view, .product-item.grid-view {
   &.selected {
     background-color: transparentize($action-color, 0.4)
   }
@@ -165,9 +165,8 @@ $selected-color: $body-font-color;
     margin: 5px;
   }
   .content-image, .product-image {
-    height: 100%;
-    background-size: contain;
     width: 100%;
+    background-size: contain;
     height: 100%;
     background-repeat: no-repeat;
     background-position: center center;
@@ -217,7 +216,7 @@ $selected-color: $body-font-color;
   }
 }
 
-.content-item.list-view {
+.content-item.list-view, .product-item.list-view {
   @include grid-column($columns: 12);
   list-style-type: none;
   background-color: #f0f0f0;
@@ -232,14 +231,14 @@ $selected-color: $body-font-color;
     left: 0;
     margin: 5px;
   }
-  .content-image {
+  .content-image, .product-image {
     float: left;
   }
-  .content-info {
+  .content-info, .product-info {
     position: relative;
     left: 10px;
   }
-  .content-actions {
+  .content-actions, .product-actions {
     > button {
       @include grid-column($columns: 2);
       background-color: #444;
@@ -250,6 +249,21 @@ $selected-color: $body-font-color;
         color: $action-color;
       }
     }
+  }
+}
+
+.product-item.list-view {
+  height: auto;
+  .product-wrapper {
+     @include grid-column($columns: 9);
+   }
+  .product-image {
+    @include grid-column($columns: 3);
+    margin-top:2px;
+  }
+  .inline {
+    margin-bottom: 1px;
+    cursor: default;
   }
 }
 
@@ -886,7 +900,9 @@ body {
 
 }
 
-/* TODO: Remove */
-body .edit-area .actions a.b2b {
-  display: none;
+.tag-content,.select2-drop{
+  max-width: 100%;
+  position: absolute;
+  top: 1em;
+  right: 1em;
 }

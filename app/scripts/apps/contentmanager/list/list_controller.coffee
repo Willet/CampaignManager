@@ -3,9 +3,12 @@ define [
   '../app',
   './list_view',
   '../views',
+  '../edit_content/edit_controller',
   'backbone.projections',
-  'components/views/main_layout', 'components/views/main_nav', 'components/views/title_bar'
-], (App, ContentManager, Views, ContentViews, BackboneProjections, MainLayout, MainNav) ->
+  'components/views/main_layout', 'components/views/main_nav', 'components/views/title_bar',
+  'marionette',
+  '../edit_content/edit_controller'
+], (App, ContentManager, Views, ContentViews, EditController, BackboneProjections, MainLayout, MainNav, Marionette) ->
 
   class ContentManager.Controller extends App.Controllers.Base
 
@@ -40,8 +43,6 @@ define [
         @show @getContentLayout(contents)
 
     getContentLayout: (contents) ->
-      self = @
-
       selectedCollection = new BackboneProjections.Filtered(contents,
         filter: ((m) -> m.get('selected') is true))
 
@@ -57,9 +58,9 @@ define [
         @setContentListViewType Views.ContentListItem
         layout.list.show @getContentList(contents)
 
-      layout.on 'change:filter-content-status', (status) ->
-        self.filters.status = status
-        contents.setFilter(self.filters)
+      layout.on 'change:filter-content-status', (status) =>
+        @filters.status = status
+        contents.setFilter(@filters)
 
       layout.on 'change:sort-order', (new_order) -> contents.updateSortOrder(new_order)
       layout.on 'content:select-all', => collection.selectAll()
@@ -105,6 +106,11 @@ define [
           content = args.model
           App.request('content:undecide', content)
           args.view.render()
+
+      contentList.on 'itemview:edit_content',
+        (view, args) =>
+          content = args.model
+          controller = new EditController content
 
       # DEFER: NOT USED
       contentList.on 'itemview:edit:tagged-products:add',

@@ -17,6 +17,11 @@
   <label for="caption" class="inline">Caption</label>
   <p class="caption">{{default caption "(No Caption)"}}</p>
   <div class="content-actions">
+  {{#is status 'approved'}}
+    <button class="tag-content-button js-content-edit">
+      Tag  <!-- TODO add icon -->
+    </button>
+  {{/is}}
   {{#isnt status 'approved'}}
   <button class="approve-content-button js-content-approve">
     Approve <i class="icon-general-checkmark"></i>

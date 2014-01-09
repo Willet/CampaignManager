@@ -1,0 +1,9 @@
+<div class="content-preview">
+  <button class="close-button reveal-close medium">Close</button>
+  {{#is type 'video'}}
+    <iframe width="640" height="480" src="{{video-embed-url}}" frameborder="0" allowfullscreen></iframe>
+  {{else}}
+    <img src="{{images.large.url}}"/>
+  {{/is}}
+  <div class="tag-content"></div>
+</div>

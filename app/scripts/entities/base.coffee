@@ -63,6 +63,21 @@ define [
       @metadata = data['meta']
       return data['results']
 
+    setFilter: (options, fetch=true) ->
+      @queryParams = {}
+      for key, val of options
+        if val == ""
+          delete @queryParams[key]
+        else
+          @queryParams[key] = val
+      @reset()
+
+      # Seems to be some condition with associated models where it can't call
+      # `fetchAll` or `getNextPage` after `setFilter` because it is in the
+      # middle of finishing the `setFilter` call
+      if fetch
+        @fetch('data': @queryParams)
+
 
   class Base.PageableCollection extends Base.Collection
 
