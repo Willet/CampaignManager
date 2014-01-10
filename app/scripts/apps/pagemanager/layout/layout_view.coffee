@@ -85,6 +85,7 @@ define [
 
       fileReader.readAsDataURL(elem.files[0])
 
+    # handled by backbone.stickit
     bindings:
       '.js-layout-hero':
         attributes: [
@@ -123,9 +124,6 @@ define [
 
     initialize: (opts) ->
       @listenTo(@model, "sync", => @render())
-
-    onRender: (opts) ->
-      @stickit()
 
     onShow: (opts) ->
 

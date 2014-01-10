@@ -124,15 +124,7 @@ define [
 
 
   class Views.PageCreateContentList extends App.Views.CollectionView
-
-    tagName: "ul"
     className: "content-list"
-    template: false
-
-    initialize: ->
-      @allSelected = false
-
-    itemViewOptions: -> { selected: @allSelected }
 
 
   class Views.PageCreateContentGridItem extends App.Views.ItemView

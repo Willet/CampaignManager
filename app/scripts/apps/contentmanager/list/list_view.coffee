@@ -141,15 +141,10 @@ define [
       @trigger('change:state', @current_state)
 
   class Views.ContentPreview extends App.Views.ItemView
-
     template: "content/item_preview"
 
-    serializeData: -> @model.viewJSON()
 
-  Views.TaggedPagesInput = App.Views.ItemView.extend
-
-    template: false
-
+  class Views.TaggedPagesInput extends App.Views.ItemView
     initialize: (options) ->
       @store = options.store
 
@@ -181,10 +176,7 @@ define [
     onClose: ->
       @$el.parent().select2("destroy")
 
-  Views.TaggedProductInput = App.Views.ItemView.extend
-
-    template: false
-
+  class Views.TaggedProductInput extends App.Views.ItemView
     initialize: (options) ->
       @store = options['store']
       @storeId = options['store_id']
@@ -258,14 +250,10 @@ define [
       @$el.parent().select2("destroy")
 
   class Views.ContentList extends App.Views.CollectionView
-
-    template: false
-    tagName: "ul"
     className: "content-list"
 
-  class Views.ContentListItem extends App.Views.ItemView
 
-    tagName: "li"
+  class Views.ContentListItem extends App.Views.ListItemView
     className: "content-item list-view"
     template: "content/item_list"
 
@@ -277,9 +265,7 @@ define [
       "click .js-content-preview": "preview_content"
       "click .js-content-edit": "edit_content"
 
-  class Views.ContentGridItem extends App.Views.ItemView
-
-    tagName: "li"
+  class Views.ContentGridItem extends App.Views.ListItemView
     className: "content-item grid-view"
     template: "content/item_grid"
 
@@ -292,6 +278,7 @@ define [
       "click .js-content-edit": "edit_content"
       "click .js-content-approve-edit": "approve_content edit_content"
 
+    # handled by backbone.stickit
     bindings:
       '.js-selected':
         attributes: [
@@ -311,7 +298,5 @@ define [
     initialize: ->
       @model.on('change:status', => @render())
 
-    onRender: ->
-      @stickit()
 
   Views

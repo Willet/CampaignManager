@@ -105,35 +105,20 @@ define [
       @$('#search-product').select2("destroy")
 
   class Views.PageScrapeItem extends App.Views.ItemView
-
     template: "page/scrape_item"
 
-    triggers:
-      "click .remove": "remove"
-
-    serializeData: ->
-      @model.viewJSON()
 
   class Views.PageScrapeList extends App.Views.CollectionView
-
     itemView: Views.PageScrapeItem
 
+
   class Views.PageProductList extends App.Views.CollectionView
-
-    template: false
     className: "product-list"
-    tagName: "ul"
 
-    initialize: (options) ->
-      @allSelected = false
-
-    itemViewOptions: -> { selected: @allSelected }
 
   class Views.PageCreateProductPreview extends App.Views.ItemView
-
     template: 'page/product/item_preview'
 
-    serializeData: -> @model.viewJSON()
 
   class Views.PageProductGridItem extends App.Views.Layout
 
@@ -193,7 +178,6 @@ define [
       @listRegion.show(new Views.ProductScrapeList(collection: @options.collection))
 
   class Views.ProductScrapeAddView extends App.Views.ItemView
-
     template: 'page/product/import_add'
 
     resetError: (event) ->
@@ -214,16 +198,13 @@ define [
       urlPattern = /(http|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/
       url && url != "" && urlPattern.test(url)
 
+
   class Views.ProductScrapeList extends App.Views.CollectionView
-
-    template: false
     className: 'import-list'
-    tagName: 'ul'
 
-  class Views.ProductScrapeItem extends App.Views.ItemView
 
+  class Views.ProductScrapeItem extends App.Views.ListItemView
     template: 'page/product/import_item'
     className: 'import-item'
-    tagName: 'li'
 
   Views

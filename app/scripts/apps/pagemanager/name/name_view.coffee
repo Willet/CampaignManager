@@ -20,6 +20,7 @@ define [
     triggers:
       "click .js-next": "save"
 
+    # handled by backbone.stickit
     bindings:
       'input[name=name]':
         observe: 'name'
@@ -30,9 +31,6 @@ define [
 
     initialize: (opts) ->
       @store = opts['store']
-
-    onRender: (opts) ->
-      @stickit()
 
     onShow: (opts) ->
 

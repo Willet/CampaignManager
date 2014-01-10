@@ -24,6 +24,7 @@ define [
         # persist changes to the page object when the user changes step
         @page.save()
 
+    # handled by backbone.stickit
     bindings:
       '.steps .name':  # given this thing,
         attributes: [
@@ -70,9 +71,5 @@ define [
               if val in ["view", "publish"] then "active" else ""
           }
         ]
-
-
-    onRender: ->
-      @stickit()
 
   Views
