@@ -130,15 +130,16 @@ define [
         xhr = @fetch
           data: params
           remove: false
-          error: =>
-            @finished = true
-            @in_progress = false
         $.when(
           xhr
         ).done(=>
           #@add(collection.models, at: @length)
           @params['offset'] = xhr.responseJSON['meta']?['cursors']?['next']
           @finished = true unless @params['offset']
+          @in_progress = false
+        ).fail(=>
+          # Need to signal fetching has ended on error
+          @finished = true
           @in_progress = false
         )
       xhr
