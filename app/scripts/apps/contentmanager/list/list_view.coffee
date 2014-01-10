@@ -176,6 +176,7 @@ define [
     onClose: ->
       @$el.parent().select2("destroy")
 
+  # TODO: grep test failed
   class Views.TaggedProductInput extends App.Views.ItemView
     initialize: (options) ->
       @store = options['store']
@@ -253,47 +254,29 @@ define [
     className: "content-list"
 
 
-  class Views.ContentListItem extends App.Views.ListItemView
+  class Views.ContentListItem extends App.Views.SelectableListItemView
     className: "content-item list-view"
     template: "content/item_list"
 
     triggers:
-      "click .js-content-select": "content:select-toggle"
       "click .js-content-approve": "approve_content"
       "click .js-content-reject": "reject_content"
       "click .js-content-undecided": "undecide_content"
       "click .js-content-preview": "preview_content"
       "click .js-content-edit": "edit_content"
 
-  class Views.ContentGridItem extends App.Views.ListItemView
+
+  class Views.ContentGridItem extends App.Views.SelectableListItemView
     className: "content-item grid-view"
     template: "content/item_grid"
 
     triggers:
-      "click .js-content-select": "content:select-toggle"
       "click .js-content-approve": "approve_content"
       "click .js-content-reject": "reject_content"
       "click .js-content-undecided": "undecide_content"
       "click .js-content-preview": "preview_content"
       "click .js-content-edit": "edit_content"
       "click .js-content-approve-edit": "approve_content edit_content"
-
-    # handled by backbone.stickit
-    bindings:
-      '.js-selected':
-        attributes: [
-          name: 'checked'
-          observe: 'selected'
-          onGet: (observed) ->
-            if observed then true else false
-        ]
-      '.item':
-        attributes: [
-          name: 'class'
-          observe: 'selected'
-          onGet: (observed) ->
-            if observed then "selected" else ""
-        ]
 
     initialize: ->
       @model.on('change:status', => @render())

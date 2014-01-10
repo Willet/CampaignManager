@@ -121,12 +121,6 @@ define [
           view.model.get('tagged-products').remove(product)
           view.model.save()
 
-      # DEFER: NOT USED
-      contentList.on 'itemview:content:select-toggle',
-        (view, args)  =>
-          content = args.model
-          content.set('selected', !args.model.get('selected'))
-
       # previews the selected content.
       contentList.on 'itemview:preview_content',
         (view, args) =>

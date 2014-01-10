@@ -117,10 +117,7 @@ define [
 
 
   class Views.PageCreateContentPreview extends App.Views.ItemView
-
     template: 'page/content/item_preview'
-
-    serializeData: -> @model.viewJSON()
 
 
   class Views.PageCreateContentList extends App.Views.CollectionView

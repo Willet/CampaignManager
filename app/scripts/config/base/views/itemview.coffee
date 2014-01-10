@@ -26,3 +26,25 @@ define ['app', 'marionette'], (App, Marionette) ->
   ###
   class App.Views.ListItemView extends App.Views.ItemView
     tagName: 'li'
+
+
+  ###
+  A ListItemView that is meant to be selected as a whole
+  ###
+  class App.Views.SelectableListItemView extends App.Views.ListItemView
+    # handled by backbone.stickit
+    bindings:
+      '.js-selected':
+        attributes: [
+          name: 'checked'
+          observe: 'selected'
+          onGet: (observed) ->
+            if observed then true else false
+        ]
+      '.item':
+        attributes: [
+          name: 'class'
+          observe: 'selected'
+          onGet: (observed) ->
+            if observed then "selected" else ""
+        ]
