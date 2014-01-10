@@ -38,14 +38,8 @@ define [
 
       layout = new Views.PageCreateProducts(model: page)
 
-      products = App.request("page:products", page)
+      products = App.request "page:products:all", page
       @setProductListType Views.PageProductGridItem
-
-      #App.execute "when:fetched", products, ->
-      #  # for each product, fetch their default content image
-      #  products.collect (product) ->
-      #    if product.get('default-image-id')
-      #      App.request "fetch:content", store.get('id'), product.get("default-image-id")
 
       layout.on "select-all", ->
         products.collect (model) ->
@@ -58,13 +52,21 @@ define [
         # also change the tab UI
         layout.$("#added-to-page").click()
 
-      layout.on "product_list:itemview:remove", (listView, itemView) ->
+      layout.on "product_list:itemview:add_product", (listView, itemView) ->
         product = itemView.model
         App.request "page:add_product", page, product
 
-      layout.on "product_list:itemview:remove", (listView, itemView) ->
+      layout.on "product_list:itemview:remove_product", (listView, itemView) ->
         product = itemView.model
         App.request "page:remove_product", page, product
+
+      layout.on 'product_list:itemview:prioritize_product', (listView, itemView) ->
+        product = itemView.model
+        App.request 'page:prioritize_product', page, product
+
+      layout.on 'product_list:itemview:deprioritize_product', (listView, itemView) ->
+        product = itemView.model
+        App.request 'page:deprioritize_product', page, product
 
       layout.on "product_list:itemview:preview_product", (listView, itemView) ->
         product = itemView.model
@@ -83,13 +85,13 @@ define [
         products.setFilter filter
 
       layout.on "display:all-product", =>
-        products = App.request "store:products", store, layout.extractFilter()
+        products = App.request "page:products:all", page, layout.extractFilter()
         layout.productList.show @getProductListView(products)
 
-      layout.on "display:import-product", =>
-        products = App.request "store:products", store, layout.extractFilter()
-        # TODO: products = App.request "page:products:imported", page, { filter: layout.extractFilter() }
-        layout.productList.show @getProductListView(products)
+      #layout.on "display:import-product", =>
+      #  products = App.request "store:products", store, { filter: layout.extractFilter() }
+      #  # TODO: products = App.request "page:products:imported", page, { filter: layout.extractFilter() }
+      #  layout.productList.show @getProductListView(products)
 
       layout.on "display:added-product", =>
         products = App.request "page:products", page, layout.extractFilter()

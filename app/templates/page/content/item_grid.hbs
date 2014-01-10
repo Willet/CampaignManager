@@ -15,10 +15,27 @@
       Add <i class="icon-general-checkmark"></i>
     </button>
   {{/is}}
-  <button class="prioritize-content-button js-content-prioritize">
-    Prioritize <i class="icon-general-up-arrow"></i>
-  </button>
+  {{#if page-prioritized}}
+    <button class="deprioritize-content-button js-content-deprioritize">
+      Deprioritize <i class="icon-general-down-arrow"></i>
+    </button>
+  {{else}}
+    <button class="prioritize-content-button js-content-prioritize">
+      Prioritize <i class="icon-general-up-arrow"></i>
+    </button>
+  {{/if}}
   <button class="preview-content-button js-content-preview">
     Preview <i class="icon-accessibility-eyeball"></i>
   </button>
 </div>
+{{#is page-status 'added'}}
+  {{#if page-prioritized}}
+      <div class="content-state content-state-prioritized">
+        Prioritized <i class="icon-general-up-arrow"></i>
+      </div>
+    {{else}}
+      <div class="content-state content-state-added">
+        Added <i class="icon-general-checkmark"></i>
+      </div>
+    {{/if}}
+{{/is}}

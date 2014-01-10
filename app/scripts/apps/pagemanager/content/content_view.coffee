@@ -143,6 +143,7 @@ define [
 
     triggers:
       "click .js-content-prioritize": "prioritize_content"
+      "click .js-content-deprioritize": "deprioritize_content"
       "click .js-content-add": "add_content"
       "click .js-content-remove": "remove_content"
       "click .js-content-preview": "preview_content"
@@ -151,6 +152,10 @@ define [
       "click": "selectItem"
 
     serializeData: -> @model.viewJSON()
+
+    initialize: ->
+      @model.on 'sync', =>
+        @render()
 
     onRender: ->
       @updateDOM()

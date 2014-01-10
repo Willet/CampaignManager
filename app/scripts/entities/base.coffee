@@ -2,9 +2,10 @@ define [
   'app',
   'backbone',
   'backbone-associations',
+  'backbone.computedfields',
   'jquery',
   'underscore'
-], (App, Backbone, BackboneAssociations, $, _) ->
+], (App, Backbone, BackboneAssociations, BackboneComputedFields, $, _) ->
 
   Base = Base || {}
 
@@ -106,7 +107,7 @@ define [
 
     resetPaging: ->
       @params =
-        results: 100
+        results: 25
       @finished = false
 
     fetchAll: (opts) ->
