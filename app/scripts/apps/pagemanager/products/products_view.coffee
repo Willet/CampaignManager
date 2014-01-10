@@ -64,7 +64,7 @@ define [
         page: @model.toJSON()
         "store-id": @model.get("store-id")
         "title": @model.get("name")
-        "categories": @model.get("categories", [])
+        "categories": @model.categories
       }
 
     onRender: (opts) ->

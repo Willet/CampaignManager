@@ -35,10 +35,11 @@ define [
     initialize: ->
       store = App.routeModels.get("store")
       page = App.routeModels.get("page")
+      products = App.request("page:products", page)
+      page.categories = App.request "categories:products", store.get('id'), page.get('id'), products.getCategoryIds()
 
       layout = new Views.PageCreateProducts(model: page)
 
-      products = App.request("page:products", page)
       @setProductListType Views.PageProductGridItem
 
       #App.execute "when:fetched", products, ->
