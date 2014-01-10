@@ -60,7 +60,7 @@ define [
       products
 
     getAllProductPage: (store_id, page_id, params = {}) ->
-      products = new Entities.ProductPageableCollection()
+      products = new Entities.ProductPageableCollection([], params)
       products.store_id = store_id
       products.page_id = page_id
       products.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product/all"

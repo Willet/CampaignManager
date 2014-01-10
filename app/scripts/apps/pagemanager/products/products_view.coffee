@@ -33,6 +33,9 @@ define [
       filter = {}
       filter['tags'] = @$('#js-filter-product-tags').val()
       filter['order'] = @$('#js-filter-sort-order').val()
+
+      if !filter['order']
+        filter['order'] = 'ascending'
       _.each(_.keys(filter), (key) -> delete filter[key] if filter[key] == null || !/\S/.test(filter[key]))
       return filter;
 

@@ -38,7 +38,7 @@ define [
 
       layout = new Views.PageCreateProducts(model: page)
 
-      products = App.request "page:products:all", page
+      products = App.request "page:products:all", page, layout.extractFilter()
       @setProductListType Views.PageProductGridItem
 
       layout.on "select-all", ->
@@ -82,7 +82,7 @@ define [
 
       layout.on "change:filter", ->
         filter = layout.extractFilter()
-        products.setFilter filter
+        products.setFilter(filter)
 
       layout.on "display:all-product", =>
         products = App.request "page:products:all", page, layout.extractFilter()

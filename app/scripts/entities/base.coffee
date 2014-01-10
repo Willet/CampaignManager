@@ -81,9 +81,9 @@ define [
 
   class Base.PageableCollection extends Base.Collection
 
-    initialize: ->
+    initialize: (models, params = { order: "descending" }) ->
       @resetPaging()
-      @queryParams = { order: "descending" }
+      @queryParams = params
 
     setFilter: (options, fetch=true) ->
       @queryParams = {}
