@@ -120,7 +120,6 @@ define [
         filter[key] = ''
       filter[sortKey] = sortDirection
 
-      _.each(_.keys(filter), (key) -> delete filter[key] if filter[key] == null || !/\S/.test(filter[key]))
       @trigger("change:filter", filter)
 
     updateActive: (event) ->
