@@ -130,6 +130,9 @@ define [
         xhr = @fetch
           data: params
           remove: false
+          error: =>
+            @finished = true
+            @in_progress = false
         $.when(
           xhr
         ).done(=>
