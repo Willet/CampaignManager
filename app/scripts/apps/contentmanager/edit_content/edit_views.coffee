@@ -14,7 +14,6 @@ define [
     triggers:
       'click .reveal-close .reveal-modal-bg' : 'closeEditView'
 
-    serializeData: -> @model.viewJSON()
 
     initialize: ->
       @storeId = App.routeModels.get('store').id

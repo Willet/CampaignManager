@@ -1,11 +1,7 @@
-define [
-  'app',
-  '../app',
-  '../views',
-  'entities'
+define ['app', '../app', '../views', 'entities'
 ], (App, ContentManager, Views, Entities) ->
 
-  class Views.ListLayout extends App.Views.Layout
+  class Views.ListLayout extends App.Views.PagedLayout
 
     template: 'content/index'
 
@@ -45,26 +41,13 @@ define [
 
       @trigger("change:filter-content-status", @status)
 
-    filterPage: (event) ->
-      @trigger("change:filter-page", @$(event.currentTarget).val())
-
     autoLoadNextPage: (event) ->
       distanceToBottom = 75
       if ($(document).scrollTop() + $(window).height()) > $(document).height() - distanceToBottom
         @nextPage()
 
-    nextPage: ->
-      @$('.loading').show()
-      @trigger("fetch:next-page")
-      false
-
     updateActive: (event) ->
       @switchActive(@extractState(event.currentTarget))
-
-    extractState: (element) ->
-      if result = element.className.match(/js-tab-([a-zA-Z-_]+)/)
-        return result[1]
-      null
 
     currentlyActive: ->
       @$('.tabs dd.active').className.split(/\s+/)
@@ -85,8 +68,7 @@ define [
       # 'all' cannot filter by type, source, and tags
       @$('.content-filter-actions').prop('disabled', true)
 
-      @on "fetch:next-page:complete", =>
-        @$('.loading').hide()
+      super()
 
     onClose: ->
       $(window).off("scroll", @scrollFunction)
@@ -104,6 +86,7 @@ define [
 
     initialize: (opts) ->
       @current_state = "grid"
+      super(opts)
 
     changeFilter: () ->
       filter = {}
@@ -147,6 +130,7 @@ define [
   class Views.TaggedPagesInput extends App.Views.ItemView
     initialize: (options) ->
       @store = options.store
+      super(opts)
 
     onShow: ->
       self = @
@@ -181,6 +165,7 @@ define [
     initialize: (options) ->
       @store = options['store']
       @storeId = options['store_id']
+      super(opts)
 
     onShow: ->
       # BUG: If this is a part of a multi-edit, there will be a problem with
@@ -280,6 +265,8 @@ define [
 
     initialize: ->
       @model.on('change:status', => @render())
+
+      super(opts)
 
 
   Views

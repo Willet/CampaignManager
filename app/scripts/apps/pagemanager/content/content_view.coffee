@@ -124,9 +124,7 @@ define [
     className: "content-list"
 
 
-  class Views.PageCreateContentGridItem extends App.Views.ItemView
-
-    tagName: "li"
+  class Views.PageCreateContentGridItem extends App.Views.ListItemView
     className: "content-item grid-view"
     template: "page/content/item_grid"
 
@@ -137,36 +135,10 @@ define [
       "click .js-content-remove": "remove_content"
       "click .js-content-preview": "preview_content"
 
-    events:
-      "click": "selectItem"
 
-    serializeData: -> @model.viewJSON()
-
-    initialize: ->
-      @model.on 'sync', =>
-        @render()
-
-    onRender: ->
-      @updateDOM()
-
-    updateDOM: () ->
-      if @model.get('selected')
-        @$el.addClass('selected')
-      else
-        @$el.removeClass('selected')
-
-    selectItem: (event) ->
-      @model.set('selected', !@model.get('selected'))
-      @updateDOM()
-
-
-  class Views.PageCreateContentListItem extends App.Views.ItemView
-
-    tagName: "li"
+  class Views.PageCreateContentListItem extends App.Views.ListItemView
     className: "content-item list-view"
     template: "page/content/item_list"
-
-    serializeData: -> @model.viewJSON()
 
     triggers:
       "click .js-content-prioritize": "prioritize_content"

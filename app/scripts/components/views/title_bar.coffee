@@ -12,5 +12,6 @@ define [
 
     initialize: (opts) ->
       @listenTo(@model, 'sync', @render())
+      super(opts)
 
   return TitleBar

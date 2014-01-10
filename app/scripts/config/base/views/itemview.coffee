@@ -16,6 +16,11 @@ define ['app', 'marionette'], (App, Marionette) ->
     serializeData: ->
       @model?.viewJSON() || {}
 
+    initialize: ->
+      if @model
+        @model.on 'sync', =>
+          @render()
+
     # support stickit bindings: call super() if subclass has its own onRender
     onRender: ->
       if @model and @bindings
@@ -48,3 +53,22 @@ define ['app', 'marionette'], (App, Marionette) ->
           onGet: (observed) ->
             if observed then "selected" else ""
         ]
+
+    events:
+      "click": "selectItem"
+
+    selectItem: (event) ->
+      @model.set('selected', !@model.get('selected'))
+      @updateDOM()
+
+    # @override
+    updateDOM: () ->
+      if @model
+        if @model.get('selected')
+          @$el.addClass('selected')
+        else
+          @$el.removeClass('selected')
+
+    onRender: ->
+      @updateDOM()
+      super()
