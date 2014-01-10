@@ -65,8 +65,8 @@ define [
       layout.on 'set:filters', (filters) =>
         filters = _.extend(@filters, filters)
 
-        _.each(_.keys(filters), (key) ->
-          delete filters[key] if (filters[key] == null || !/\S/.test(filters[key])))
+        _.filter(_.keys(filters), (key) ->
+          filters[key] == null || !/\S/.test(filters[key]))
 
         @filters = filters
         contents.setFilter(@filters)
