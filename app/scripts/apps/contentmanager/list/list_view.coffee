@@ -16,7 +16,6 @@ define [
 
     events:
       "click dd": "updateActive"
-      "change #js-sort-order": "updateSortOrder"
       "change #js-filter-page": "filterPage"
       "click .js-filter-content-status": "filterContentStatus"
 
@@ -42,15 +41,12 @@ define [
       @status = @$(event.currentTarget).val()
 
       # 'all' cannot filter by type, source, and tags
-      @$('.content-filter-actions').prop('disabled', not status)
+      @$('.content-filter-actions').prop('disabled', not @status)
 
       @trigger("change:filter-content-status", @status)
 
     filterPage: (event) ->
       @trigger("change:filter-page", @$(event.currentTarget).val())
-
-    updateSortOrder: (event) ->
-      @trigger("change:sort-order", @$(event.currentTarget).val())
 
     autoLoadNextPage: (event) ->
       distanceToBottom = 75
@@ -101,7 +97,7 @@ define [
 
     events:
       "click dd": "updateActive"
-      "keyup #js-filter-content-tags": "filterContentTags"
+      "keyup #js-filter-content-tags": "changeFilter"
       "change #js-filter-content-type": "changeFilter"
       "change #js-filter-content-source": "changeFilter"
       "change #js-filter-sort-order": "changeFilter"
@@ -119,6 +115,9 @@ define [
       # only one of which can be used to sort the list at any given time
       sortKey = @$('#js-filter-sort-order').val()
       sortDirection = @$('#js-filter-sort-order option:selected').data('direction')
+      @$('#js-filter-sort-order option').each () ->
+          key = $(this).val()
+          filter[key] = ''
       filter[sortKey] = sortDirection
 
       _.each(_.keys(filter), (key) -> delete filter[key] if filter[key] == null || !/\S/.test(filter[key]))
@@ -126,10 +125,6 @@ define [
 
     updateActive: (event) ->
       @switchActive(@extractState(event.currentTarget))
-
-    filterContentTags: (event) ->
-      # event val e.g. 'a, b, c'
-      @trigger("change:filter-content-tags", @$(event.currentTarget).val())
 
     extractState: (element) ->
       if result = element.className.match(/js-tab-([a-zA-Z-_]+)/)

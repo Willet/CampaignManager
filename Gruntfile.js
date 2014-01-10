@@ -1,3 +1,4 @@
+/*global module, require */
 'use strict';
 
 module.exports = function (grunt) {
@@ -319,7 +320,7 @@ module.exports = function (grunt) {
                             'index.html',
                             'robots.txt',
                             'images/**/*.{webp,gif,jpg,jpeg,png}',
-                            'styles/fonts/**/*.*',
+                            'styles/fonts/**/*.*'
                         ]
                     }
                 ]

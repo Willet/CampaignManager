@@ -62,6 +62,10 @@ define [
         @filters.status = status
         contents.setFilter(@filters)
 
+      layout.on 'set:filters', (filters) =>
+        @filters = _.extend(@filters, filters)
+        contents.setFilter(@filters)
+
       layout.on 'content:select-all', => collection.selectAll()
       layout.on 'content:unselect-all', => collection.unselectAll()
       layout.on 'fetch:next-page', () =>
@@ -74,12 +78,7 @@ define [
         listControls = @getContentListControls()
 
         listControls.on 'change:filter', (filters) ->
-          filters['status'] = contents.get('status')
-          contents.setFilter filters
-
-        listControls.on 'change:filter-content-tags', (contentTags) ->
-          console.log contentTags
-          # contents.setFilter self.addFilters('tags': contentTags or null)
+          layout.trigger('set:filters', filters)
 
         layout.listControls.show listControls
 
