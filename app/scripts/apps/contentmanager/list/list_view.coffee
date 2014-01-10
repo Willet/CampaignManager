@@ -116,8 +116,8 @@ define [
       sortKey = @$('#js-filter-sort-order').val()
       sortDirection = @$('#js-filter-sort-order option:selected').data('direction')
       @$('#js-filter-sort-order option').each () ->
-          key = $(this).val()
-          filter[key] = ''
+        key = $(this).val()
+        filter[key] = ''
       filter[sortKey] = sortDirection
 
       _.each(_.keys(filter), (key) -> delete filter[key] if filter[key] == null || !/\S/.test(filter[key]))
