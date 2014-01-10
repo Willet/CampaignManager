@@ -8,11 +8,12 @@ define [
   'components/views/main_layout', 'components/views/main_nav', 'components/views/title_bar',
   'marionette',
   '../edit_content/edit_controller'
-], (App, ContentManager, Views, ContentViews, EditController, BackboneProjections, MainLayout, MainNav, Marionette) ->
+], (App, ContentManager, Views, ContentViews, EditController,
+    BackboneProjections, MainLayout, MainNav, Marionette) ->
 
   class ContentManager.Controller extends App.Controllers.Base
 
-    contentListViewType: Views.ContentGridItem
+    itemViewType: Views.ContentGridItem
     filters:  # default filters (type, source, tags, ...)
       'type': ''
       'status': 'needs-review'
@@ -22,11 +23,11 @@ define [
       _.extend @filters, newFilters
 
     setContentListViewType: (viewType) ->
-      @contentListViewType = viewType
+      @itemViewType = viewType
 
     # @returns {ContentGridItem}
     getContentListViewType: ->
-      @contentListViewType
+      @itemViewType
 
     # @returns a grid view or a list view, depending on how "this" is configured
     getContentListView: (contents) ->
@@ -108,18 +109,6 @@ define [
         (view, args) =>
           content = args.model
           controller = new EditController content
-
-      # DEFER: NOT USED
-      contentList.on 'itemview:edit:tagged-products:add',
-        (view, editArea, tagger, product) ->
-          view.model.get('tagged-products').add(product)
-          view.model.save()
-
-      # DEFER: NOT USED
-      contentList.on 'itemview:edit:tagged-products:remove',
-        (view, editArea, tagger, product) ->
-          view.model.get('tagged-products').remove(product)
-          view.model.save()
 
       # previews the selected content.
       contentList.on 'itemview:preview_content',

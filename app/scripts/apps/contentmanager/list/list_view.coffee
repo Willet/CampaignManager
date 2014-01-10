@@ -89,10 +89,10 @@ define ['app', '../app', '../views', 'entities'
       super(opts)
 
     changeFilter: () ->
-      filter = {}
-      filter['type'] = @$('#js-filter-content-type').val()
-      filter['source'] = @$('#js-filter-content-source').val()
-      filter['tags'] = @$('#js-filter-content-tags').val()
+      filter =
+        type: @$('#js-filter-content-type').val()
+        source: @$('#js-filter-content-source').val()
+        tags: @$('#js-filter-content-tags').val()
 
       # differentiate two kinds of UI "sort by": import/post dates,
       # only one of which can be used to sort the list at any given time
@@ -266,7 +266,7 @@ define ['app', '../app', '../views', 'entities'
     initialize: ->
       @model.on('change:status', => @render())
 
-      super(opts)
+      super()
 
 
   Views

@@ -14,17 +14,14 @@ define [
       @listenTo(@store, 'sync', => @render())
 
     serializeData: ->
-      return {
-        page: @page.toJSON()
-        store: @store.toJSON()
-      }
+      page: @page.toJSON()
+      store: @store.toJSON()
 
     events:
       'click .steps li a': ->
         # persist changes to the page object when the user changes step
         @page.save()
 
-    # handled by backbone.stickit
     bindings:
       '.steps .name':  # given this thing,
         attributes: [

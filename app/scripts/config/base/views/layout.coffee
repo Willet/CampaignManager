@@ -12,7 +12,7 @@ define ['app', 'marionette'], (App, Marionette) ->
 
     # ???
     extractState: (element) ->
-      if result = element.className.match(/js-tab-([a-zA-Z-_]+)/)
+      if (result = element.className.match(/js-tab-([a-zA-Z-_]+)/))
         return result[1]
       null
 
@@ -21,6 +21,11 @@ define ['app', 'marionette'], (App, Marionette) ->
 
     serializeData: ->
       @model?.viewJSON() || {}
+
+    # support stickit bindings: call super() if subclass has its own onRender
+    onRender: ->
+      if @model and @bindings
+        @stickit()
 
 
   ###

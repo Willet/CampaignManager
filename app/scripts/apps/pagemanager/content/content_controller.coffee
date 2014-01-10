@@ -10,13 +10,13 @@ define [
 
   class PageManager.Content.Controller extends App.Controllers.Base
 
-    contentListViewType: Views.PageCreateContentGridItem
+    itemViewType: Views.PageCreateContentGridItem
 
     setContentListViewType: (viewType) ->
-      @contentListViewType = viewType
+      @itemViewType = viewType
 
     getContentListViewType: ->
-      @contentListViewType
+      @itemViewType
 
     getContentListView: (contents) ->
       new Views.PageCreateContentList
