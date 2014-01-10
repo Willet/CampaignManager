@@ -28,3 +28,14 @@
     Preview <i class="icon-accessibility-eyeball"></i>
   </button>
 </div>
+{{#is page-status 'added'}}
+  {{#if page-prioritized}}
+      <div class="content-state content-state-prioritized">
+        Prioritized <i class="icon-general-up-arrow"></i>
+      </div>
+    {{else}}
+      <div class="content-state content-state-added">
+        Added <i class="icon-general-checkmark"></i>
+      </div>
+    {{/if}}
+{{/is}}
