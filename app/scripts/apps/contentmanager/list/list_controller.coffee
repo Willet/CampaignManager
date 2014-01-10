@@ -62,7 +62,10 @@ define [
         @filters.status = status
         contents.setFilter(@filters)
 
-      layout.on 'change:sort-order', (new_order) -> contents.updateSortOrder(new_order)
+      layout.on 'set:filters', (filters) =>
+        @filters = _.extend(@filters, filters)
+        contents.setFilter(@filters)
+
       layout.on 'content:select-all', => collection.selectAll()
       layout.on 'content:unselect-all', => collection.unselectAll()
       layout.on 'fetch:next-page', () =>
@@ -73,15 +76,9 @@ define [
         layout.list.show @getContentList(contents)
 
         listControls = @getContentListControls()
-        listControls.on 'change:filter-content-type', (contentType) ->
-          contents.setFilter self.addFilters('type': contentType or '')
 
-        listControls.on 'change:filter-content-source', (contentSource) ->
-          contents.setFilter self.addFilters('source': contentSource or '')
-
-        listControls.on 'change:filter-content-tags', (contentTags) ->
-          console.log contentTags
-          # contents.setFilter self.addFilters('tags': contentTags or null)
+        listControls.on 'change:filter', (filters) ->
+          layout.trigger('set:filters', filters)
 
         layout.listControls.show listControls
 
