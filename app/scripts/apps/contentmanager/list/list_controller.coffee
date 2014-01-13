@@ -16,7 +16,7 @@ define [
     itemViewType: Views.ContentGridItem
     filters:  # default filters (type, source, tags, ...)
       'type': ''
-      'status': 'needs-review'
+      'status': ''
       'source': ''
 
     addFilters: (newFilters={}) ->
@@ -71,8 +71,13 @@ define [
         @filters.status = status
         contents.setFilter(@filters)
 
-      layout.on 'set:filters', (filters) =>
+      layout.on 'add:filter', (filters) =>
         @filters = _.extend(@filters, filters)
+
+        _.each(_.keys(@filters), (key) =>
+          delete @filters[key] if \
+            @filters[key] == null || !/\S/.test(@filters[key]))
+
         contents.setFilter(@filters)
 
       layout.on 'content:select-all', => collection.selectAll()
@@ -85,6 +90,9 @@ define [
         layout.list.show @getContentList(contents)
 
         listControls = @getContentListControls()
+
+        listControls.on 'change:filter', (filters) ->
+          layout.trigger('add:filter', filters)
 
         layout.listControls.show listControls
 

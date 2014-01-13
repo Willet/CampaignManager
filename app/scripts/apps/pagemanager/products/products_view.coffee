@@ -29,6 +29,13 @@ define [
       @productList.on("show", ((view) => @relayEvents(view, 'product_list')))
       @productList.on("close", ((view) => @stopRelayEvents(view)))
 
+    extractFilter: () ->
+      filter = super()
+      if !filter['order']
+        filter['order'] = 'ascending'
+
+      filter
+
     displayImportProduct: (event) ->
       @trigger('display:import-product')
       @$('.import-product-region').show()

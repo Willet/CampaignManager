@@ -81,9 +81,9 @@ define [
 
   class Base.PageableCollection extends Base.Collection
 
-    initialize: ->
+    initialize: (models, params = { order: "descending" }) ->
       @resetPaging()
-      @queryParams = { order: "descending" }
+      @queryParams = params
 
     setFilter: (options, fetch=true) ->
       @queryParams = {}
@@ -134,6 +134,10 @@ define [
         $.when(xhr).done(() =>
           @params.offset = xhr.responseJSON['meta']?['cursors']?['next']
           @finished = true unless @params.offset
+          @in_progress = false
+        ).fail(=>
+          # Need to signal fetching has ended on error
+          @finished = true
           @in_progress = false
         )
       xhr
