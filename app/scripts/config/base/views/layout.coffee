@@ -54,11 +54,13 @@ define ['app', 'marionette'], (App, Marionette) ->
     extractFilter: (filter = {}) ->
 
       # all undefined if control not in view
+      filter['status'] = @$('.js-filter-content-status:checked').val()
       filter['source'] = @$('#js-filter-content-source').val()
       filter['type'] = @$('#js-filter-type').val()
       filter['tags'] = @$('#js-filter-tags').val()
-      filter['order'] = @$('#js-filter-sort-order').val()
 
+      # special case for sort ordering, where content can be sorted
+      # in one order only
       sortKey = @$('#js-filter-sort-order').val()
       sortDirection = @$('#js-filter-sort-order option:selected').data('direction')
       if sortKey
