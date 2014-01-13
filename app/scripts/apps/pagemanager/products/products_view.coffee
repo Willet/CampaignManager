@@ -5,7 +5,7 @@ define [
   'select2'
 ], (App, Views) ->
 
-  class Views.PageCreateProducts extends App.Views.Layout
+  class Views.PageCreateProducts extends App.Views.SortableLayout
 
     template: "page/product/main"
 
@@ -28,13 +28,6 @@ define [
     initialize: (opts) ->
       @productList.on("show", ((view) => @relayEvents(view, 'product_list')))
       @productList.on("close", ((view) => @stopRelayEvents(view)))
-
-    extractFilter: () ->
-      filter = {}
-      filter['tags'] = @$('#js-filter-product-tags').val()
-      filter['order'] = @$('#js-filter-sort-order').val()
-      _.each(_.keys(filter), (key) -> delete filter[key] if filter[key] == null || !/\S/.test(filter[key]))
-      return filter;
 
     displayImportProduct: (event) ->
       @trigger('display:import-product')

@@ -41,3 +41,31 @@ define ['app', 'marionette'], (App, Marionette) ->
     onShow: ->
       @on "fetch:next-page:complete", =>
         @$('.loading').hide()
+
+
+  ###
+  Layouts with sorting and filtering options.
+  ###
+  class App.Views.SortableLayout extends App.Views.Layout
+    triggers:
+      "change #js-filter-sort-order": "change:filter"
+
+    # returns all (default) filters except the ones with blank values
+    extractFilter: (filter = {}) ->
+
+      # all undefined if control not in view
+      filter['source'] = @$('#js-filter-content-source').val()
+      filter['type'] = @$('#js-filter-type').val()
+      filter['tags'] = @$('#js-filter-tags').val()
+      filter['order'] = @$('#js-filter-sort-order').val()
+
+      sortKey = @$('#js-filter-sort-order').val()
+      sortDirection = @$('#js-filter-sort-order option:selected').data('direction')
+      if sortKey
+        filter[sortKey] = sortDirection
+
+      _.each(_.keys(filter), (key) ->
+        delete filter[key] if filter[key] == null || !/\S/.test(filter[key])
+      )
+
+      filter

@@ -79,8 +79,8 @@ define ['app', '../app', '../views', 'entities'
 
     events:
       "click dd": "updateActive"
-      "keyup #js-filter-content-tags": "changeFilter"
-      "change #js-filter-content-type": "changeFilter"
+      "keyup #js-filter-tags": "changeFilter"
+      "change #js-filter-type": "changeFilter"
       "change #js-filter-content-source": "changeFilter"
       "change #js-filter-sort-order": "changeFilter"
 
@@ -90,9 +90,9 @@ define ['app', '../app', '../views', 'entities'
 
     changeFilter: () ->
       filter =
-        type: @$('#js-filter-content-type').val()
+        type: @$('#js-filter-type').val()
         source: @$('#js-filter-content-source').val()
-        tags: @$('#js-filter-content-tags').val()
+        tags: @$('#js-filter-tags').val()
 
       # differentiate two kinds of UI "sort by": import/post dates,
       # only one of which can be used to sort the list at any given time
