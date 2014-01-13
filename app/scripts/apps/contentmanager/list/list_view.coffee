@@ -1,7 +1,7 @@
 define ['app', '../app', '../views', 'entities'
 ], (App, ContentManager, Views, Entities) ->
 
-  class Views.ListLayout extends App.Views.PagedLayout
+  class Views.ListLayout extends App.Views.SortableLayout
 
     template: 'content/index'
 
@@ -10,8 +10,18 @@ define ['app', '../app', '../views', 'entities'
       "listControls": "#list-controls"
       "multiedit": ".edit-area"
 
+    triggers:
+      "click .js-grid-view": "grid-view"
+      "click .js-list-view": "list-view"
+      "click .js-select-all": "content:select-all"
+      "click .js-unselect-all": "content:unselect-all"
+
+      "keyup #js-filter-tags": "change:filter"
+      "change #js-filter-type": "change:filter"
+      "change #js-filter-content-source": "change:filter"
+      "change #js-filter-sort-order": "change:filter"
+
     events:
-      "click dd": "updateActive"
       "change #js-filter-page": "filterPage"
       "click .js-filter-content-status": "filterContentStatus"
 
@@ -21,12 +31,6 @@ define ['app', '../app', '../views', 'entities'
         @model.trigger("grid-item:selected",@model)
       else
         @model.trigger("grid-item:deselected",@model)
-
-    triggers:
-      "click .js-grid-view": "grid-view"
-      "click .js-list-view": "list-view"
-      "click .js-select-all": "content:select-all"
-      "click .js-unselect-all": "content:unselect-all"
 
     initialize: (opts) ->
       @current_state = opts['initial_state']
@@ -45,18 +49,6 @@ define ['app', '../app', '../views', 'entities'
       distanceToBottom = 75
       if ($(document).scrollTop() + $(window).height()) > $(document).height() - distanceToBottom
         @nextPage()
-
-    updateActive: (event) ->
-      @switchActive(@extractState(event.currentTarget))
-
-    currentlyActive: ->
-      @$('.tabs dd.active').className.split(/\s+/)
-
-    switchActive: (new_state) ->
-      @$(".tabs .active").removeClass("active")
-      @$(".tabs .js-tab-#{new_state}").addClass("active")
-      @current_state = new_state
-      @$('#list').removeClass("grid-view").removeClass("list-view").addClass("#{new_state}-view")
 
     onRender: (opts) ->
 
@@ -77,51 +69,10 @@ define ['app', '../app', '../views', 'entities'
 
     template: "content/filter_controls"
 
-    events:
-      "click dd": "updateActive"
-      "keyup #js-filter-tags": "changeFilter"
-      "change #js-filter-type": "changeFilter"
-      "change #js-filter-content-source": "changeFilter"
-      "change #js-filter-sort-order": "changeFilter"
-
     initialize: (opts) ->
       @current_state = "grid"
       super(opts)
 
-    changeFilter: () ->
-      filter =
-        type: @$('#js-filter-type').val()
-        source: @$('#js-filter-content-source').val()
-        tags: @$('#js-filter-tags').val()
-
-      # differentiate two kinds of UI "sort by": import/post dates,
-      # only one of which can be used to sort the list at any given time
-      sortKey = @$('#js-filter-sort-order').val()
-      sortDirection = @$('#js-filter-sort-order option:selected').data('direction')
-      @$('#js-filter-sort-order option').each () ->
-        key = $(this).val()
-        filter[key] = ''
-      filter[sortKey] = sortDirection
-
-      _.each(_.keys(filter), (key) -> delete filter[key] if filter[key] == null || !/\S/.test(filter[key]))
-      @trigger("change:filter", filter)
-
-    updateActive: (event) ->
-      @switchActive(@extractState(event.currentTarget))
-
-    extractState: (element) ->
-      if result = element.className.match(/js-tab-([a-zA-Z-_]+)/)
-        return result[1]
-      null
-
-    currentlyActive: ->
-      @$('.tabs dd.active').className.split(/\s+/)
-
-    switchActive: (new_state) ->
-      @$(".tabs .active").removeClass("active")
-      @$(".tabs .js-tab-#{new_state}").addClass("active")
-      @current_state = new_state
-      @trigger('change:state', @current_state)
 
   class Views.ContentPreview extends App.Views.ItemView
     template: "content/item_preview"
@@ -159,6 +110,7 @@ define ['app', '../app', '../views', 'entities'
 
     onClose: ->
       @$el.parent().select2("destroy")
+
 
   # TODO: grep test failed
   class Views.TaggedProductInput extends App.Views.ItemView
@@ -235,26 +187,13 @@ define ['app', '../app', '../views', 'entities'
     onClose: ->
       @$el.parent().select2("destroy")
 
+
   class Views.ContentList extends App.Views.CollectionView
     className: "content-list"
 
 
-  class Views.ContentListItem extends App.Views.SelectableListItemView
-    className: "content-item list-view"
-    template: "content/item_list"
-
-    triggers:
-      "click .js-content-approve": "approve_content"
-      "click .js-content-reject": "reject_content"
-      "click .js-content-undecided": "undecide_content"
-      "click .js-content-preview": "preview_content"
-      "click .js-content-edit": "edit_content"
-
-
-  class Views.ContentGridItem extends App.Views.SelectableListItemView
-    className: "content-item grid-view"
-    template: "content/item_grid"
-
+  # superclass for handling events; use subclasses below
+  class Views.ContentItemView extends App.Views.SelectableListItemView
     triggers:
       "click .js-content-approve": "approve_content"
       "click .js-content-reject": "reject_content"
@@ -265,8 +204,19 @@ define ['app', '../app', '../views', 'entities'
 
     initialize: ->
       @model.on('change:status', => @render())
-
       super()
+
+
+  # Grid item view (mirror of list item view)
+  class Views.ContentListItem extends Views.ContentItemView
+    className: "content-item list-view"
+    template: "content/item_list"
+
+
+  # Grid item view (mirror of list item view)
+  class Views.ContentGridItem extends Views.ContentItemView
+    className: "content-item grid-view"
+    template: "content/item_grid"
 
 
   Views

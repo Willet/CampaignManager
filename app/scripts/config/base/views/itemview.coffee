@@ -13,6 +13,12 @@ define ['app', 'marionette'], (App, Marionette) ->
     # @override
     bindings: null
 
+    # ???
+    extractState: (element) ->
+      if result = element.className.match(/js-tab-([a-zA-Z-_]+)/)
+        return result[1]
+      null
+
     serializeData: ->
       @model?.viewJSON() || {}
 

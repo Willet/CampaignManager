@@ -46,7 +46,7 @@ define ['app', 'marionette'], (App, Marionette) ->
   ###
   Layouts with sorting and filtering options.
   ###
-  class App.Views.SortableLayout extends App.Views.Layout
+  class App.Views.SortableLayout extends App.Views.PagedLayout
     triggers:
       "change #js-filter-sort-order": "change:filter"
 

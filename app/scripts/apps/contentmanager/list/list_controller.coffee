@@ -41,7 +41,15 @@ define [
       store = App.routeModels.get 'store'
       contents = App.request 'content:all', store
       App.execute 'when:fetched', contents, =>
-        @show @getContentLayout(contents)
+        layout = @getContentLayout(contents)
+
+        # locates all filter controls in the view and generates a
+        # querydict-like object.
+        layout.on 'change:filter', () ->
+          filter = layout.extractFilter()
+          contents.setFilter(filter)
+
+        @show layout
 
     getContentLayout: (contents) ->
       selectedCollection = new BackboneProjections.Filtered(contents,
@@ -77,9 +85,6 @@ define [
         layout.list.show @getContentList(contents)
 
         listControls = @getContentListControls()
-
-        listControls.on 'change:filter', (filters) ->
-          layout.trigger('set:filters', filters)
 
         layout.listControls.show listControls
 
