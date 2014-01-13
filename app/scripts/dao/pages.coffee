@@ -52,6 +52,10 @@ define [
       url = "#{App.API_ROOT}/store/#{page.get('store-id')}/page/#{page.get('id')}/product/#{product.get('id')}"
       product.save({}, { method: 'PUT', url: url })
 
+    addAllProducts: (store_id, page_id, product_list, params = {}) ->
+      url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product/add_all"
+      $.ajax url, type: "PUT", data: JSON.stringify(product_list)
+
     removeProduct: (page, product, params = {}) ->
       url = "#{App.API_ROOT}/store/#{page.get('store-id')}/page/#{page.get('id')}/product/#{product.get('id')}"
       product.save({}, { method: 'DELETE', url: url })
@@ -140,6 +144,10 @@ define [
   App.reqres.setHandler "page:add_product",
     (page, product, options) ->
       API.addProduct page, product, options
+
+  App.reqres.setHandler "page:add_all_products",
+    (page, product_list, options) ->
+      API.addAllProducts page.get('store-id'), page.get('id'), product_list
 
   App.reqres.setHandler "page:remove_product",
     (page, product, options) ->
