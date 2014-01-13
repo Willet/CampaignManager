@@ -60,6 +60,7 @@ define [
       products
 
     getAllProductPage: (store_id, page_id, params = {}) ->
+      #You can not pass the params object directly to the Collection or it will create a collection with 1 item.
       products = new Entities.ProductPageableCollection([], params)
       products.store_id = store_id
       products.page_id = page_id
