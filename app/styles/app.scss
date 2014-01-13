@@ -256,6 +256,11 @@ $selected-color: $body-font-color;
       }
     }
   }
+  .content-state, .product-state {
+    position: absolute;
+    right: 10px;
+    top: 0;
+  }
 }
 
 .product-item.list-view {
@@ -343,6 +348,15 @@ $selected-color: $body-font-color;
     }
     > input {
       @include grid-column($columns: 10);
+    }
+  }
+  .filter-product-page {
+    @include grid-column($columns: 12);
+    > label {
+      @include grid-column($columns: 3);
+    }
+    > input {
+      @include grid-column($columns: 9);
     }
   }
 }

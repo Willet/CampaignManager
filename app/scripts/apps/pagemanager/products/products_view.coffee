@@ -24,6 +24,7 @@ define [
       "click #filter-import-product": "displayImportProduct"
       "click #filter-all-product": "displayAllProduct"
       "click #filter-added-product": "displayAddedProduct"
+      "keyup #js-filter-product-page": "change:filter"
 
     initialize: (opts) ->
       @productList.on("show", ((view) => @relayEvents(view, 'product_list')))
@@ -37,6 +38,14 @@ define [
       if !filter['order']
         filter['order'] = 'ascending'
       _.each(_.keys(filter), (key) -> delete filter[key] if filter[key] == null || !/\S/.test(filter[key]))
+
+      filter['page_ids'] = @$('#js-filter-product-page').val()
+      if filter['page_ids']
+        pages = _.filter(filter['page_ids'].split(/[\s,]+/), (page) ->
+          # TODO: Add support for filtering on slugs
+          /^[0-9]+$/.test(page))
+        filter['page_ids'] = pages.join(",")
+
       return filter;
 
     displayImportProduct: (event) ->

@@ -76,7 +76,6 @@ define [
       products.getNextPage()
       products
 
-
   App.reqres.setHandler "product:entities:set",
     (store_id, product_ids, params) ->
       API.getProductSet store_id, product_ids, params
