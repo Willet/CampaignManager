@@ -1,8 +1,9 @@
 define [
   'app',
   '../app',
-  './content_view'
-], (App, PageManager, Views) ->
+  './content_view',
+  'entities'
+], (App, PageManager, Views, Entities) ->
 
   PageManager.Content ?= {}
 
@@ -24,7 +25,8 @@ define [
     initialize: ->
       page = App.routeModels.get 'page'
       store = App.routeModels.get 'store'
-      contents = App.request 'content:all', store
+      contents = App.request 'page:suggested_content', page
+      content_type = null
 
       layout = new Views.PageCreateContent
         model: page
@@ -49,6 +51,11 @@ define [
       layout.on 'content_list:itemview:prioritize_content', (listView, itemView) ->
         content = itemView.model
         App.request 'page:prioritize_content', page, content
+        itemView.render()
+
+      layout.on 'content_list:itemview:deprioritize_content', (listView, itemView) ->
+        content = itemView.model
+        App.request 'page:deprioritize_content', page, content
 
       layout.on 'content_list:itemview:preview_content', (listView, itemView) ->
         content = itemView.model
@@ -69,7 +76,7 @@ define [
 
       layout.on 'add-selected', () =>
         selected = contents.filter((model) -> model.get('selected'))
-        content_list = _.map(_.pluck(selected, 'id'), (value) -> 
+        content_list = _.map(_.pluck(selected, 'id'), (value) ->
           parseInt(value, 10);
         );
 
@@ -87,14 +94,17 @@ define [
         layout.contentList.show @getContentListView(contents)
 
       layout.on 'display:all-content', () =>
-        contents = App.request 'store:content', store, layout.extractFilter()
+        content_type = 'all-content'
+        contents = App.request 'page:content:all', page, layout.extractFilter()
         layout.contentList.show @getContentListView(contents)
 
       layout.on 'display:suggested-content', () =>
+        content_type = 'suggested-content'
         contents = App.request 'page:suggested_content', page, layout.extractFilter()
         layout.contentList.show @getContentListView(contents)
 
       layout.on 'display:added-content', () =>
+        content_type = 'added-content'
         contents = App.request 'page:content', page, layout.extractFilter()
         layout.contentList.show @getContentListView(contents)
 

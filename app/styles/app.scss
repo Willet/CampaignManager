@@ -171,7 +171,7 @@ $selected-color: $body-font-color;
     background-repeat: no-repeat;
     background-position: center center;
   }
-  .content-state {
+  .content-state, .product-state {
     position: absolute;
     top: 0;
     left: 0;
@@ -188,6 +188,12 @@ $selected-color: $body-font-color;
       background-color: transparentize($approved-color, 0.6);
     }
     &.content-state-needs-review {
+    }
+    &.content-state-prioritized, &.product-state-prioritized {
+      background-color: transparentize($rejected-color, 0.6);
+    }
+    &.content-state-added, &.product-state-added {
+      background-color: transparentize($approved-color, 0.6);
     }
   }
   .content-actions, .product-actions {

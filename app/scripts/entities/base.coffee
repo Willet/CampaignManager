@@ -2,9 +2,10 @@ define [
   'app',
   'backbone',
   'backbone-associations',
+  'backbone.computedfields',
   'jquery',
   'underscore'
-], (App, Backbone, BackboneAssociations, $, _) ->
+], (App, Backbone, BackboneAssociations, BackboneComputedFields, $, _) ->
 
   Base = Base || {}
 
@@ -80,9 +81,9 @@ define [
 
   class Base.PageableCollection extends Base.Collection
 
-    initialize: ->
+    initialize: (models, params = { order: "descending" }) ->
       @resetPaging()
-      @queryParams = { order: "descending" }
+      @queryParams = params
 
     setFilter: (options, fetch=true) ->
       @queryParams = {}
@@ -106,7 +107,7 @@ define [
 
     resetPaging: ->
       @params =
-        results: 100
+        results: 25
       @finished = false
 
     fetchAll: (opts) ->
@@ -135,6 +136,10 @@ define [
           #@add(collection.models, at: @length)
           @params['offset'] = xhr.responseJSON['meta']?['cursors']?['next']
           @finished = true unless @params['offset']
+          @in_progress = false
+        ).fail(=>
+          # Need to signal fetching has ended on error
+          @finished = true
           @in_progress = false
         )
       xhr

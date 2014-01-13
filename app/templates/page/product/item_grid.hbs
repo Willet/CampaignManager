@@ -1,4 +1,4 @@
-<div class="product-image" style="background-image: url('{{default-image-id.images.medium.url}}');">
+<div class="product-image" style="background-image: url('{{default-image.images.medium.url}}');">
 </div>
 <div class="product-actions">
   {{#is page-status 'added'}}
@@ -10,10 +10,27 @@
       Add <i class="icon-general-checkmark"></i>
     </button>
   {{/is}}
-  <button class="prioritize-product-button js-product-prioritize">
-    Prioritize <i class="icon-general-up-arrow"></i>
-  </button>
+  {{#if page-prioritized}}
+    <button class="deprioritize-product-button js-product-deprioritize">
+      Deprioritize <i class="icon-general-down-arrow"></i>
+    </button>
+  {{else}}
+    <button class="prioritize-product-button js-product-prioritize">
+      Prioritize <i class="icon-general-up-arrow"></i>
+    </button>
+  {{/if}}
   <button class="preview-product-button js-product-preview">
     Preview <i class="icon-accessibility-eyeball"></i>
   </button>
 </div>
+{{#is page-status 'added'}}
+  {{#if page-prioritized}}
+      <div class="product-state product-state-prioritized">
+        Prioritized <i class="icon-general-up-arrow"></i>
+      </div>
+    {{else}}
+      <div class="product-state product-state-added">
+        Added <i class="icon-general-checkmark"></i>
+      </div>
+    {{/if}}
+{{/is}}

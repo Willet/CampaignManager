@@ -26,7 +26,7 @@ define [
       formatProduct = (product) =>
         unless product instanceof Backbone.Model
           product = new Entities.Product($.extend(product, {'store-id': @storeId}))
-        imageUrl = product.viewJSON()['default-image-id']?.images?.thumb.url || null
+        imageUrl = product.viewJSON()['default-image']?.images?.thumb.url || null
         identifier = "product-#{product.get('id')}"
 
         # replace image url when model is fetched if it wasn't ready when we rendered
@@ -35,10 +35,12 @@ define [
           # Yes, this is a horrible idea. However, we don't have a CID as the model
           # has not been fetched yet, and I can't think of a better way. Needless to
           # say, feel free to modify if you can think of something less idiotic.
-          setTimeout ->
-              if (imageUrl = product.viewJSON()['default-image-id']?.images?.thumb.url || null)
-                $(".#{identifier} img").attr('src', imageUrl)
-            , 1000
+          intv = setInterval(() ->
+            if (imageUrl = product.viewJSON()['default-image']?.images?.thumb.url || null)
+
+              $(".#{identifier} img").attr('src', imageUrl)
+              clearInterval intv
+          , 1000)
 
         image = "<img src=\"#{imageUrl}\">"
         name = "<span>#{product.get("name")}</span>"

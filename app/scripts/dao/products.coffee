@@ -59,20 +59,22 @@ define [
           data: _.extend(id: product_ids, params)
       products
 
-    # DEFER: decide on where to put related models etc
+    getAllProductPage: (store_id, page_id, params = {}) ->
+      #You can not pass the params object directly to the Collection or it will create a collection with 1 item.
+      products = new Entities.ProductPageableCollection([], params)
+      products.store_id = store_id
+      products.page_id = page_id
+      products.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product/all"
+      products.getNextPage()
+      products
+
     getPageProducts: (store_id, page_id, params = {}) ->
       products = new Entities.ProductPageableCollection()
       products.store_id = store_id
       products.page_id = page_id
       products.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product"
-      #products.getNextPage()
-      products.fetchAll()
+      products.getNextPage()
       products
-
-    addProduct: (page, product, params = {}) ->
-      $()
-
-    addProducts: (page, products, params = {}) ->
 
 
   App.reqres.setHandler "product:entities:set",
@@ -102,6 +104,10 @@ define [
   App.reqres.setHandler "store:products",
     (store, params) ->
       API.getProducts store.get('id'), params
+
+  App.reqres.setHandler "page:products:all",
+    (page, params) ->
+      API.getAllProductPage page.get('store-id'), page.get('id'), params
 
   App.reqres.setHandler "page:products",
     (page, params) ->

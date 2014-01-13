@@ -33,13 +33,24 @@ define [
       contents.getNextPage()
       contents
 
+    getPageContent: (store_id, page_id, content_id, params = {}) ->
+      content = new Entities.Content({id: content_id, 'store-id': store_id, 'page-id': page_id})
+      content.store_id = store_id
+      content.page_id = page_id
+      content.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/#{content_id}"
+      unless content.isFetched # don't fetch multiple times
+        content.fetch
+          reset: true
+          data: params
+      content
+
     getPageContents: (store_id, page_id, params = {}) ->
-      contents = new Entities.ContentPageableCollection()
-      contents.store_id = store_id
-      contents.page_id = page_id
-      contents.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content"
-      contents.getNextPage(params)
-      contents
+      content = new Entities.ContentPageableCollection()
+      content.store_id = store_id
+      content.page_id = page_id
+      content.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content"
+      content.getNextPage()
+      content
 
     getPageSuggestedContent: (store_id, page_id, params = {}) ->
       contents = new Entities.ContentPageableCollection()
@@ -47,6 +58,14 @@ define [
       contents.page_id = page_id
       contents.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/suggested"
       contents.getNextPage(params)
+      contents
+
+    getAllContentPage: (store_id, page_id, params = {}) ->
+      contents = new Entities.ContentPageableCollection()
+      contents.store_id = store_id
+      contents.page_id = page_id
+      contents.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/all"
+      contents.getNextPage()
       contents
 
     approveContent: (content, params) ->
@@ -104,6 +123,14 @@ define [
   App.reqres.setHandler "page:content",
     (page, params) ->
       API.getPageContents page.get('store-id'), page.get('id'), params
+
+  App.reqres.setHandler "page:content:get",
+    (page, content_id, params) ->
+      API.getPageContent page.get('store-id'), page.get('id'), content_id, params
+
+  App.reqres.setHandler "page:content:all",
+    (page, params) ->
+      API.getAllContentPage page.get('store-id'), page.get('id'), params
 
   App.reqres.setHandler "page:suggested_content",
     # handles App.request(^ that)

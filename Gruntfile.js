@@ -1,3 +1,4 @@
+/*global module, require */
 'use strict';
 
 module.exports = function (grunt) {
@@ -8,6 +9,26 @@ module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
 
     var proxySnippet = require('grunt-connect-proxy/lib/utils').proxyRequest;
+    var connectMiddleware = function(connect, options) {
+        var middlewares = [];
+        var directory = options.directory || options.base[options.base.length - 1];
+        if (!Array.isArray(options.base)) {
+            options.base = [options.base];
+        }
+
+        options.base.forEach(function(base) {
+            // Serve static files.
+            middlewares.push(connect.static(base));
+        });
+
+        // Make directory browse-able.
+        middlewares.push(connect.directory(directory));
+
+        // Setup a proxy for local development
+        middlewares.push(proxySnippet);
+
+        return middlewares;
+    };
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -67,26 +88,7 @@ module.exports = function (grunt) {
                         '<%= yeoman.tmp %>',
                         '<%= yeoman.app %>'
                     ],
-                    middleware: function(connect, options) {
-                        var middlewares = [];
-                        var directory = options.directory || options.base[options.base.length - 1];
-                        if (!Array.isArray(options.base)) {
-                            options.base = [options.base];
-                        }
-
-                        options.base.forEach(function(base) {
-                            // Serve static files.
-                            middlewares.push(connect.static(base));
-                        });
-
-                        // Make directory browse-able.
-                        middlewares.push(connect.directory(directory));
-
-                        // Setup a proxy for local development
-                        middlewares.push(proxySnippet);
-
-                        return middlewares;
-                    }
+                    middleware: connectMiddleware
                 }
             },
             test: {
@@ -95,7 +97,8 @@ module.exports = function (grunt) {
                         'test',
                         '<%= yeoman.tmp %>',
                         '<%= yeoman.app %>'
-                    ]
+                    ],
+                    middleware: connectMiddleware
                 }
             },
             dist: {
@@ -134,7 +137,7 @@ module.exports = function (grunt) {
                 '<%= yeoman.app %>/scripts/**/*.js',
                 '!<%= yeoman.app %>/scripts/vendor/*',
                 '!<%= yeoman.app %>/scripts/lib/*',
-                'test/**/*.js',
+                '!test/**/*.js',
                 '!test/lib/**/*.js'
             ],
             options: {
@@ -241,7 +244,7 @@ module.exports = function (grunt) {
                 options: {
                     // `name` and `out` is set by grunt-usemin
                     baseUrl: '<%= yeoman.tmp %>/scripts',
-                    mainConfigFile: '<%= yeoman.tmp %>/scripts/main.js',
+                    mainConfigFile: '<%= yeoman.tmp %>/scripts/config.js',
                     preserveLicenseComments: false,
                     useStrict: true,
                     wrap: true,
@@ -319,7 +322,7 @@ module.exports = function (grunt) {
                             'index.html',
                             'robots.txt',
                             'images/**/*.{webp,gif,jpg,jpeg,png}',
-                            'styles/fonts/**/*.*',
+                            'styles/fonts/**/*.*'
                         ]
                     }
                 ]
@@ -350,9 +353,12 @@ module.exports = function (grunt) {
                 }
             },
             test: [
-                'sync:styles'
+                'sync:styles',
+                'coffee',
+                'compass:dist'
             ],
             dist: [
+                'coffee',
                 'compass:dist'
             ]
         },
@@ -399,22 +405,28 @@ module.exports = function (grunt) {
 
     grunt.registerTask('test', [
         'clean:server',
+        'buildSources',
         'concurrent:test',
         'autoprefixer',
-        'connect:test',
+        'configureProxies',
+        'connect:test:keepalive', // add :keepalive and visit localhost:9000 to debug test environment
         'mocha'
     ]);
 
-    grunt.registerTask('build', [
-        'clean:dist',
+    grunt.registerTask('buildSources', [
         'handlebars',
         'coffee',
-        'useminPrepare',
-        'concurrent:dist',
         'sync:js',
         'sync:styles',
         'sync:images',
         'autoprefixer',
+    ]);
+
+    grunt.registerTask('build', [
+        'clean:dist',
+        'useminPrepare',
+        'concurrent:dist',
+        'buildSources',
         'requirejs',
         'concat',
         'cssmin',

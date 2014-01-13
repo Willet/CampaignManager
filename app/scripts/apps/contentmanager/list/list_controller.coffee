@@ -15,7 +15,7 @@ define [
     contentListViewType: Views.ContentGridItem
     filters:  # default filters (type, source, tags, ...)
       'type': ''
-      'status': 'needs-review'
+      'status': ''
       'source': ''
 
     addFilters: (newFilters={}) ->
@@ -60,9 +60,18 @@ define [
 
       layout.on 'change:filter-content-status', (status) =>
         @filters.status = status
+        layout.trigger('reset:filter')
         contents.setFilter(@filters)
 
-      layout.on 'change:sort-order', (new_order) -> contents.updateSortOrder(new_order)
+      layout.on 'add:filter', (filters) =>
+        @filters = _.extend(@filters, filters)
+
+        _.each(_.keys(@filters), (key) =>
+          delete @filters[key] if \
+            @filters[key] == null || !/\S/.test(@filters[key]))
+
+        contents.setFilter(@filters)
+
       layout.on 'content:select-all', => collection.selectAll()
       layout.on 'content:unselect-all', => collection.unselectAll()
       layout.on 'fetch:next-page', () =>
@@ -73,17 +82,14 @@ define [
         layout.list.show @getContentList(contents)
 
         listControls = @getContentListControls()
-        listControls.on 'change:filter-content-type', (contentType) ->
-          contents.setFilter self.addFilters('type': contentType or '')
 
-        listControls.on 'change:filter-content-source', (contentSource) ->
-          contents.setFilter self.addFilters('source': contentSource or '')
-
-        listControls.on 'change:filter-content-tags', (contentTags) ->
-          console.log contentTags
-          # contents.setFilter self.addFilters('tags': contentTags or null)
+        listControls.on 'change:filter', (filters) ->
+          layout.trigger('add:filter', filters)
 
         layout.listControls.show listControls
+
+        layout.on 'reset:filter', () ->
+          listControls.resetFilter()
 
       return layout
 

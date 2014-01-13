@@ -35,6 +35,9 @@ define [
       filter['tags'] = @$('#js-filter-product-tags').val()
       filter['order'] = @$('#js-filter-sort-order').val()
       filter['category'] = @$('#js-filter-category').val()
+
+      if !filter['order']
+        filter['order'] = 'ascending'
       _.each(_.keys(filter), (key) -> delete filter[key] if filter[key] == null || !/\S/.test(filter[key]))
       return filter;
 
@@ -140,16 +143,16 @@ define [
 
   class Views.PageProductGridItem extends App.Views.Layout
 
-    # TODO: implement a sane version of "added"
-    #       how do we figure out if a product is in a page...
     template: "page/product/item_grid"
     className: "product-item grid-view"
     tagName: "li"
 
     triggers:
+      "click .js-product-prioritize": "prioritize_product"
+      "click .js-product-deprioritize": "deprioritize_product"
+      "click .js-product-add": "add_product"
+      "click .js-product-remove": "remove_product"
       "click .js-product-preview": "preview_product"
-      "click .js-add-to-page": "add"
-      "click .js-remove-from-page": "remove"
 
     events:
       "click": "selectItem"
@@ -157,6 +160,7 @@ define [
     initialize: (options) ->
       throttled_render = _.throttle((=> @render()), 500, leading: false)
       @model.on('nested-change', throttled_render)
+      @model.on 'sync', throttled_render
 
     serializeData: -> @model.viewJSON()
 
@@ -176,8 +180,6 @@ define [
 
   class Views.PageProductListItem extends Views.PageProductGridItem
 
-    # TODO: implement a sane version of "added"
-    #       how do we figure out if a product is in a page...
     template: "page/product/item_list"
     className: "product-item list-view"
     tagName: "li"

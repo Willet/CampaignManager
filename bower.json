@@ -19,7 +19,8 @@
     "requirejs-text": "~2.0.10",
     "sinonjs": "~1.7.1",
     "backbone.uniquemodel": "*",
-    "backbone-associations": "~0.5.4"
+    "backbone-associations": "~0.5.4",
+    "backbone.computedfields": "~0.0.7"
   },
   "authors": [
     "Alex Riedler <alex@riedler.ca>"
@@ -34,6 +35,10 @@
   ],
   "resolutions": {
     "handlebars.js": "~1.1.1",
-    "backbone": "~1.0.0"
+    "backbone": "~1.1.0"
+  },
+  "devDependencies": {
+    "mocha": "~1.16.2",
+    "chai": "~1.8.1"
   }
 }
