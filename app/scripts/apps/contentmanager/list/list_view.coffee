@@ -122,6 +122,15 @@ define [
 
       @trigger("change:filter", filter)
 
+    resetFilter: () ->
+      @$('#js-filter-content-type').val('')
+      @$('#js-filter-content-source').val('')
+      @$('#js-filter-content-tags').val('')
+      @$('#js-filter-sort-order [value="order"][data-direction="descending"]').prop('selected', true)
+
+      # Signify that the filter has changed
+      @changeFilter()
+
     updateActive: (event) ->
       @switchActive(@extractState(event.currentTarget))
 
