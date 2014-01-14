@@ -36,7 +36,10 @@ define [
       store = App.routeModels.get("store")
       page = App.routeModels.get("page")
       products = App.request("page:products", page)
-      page.categories = App.request "categories:products", store.get('id'), page.get('id'), products.getCategoryIds()
+      categories = App.request "categories:store", store.get('id')
+
+      App.execute 'when:fetched', categories, ->
+        page.categories = _.clone categories.models
 
       layout = new Views.PageCreateProducts(model: page)
 

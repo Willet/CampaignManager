@@ -116,7 +116,3 @@ define [
   App.reqres.setHandler "page:add_products",
     (page, products, params) ->
       API.addProducts page, products, params
-
-  App.reqres.setHandler "categories:products",
-    (store_id, page_id, categories) ->
-      [{"id": 1, "name": "Electronics"}, {"id": 2, "name": "Ice-Cream"}]

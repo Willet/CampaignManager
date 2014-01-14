@@ -21,6 +21,7 @@ require([
     'dao/pages',
     'dao/scrape',
     'dao/stores',
+    'dao/categories',
     'dao/content',
     'dao/products',
     'dao/tile-config',
