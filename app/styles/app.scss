@@ -350,15 +350,6 @@ $selected-color: $body-font-color;
       @include grid-column($columns: 10);
     }
   }
-  .filter-product-page {
-    @include grid-column($columns: 12);
-    > label {
-      @include grid-column($columns: 3);
-    }
-    > input {
-      @include grid-column($columns: 9);
-    }
-  }
 }
 .content-item-actions, .product-item-actions {
   @include grid-row();
