@@ -100,6 +100,7 @@ define [
       @collect((m) -> m.viewJSON())
 
     getCategoryIds:  =>
+      self = this
       _.union(self.map (p) -> p.categories || [])
 
   class Entities.ProductPageableCollection extends Base.PageableCollection

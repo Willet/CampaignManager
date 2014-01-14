@@ -6,9 +6,9 @@ define [
 
   API =
     getCategory: (store_id, category_id, params = {}) ->
-      category = new Entities.Category()
-      category.store_id = store_id
-      category.category_id = category_id
+      category = new Entities.Category
+        store_id: store_id
+        category_id: category_id
       categories.url = "#{App.API_ROOT}/store/#{store_id}/category/#{category_id}"
       category.fetch
         reset: true
@@ -16,11 +16,11 @@ define [
       category
 
     getCategories: (store_id, params = {}) ->
-      categories = new Entities.CategoryCollection()
-      categories.store_id = store_id
+      categories = new Entities.CategoryCollection
+        store_id: store_id
       categories.url = "#{App.API_ROOT}/store/#{store_id}/category"
       categories.fetch
-        rset: true
+        reset: true
         data: params
       categories
 
@@ -29,6 +29,6 @@ define [
     (store_id, params) ->
       API.getCategories store_id, params
 
-  App.reqres.setHandler "category:get",
+  App.reqres.setHandler "categories:get",
     (store_id, category_id, params) ->
       API.getCategory store_id, category_id, params
