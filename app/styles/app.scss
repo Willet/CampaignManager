@@ -315,6 +315,15 @@ $selected-color: $body-font-color;
       @include grid-column($columns: 10);
     }
   }
+  .filter-product-category {
+    @include grid-column($columns: 12);
+    > label {
+      @include grid-column($columns: 2);
+    }
+    > select {
+      @include grid-column($columns: 10);
+    }
+  }
   .filter-content-type {
     @include grid-column($columns: 6);
     > label {

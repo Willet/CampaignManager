@@ -19,6 +19,7 @@ define [
       "click .js-list-view": "list-view"
       "click .js-select-all": "select-all"
       "change #js-filter-sort-order": "change:filter"
+      "change #js-filter-category": "change:filter"
       "click .js-add-selected": "add-selected"
 
     events:
@@ -34,6 +35,7 @@ define [
       filter = {}
       filter['tags'] = @$('#js-filter-product-tags').val()
       filter['order'] = @$('#js-filter-sort-order').val()
+      filter['category'] = @$('#js-filter-category').val()
 
       if !filter['order']
         filter['order'] = 'ascending'
@@ -66,6 +68,7 @@ define [
         page: @model.toJSON()
         "store-id": @model.get("store-id")
         "title": @model.get("name")
+        "categories": @model.categories
       }
 
     onRender: (opts) ->
