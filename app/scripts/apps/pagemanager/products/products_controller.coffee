@@ -35,6 +35,11 @@ define [
     initialize: ->
       store = App.routeModels.get("store")
       page = App.routeModels.get("page")
+      products = App.request("page:products", page)
+      categories = App.request "categories:store", store.get('id')
+
+      App.execute 'when:fetched', categories, ->
+        page.categories = _.clone categories.models
 
       layout = new Views.PageCreateProducts(model: page)
 
@@ -83,6 +88,18 @@ define [
       layout.on "change:filter", ->
         filter = layout.extractFilter()
         products.setFilter(filter)
+
+      layout.on 'add-selected', () =>
+        selected = products.filter((model) -> model.get('selected'))
+        product_list = _.map(_.pluck(selected, 'id'), (value) ->
+          parseInt(value, 10);
+        );
+
+        _.each selected, (model) ->
+          model.set 'selected', false
+
+        App.request 'page:add_all_products', page, product_list
+        layout.productList.show @getProductListView(products)
 
       layout.on "display:all-product", =>
         products = App.request "page:products:all", page, layout.extractFilter()

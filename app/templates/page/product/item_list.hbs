@@ -1,5 +1,5 @@
 <div class="product-image">
-  <img src="{{#if default-image-id}}{{default-image-id.images.medium.url}}{{else}}http://placehold.it/180x240&text=No%20Image%20Available{{/if}}" />
+  <img src="{{#if default-image}}{{default-image.images.medium.url}}{{else}}http://placehold.it/180x240&text=No%20Image%20Available{{/if}}" />
 </div>
 <div class="product-wrapper">
   <div class="product-info">
@@ -18,11 +18,28 @@
       Add <i class="icon-general-checkmark"></i>
     </button>
     {{/is}}
+    {{#if page-prioritized}}
+    <button class="deprioritize-product-button js-product-deprioritize">
+      Deprioritize <i class="icon-general-down-arrow"></i>
+    </button>
+    {{else}}
     <button class="prioritize-product-button js-product-prioritize">
       Prioritize <i class="icon-general-up-arrow"></i>
     </button>
+    {{/if}}
     <button class="preview-product-button js-product-preview">
       Preview <i class="icon-accessibility-eyeball"></i>
     </button>
   </div>
 </div>
+{{#is page-status 'added'}}
+  {{#if page-prioritized}}
+      <div class="product-state product-state-prioritized">
+        Prioritized <i class="icon-general-up-arrow"></i>
+      </div>
+    {{else}}
+      <div class="product-state product-state-added">
+        Added <i class="icon-general-checkmark"></i>
+      </div>
+    {{/if}}
+{{/is}}

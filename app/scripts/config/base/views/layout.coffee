@@ -58,6 +58,7 @@ define ['app', 'marionette'], (App, Marionette) ->
       filter['source'] = @$('#js-filter-content-source').val()
       filter['type'] = @$('#js-filter-type').val()
       filter['tags'] = @$('#js-filter-tags').val()
+      filter['category'] = @$('#js-filter-category').val()
 
       # special case for sort ordering, where content can be sorted
       # in one order only
