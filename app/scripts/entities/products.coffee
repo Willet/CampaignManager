@@ -99,16 +99,15 @@ define [
     viewJSON: ->
       @collect((m) -> m.viewJSON())
 
-    getCategoryIds:  =>
-      self = this
-      _.union(self.map (p) -> p.categories || [])
+    getCategoryIds: ->
+      _.union(@map (p) -> p.categories || [])
 
   class Entities.ProductPageableCollection extends Base.PageableCollection
 
     model: Entities.Product
     collectionType: Entities.ProductCollection
 
-    getCategoryIds:  =>
-      _.union(this.map (p) -> p.categories || [])
+    getCategoryIds: ->
+      _.union(@map (p) -> p.categories || [])
 
   Entities
