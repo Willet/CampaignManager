@@ -22,19 +22,25 @@ define [
       "change #js-filter-sort-order": "change:filter"
       "change #js-filter-content-type": "change:filter"
       "change #js-filter-content-source": "change:filter"
-      "blur #js-filter-content-tags": "change:filter"
       "click .js-grid-view": "grid-view"
       "click .js-list-view": "list-view"
       "click .js-select-all": "select-all"
       "click .js-select-none": "select-none"
       "click .js-add-selected": "add-selected"
       "click .js-remove-selected": "remove-selected"
+      "keyup #js-filter-content-tags": "tags:change"
 
     events:
       "click #filter-suggested-content": "displaySuggestedContent"
       "click #filter-all-content": "displayAllContent"
       "click #filter-added-content": "displayAddedContent"
       "click #filter-import-content": "displayImportContent"
+
+    onTagsChange: () ->
+      # Want to ensure that the user has actually finished typing before going
+      # off and calling otherwise we have a race condition.
+      if @doneInput then clearTimeout(@doneInput)
+      @doneInput = setTimeout(_.bind(@trigger, this, 'change:filter'), 1000)
 
     resetFilters: () ->
       @$('#js-filter-sort-order option[value="order"][data-direction="descending"]').prop('selected', 'selected')
@@ -46,7 +52,7 @@ define [
       filter = {}
       filter['source'] = @$('#js-filter-content-source').val()
       filter['type'] = @$('#js-filter-content-type').val()
-      filter['tags'] = @$('#js-filter-content-tags').val()
+      filter['tagged-products'] = @$('#js-filter-content-tags').val()
 
       # differentiate two kinds of UI "sort by": import/post dates,
       # only one of which can be used to sort the list at any given time

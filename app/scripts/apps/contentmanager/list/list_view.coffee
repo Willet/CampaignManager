@@ -39,10 +39,6 @@ define [
     # event triggered when all/needs review/approved/rejected tabs are clicked
     filterContentStatus: (event) ->
       @status = @$(event.currentTarget).val()
-
-      # 'all' cannot filter by type, source, and tags
-      @$('.content-filter-actions').prop('disabled', not @status)
-
       @trigger("change:filter-content-status", @status)
 
     filterPage: (event) ->
@@ -82,9 +78,6 @@ define [
       $(window).on("scroll", @scrollFunction)
       @$('.loading').hide()
 
-      # 'all' cannot filter by type, source, and tags
-      @$('.content-filter-actions').prop('disabled', true)
-
       @on "fetch:next-page:complete", =>
         @$('.loading').hide()
 
@@ -97,7 +90,7 @@ define [
 
     events:
       "click dd": "updateActive"
-      "keyup #js-filter-content-tags": "changeFilter"
+      "keyup #js-filter-content-tags": "onTagsChange"
       "change #js-filter-content-type": "changeFilter"
       "change #js-filter-content-source": "changeFilter"
       "change #js-filter-sort-order": "changeFilter"
@@ -105,11 +98,17 @@ define [
     initialize: (opts) ->
       @current_state = "grid"
 
+    onTagsChange: () ->
+      # Want to ensure that the user has actually finished typing before going
+      # off and calling otherwise we have a race condition.
+      if @doneInput then clearTimeout(@doneInput)
+      @doneInput = setTimeout(_.bind(@changeFilter, this), 1000)
+
     changeFilter: () ->
       filter = {}
       filter['type'] = @$('#js-filter-content-type').val()
       filter['source'] = @$('#js-filter-content-source').val()
-      filter['tags'] = @$('#js-filter-content-tags').val()
+      filter['tagged-products'] = @$('#js-filter-content-tags').val()
 
       # differentiate two kinds of UI "sort by": import/post dates,
       # only one of which can be used to sort the list at any given time
