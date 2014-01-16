@@ -99,9 +99,15 @@ define [
     viewJSON: ->
       @collect((m) -> m.viewJSON())
 
+    getCategoryIds: ->
+      _.union(@map (p) -> p.categories || [])
+
   class Entities.ProductPageableCollection extends Base.PageableCollection
 
     model: Entities.Product
     collectionType: Entities.ProductCollection
+
+    getCategoryIds: ->
+      _.union(@map (p) -> p.categories || [])
 
   Entities

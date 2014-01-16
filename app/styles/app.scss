@@ -234,8 +234,8 @@ $selected-color: $body-font-color;
   margin: 1.666%;
   .content-type {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 15px;
+    right: 10px;
     margin: 5px;
   }
   .content-image, .product-image {
@@ -256,6 +256,11 @@ $selected-color: $body-font-color;
         color: $action-color;
       }
     }
+  }
+  .content-state, .product-state {
+    position: absolute;
+    right: 10px;
+    top: 0;
   }
 }
 
@@ -302,6 +307,15 @@ $selected-color: $body-font-color;
     line-height: 22px;
   }
   .filter-sort-order {
+    @include grid-column($columns: 12);
+    > label {
+      @include grid-column($columns: 2);
+    }
+    > select {
+      @include grid-column($columns: 10);
+    }
+  }
+  .filter-product-category {
     @include grid-column($columns: 12);
     > label {
       @include grid-column($columns: 2);
