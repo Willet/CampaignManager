@@ -72,6 +72,15 @@ define [
       @importRegion.show new Views.ProductScrapersView()
       @displayImportProduct()
 
+    nextPage: ->
+      @trigger("fetch:next-page")
+      false
+
+    autoLoadNextPage: (event) ->
+      distanceToBottom = 75
+      if ($(document).scrollTop() + $(window).height()) > $(document).height() - distanceToBottom
+        @nextPage()
+
     onShow: (opts) ->
       # TODO: unhard-code this...
       @$('#search-product').select2(
@@ -103,10 +112,13 @@ define [
         @trigger "added-product", product
         @$('#search-product').select2('val', null)
         @$(@productAddedBySearch.el).fadeIn(200).delay(1500).fadeOut(400)
+      @scrollFunction = => @autoLoadNextPage()
+      $(window).on("scroll", @scrollFunction)
       false
 
     onClose: ->
       @$('#search-product').select2("destroy")
+      $(window).off("scroll", @scrollFunction)
 
   class Views.PageScrapeItem extends App.Views.ItemView
 
