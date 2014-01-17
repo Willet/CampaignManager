@@ -120,6 +120,9 @@ define [
           App.navigate "/" + store.get('id') + "/pages/" + page.get('id') + "/content",
             trigger: true
 
+      layout.on 'fetch:next-page', () ->
+        products.getNextPage()
+
       @listenTo layout, 'show', =>
         layout.productList.show @getProductListView(products)
 
