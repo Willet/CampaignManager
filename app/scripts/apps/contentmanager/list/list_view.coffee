@@ -1,11 +1,7 @@
-define [
-  'app',
-  '../app',
-  '../views',
-  'entities'
+define ['app', '../app', '../views', 'entities'
 ], (App, ContentManager, Views, Entities) ->
 
-  class Views.ListLayout extends App.Views.Layout
+  class Views.ListLayout extends App.Views.SortableLayout
 
     template: 'content/index'
 
@@ -14,8 +10,18 @@ define [
       "listControls": "#list-controls"
       "multiedit": ".edit-area"
 
+    triggers:
+      "click .js-grid-view": "grid-view"
+      "click .js-list-view": "list-view"
+      "click .js-select-all": "content:select-all"
+      "click .js-unselect-all": "content:unselect-all"
+
+      "keyup #js-filter-tags": "change:filter"
+      "change #js-filter-type": "change:filter"
+      "change #js-filter-content-source": "change:filter"
+      "change #js-filter-sort-order": "change:filter"
+
     events:
-      "click dd": "updateActive"
       "change #js-filter-page": "filterPage"
       "click .js-filter-content-status": "filterContentStatus"
 
@@ -25,12 +31,6 @@ define [
         @model.trigger("grid-item:selected",@model)
       else
         @model.trigger("grid-item:deselected",@model)
-
-    triggers:
-      "click .js-grid-view": "grid-view"
-      "click .js-list-view": "list-view"
-      "click .js-select-all": "content:select-all"
-      "click .js-unselect-all": "content:unselect-all"
 
     initialize: (opts) ->
       @current_state = opts['initial_state']
@@ -45,35 +45,10 @@ define [
 
       @trigger("change:filter-content-status", @status)
 
-    filterPage: (event) ->
-      @trigger("change:filter-page", @$(event.currentTarget).val())
-
     autoLoadNextPage: (event) ->
       distanceToBottom = 75
       if ($(document).scrollTop() + $(window).height()) > $(document).height() - distanceToBottom
         @nextPage()
-
-    nextPage: ->
-      @$('.loading').show()
-      @trigger("fetch:next-page")
-      false
-
-    updateActive: (event) ->
-      @switchActive(@extractState(event.currentTarget))
-
-    extractState: (element) ->
-      if result = element.className.match(/js-tab-([a-zA-Z-_]+)/)
-        return result[1]
-      null
-
-    currentlyActive: ->
-      @$('.tabs dd.active').className.split(/\s+/)
-
-    switchActive: (new_state) ->
-      @$(".tabs .active").removeClass("active")
-      @$(".tabs .js-tab-#{new_state}").addClass("active")
-      @current_state = new_state
-      @$('#list').removeClass("grid-view").removeClass("list-view").addClass("#{new_state}-view")
 
     onRender: (opts) ->
 
@@ -85,8 +60,7 @@ define [
       # 'all' cannot filter by type, source, and tags
       @$('.content-filter-actions').prop('disabled', true)
 
-      @on "fetch:next-page:complete", =>
-        @$('.loading').hide()
+      super()
 
     onClose: ->
       $(window).off("scroll", @scrollFunction)
@@ -95,71 +69,19 @@ define [
 
     template: "content/filter_controls"
 
-    events:
-      "click dd": "updateActive"
-      "keyup #js-filter-content-tags": "changeFilter"
-      "change #js-filter-content-type": "changeFilter"
-      "change #js-filter-content-source": "changeFilter"
-      "change #js-filter-sort-order": "changeFilter"
-
     initialize: (opts) ->
       @current_state = "grid"
+      super(opts)
 
-    changeFilter: () ->
-      filter = {}
-      filter['type'] = @$('#js-filter-content-type').val()
-      filter['source'] = @$('#js-filter-content-source').val()
-      filter['tags'] = @$('#js-filter-content-tags').val()
-
-      # differentiate two kinds of UI "sort by": import/post dates,
-      # only one of which can be used to sort the list at any given time
-      sortKey = @$('#js-filter-sort-order').val()
-      sortDirection = @$('#js-filter-sort-order option:selected').data('direction')
-      @$('#js-filter-sort-order option').each () ->
-        key = $(this).val()
-        filter[key] = ''
-      filter[sortKey] = sortDirection
-
-      @trigger("change:filter", filter)
-
-    resetFilter: () ->
-      @$('#js-filter-content-type').val('')
-      @$('#js-filter-content-source').val('')
-      @$('#js-filter-content-tags').val('')
-      @$('#js-filter-sort-order [value="order"][data-direction="descending"]').prop('selected', true)
-
-      # Signify that the filter has changed
-      @changeFilter()
-
-    updateActive: (event) ->
-      @switchActive(@extractState(event.currentTarget))
-
-    extractState: (element) ->
-      if result = element.className.match(/js-tab-([a-zA-Z-_]+)/)
-        return result[1]
-      null
-
-    currentlyActive: ->
-      @$('.tabs dd.active').className.split(/\s+/)
-
-    switchActive: (new_state) ->
-      @$(".tabs .active").removeClass("active")
-      @$(".tabs .js-tab-#{new_state}").addClass("active")
-      @current_state = new_state
-      @trigger('change:state', @current_state)
 
   class Views.ContentPreview extends App.Views.ItemView
-
     template: "content/item_preview"
 
-    serializeData: -> @model.viewJSON()
 
-  Views.TaggedPagesInput = App.Views.ItemView.extend
-
-    template: false
-
+  class Views.TaggedPagesInput extends App.Views.ItemView
     initialize: (options) ->
       @store = options.store
+      super(opts)
 
     onShow: ->
       self = @
@@ -189,13 +111,13 @@ define [
     onClose: ->
       @$el.parent().select2("destroy")
 
-  Views.TaggedProductInput = App.Views.ItemView.extend
 
-    template: false
-
+  # TODO: grep test failed
+  class Views.TaggedProductInput extends App.Views.ItemView
     initialize: (options) ->
       @store = options['store']
       @storeId = options['store_id']
+      super(opts)
 
     onShow: ->
       # BUG: If this is a part of a multi-edit, there will be a problem with
@@ -265,34 +187,14 @@ define [
     onClose: ->
       @$el.parent().select2("destroy")
 
-  class Views.ContentList extends App.Views.CollectionView
 
-    template: false
-    tagName: "ul"
+  class Views.ContentList extends App.Views.CollectionView
     className: "content-list"
 
-  class Views.ContentListItem extends App.Views.ItemView
 
-    tagName: "li"
-    className: "content-item list-view"
-    template: "content/item_list"
-
+  # superclass for handling events; use subclasses below
+  class Views.ContentItemView extends App.Views.SelectableListItemView
     triggers:
-      "click .js-content-select": "content:select-toggle"
-      "click .js-content-approve": "approve_content"
-      "click .js-content-reject": "reject_content"
-      "click .js-content-undecided": "undecide_content"
-      "click .js-content-preview": "preview_content"
-      "click .js-content-edit": "edit_content"
-
-  class Views.ContentGridItem extends App.Views.ItemView
-
-    tagName: "li"
-    className: "content-item grid-view"
-    template: "content/item_grid"
-
-    triggers:
-      "click .js-content-select": "content:select-toggle"
       "click .js-content-approve": "approve_content"
       "click .js-content-reject": "reject_content"
       "click .js-content-undecided": "undecide_content"
@@ -300,26 +202,21 @@ define [
       "click .js-content-edit": "edit_content"
       "click .js-content-approve-edit": "approve_content edit_content"
 
-    bindings:
-      '.js-selected':
-        attributes: [
-          name: 'checked'
-          observe: 'selected'
-          onGet: (observed) ->
-            if observed then true else false
-        ]
-      '.item':
-        attributes: [
-          name: 'class'
-          observe: 'selected'
-          onGet: (observed) ->
-            if observed then "selected" else ""
-        ]
-
     initialize: ->
       @model.on('change:status', => @render())
+      super()
 
-    onRender: ->
-      @stickit()
+
+  # Grid item view (mirror of list item view)
+  class Views.ContentListItem extends Views.ContentItemView
+    className: "content-item list-view"
+    template: "content/item_list"
+
+
+  # Grid item view (mirror of list item view)
+  class Views.ContentGridItem extends Views.ContentItemView
+    className: "content-item grid-view"
+    template: "content/item_grid"
+
 
   Views

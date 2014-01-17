@@ -14,10 +14,8 @@ define [
       @listenTo(@store, 'sync', => @render())
 
     serializeData: ->
-      return {
-        page: @page.toJSON()
-        store: @store.toJSON()
-      }
+      page: @page.toJSON()
+      store: @store.toJSON()
 
     events:
       'click .steps li a': ->
@@ -70,9 +68,5 @@ define [
               if val in ["view", "publish"] then "active" else ""
           }
         ]
-
-
-    onRender: ->
-      @stickit()
 
   Views

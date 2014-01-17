@@ -13,6 +13,8 @@ define [
         loadingMessage: "Please wait. Loading..."
       @options = _.extend(defaults, opts)
 
+      super(opts)
+
     serializeData: ->
       {
         message: (if @options['initialized'] then @options['loadingMessage'] else @options['emptyMessage'])

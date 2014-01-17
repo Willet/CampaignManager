@@ -8,11 +8,12 @@ define [
   'components/views/main_layout', 'components/views/main_nav', 'components/views/title_bar',
   'marionette',
   '../edit_content/edit_controller'
-], (App, ContentManager, Views, ContentViews, EditController, BackboneProjections, MainLayout, MainNav, Marionette) ->
+], (App, ContentManager, Views, ContentViews, EditController,
+    BackboneProjections, MainLayout, MainNav, Marionette) ->
 
   class ContentManager.Controller extends App.Controllers.Base
 
-    contentListViewType: Views.ContentGridItem
+    itemViewType: Views.ContentGridItem
     filters:  # default filters (type, source, tags, ...)
       'type': ''
       'status': ''
@@ -22,11 +23,11 @@ define [
       _.extend @filters, newFilters
 
     setContentListViewType: (viewType) ->
-      @contentListViewType = viewType
+      @itemViewType = viewType
 
     # @returns {ContentGridItem}
     getContentListViewType: ->
-      @contentListViewType
+      @itemViewType
 
     # @returns a grid view or a list view, depending on how "this" is configured
     getContentListView: (contents) ->
@@ -40,7 +41,15 @@ define [
       store = App.routeModels.get 'store'
       contents = App.request 'content:all', store
       App.execute 'when:fetched', contents, =>
-        @show @getContentLayout(contents)
+        layout = @getContentLayout(contents)
+
+        # locates all filter controls in the view and generates a
+        # querydict-like object.
+        layout.on 'change:filter', () ->
+          filter = layout.extractFilter()
+          contents.setFilter(filter)
+
+        @show layout
 
     getContentLayout: (contents) ->
       selectedCollection = new BackboneProjections.Filtered(contents,
@@ -60,7 +69,6 @@ define [
 
       layout.on 'change:filter-content-status', (status) =>
         @filters.status = status
-        layout.trigger('reset:filter')
         contents.setFilter(@filters)
 
       layout.on 'add:filter', (filters) =>
@@ -88,9 +96,6 @@ define [
 
         layout.listControls.show listControls
 
-        layout.on 'reset:filter', () ->
-          listControls.resetFilter()
-
       return layout
 
     getContentList: (contents) ->
@@ -117,24 +122,6 @@ define [
         (view, args) =>
           content = args.model
           controller = new EditController content
-
-      # DEFER: NOT USED
-      contentList.on 'itemview:edit:tagged-products:add',
-        (view, editArea, tagger, product) ->
-          view.model.get('tagged-products').add(product)
-          view.model.save()
-
-      # DEFER: NOT USED
-      contentList.on 'itemview:edit:tagged-products:remove',
-        (view, editArea, tagger, product) ->
-          view.model.get('tagged-products').remove(product)
-          view.model.save()
-
-      # DEFER: NOT USED
-      contentList.on 'itemview:content:select-toggle',
-        (view, args)  =>
-          content = args.model
-          content.set('selected', !args.model.get('selected'))
 
       # previews the selected content.
       contentList.on 'itemview:preview_content',

@@ -4,7 +4,7 @@ define [
   'backbone.stickit'
 ], (App, Views) ->
 
-  class Views.PageCreateContent extends App.Views.Layout
+  class Views.PageCreateContent extends App.Views.SortableLayout
 
     template: "page/content/main"
 
@@ -20,9 +20,9 @@ define [
     triggers:
       "click .js-next": "save"
       "change #js-filter-sort-order": "change:filter"
-      "change #js-filter-content-type": "change:filter"
+      "change #js-filter-type": "change:filter"
       "change #js-filter-content-source": "change:filter"
-      "blur #js-filter-content-tags": "change:filter"
+      "blur #js-filter-tags": "change:filter"
       "click .js-grid-view": "grid-view"
       "click .js-list-view": "list-view"
       "click .js-select-all": "select-all"
@@ -38,25 +38,12 @@ define [
 
     resetFilters: () ->
       @$('#js-filter-sort-order option[value="order"][data-direction="descending"]').prop('selected', 'selected')
-      @$('#js-filter-content-type').val('')
+      @$('#js-filter-type').val('')
       @$('#js-filter-content-source').val('')
-      @$('#js-filter-content-tags').val('')
+      @$('#js-filter-tags').val('')
 
     extractFilter: () ->
-      filter = {}
-      filter['source'] = @$('#js-filter-content-source').val()
-      filter['type'] = @$('#js-filter-content-type').val()
-      filter['tags'] = @$('#js-filter-content-tags').val()
-
-      # differentiate two kinds of UI "sort by": import/post dates,
-      # only one of which can be used to sort the list at any given time
-      sortKey = @$('#js-filter-sort-order').val()
-      sortDirection = @$('#js-filter-sort-order option:selected').data('direction')
-      filter[sortKey] = sortDirection
-
-      filter['status'] = 'approved'
-      _.each(_.keys(filter), (key) -> delete filter[key] if filter[key] == null || !/\S/.test(filter[key]))
-      return filter;
+      filter = super(status: 'approved')  # defaults plus {'status'}
 
     displaySuggestedContent: (event) ->
       @trigger('display:suggested-content')
@@ -117,27 +104,14 @@ define [
 
 
   class Views.PageCreateContentPreview extends App.Views.ItemView
-
     template: 'page/content/item_preview'
-
-    serializeData: -> @model.viewJSON()
 
 
   class Views.PageCreateContentList extends App.Views.CollectionView
-
-    tagName: "ul"
     className: "content-list"
-    template: false
-
-    initialize: ->
-      @allSelected = false
-
-    itemViewOptions: -> { selected: @allSelected }
 
 
-  class Views.PageCreateContentGridItem extends App.Views.ItemView
-
-    tagName: "li"
+  class Views.PageCreateContentGridItem extends App.Views.ListItemView
     className: "content-item grid-view"
     template: "page/content/item_grid"
 
@@ -148,36 +122,10 @@ define [
       "click .js-content-remove": "remove_content"
       "click .js-content-preview": "preview_content"
 
-    events:
-      "click": "selectItem"
 
-    serializeData: -> @model.viewJSON()
-
-    initialize: ->
-      @model.on 'sync', =>
-        @render()
-
-    onRender: ->
-      @updateDOM()
-
-    updateDOM: () ->
-      if @model.get('selected')
-        @$el.addClass('selected')
-      else
-        @$el.removeClass('selected')
-
-    selectItem: (event) ->
-      @model.set('selected', !@model.get('selected'))
-      @updateDOM()
-
-
-  class Views.PageCreateContentListItem extends App.Views.ItemView
-
-    tagName: "li"
+  class Views.PageCreateContentListItem extends App.Views.ListItemView
     className: "content-item list-view"
     template: "page/content/item_list"
-
-    serializeData: -> @model.viewJSON()
 
     triggers:
       "click .js-content-prioritize": "prioritize_content"
