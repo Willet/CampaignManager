@@ -36,12 +36,6 @@ define [
       "click #filter-added-content": "displayAddedContent"
       "click #filter-import-content": "displayImportContent"
 
-    onTagsChange: () ->
-      # Want to ensure that the user has actually finished typing before going
-      # off and calling otherwise we have a race condition.
-      if @doneInput then clearTimeout(@doneInput)
-      @doneInput = setTimeout(_.bind(@trigger, this, 'change:filter'), 1000)
-
     resetFilters: () ->
       @$('#js-filter-sort-order option[value="order"][data-direction="descending"]').prop('selected', 'selected')
       @$('#js-filter-content-type').val('')

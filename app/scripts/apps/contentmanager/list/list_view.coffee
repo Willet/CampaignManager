@@ -98,11 +98,8 @@ define [
     initialize: (opts) ->
       @current_state = "grid"
 
-    onTagsChange: () ->
-      # Want to ensure that the user has actually finished typing before going
-      # off and calling otherwise we have a race condition.
-      if @doneInput then clearTimeout(@doneInput)
-      @doneInput = setTimeout(_.bind(@changeFilter, this), 1000)
+    onTagsChange: _.debounce (() ->
+      @changeFilter()), 1000
 
     changeFilter: () ->
       filter = {}

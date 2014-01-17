@@ -66,6 +66,9 @@ define [
         filter = layout.extractFilter()
         contents.setFilter(filter)
 
+      layout.on 'tags:change', _.debounce((() ->
+        layout.trigger('change:filter')), 1000)
+
       layout.on 'select-all', () =>
         contents.collect((model) -> model.set('selected', true))
         layout.contentList.show @getContentListView(contents)
