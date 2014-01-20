@@ -110,14 +110,14 @@ define [
         results: 25
       @finished = false
 
-    fetchAll: (opts) ->
+    fetchAll: (opts={}) ->
       unless @finished
         xhr = @getNextPage(opts)
         xhr.promise().done(=>
           @fetchAll()
         )
 
-    getNextPage: (opts) ->
+    getNextPage: (opts={}) ->
       unless @finished || @in_progress
         @in_progress = true
 
@@ -125,10 +125,7 @@ define [
         #collection = new @collectionType
         #collection.model = @model
         #collection.url = @url
-        params = _.extend(@queryParams, @params)
-
-        if not $.isEmptyObject(opts)
-          _.extend(params, opts)
+        params = _.extend(@queryParams, @params, opts)
 
         xhr = @fetch
           data: params
