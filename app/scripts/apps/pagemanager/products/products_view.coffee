@@ -11,6 +11,7 @@ define [
 
     regions:
       productList: ".product-list-region"
+      loadingArea: ".product-list-loading-region"
       importRegion: ".import-product-region"
 
     triggers:
@@ -132,6 +133,15 @@ define [
 
     serializeData: ->
       @model.viewJSON()
+
+  class Views.PageLoadingProduct extends App.Views.ItemLoadingView
+
+    template: "shared/items/loading"
+    emptyTemplate: "shared/items/empty"
+    completeTemplate: "shared/items/complete"
+
+    serializeData: ->
+      page_type: "product"
 
   class Views.PageScrapeList extends App.Views.CollectionView
 

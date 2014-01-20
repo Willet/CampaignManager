@@ -57,6 +57,7 @@ define [
       @sort()
 
     fetch: ->
+      @trigger "fetch", this
       @_fetch = super(arguments...)
 
     parse: (data) ->

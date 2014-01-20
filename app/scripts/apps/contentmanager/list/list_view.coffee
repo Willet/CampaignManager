@@ -13,6 +13,7 @@ define [
       "list": ".content-list-region"
       "listControls": "#list-controls"
       "multiedit": ".edit-area"
+      "loading": ".content-list-loading-region"
 
     events:
       "click dd": "updateActive"
@@ -90,6 +91,14 @@ define [
 
     onClose: ->
       $(window).off("scroll", @scrollFunction)
+
+  class Views.ContentLoadingContent extends App.Views.ItemLoadingView
+
+    template: "shared/items/loading"
+    emptyTemplate: "shared/items/empty"
+    completeTemplate: "shared/items/complete"
+
+    serializeData: -> {}
 
   class Views.ContentListControls extends App.Views.ItemView
 
