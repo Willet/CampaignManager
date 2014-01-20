@@ -112,7 +112,7 @@ define [
 
     fetchAll: (opts) ->
       unless @finished
-        xhr = @getNextPage()
+        xhr = @getNextPage(opts)
         xhr.promise().done(=>
           @fetchAll()
         )
@@ -126,6 +126,9 @@ define [
         #collection.model = @model
         #collection.url = @url
         params = _.extend(@queryParams, @params)
+
+        if not $.isEmptyObject(opts)
+          _.extend(params, opts)
 
         xhr = @fetch
           data: params
