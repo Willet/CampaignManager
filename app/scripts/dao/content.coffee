@@ -49,7 +49,7 @@ define [
       content.store_id = store_id
       content.page_id = page_id
       content.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content"
-      content.getNextPage()
+      content.getNextPage(params)
       content
 
     getPageSuggestedContent: (store_id, page_id, params = {}) ->
@@ -65,7 +65,7 @@ define [
       contents.store_id = store_id
       contents.page_id = page_id
       contents.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/all"
-      contents.getNextPage()
+      contents.getNextPage(params)
       contents
 
     approveContent: (content, params) ->

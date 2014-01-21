@@ -25,7 +25,7 @@ define [
     initialize: ->
       page = App.routeModels.get 'page'
       store = App.routeModels.get 'store'
-      contents = App.request 'page:suggested_content', page
+      contents = null
       content_type = null
 
       layout = new Views.PageCreateContent
@@ -115,7 +115,7 @@ define [
         layout.contentList.show @getContentListView(contents)
 
       layout.on 'fetch:next-page', () ->
-        contents.getNextPage()
+        contents.getNextPage layout.extractFilter()
 
       layout.on 'save', () ->
         $.when(page.save()).done (data) ->
