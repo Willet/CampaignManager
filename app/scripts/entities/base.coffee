@@ -57,7 +57,6 @@ define [
       @sort()
 
     fetch: ->
-      @trigger "fetch", this
       @_fetch = super(arguments...)
 
     parse: (data) ->
@@ -138,10 +137,14 @@ define [
           @params['offset'] = xhr.responseJSON['meta']?['cursors']?['next']
           @finished = true unless @params['offset']
           @in_progress = false
+          # We trigger a fail if we have no results
+          if @params['results'].length == 0 or not @params['offset']
+            @trigger 'fail'
         ).fail(=>
           # Need to signal fetching has ended on error
           @finished = true
           @in_progress = false
+          @trigger 'fail' # Need the explicit call in case of fail
         )
       xhr
 
