@@ -304,10 +304,30 @@ $selected-color: $body-font-color;
         overflow: hidden;
         display: inline-block;
         vertical-align: bottom;
+        -o-animation: ellipsis 1s infinite;
         -moz-animation: ellipsis 1s infinite;
         -webkit-animation: ellipsis 1s infinite;
+        animation: ellipsis 1s infinite;
       }
     }
+  }
+}
+
+@keyframes ellipsis {
+  from {
+    width: 0px;
+  }
+  to {
+    width: 12px;
+  }
+}
+
+@-o-keyframes ellipsis {
+  from {
+    width: 0px;
+  }
+  to {
+    width: 12px;
   }
 }
 
