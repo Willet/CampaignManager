@@ -26,7 +26,7 @@ define [
     initialize: ->
       page = App.routeModels.get 'page'
       store = App.routeModels.get 'store'
-      contents = App.request 'page:suggested_content', page
+      contents = null
       content_type = null
 
       layout = new Views.PageCreateContent
@@ -66,6 +66,9 @@ define [
       layout.on 'change:filter', () ->
         filter = layout.extractFilter()
         contents.setFilter(filter)
+
+      layout.on 'tags:change', _.debounce((() ->
+        layout.trigger('change:filter')), 1000)
 
       layout.on 'select-all', () =>
         contents.collect((model) -> model.set('selected', true))
@@ -121,7 +124,7 @@ define [
         layout.loadingArea.show new @contentLoading(collection: contents)
 
       layout.on 'fetch:next-page', () ->
-        contents.getNextPage()
+        contents.getNextPage layout.extractFilter()
 
       layout.on 'save', () ->
         $.when(page.save()).done (data) ->
