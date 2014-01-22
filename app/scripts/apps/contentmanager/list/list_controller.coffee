@@ -53,18 +53,19 @@ define [
       layout.on 'grid-view', () =>
         @setContentListViewType Views.ContentGridItem
         layout.list.show @getContentList(contents)
-        layout.loading.show @contentLoadingView(collection: contents)
+        layout.loading.show new @contentLoadingView(collection: contents)
 
       # swap the current view (whatever it is) with a list view.
       layout.on 'list-view', () =>
         @setContentListViewType Views.ContentListItem
         layout.list.show @getContentList(contents)
-        layout.loading.show @contentLoadingView(collection: contents)
+        layout.loading.show new @contentLoadingView(collection: contents)
 
       layout.on 'change:filter-content-status', (status) =>
         @filters.status = status
         layout.trigger('reset:filter')
         contents.setFilter(@filters)
+        layout.loading.show new @contentLoadingView(collection: contents)
 
       layout.on 'add:filter', (filters) =>
         @filters = _.extend(@filters, filters)
