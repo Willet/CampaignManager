@@ -187,8 +187,6 @@ define [
 
   Views.TaggedProductInput = App.Views.ItemView.extend
 
-    template: false
-
     initialize: (options) ->
       @store = options['store']
       @storeId = options['store_id']
@@ -196,8 +194,31 @@ define [
     onShow: ->
       # BUG: If this is a part of a multi-edit, there will be a problem with
       # accessing store / page
+      formatProduct = (product) =>
+        unless product instanceof Backbone.Model
+          product = new Entities.Product($.extend(product, {'store-id': @storeId}))
+        imageUrl = product.viewJSON()['default-image']?.images?.thumb.url || null
+        identifier = "product-#{product.get('id')}"
+
+        # replace image url when model is fetched if it wasn't ready when we rendered
+        if imageUrl == null
+          imageUrl = 'http://placehold.it/20/eee/000&text=X'
+          # Yes, this is a horrible idea. However, we don't have a CID as the model
+          # has not been fetched yet, and I can't think of a better way. Needless to
+          # say, feel free to modify if you can think of something less idiotic.
+          intv = setInterval(() ->
+            if (imageUrl = product.viewJSON()['default-image']?.images?.thumb.url || null)
+
+              $(".#{identifier} img").attr('src', imageUrl)
+              clearInterval intv
+          , 1000)
+
+        image = "<img src=\"#{imageUrl}\">"
+        name = "<span>#{product.get("name")}</span>"
+        "<span class=\"#{identifier}\">#{image} #{name}</span>"
+
       storeId = @store?.get('id') or @storeId
-      @$el.parent().select2(
+      @$('.tag-content').select2(
         multiple: true
         allowClear: true
         placeholder: "Search for a product"
@@ -214,14 +235,12 @@ define [
             return {
               results: data['results']
             }
-        formatResult: (product) ->
-          "<span>#{product['name']}</span>"
-        formatSelection: (product) ->
-          "<span>#{product['name']}</span>"
+        formatResult: formatProduct
+        formatSelection: formatProduct
       )
       if @model?.get("tagged-products")
-        @$el.parent().select2('data', @model.get("tagged-products").toJSON())
-      @$el.parent().on "change", (event, element) =>
+        @$('.tag-content').select2('data', @model.get("tagged-products").toJSON())
+      @$('.tag-content').on "change", (event, element) =>
         if event.added
           product = new Entities.Product(event.added)
           if @model
@@ -246,20 +265,20 @@ define [
       false
 
     addProduct: (product) ->
-      products = @$el.parent().select2("data")
+      products = @$('.tag-content').select2("data")
       products.push(product.toJSON())
-      @$el.parent().select2("data", products)
+      @$('.tag-content').select2("data", products)
 
     removeProduct: (product_id) ->
-      products = @$el.parent().select2("data")
+      products = @$('.tag-content').select2("data")
       for product, i in products
         if product['id'] is product_id
           delete product[i]
           break
-      @$el.parent().select2("data", products)
+      @$('.tag-content').select2("data", products)
 
     onClose: ->
-      @$el.parent().select2("destroy")
+      @$('.tag-content').select2("destroy")
 
   class Views.ContentList extends App.Views.CollectionView
 
@@ -267,7 +286,7 @@ define [
     tagName: "ul"
     className: "content-list"
 
-  class Views.ContentListItem extends App.Views.ItemView
+  class Views.ContentListItem extends Views.TaggedProductInput
 
     tagName: "li"
     className: "content-item list-view"

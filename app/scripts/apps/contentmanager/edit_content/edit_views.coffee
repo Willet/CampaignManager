@@ -46,6 +46,13 @@ define [
         name = "<span>#{product.get("name")}</span>"
         "<span class=\"#{identifier}\">#{image} #{name}</span>"
 
+      $caption = $('textarea.tag-content-caption')
+      $caption.on "keyup", _.debounce(((event) =>
+        caption = $(event.currentTarget).val()
+        @saveModel = true
+        @model.set('caption', caption)
+      ), 1000)
+
       $el = $('.tag-content')
       $el.select2(
         multiple: true
