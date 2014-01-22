@@ -10,7 +10,7 @@ define [
 
     regions:
       "contentList": ".content-list-region"
-      loadingArea: ".content-list-loading-region"
+      "loadingArea": ".content-list-loading-region"
 
     serializeData: ->
       return {
