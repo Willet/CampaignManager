@@ -1,8 +1,7 @@
 <div class="content-image">
-  <img src="{{images.medium.url}}{{video-thumbnail}}"/>
+  <img src="{{images.large.url}}{{video-thumbnail}}"/>
 </div>
 <div class="content-info">
-  {{ debug }}
   <div class="content-source">
     <span class="content-label">Source:</span> {{titleize source}}
     {{#is source 'facebook'}}
@@ -36,7 +35,7 @@
       Approve <i class="icon-general-checkmark"></i>
     </button>
     {{/isnt}}
-    <button class="js-content-priorize">
+    <button class="js-content-prioritize">
       Prioritize <i class="icon-general-up-arrow"></i>
     </button>
     <button class="js-content-preview">

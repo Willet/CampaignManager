@@ -33,6 +33,8 @@ define [
       new Views.ContentList
         collection: contents
         itemView: @getContentListViewType()
+        itemViewOptions:
+          autosave: true # enables autosave in list view
 
     contentIndex: () ->
       # Called everytime page is loaded
@@ -117,6 +119,15 @@ define [
         (view, args) =>
           content = args.model
           controller = new EditController content
+
+      contentList.on 'itemview:prioritize_content',
+        (view, args) =>
+          # TODO: Add in prioritize functionality
+          console.log args
+
+      contentList.on 'itemview:edit_caption',
+        (view, args) =>
+          view.onCaptionChange()
 
       # DEFER: NOT USED
       contentList.on 'itemview:edit:tagged-products:add',

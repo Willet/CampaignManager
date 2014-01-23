@@ -229,9 +229,9 @@ $selected-color: $body-font-color;
   background-color: #f0f0f0;
   padding-left: 0em;
   border: 1px solid #aaaaaa;
-  height: 240px;
   overflow: hidden;
   margin: 1.666%;
+  margin-left: 0;
   .content-type {
     position: absolute;
     top: 15px;
@@ -240,6 +240,8 @@ $selected-color: $body-font-color;
   }
   .content-image, .product-image {
     @include grid-column($columns: 3);
+    float: none;
+    display: inline-block;
     padding: 0;
     float: left;
     > img {
@@ -248,8 +250,11 @@ $selected-color: $body-font-color;
   }
   .content-info, .product-info {
     @include grid-column($columns: 9);
+    float: none;
+    display: inline-block;
     padding: 0;
-    margin-left: 0px;
+    margin-left: 0.3375em;
+    margin-right: -0.9375em;
   }
   .content-actions, .product-actions {
     > button {
@@ -279,6 +284,7 @@ $selected-color: $body-font-color;
   }
   .content-tag-buttons {
     margin-bottom: 3px;
+    float: right;
     > button {
       background-color: #444;
       height: 35px;
