@@ -35,9 +35,15 @@
       Approve <i class="icon-general-checkmark"></i>
     </button>
     {{/isnt}}
+    {{#if page-prioritized}}
+    <button class="js-content-prioritize">
+      Unprioritize <i class="icon-general-down-arrow"></i>
+    </button>
+    {{else}}
     <button class="js-content-prioritize">
       Prioritize <i class="icon-general-up-arrow"></i>
     </button>
+    {{/if}}
     <button class="js-content-preview">
       Preview <i class="icon-accessibility-eyeball"></i>
     </button>

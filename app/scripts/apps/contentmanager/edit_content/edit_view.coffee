@@ -10,7 +10,7 @@ define [
 
     triggers:
       'click .reveal-close .reveal-modal-bg' : 'closeEditView'
-      'keyup .content-caption' : 'captionEditView'
+      'keyup .tag-content-caption' : 'captionEditView'
 
     serializeData: ->
       @model.viewJSON()

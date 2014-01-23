@@ -122,8 +122,11 @@ define [
 
       contentList.on 'itemview:prioritize_content',
         (view, args) =>
-          # TODO: Add in prioritize functionality
-          console.log args
+          content = args.model
+          priority = content.get('page-prioritized')
+          content.set('page-prioritized', not priority)
+          view.toggleSave(content)
+          view.render()
 
       contentList.on 'itemview:edit_caption',
         (view, args) =>

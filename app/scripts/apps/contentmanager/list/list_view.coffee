@@ -160,25 +160,6 @@ define [
       @captionTarget = options['captionTarget'] || '.content-caption'
       _.bindAll(@, 'onCaptionChange')
 
-    onCaptionChange: _.debounce(
-      (() ->
-        caption = @$(@captionTarget).val()
-        @model.set('caption', caption)
-        @saveModel = true
-        if @autosave
-          @model.save()
-      ), 1000)
-
-    serializeData: ->
-      @model.viewJSON()
-
-    onRender: ->
-      target = @$(@selectTarget)
-      # Need to destroy the select2 instance in the event that it already
-      # exists when we're rerendering
-      target.select2('destroy')
-      @initSelect(target)
-
     initSelect: (target) ->
       # BUG: If this is a part of a multi-edit, there will be a problem with
       # accessing store / page
@@ -246,8 +227,34 @@ define [
         if @autosave
           @model.save()
 
+    serializeData: ->
+      @model.viewJSON()
+
+    toggleSave: (model) ->
+      @saveModel = true
+      if @autosave
+        @model.save()
+
+    onCaptionChange: _.debounce(
+      (() ->
+        caption = @$(@captionTarget).val()
+        @model.set('caption', caption)
+        @saveModel = true
+        if @autosave
+          @model.save()
+      ), 1000)
+
+
+    onRender: ->
+      target = @$(@selectTarget)
+      # Need to destroy the select2 instance in the event that it already
+      # exists when we're rerendering
+      target.select2('destroy')
+      @initSelect(target)
+
     onClose: ->
-      if @saveModel
+      # Don't save if we're already autosaving
+      if @saveModel and not @autosave
         @model.save()
       @$('.tag-content').select2("destroy")
 

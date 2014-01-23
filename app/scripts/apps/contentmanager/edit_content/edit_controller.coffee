@@ -12,6 +12,7 @@ define [
       page = App.routeModels.get('page')
       @view = new Views.EditContentView
         model: model
+        captionTarget: '.tag-content-caption'
 
       @view.on 'closeEditView', =>
         @view.close()
