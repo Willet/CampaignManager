@@ -168,6 +168,7 @@ define [
           product = new Entities.Product($.extend(product, {'store-id': @storeId}))
         imageUrl = product.viewJSON()['default-image']?.images?.thumb.url || null
         identifier = "product-#{product.get('id')}"
+        productName = product.viewJSON()['name']
 
         # replace image url when model is fetched if it wasn't ready when we rendered
         if imageUrl == null
@@ -182,8 +183,25 @@ define [
               clearInterval intv
           , 1000)
 
+        # replace name when it is fetched; when rendering, may find that it is undefined,
+        # so we want the name to be present.
+        if not productName
+          # for now enforce a strict limit on the number of retries as there exists
+          # products with no names.
+          # Note: We should not be doing this, and this needs to be fixed.
+          limit = 10
+          intv = setInterval(() ->
+            productName = product.viewJSON()['name']
+            if productName
+              $(".#{identifier} span").text(productName)
+              clearInterval intv
+            if limit == 0
+              clearInterval intv
+            limit -= 1
+          , 1000)
+
         image = "<img src=\"#{imageUrl}\">"
-        name = "<span>#{product.get("name")}</span>"
+        name = "<span>#{productName}</span>"
         "<span class=\"#{identifier}\">#{image} #{name}</span>"
 
       # Initialize the select2 script on our target that will display
