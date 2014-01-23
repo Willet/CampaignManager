@@ -232,6 +232,7 @@ $selected-color: $body-font-color;
   overflow: hidden;
   margin: 1.666%;
   margin-left: 0;
+  min-height: 240px;
   .content-type {
     position: absolute;
     top: 15px;
@@ -273,6 +274,15 @@ $selected-color: $body-font-color;
     right: 10px;
     top: 0;
   }
+  .content-label, .product-label {
+    font-size: 1.1em;
+    font-weight: 500;
+    display: block;
+  }
+  .content-label-text, .product-label-text {
+    display: block;
+    margin-bottom: 8px;
+  }
 }
 
 .content-item.list-view {
@@ -297,11 +307,6 @@ $selected-color: $body-font-color;
       }
     }
   }
-  .content-label {
-    font-size: 1.1em;
-    font-weight: 500;
-    display: block;
-  }
   .content-source, .content-type-info {
     display: inline-block;
     margin-right: 15px;
@@ -322,7 +327,7 @@ $selected-color: $body-font-color;
    }
   .product-image {
     @include grid-column($columns: 3);
-    margin-top:2px;
+    padding: 0;
   }
   .inline {
     margin-bottom: 1px;

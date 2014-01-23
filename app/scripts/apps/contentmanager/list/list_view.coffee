@@ -277,7 +277,6 @@ define [
       "click .js-content-undecided": "undecide_content"
       "click .js-content-preview": "preview_content"
       "click .js-content-edit": "edit_content"
-      "click .js-content-prioritize": "prioritize_content"
       "keyup .content-caption": "edit_caption"
 
   class Views.ContentGridItem extends App.Views.ItemView

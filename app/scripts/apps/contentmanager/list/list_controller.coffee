@@ -120,14 +120,6 @@ define [
           content = args.model
           controller = new EditController content
 
-      contentList.on 'itemview:prioritize_content',
-        (view, args) =>
-          content = args.model
-          priority = content.get('page-prioritized')
-          content.set('page-prioritized', not priority)
-          view.toggleSave(content)
-          view.render()
-
       contentList.on 'itemview:edit_caption',
         (view, args) =>
           view.onCaptionChange()
