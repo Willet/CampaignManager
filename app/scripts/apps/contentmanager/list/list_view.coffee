@@ -166,39 +166,28 @@ define [
       formatProduct = (product) =>
         unless product instanceof Backbone.Model
           product = new Entities.Product($.extend(product, {'store-id': @storeId}))
-        imageUrl = product.viewJSON()['default-image']?.images?.thumb.url || null
+        imageUrl = product.viewJSON()['default-image']?.images?.thumb.url || 'http://placehold.it/20/eee/000&ext=X'
         identifier = "product-#{product.get('id')}"
-        productName = product.viewJSON()['name']
+        productName = product.viewJSON()['name'] || ''
 
-        # replace image url when model is fetched if it wasn't ready when we rendered
-        if imageUrl == null
-          imageUrl = 'http://placehold.it/20/eee/000&text=X'
-          # Yes, this is a horrible idea. However, we don't have a CID as the model
-          # has not been fetched yet, and I can't think of a better way. Needless to
-          # say, feel free to modify if you can think of something less idiotic.
-          intv = setInterval(() ->
-            if (imageUrl = product.viewJSON()['default-image']?.images?.thumb.url || null)
-
-              $(".#{identifier} img").attr('src', imageUrl)
-              clearInterval intv
-          , 1000)
-
-        # replace name when it is fetched; when rendering, may find that it is undefined,
-        # so we want the name to be present.
-        if not productName
-          # for now enforce a strict limit on the number of retries as there exists
-          # products with no names.
-          # Note: We should not be doing this, and this needs to be fixed.
-          limit = 10
-          intv = setInterval(() ->
-            productName = product.viewJSON()['name']
-            if productName
-              $(".#{identifier} span").text(productName)
-              clearInterval intv
-            if limit == 0
-              clearInterval intv
-            limit -= 1
-          , 1000)
+        # TODO: find a better way to do this
+        # We should not be doing this, as with significant amount of products and scrolling occuring
+        # at the same time, the user may notice latency.
+        limit = 10
+        intv = setInterval((() ->
+          # while the image/name are still loading, attempt every second
+          # to see if we've got them; limit ourselves to ten tries.
+          imageUrl = product.viewJSON()['default-image']?.images?.thumb.url
+          productName = product.viewJSON()['name']
+          # If they're loaded, plug in the values
+          if imageUrl
+            $(".#{identifier} img").attr('src', imageUrl)
+          if productName
+            $(".#{identifier} span").text(productName)
+          if (productName and imageUrl) || limit == 0
+            clearInterval intv
+          limit -= 1
+        ), 1000)
 
         image = "<img src=\"#{imageUrl}\">"
         name = "<span>#{productName}</span>"
