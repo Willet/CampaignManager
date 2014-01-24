@@ -85,8 +85,7 @@ module.exports = function (grunt) {
             livereload: {
                 options: {
                     base: [
-                        '<%= yeoman.tmp %>',
-                        '<%= yeoman.app %>'
+                        '<%= yeoman.tmp %>'
                     ],
                     middleware: connectMiddleware
                 }
@@ -95,8 +94,7 @@ module.exports = function (grunt) {
                 options: {
                     base: [
                         'test',
-                        '<%= yeoman.tmp %>',
-                        '<%= yeoman.app %>'
+                        '<%= yeoman.tmp %>'
                     ],
                     middleware: connectMiddleware
                 }
@@ -105,7 +103,8 @@ module.exports = function (grunt) {
                 options: {
                     open: true,
                     base: '<%= yeoman.dist %>'
-                }
+                },
+                middleware: connectMiddleware
             },
             proxies: [{
                 context: '/graph/v1',
@@ -242,7 +241,8 @@ module.exports = function (grunt) {
         requirejs: {
             dist: {
                 options: {
-                    // `name` and `out` is set by grunt-usemin
+                    name: 'config',
+                    out: '<%= yeoman.dist %>/scripts/config.js',
                     baseUrl: '<%= yeoman.tmp %>/scripts',
                     mainConfigFile: '<%= yeoman.tmp %>/scripts/config.js',
                     preserveLicenseComments: false,
@@ -252,7 +252,7 @@ module.exports = function (grunt) {
                 }
             }
         },
-        rev: {
+        rev: { // cache-busting utility (adds hash to filenames)
             dist: {
                 files: {
                     src: [
@@ -265,17 +265,14 @@ module.exports = function (grunt) {
             }
         },
         useminPrepare: {
+            html: '<%= yeoman.app %>/index.html',
             options: {
-                dest: '<%= yeoman.dist %>'
-            },
-            html: '<%= yeoman.app %>/index.html'
+                dest: '<%= yeoman.dist %>/'
+            }
         },
         usemin: {
-            options: {
-                dirs: ['<%= yeoman.dist %>']
-            },
-            html: ['<%= yeoman.dist %>/**/*.html'],
-            css: ['<%= yeoman.dist %>/styles/**/*.css']
+            html: '<%= yeoman.dist %>/index.html',
+            css: '<%= yeoman.dist %>/styles/app.css'
         },
         // Put files not handled in other tasks here
         sync: {
@@ -311,12 +308,30 @@ module.exports = function (grunt) {
                 dest: '<%= yeoman.tmp %>/styles/',
                 src: '**/*.css'
             },
-            dist: {
+            dev: {
                 files: [
                     {
                         cwd: '<%= yeoman.app %>/',
+                        dest: '<%= yeoman.tmp %>/',
+                        src: [
+                            'bower_components/requirejs/require.js',
+                            '*.{ico,png,txt}',
+                            '.htaccess',
+                            'index.html',
+                            'robots.txt',
+                            'images/**/*.{webp,gif,jpg,jpeg,png}',
+                            'styles/fonts/**/*.*'
+                        ]
+                    }
+                ]
+            },
+            dist: {
+                files: [
+                    {
+                        cwd: '<%= yeoman.tmp %>/',
                         dest: '<%= yeoman.dist %>/',
                         src: [
+                            'bower_components/requirejs/require.js',
                             '*.{ico,png,txt}',
                             '.htaccess',
                             'index.html',
@@ -327,16 +342,6 @@ module.exports = function (grunt) {
                     }
                 ]
             }
-        },
-        modernizr: {
-            devFile: '<%= yeoman.app %>/bower_components/modernizr/modernizr.js',
-            outputFile: '<%= yeoman.dist %>/bower_components/modernizr/modernizr.js',
-            files: [
-                '<%= yeoman.dist %>/scripts/**/*.js',
-                '<%= yeoman.dist %>/styles/**/*.css',
-                '!<%= yeoman.dist %>/scripts/vendor/*'
-            ],
-            uglify: true
         },
         concurrent: {
             server: {
@@ -359,7 +364,6 @@ module.exports = function (grunt) {
             ],
             dist: [
                 'coffee',
-                'compass:dist'
             ]
         },
         bower: {
@@ -367,35 +371,35 @@ module.exports = function (grunt) {
                 exclude: ['modernizr']
             },
             all: {
-                rjsConfig: '<%= yeoman.app %>/scripts/main.js'
+                rjsConfig: '<%= yeoman.app %>/scripts/config.js'
             }
         }
     }); // end of config
 
+    grunt.loadNpmTasks('grunt-contrib-coffee');
+    grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-connect');
+    grunt.loadNpmTasks('grunt-contrib-compass');
     grunt.loadNpmTasks('grunt-contrib-handlebars');
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-compass');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-connect-proxy');
-    grunt.loadNpmTasks('grunt-contrib-coffee');
-    grunt.loadNpmTasks('grunt-sync');
+    grunt.loadNpmTasks('grunt-contrib-requirejs');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-concurrent');
+    grunt.loadNpmTasks('grunt-rev');
+    grunt.loadNpmTasks('grunt-sync');
+    grunt.loadNpmTasks('grunt-usemin');
 
     grunt.registerTask('server', function (target) {
         if (target === 'dist') {
-            return grunt.task.run(['build', 'connect:dist:keepalive']);
+            return grunt.task.run(['build', 'configureProxies', 'connect:dist:keepalive']);
         }
 
         grunt.task.run([
             'clean:server',
             'compass:server',
-            'sync:styles',
-            'sync:images',
-            'sync:js',
-            'handlebars',
-            'coffee',
+            'buildSources',
             'jshint',
             'configureProxies',
             'connect:livereload',
@@ -419,21 +423,28 @@ module.exports = function (grunt) {
         'sync:js',
         'sync:styles',
         'sync:images',
+        'sync:dev',
         'autoprefixer',
     ]);
 
     grunt.registerTask('build', [
+        // clean
+        'clean:server',
         'clean:dist',
+        // setup build config
         'useminPrepare',
-        'concurrent:dist',
+        // build everything
         'buildSources',
         'requirejs',
+        'compass:dist',
+        'sync:dist',
+        // save some bytes
+        'uglify',
         'concat',
         'cssmin',
-        'uglify',
-        'modernizr',
-        'sync:dist',
+        // rename files for cache
         'rev',
+        // write modified index.html out
         'usemin'
     ]);
 
