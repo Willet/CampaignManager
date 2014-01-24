@@ -54,7 +54,6 @@ define [
       sortDirection = @$('#js-filter-sort-order option:selected').data('direction')
       filter[sortKey] = sortDirection
 
-      filter['status'] = 'approved'
       _.each(_.keys(filter), (key) -> delete filter[key] if filter[key] == null || !/\S/.test(filter[key]))
       return filter;
 
