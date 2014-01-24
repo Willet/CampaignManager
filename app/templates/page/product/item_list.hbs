@@ -1,12 +1,14 @@
 <div class="product-image">
-  <img src="{{#if default-image}}{{default-image.images.medium.url}}{{else}}http://placehold.it/180x240&text=No%20Image%20Available{{/if}}" />
+  <img src="{{#if default-image}}{{default-image.images.large.url}}{{else}}http://placehold.it/252x252&text=No%20Image%20Available{{/if}}" />
 </div>
 <div class="product-wrapper">
   <div class="product-info">
-    <label for="name" class="inline">Name</label> <a href="{{url}}">{{default name "(No Name)"}}</a>
-    <label for="price" class="inline">Price</label> <b>{{default price "(Price Missing)"}}</b>
-    <label for="description" class="inline">Description</label>
-    <p class="description">{{default description "(No Description)"}}</p>
+    <label for="name" class="product-label">Name</label>
+    <span class="product-label-text"><a href="{{url}}">{{default name "(No Name)"}}</a></span>
+    <label for="price" class="product-label">Price</label>
+    <span class="product-label-text"><b>{{default price "(Price Missing)"}}</b></span>
+    <label for="description" class="product-label">Description</label>
+    <p class="product-label-text description">{{default description "(No Description)"}}</p>
   </div>
   <div class="product-actions">
     {{#is page-status 'added'}}

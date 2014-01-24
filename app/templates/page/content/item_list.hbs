@@ -4,23 +4,24 @@
   {{/is}}
 </div>
 <div class="content-image">
-  <img src="{{images.medium.url}}{{video-thumbnail}}"/>
+  <img src="{{images.large.url}}{{video-thumbnail}}"/>
 </div>
 <div class="content-info">
-  <label for="source" class="inline">Source</label>
-  <div class="content-source">
+  <label for="source" class="content-label">Source</label>
+  <div class="content-source content-label-text">
     {{#is source 'facebook'}}
-    <i class="icon-social-facebook"></i> Facebook
+    <i class="icon-social-facebook"></i>
     {{/is}}
     {{#is source 'instagram'}}
-    <i class="icon-social-instagram"></i> Instagram
+    <i class="icon-social-instagram"></i>
     {{/is}}
     {{#is source 'youtube'}}
-    <i class="icon-social-youtube"></i> Youtube
+    <i class="icon-social-youtube"></i>
     {{/is}}
+    {{titleize source}}
   </div>
-  <label for="caption" class="inline">Caption</label>
-  <p class="caption">{{default caption "(No Caption)"}}</p>
+  <label for="caption" class="content-label">Caption</label>
+  <p class="caption content-label-text">{{default caption "(No Caption)"}}</p>
   <div class="content-actions">
     {{#is page-status 'added'}}
     <button class="remove-content-button js-content-remove">

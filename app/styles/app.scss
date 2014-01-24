@@ -227,11 +227,12 @@ $selected-color: $body-font-color;
   @include grid-column($columns: 12);
   list-style-type: none;
   background-color: #f0f0f0;
-  box-shadow: inset 1px 1px #aaaaaa;
+  padding-left: 0em;
   border: 1px solid #aaaaaa;
-  height: 240px;
   overflow: hidden;
   margin: 1.666%;
+  margin-left: 0;
+  min-height: 240px;
   .content-type {
     position: absolute;
     top: 15px;
@@ -239,11 +240,22 @@ $selected-color: $body-font-color;
     margin: 5px;
   }
   .content-image, .product-image {
+    @include grid-column($columns: 3);
+    float: none;
+    display: inline-block;
+    padding: 0;
     float: left;
+    > img {
+      width: 100%;
+    }
   }
   .content-info, .product-info {
-    position: relative;
-    left: 10px;
+    @include grid-column($columns: 9);
+    float: none;
+    display: inline-block;
+    padding: 0;
+    margin-left: 0.3375em;
+    margin-right: -0.9375em;
   }
   .content-actions, .product-actions {
     > button {
@@ -262,6 +274,50 @@ $selected-color: $body-font-color;
     right: 10px;
     top: 0;
   }
+  .content-label, .product-label {
+    font-size: 1.1em;
+    font-weight: 500;
+    display: block;
+  }
+  .content-label-text, .product-label-text {
+    display: block;
+    margin-bottom: 8px;
+  }
+}
+
+.content-item.list-view {
+  textarea.content-caption {
+    display: block;
+    resize: none;
+    height: 50px;
+    width: 100%;
+  }
+  .content-tag-buttons {
+    margin-bottom: 3px;
+    float: right;
+    > button {
+      background-color: #444;
+      height: 35px;
+      border: 0;
+      margin: 0;
+      font-size: 12px;
+      margin-right: 5px;
+      &:hover {
+        color: $action-color;
+      }
+    }
+  }
+  .content-source, .content-type-info {
+    display: inline-block;
+    margin-right: 15px;
+    .content-label {
+      display: inline-block;
+    }
+  }
+  .tag-content,.select2-drop{
+    width: 100%;
+    margin-bottom: 5px;
+  }
 }
 
 .product-item.list-view {
@@ -271,7 +327,7 @@ $selected-color: $body-font-color;
    }
   .product-image {
     @include grid-column($columns: 3);
-    margin-top:2px;
+    padding: 0;
   }
   .inline {
     margin-bottom: 1px;
@@ -921,9 +977,40 @@ body {
 
 }
 
-.tag-content,.select2-drop{
-  max-width: 100%;
-  position: absolute;
-  top: 1em;
-  right: 1em;
+
+.content-preview {
+  textarea {
+    resize: none;
+    font-size: 14px;
+    color: #464646;
+    width: 500px;
+  }
+  .tag-label {
+    display: block;
+    font-weight: 500;
+    font-size: 1.2em;
+  }
+  .tag-content,.select2-drop{
+    min-width: 500px;
+    max-width: 100%;
+    top: 1em;
+    right: 1em;
+    position: inherit;
+  }
+  .tag-content-caption {
+    min-width: 500px;
+    max-width: 100%;
+  }
+  > img {
+    float: left;
+  }
+  .tag-content-buttons {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    > button {
+      width: 120px;
+      margin-right: 12px;
+    }
+  }
 }
