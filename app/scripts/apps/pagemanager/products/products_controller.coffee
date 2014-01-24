@@ -89,6 +89,9 @@ define [
         filter = layout.extractFilter()
         products.setFilter(filter)
 
+      layout.on "change:tags", _.debounce((() ->
+        layout.trigger('change:filter')), 1000)
+
       layout.on 'add-selected', () =>
         selected = products.filter (model) ->
           if select = model.get('selected')
