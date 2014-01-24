@@ -1,8 +1,9 @@
 define [
   "app",
   "dao/base",
-  "entities"
-], (App, Base, Entities) ->
+  "entities",
+  "underscore"
+], (App, Base, Entities, _) ->
 
   API =
     getPage: (store_id, page_id, params = {}) ->
@@ -44,21 +45,29 @@ define [
       url = "#{App.API_ROOT}/store/#{page.get('store-id')}/page/#{page.get('id')}/content/#{content.get('id')}/deprioritize"
       content.save({}, { method: 'POST', url: url })
 
-    addAllContent: (store_id, page_id, content_list, params = {}) ->
-      url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/content/add_all"
-      $.ajax url, type: "PUT", data: JSON.stringify(content_list)
+    addAllContent: (page, content_list, params = {}) ->
+      _.each content_list, (content) =>
+        @addContent page, content, params
+
+    removeAllContent: (page, content_list, params = {}) ->
+      _.each content_list, (content) =>
+        @removeContent page, content, params
 
     addProduct: (page, product, params = {}) ->
       url = "#{App.API_ROOT}/store/#{page.get('store-id')}/page/#{page.get('id')}/product/#{product.get('id')}"
       product.save({}, { method: 'PUT', url: url })
 
-    addAllProducts: (store_id, page_id, product_list, params = {}) ->
-      url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product/add_all"
-      $.ajax url, type: "PUT", data: JSON.stringify(product_list)
+    addAllProducts: (page, product_list, params = {}) ->
+      _.each product_list, (product) =>
+        @addProduct page, product, params
 
     removeProduct: (page, product, params = {}) ->
       url = "#{App.API_ROOT}/store/#{page.get('store-id')}/page/#{page.get('id')}/product/#{product.get('id')}"
       product.save({}, { method: 'DELETE', url: url })
+
+    removeAllProducts: (page, product_list, params = {}) ->
+      _.each product_list, (product) =>
+        @removeProduct page, product, params
 
     prioritizeProduct: (page, product, params = {}) ->
       url = "#{App.API_ROOT}/store/#{page.get('store-id')}/page/#{page.get('id')}/product/#{product.get('id')}/prioritize"
@@ -123,11 +132,15 @@ define [
 
   App.reqres.setHandler "page:add_all_content",
     (page, content_list, options) ->
-      API.addAllContent page.get('store-id'), page.get('id'), content_list
+      API.addAllContent page, content_list, options
 
   App.reqres.setHandler "page:remove_content",
     (page, content, options) ->
       API.removeContent page, content, options
+
+  App.reqres.setHandler "page:remove_all_content",
+    (page, content_list, options) ->
+      API.removeAllContent page, content_list, options
 
   App.reqres.setHandler "page:prioritize_content",
     (page, content, options) ->
@@ -147,11 +160,15 @@ define [
 
   App.reqres.setHandler "page:add_all_products",
     (page, product_list, options) ->
-      API.addAllProducts page.get('store-id'), page.get('id'), product_list
+      API.addAllProducts page, product_list, options
 
   App.reqres.setHandler "page:remove_product",
     (page, product, options) ->
       API.removeProduct page, product, options
+
+  App.reqres.setHandler "page:remove_all_products",
+    (page, product_list, options) ->
+      API.removeAllProducts page, product_list, options
 
   App.reqres.setHandler "page:prioritize_product",
     (page, product, options) ->

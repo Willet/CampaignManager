@@ -90,15 +90,21 @@ define [
         products.setFilter(filter)
 
       layout.on 'add-selected', () =>
-        selected = products.filter((model) -> model.get('selected'))
-        product_list = _.map(_.pluck(selected, 'id'), (value) ->
-          parseInt(value, 10);
-        );
+        selected = products.filter (model) ->
+          if select = model.get('selected')
+            model.set 'selected', false
+          select
 
-        _.each selected, (model) ->
-          model.set 'selected', false
+        App.request 'page:add_all_products', page, selected
+        layout.productList.show @getProductListView(products)
 
-        App.request 'page:add_all_products', page, product_list
+      layout.on 'remove-selected', () =>
+        selected = products.filter (model) ->
+          if select = model.get('selected')
+            model.set 'selected', false
+          select
+
+        App.request 'page:remove_all_products', page, selected
         layout.productList.show @getProductListView(products)
 
       layout.on "display:all-product", =>

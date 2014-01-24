@@ -21,6 +21,7 @@ define [
       "change #js-filter-sort-order": "change:filter"
       "change #js-filter-category": "change:filter"
       "click .js-add-selected": "add-selected"
+      "click .js-remove-selected": "remove-selected"
 
     events:
       "click #filter-import-product": "displayImportProduct"
