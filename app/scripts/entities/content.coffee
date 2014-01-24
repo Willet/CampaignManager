@@ -55,30 +55,6 @@ define [
       pageTile = tileConfigs.filter((m) -> m.get('template') == 'image')
       pageTile[0]
 
-    computed: {
-      'page-tile':
-        depends: ['tile-configs']
-        get: (fields) ->
-          return @getPageTile()
-
-      'page-status':
-        depends: ['tile-configs']
-        get: (fields) ->
-          if @getPageTile()
-            return 'added'
-          else
-            return null
-
-      'page-prioritized':
-        depends: ['tile-configs']
-        get: (fields) ->
-          tileConfig = @getPageTile()
-          if tileConfig
-            return tileConfig.get('prioritized')
-          else
-            return false
-    }
-
     tag: (tags) ->
       unless _.isArray(tags) or _.isNull(tags)
         tags = [tags]

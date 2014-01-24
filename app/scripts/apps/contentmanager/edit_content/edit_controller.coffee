@@ -8,6 +8,7 @@ define [
   class ContentManager.Controller extends App.Controllers.Base
 
     initialize: (model) ->
+      console.error "poop"
       store = App.routeModels.get('store')
       page = App.routeModels.get('page')
       @layout = new Views.EditContentLayout

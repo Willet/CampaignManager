@@ -73,22 +73,27 @@ define [
       $el.select2('data', @model.get('tagged-products').models)
       $el.on "change", (event, element) =>
 
-        @saveModel = true
+        # @saveModel = true
         if event.added
           unless event.added instanceof Entities.Product
             product = new Entities.Product $.extend(event.added,
               'store-id': @storeId
             )
+          console.log "adding product %O", {id: product.get('id')}
           @model.get('tagged-products').add(id: product.get('id'));
 
         else if event.removed
           removedId = event.removed.id
 
+          console.log "removing product %O", event.removed
           @model.get('tagged-products').remove(removedId);
 
+        # wtf?
+        @model.save()
+
     onClose: =>
-      if @saveModel
-        @model.save();
+      #if @saveModel
+        #@model.save();
 
       $('.tag-products').select2('destroy')
 

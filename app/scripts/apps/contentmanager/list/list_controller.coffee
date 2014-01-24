@@ -115,6 +115,7 @@ define [
 
       contentList.on 'itemview:edit_content',
         (view, args) =>
+          # marionette.view.md#trigger-handler-arguments
           content = args.model
           controller = new EditController content
 

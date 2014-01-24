@@ -317,5 +317,6 @@ define [
 
     onRender: ->
       @stickit()
+      @$el.data('model', @model)
 
   Views
