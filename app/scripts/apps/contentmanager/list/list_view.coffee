@@ -110,6 +110,7 @@ define [
 
     changeFilter: () ->
       filter = {}
+      filter['is-content'] = 'true'
       filter['type'] = @$('#js-filter-content-type').val()
       filter['source'] = @$('#js-filter-content-source').val()
       filter['tagged-products'] = @$('#js-filter-content-tags').val()
