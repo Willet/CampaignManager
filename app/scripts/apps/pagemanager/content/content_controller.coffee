@@ -79,7 +79,8 @@ define [
 
       layout.on 'add-selected', () =>
         selected = contents.filter (model) ->
-          if select = model.get('selected')
+          select = model.get('selected')
+          if select
             model.set 'selected', false
           select
         App.request 'page:add_all_content', page, selected
@@ -87,7 +88,8 @@ define [
 
       layout.on 'remove-selected', () =>
         selected = contents.filter (model) ->
-          if select = model.get('selected')
+          select = model.get('selected')
+          if select
             model.set 'selected', false
           select
         App.request 'page:remove_all_content', page, selected

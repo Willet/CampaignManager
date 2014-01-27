@@ -94,7 +94,8 @@ define [
 
       layout.on 'add-selected', () =>
         selected = products.filter (model) ->
-          if select = model.get('selected')
+          select = model.get('selected')
+          if select
             model.set 'selected', false
           select
 
@@ -103,7 +104,8 @@ define [
 
       layout.on 'remove-selected', () =>
         selected = products.filter (model) ->
-          if select = model.get('selected')
+          select = model.get('selected')
+          if select
             model.set 'selected', false
           select
 
