@@ -180,7 +180,7 @@ define [
       "click": "selectItem"
 
     initialize: (options) ->
-      throttled_render = _.throttle((=> @render()), 500, leading: false)
+      throttled_render = _.debounce((=> @render()), 500)
       @model.on('nested-change', throttled_render)
       @model.on 'sync', throttled_render
 
