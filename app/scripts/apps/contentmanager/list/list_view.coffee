@@ -159,54 +159,52 @@ define [
 
     serializeData: -> @model.viewJSON()
 
-  Views.TaggedPagesInput = App.Views.ItemView.extend
-
-    template: false
-
-    initialize: (options) ->
-      @store = options.store
-
-    onShow: ->
-      self = @
-      @$el.parent().select2(
-        multiple: true
-        allowClear: true
-        placeholder: "Search for a page"
-        tokenSeparators: [',']
-        query: (query) ->
-          $.ajax "#{App.API_ROOT}/store/#{self.model.get("store-id")}/page",
-            success: (data) ->
-              query.callback(data)
-        data:
-          results: [] # TODO: needs page data
-          text: (item) -> item['name']
-        formatNoMatches: (term) ->
-          "No pages match '#{term}'"
-        formatResult: (page) ->
-          "<span>#{page['name']}</span>"
-        formatSelection: (page) ->
-          "<span>#{page['name']}</span>"
-      ).on "change", (e) ->
-        # TODO: I have no idea where the endpoint is
-        # added:e.added, removed:e.removed
-      false
-
-    onClose: ->
-      @$el.parent().select2("destroy")
-
-  Views.TaggedProductInput = App.Views.ItemView.extend
-
-    template: false
+  class Views.TaggedProductInput extends App.Views.ItemView
 
     initialize: (options) ->
       @store = options['store']
-      @storeId = options['store_id']
+      @storeId = options['store_id'] || App.routeModels.get('store').id
+      @autosave = options['autosave'] || false
+      @selectTarget = options['selectTarget'] || '.tag-content'
+      @captionTarget = options['captionTarget'] || '.content-caption'
+      _.bindAll(@, 'onCaptionChange')
 
-    onShow: ->
+    initSelect: (target) ->
       # BUG: If this is a part of a multi-edit, there will be a problem with
       # accessing store / page
-      storeId = @store?.get('id') or @storeId
-      @$el.parent().select2(
+      formatProduct = (product) =>
+        unless product instanceof Backbone.Model
+          product = new Entities.Product($.extend(product, {'store-id': @storeId}))
+        imageUrl = product.viewJSON()['default-image']?.images?.thumb.url || 'http://placehold.it/20/eee/000&ext=X'
+        identifier = "product-#{product.get('id')}"
+        productName = product.viewJSON()['name'] || ''
+
+        # TODO: find a better way to do this
+        # We should not be doing this, as with significant amount of products and scrolling occuring
+        # at the same time, the user may notice latency.
+        limit = 10
+        intv = setInterval((() ->
+          # while the image/name are still loading, attempt every second
+          # to see if we've got them; limit ourselves to ten tries.
+          imageUrl = product.viewJSON()['default-image']?.images?.thumb.url
+          productName = product.viewJSON()['name']
+          # If they're loaded, plug in the values
+          if imageUrl
+            $(".#{identifier} img").attr('src', imageUrl)
+          if productName
+            $(".#{identifier} span").text(productName)
+          if (productName and imageUrl) || limit == 0
+            clearInterval intv
+          limit -= 1
+        ), 1000)
+
+        image = "<img src=\"#{imageUrl}\">"
+        name = "<span>#{productName}</span>"
+        "<span class=\"#{identifier}\">#{image} #{name}</span>"
+
+      # Initialize the select2 script on our target that will display
+      # the tagged products.
+      target.select2(
         multiple: true
         allowClear: true
         placeholder: "Search for a product"
@@ -223,52 +221,58 @@ define [
             return {
               results: data['results']
             }
-        formatResult: (product) ->
-          "<span>#{product['name']}</span>"
-        formatSelection: (product) ->
-          "<span>#{product['name']}</span>"
+        formatResult: formatProduct
+        formatSelection: formatProduct
       )
-      if @model?.get("tagged-products")
-        @$el.parent().select2('data', @model.get("tagged-products").toJSON())
-      @$el.parent().on "change", (event, element) =>
+
+      target.select2('data', @model.get('tagged-products').models)
+      target.on "change", (event, element) =>
+        @saveModel = true
         if event.added
-          product = new Entities.Product(event.added)
-          if @model
-            @model.get('tagged-products').add(product)
-            @trigger('add', model)
-          else
-            @collection.collect((m) =>
-              m.get('tagged-products').add(product)
-              m.set('selected', false)
+          product = event.added
+          unless product instanceof Entities.Product
+            product = new Entities.Product $.extend(event.added,
+              'store-id': @storeId
             )
-        if event.removed
-          if @model
-            product = @model.get('tagged-products').get(event.removed.id)
-            @model.get('tagged-products').remove(product)
-            @trigger('remove', product)
-          else
-            @collection.collect((m) =>
-              product = m.get('tagged-products').get(event.removed.id)
-              m.get('tagged-products').remove(product)
-              m.set('selected', false)
-            )
-      false
+          @model.get('tagged-products').add(id: product.get('id'))
 
-    addProduct: (product) ->
-      products = @$el.parent().select2("data")
-      products.push(product.toJSON())
-      @$el.parent().select2("data", products)
+        else if event.removed
+          productId = event.removed.id
+          @model.get('tagged-products').remove(productId)
 
-    removeProduct: (product_id) ->
-      products = @$el.parent().select2("data")
-      for product, i in products
-        if product['id'] is product_id
-          delete product[i]
-          break
-      @$el.parent().select2("data", products)
+        if @autosave
+          @model.save()
+
+    serializeData: ->
+      @model.viewJSON()
+
+    toggleSave: (model) ->
+      @saveModel = true
+      if @autosave
+        @model.save()
+
+    onCaptionChange: _.debounce(
+      (() ->
+        caption = @$(@captionTarget).val()
+        @model.set('caption', caption)
+        @saveModel = true
+        if @autosave
+          @model.save()
+      ), 1000)
+
+
+    onRender: ->
+      target = @$(@selectTarget)
+      # Need to destroy the select2 instance in the event that it already
+      # exists when we're rerendering
+      target.select2('destroy')
+      @initSelect(target)
 
     onClose: ->
-      @$el.parent().select2("destroy")
+      # Don't save if we're already autosaving
+      if @saveModel and not @autosave
+        @model.save()
+      @$('.tag-content').select2("destroy")
 
   class Views.ContentList extends App.Views.CollectionView
 
@@ -276,7 +280,7 @@ define [
     tagName: "ul"
     className: "content-list"
 
-  class Views.ContentListItem extends App.Views.ItemView
+  class Views.ContentListItem extends Views.TaggedProductInput
 
     tagName: "li"
     className: "content-item list-view"
@@ -289,6 +293,7 @@ define [
       "click .js-content-undecided": "undecide_content"
       "click .js-content-preview": "preview_content"
       "click .js-content-edit": "edit_content"
+      "keyup .content-caption": "edit_caption"
 
   class Views.ContentGridItem extends App.Views.ItemView
 

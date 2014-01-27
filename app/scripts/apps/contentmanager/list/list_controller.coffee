@@ -33,6 +33,8 @@ define [
       new Views.ContentList
         collection: contents
         itemView: @getContentListViewType()
+        itemViewOptions:
+          autosave: true # enables autosave in list view
 
     getContentLoadingView: (contents) ->
       new Views.ContentLoadingContent
@@ -124,6 +126,10 @@ define [
         (view, args) =>
           content = args.model
           controller = new EditController content
+
+      contentList.on 'itemview:edit_caption',
+        (view, args) =>
+          view.onCaptionChange()
 
       # DEFER: NOT USED
       contentList.on 'itemview:edit:tagged-products:add',

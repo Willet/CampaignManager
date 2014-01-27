@@ -1,39 +1,42 @@
 <div class="content-image">
-  <img src="{{images.medium.url}}{{video-thumbnail}}"/>
+  <img src="{{images.large.url}}{{video-thumbnail}}"/>
 </div>
 <div class="content-info">
-  <label for="source" class="inline">Source</label>
   <div class="content-source">
+    <span class="content-label">Source:</span> {{titleize source}}
     {{#is source 'facebook'}}
-    <i class="icon-social-facebook"></i> Facebook
+    <i class="icon-social-facebook"></i>
     {{/is}}
     {{#is source 'instagram'}}
-    <i class="icon-social-instagram"></i> Instagram
+    <i class="icon-social-instagram"></i>
     {{/is}}
     {{#is source 'youtube'}}
-    <i class="icon-social-youtube"></i> Youtube
+    <i class="icon-social-youtube"></i>
     {{/is}}
   </div>
-  <label for="caption" class="inline">Caption</label>
-  <p class="caption">{{default caption "(No Caption)"}}</p>
-  <div class="content-actions">
-  {{#is status 'approved'}}
-    <button class="tag-content-button js-content-edit">
-      Tag  <!-- TODO add icon -->
+  <div class="content-type-info">
+    <span class="content-label">Type:</span> {{titleize type}}
+    {{#is type 'video'}}
+    <i class="icon-general-video"></i>
+    {{/is}}
+  </div>
+  <span class="content-label">Caption</span>
+  <textarea class="content-caption">{{default caption "(No Caption)"}}</textarea>
+  <span class="content-caption-label">Tagged Products</span>
+  <div class="tag-content"></div>
+  <div class="content-tag-buttons">
+    {{#is status 'approved'}}
+    <button class="js-content-reject">
+      Reject <i class="icon-general-remove"></i>
     </button>
-  {{/is}}
-  {{#isnt status 'approved'}}
-  <button class="approve-content-button js-content-approve">
-    Approve <i class="icon-general-checkmark"></i>
-  </button>
-  {{/isnt}}
-  {{#isnt status 'rejected'}}
-  <button class="reject-content-button js-content-reject">
-    Reject <i class="icon-general-remove"></i>
-  </button>
-  {{/isnt}}
-  <button class="preview-content-button js-content-preview">
-    Preview <i class="icon-accessibility-eyeball"></i>
-  </button>
+    {{/is}}
+    {{#isnt status 'approved'}}
+    <button class="js-content-approve">
+      Approve <i class="icon-general-checkmark"></i>
+    </button>
+    {{/isnt}}
+    <button class="js-content-preview">
+      Preview <i class="icon-accessibility-eyeball"></i>
+    </button>
   </div>
 </div>

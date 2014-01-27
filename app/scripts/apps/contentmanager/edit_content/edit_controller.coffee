@@ -2,7 +2,7 @@ define [
   'app',
   '../app',
   'entities/content'
-  './edit_views'
+  './edit_view'
 ], (App, ContentManager, ContentEntities, Views) ->
 
   class ContentManager.Controller extends App.Controllers.Base
@@ -10,12 +10,16 @@ define [
     initialize: (model) ->
       store = App.routeModels.get('store')
       page = App.routeModels.get('page')
-      @layout = new Views.EditContentLayout
+      @view = new Views.EditContentView
         model: model
+        captionTarget: '.tag-content-caption'
 
-      @layout.on 'closeEditView', =>
-        @layout.close()
+      @view.on 'closeEditView', =>
+        @view.close()
 
-      App.modal.show @layout
+      @view.on 'captionEditView', =>
+        @view.onCaptionChange()
+
+      App.modal.show @view
 
   ContentManager.Controller
