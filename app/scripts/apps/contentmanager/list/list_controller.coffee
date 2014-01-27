@@ -100,6 +100,8 @@ define [
         layout.on 'reset:filter', () ->
           listControls.resetFilter()
 
+        listControls.resetFilter()
+
       return layout
 
     getContentList: (contents) ->
