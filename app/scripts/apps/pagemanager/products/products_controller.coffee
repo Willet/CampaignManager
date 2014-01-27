@@ -21,6 +21,10 @@ define [
         collection: products
         itemView: @getProductListViewType()
 
+    getProductLoadingView: (products) ->
+      new Views.PageLoadingProduct
+        collection: products
+
     # TODO: an idea, so it is more like sub-page switching
     #       maybe a router mechanism to handle this as well???
     #       real question is how do you still be DRY
@@ -80,10 +84,12 @@ define [
       layout.on "grid-view", =>
         @setProductListType Views.PageProductGridItem
         layout.productList.show @getProductListView(products)
+        layout.loadingArea.show @getProductLoadingView(products)
 
       layout.on "list-view", =>
         @setProductListType Views.PageProductListItem
         layout.productList.show @getProductListView(products)
+        layout.loadingArea.show @getProductLoadingView(products)
 
       layout.on "change:filter", ->
         filter = layout.extractFilter()
@@ -111,19 +117,23 @@ define [
 
         App.request 'page:remove_all_products', page, selected
         layout.productList.show @getProductListView(products)
+        layout.loadingArea.show @getProductLoadingView(products)
 
       layout.on "display:all-product", =>
         products = App.request "page:products:all", page, layout.extractFilter()
         layout.productList.show @getProductListView(products)
+        layout.loadingArea.show @getProductLoadingView(products)
 
       #layout.on "display:import-product", =>
       #  products = App.request "store:products", store, { filter: layout.extractFilter() }
       #  # TODO: products = App.request "page:products:imported", page, { filter: layout.extractFilter() }
       #  layout.productList.show @getProductListView(products)
+      #  layout.loadingArea.show @getProductLoadingView(products)
 
       layout.on "display:added-product", =>
         products = App.request "page:products", page, layout.extractFilter()
         layout.productList.show @getProductListView(products)
+        layout.loadingArea.show @getProductLoadingView(products)
 
       layout.on "save", ->
         # TODO: there should be a better way to do this...
@@ -136,5 +146,6 @@ define [
 
       @listenTo layout, 'show', =>
         layout.productList.show @getProductListView(products)
+        layout.loadingArea.show @getProductLoadingView(products)
 
       @show layout

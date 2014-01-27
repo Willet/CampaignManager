@@ -36,6 +36,10 @@ define [
         itemViewOptions:
           autosave: true # enables autosave in list view
 
+    getContentLoadingView: (contents) ->
+      new Views.ContentLoadingContent
+        collection: contents
+
     contentIndex: () ->
       # Called everytime page is loaded
       # Similar to 'initialize' method
@@ -54,11 +58,13 @@ define [
       layout.on 'grid-view', () =>
         @setContentListViewType Views.ContentGridItem
         layout.list.show @getContentList(contents)
+        layout.loading.show @getContentLoadingView(contents)
 
       # swap the current view (whatever it is) with a list view.
       layout.on 'list-view', () =>
         @setContentListViewType Views.ContentListItem
         layout.list.show @getContentList(contents)
+        layout.loading.show @getContentLoadingView(contents)
 
       layout.on 'change:filter-content-status', (status) =>
         @filters.status = status
@@ -82,6 +88,7 @@ define [
 
       layout.on 'show', =>
         layout.list.show @getContentList(contents)
+        layout.loading.show @getContentLoadingView(contents)
 
         listControls = @getContentListControls()
 

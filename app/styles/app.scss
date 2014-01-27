@@ -340,6 +340,71 @@ $selected-color: $body-font-color;
   float: right;
 }
 
+.page-loading-indicator, .content-loading-indicator {
+  @include grid-column($columns: 2);
+  padding-left: 8px;
+  padding-right: 8px;
+  border-radius: 5px;
+  border: 1px #fff;
+  color: white;
+  background-color: #464646;
+  float: none !important;
+  margin: 0 auto;
+  margin-top: 20px;
+  text-align: center;
+  display: block;
+  .page-loading-indicator-text, .content-loading-indicator-text {
+    padding: 8px;
+    > div {
+      .ellipsis {
+        overflow: hidden;
+        display: inline-block;
+        vertical-align: bottom;
+        -o-animation: ellipsis 1s infinite;
+        -moz-animation: ellipsis 1s infinite;
+        -webkit-animation: ellipsis 1s infinite;
+        animation: ellipsis 1s infinite;
+      }
+    }
+  }
+}
+
+@keyframes ellipsis {
+  from {
+    width: 0px;
+  }
+  to {
+    width: 12px;
+  }
+}
+
+@-o-keyframes ellipsis {
+  from {
+    width: 0px;
+  }
+  to {
+    width: 12px;
+  }
+}
+
+@-webkit-keyframes ellipsis {
+  from {
+    width: 0px;
+  }
+  to {
+    width: 12px;
+  }
+}
+
+@-moz-keyframes ellipsis {
+  from {
+    width: 0px;
+  }
+  to {
+    width: 12px;
+  }
+}
+
 .add-content {
   @include grid-row();
   .add-by-url {

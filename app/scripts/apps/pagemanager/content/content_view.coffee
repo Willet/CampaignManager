@@ -10,6 +10,7 @@ define [
 
     regions:
       "contentList": ".content-list-region"
+      "loadingArea": ".content-list-loading-region"
 
     serializeData: ->
       return {
@@ -113,6 +114,13 @@ define [
 
     onClose: ->
       $(window).off("scroll", @scrollFunction)
+
+
+  class Views.PageLoadingContent extends App.Views.ItemLoadingView
+
+    template: "shared/items/loading"
+    emptyTemplate: "shared/items/empty"
+    completeTemplate: "shared/items/complete"
 
 
   class Views.PageCreateContentPreview extends App.Views.ItemView

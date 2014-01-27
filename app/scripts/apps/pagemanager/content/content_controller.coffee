@@ -22,6 +22,10 @@ define [
         collection: contents
         itemView: @getContentListViewType()
 
+    getContentLoadingView: (contents) ->
+      new Views.PageLoadingContent
+        collection: contents
+
     initialize: ->
       page = App.routeModels.get 'page'
       store = App.routeModels.get 'store'
@@ -34,10 +38,12 @@ define [
       layout.on 'grid-view', () =>
         @setContentListViewType Views.PageCreateContentGridItem
         layout.contentList.show @getContentListView(contents)
+        layout.loadingArea.show @getContentLoadingView(contents)
 
       layout.on 'list-view', () =>
         @setContentListViewType Views.PageCreateContentListItem
         layout.contentList.show @getContentListView(contents)
+        layout.loadingArea.show @getContentLoadingView(contents)
 
       # Item View Actions
       layout.on 'content_list:itemview:add_content', (listView, itemView) ->
@@ -72,10 +78,12 @@ define [
       layout.on 'select-all', () =>
         contents.collect((model) -> model.set('selected', true))
         layout.contentList.show @getContentListView(contents)
+        layout.loadingArea.show @getContentLoadingView(contents)
 
       layout.on 'select-none', () =>
         contents.collect((model) -> model.set('selected', false))
         layout.contentList.show @getContentListView(contents)
+        layout.loadingArea.show @getContentLoadingView(contents)
 
       layout.on 'add-selected', () =>
         selected = contents.filter (model) ->
@@ -85,6 +93,7 @@ define [
           select
         App.request 'page:add_all_content', page, selected
         layout.contentList.show @getContentListView(contents)
+        layout.loadingArea.show @getContentLoadingView(contents)
 
       layout.on 'remove-selected', () =>
         selected = contents.filter (model) ->
@@ -94,24 +103,29 @@ define [
           select
         App.request 'page:remove_all_content', page, selected
         layout.contentList.show @getContentListView(contents)
+        layout.loadingArea.show @getContentLoadingView(contents)
 
       layout.on 'display:all-content', () =>
         content_type = 'all-content'
         contents = App.request 'page:content:all', page, layout.extractFilter()
         layout.contentList.show @getContentListView(contents)
+        layout.loadingArea.show @getContentLoadingView(contents)
 
       layout.on 'display:suggested-content', () =>
         content_type = 'suggested-content'
         contents = App.request 'page:suggested_content', page, layout.extractFilter()
         layout.contentList.show @getContentListView(contents)
+        layout.loadingArea.show @getContentLoadingView(contents)
 
       layout.on 'display:added-content', () =>
         content_type = 'added-content'
         contents = App.request 'page:content', page, layout.extractFilter()
         layout.contentList.show @getContentListView(contents)
+        layout.loadingArea.show @getContentLoadingView(contents)
 
       @listenTo layout, 'show', =>
         layout.contentList.show @getContentListView(contents)
+        layout.loadingArea.show @getContentLoadingView(contents)
 
       layout.on 'fetch:next-page', () ->
         contents.getNextPage layout.extractFilter()
