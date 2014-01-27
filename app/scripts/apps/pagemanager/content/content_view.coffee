@@ -115,14 +115,13 @@ define [
     onClose: ->
       $(window).off("scroll", @scrollFunction)
 
+
   class Views.PageLoadingContent extends App.Views.ItemLoadingView
 
     template: "shared/items/loading"
     emptyTemplate: "shared/items/empty"
     completeTemplate: "shared/items/complete"
 
-    serializeData: ->
-      page_type: "content"
 
   class Views.PageCreateContentPreview extends App.Views.ItemView
 

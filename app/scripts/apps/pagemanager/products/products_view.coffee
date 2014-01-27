@@ -140,9 +140,6 @@ define [
     emptyTemplate: "shared/items/empty"
     completeTemplate: "shared/items/complete"
 
-    serializeData: ->
-      page_type: "product"
-
   class Views.PageScrapeList extends App.Views.CollectionView
 
     itemView: Views.PageScrapeItem

@@ -91,8 +91,6 @@ define [
     emptyTemplate: "shared/items/empty"
     completeTemplate: "shared/items/complete"
 
-    serializeData: -> {}
-
   class Views.ContentListControls extends App.Views.ItemView
 
     template: "content/filter_controls"
