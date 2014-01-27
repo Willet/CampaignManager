@@ -41,7 +41,7 @@ define [
       filter['category'] = @$('#js-filter-category').val()
 
       if !filter['order']
-        filter['order'] = 'ascending'
+        filter['order'] = 'descending'
       _.each(_.keys(filter), (key) -> delete filter[key] if filter[key] == null || !/\S/.test(filter[key]))
       return filter;
 

@@ -65,7 +65,7 @@ define [
       products.store_id = store_id
       products.page_id = page_id
       products.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product/all"
-      products.getNextPage()
+      products.getNextPage(params)
       products
 
     getPageProducts: (store_id, page_id, params = {}) ->
@@ -73,7 +73,7 @@ define [
       products.store_id = store_id
       products.page_id = page_id
       products.url = "#{App.API_ROOT}/store/#{store_id}/page/#{page_id}/product"
-      products.getNextPage()
+      products.getNextPage(params)
       products
 
 
