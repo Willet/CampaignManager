@@ -163,7 +163,7 @@ define [
 
     serializeData: -> @model.viewJSON()
 
-  class Views.PageProductGridItem extends App.Views.Layout
+  class Views.PageProductGridItem extends App.Views.ItemView
 
     template: "page/product/item_grid"
     className: "product-item grid-view"
@@ -180,9 +180,9 @@ define [
       "click": "selectItem"
 
     initialize: (options) ->
-      throttled_render = _.throttle((=> @render()), 500, leading: false)
-      @model.on('nested-change', throttled_render)
-      @model.on 'sync', throttled_render
+      @model.on 'nested-change', _.debounce((=>
+        @render()), 500)
+      @model.on 'sync', @render
 
     serializeData: -> @model.viewJSON()
 
