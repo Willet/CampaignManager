@@ -293,6 +293,10 @@ define [
       "click .js-content-edit": "edit_content"
       "keyup .content-caption": "edit_caption"
 
+    initialize: (opts) ->
+      @model.on('change:status', => @render())
+      super opts
+
   class Views.ContentGridItem extends App.Views.ItemView
 
     tagName: "li"
