@@ -78,22 +78,21 @@ define [
         layout.contentList.show @getContentListView(contents)
 
       layout.on 'add-selected', () =>
-        selected = contents.filter((model) -> model.get('selected'))
-        content_list = _.map(_.pluck(selected, 'id'), (value) ->
-          parseInt(value, 10);
-        );
-
-        _.each selected, (model) ->
-          model.set 'selected', false
-
-        App.request 'page:add_all_content', page, content_list
+        selected = contents.filter (model) ->
+          select = model.get('selected')
+          if select
+            model.set 'selected', false
+          select
+        App.request 'page:add_all_content', page, selected
         layout.contentList.show @getContentListView(contents)
 
       layout.on 'remove-selected', () =>
-        selected = contents.filter((model) -> return model.get('selected'))
-        _.each selected, (model) ->
-          App.request 'page:remove_content', page, model
-          model.set 'selected', false
+        selected = contents.filter (model) ->
+          select = model.get('selected')
+          if select
+            model.set 'selected', false
+          select
+        App.request 'page:remove_all_content', page, selected
         layout.contentList.show @getContentListView(contents)
 
       layout.on 'display:all-content', () =>
