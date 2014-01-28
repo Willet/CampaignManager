@@ -38,12 +38,10 @@ define [
       layout.on 'grid-view', () =>
         @setContentListViewType Views.PageCreateContentGridItem
         layout.contentList.show @getContentListView(contents)
-        layout.loadingArea.show @getContentLoadingView(contents)
 
       layout.on 'list-view', () =>
         @setContentListViewType Views.PageCreateContentListItem
         layout.contentList.show @getContentListView(contents)
-        layout.loadingArea.show @getContentLoadingView(contents)
 
       # Item View Actions
       layout.on 'content_list:itemview:add_content', (listView, itemView) ->
@@ -78,12 +76,10 @@ define [
       layout.on 'select-all', () =>
         contents.collect((model) -> model.set('selected', true))
         layout.contentList.show @getContentListView(contents)
-        layout.loadingArea.show @getContentLoadingView(contents)
 
       layout.on 'select-none', () =>
         contents.collect((model) -> model.set('selected', false))
         layout.contentList.show @getContentListView(contents)
-        layout.loadingArea.show @getContentLoadingView(contents)
 
       layout.on 'add-selected', () =>
         selected = contents.filter (model) ->
@@ -93,7 +89,6 @@ define [
           select
         App.request 'page:add_all_content', page, selected
         layout.contentList.show @getContentListView(contents)
-        layout.loadingArea.show @getContentLoadingView(contents)
 
       layout.on 'remove-selected', () =>
         selected = contents.filter (model) ->
@@ -103,7 +98,6 @@ define [
           select
         App.request 'page:remove_all_content', page, selected
         layout.contentList.show @getContentListView(contents)
-        layout.loadingArea.show @getContentLoadingView(contents)
 
       layout.on 'display:all-content', () =>
         content_type = 'all-content'

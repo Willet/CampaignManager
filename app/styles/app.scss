@@ -257,6 +257,9 @@ $selected-color: $body-font-color;
     margin-left: 0.3375em;
     margin-right: -0.9375em;
   }
+  .product-info {
+    width: 100%;
+  }
   .content-actions, .product-actions {
     > button {
       @include grid-column($columns: 2);

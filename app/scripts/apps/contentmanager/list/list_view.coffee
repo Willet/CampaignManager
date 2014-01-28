@@ -163,9 +163,9 @@ define [
     initialize: (options) ->
       @store = options['store']
       @storeId = options['store_id'] || App.routeModels.get('store').id
-      @autosave = options['autosave'] || false
       @selectTarget = options['selectTarget'] || '.tag-content'
       @captionTarget = options['captionTarget'] || '.content-caption'
+      @autosave = options['autosave'] || false
       _.bindAll(@, 'onCaptionChange')
 
     initSelect: (target) ->
@@ -178,24 +178,16 @@ define [
         identifier = "product-#{product.get('id')}"
         productName = product.viewJSON()['name'] || ''
 
-        # TODO: find a better way to do this
-        # We should not be doing this, as with significant amount of products and scrolling occuring
-        # at the same time, the user may notice latency.
-        limit = 10
-        intv = setInterval((() ->
-          # while the image/name are still loading, attempt every second
-          # to see if we've got them; limit ourselves to ten tries.
+        @listenTo product, 'nested-change', () ->
+          # Listen for a change in the attributes of the product
+          # to see if the image and name have loaded.
           imageUrl = product.viewJSON()['default-image']?.images?.thumb.url
           productName = product.viewJSON()['name']
-          # If they're loaded, plug in the values
-          if imageUrl
+          if imageUrl and productName
             $(".#{identifier} img").attr('src', imageUrl)
-          if productName
             $(".#{identifier} span").text(productName)
-          if (productName and imageUrl) || limit == 0
-            clearInterval intv
-          limit -= 1
-        ), 1000)
+            # No longer need the listener
+            @stopListening product
 
         image = "<img src=\"#{imageUrl}\">"
         name = "<span>#{productName}</span>"

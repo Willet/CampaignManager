@@ -63,13 +63,11 @@ define [
       layout.on 'grid-view', () =>
         @setContentListViewType Views.ContentGridItem
         layout.list.show @getContentList(contents)
-        layout.loading.show @getContentLoadingView(contents)
 
       # swap the current view (whatever it is) with a list view.
       layout.on 'list-view', () =>
         @setContentListViewType Views.ContentListItem
         layout.list.show @getContentList(contents)
-        layout.loading.show @getContentLoadingView(contents)
 
       layout.on 'change:filter-content-status', (status) =>
         @filters.status = status
@@ -137,24 +135,6 @@ define [
       contentList.on 'itemview:edit_caption',
         (view, args) =>
           view.onCaptionChange()
-
-      # DEFER: NOT USED
-      contentList.on 'itemview:edit:tagged-products:add',
-        (view, editArea, tagger, product) ->
-          view.model.get('tagged-products').add(product)
-          view.model.save()
-
-      # DEFER: NOT USED
-      contentList.on 'itemview:edit:tagged-products:remove',
-        (view, editArea, tagger, product) ->
-          view.model.get('tagged-products').remove(product)
-          view.model.save()
-
-      # DEFER: NOT USED
-      contentList.on 'itemview:content:select-toggle',
-        (view, args)  =>
-          content = args.model
-          content.set('selected', !args.model.get('selected'))
 
       # previews the selected content.
       contentList.on 'itemview:preview_content',
