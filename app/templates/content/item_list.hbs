@@ -3,22 +3,32 @@
 </div>
 <div class="content-info">
   <div class="content-source">
-    <span class="content-label">Source:</span> {{titleize source}}
-    {{#is source 'facebook'}}
-    <i class="icon-social-facebook"></i>
-    {{/is}}
-    {{#is source 'instagram'}}
-    <i class="icon-social-instagram"></i>
-    {{/is}}
-    {{#is source 'youtube'}}
-    <i class="icon-social-youtube"></i>
-    {{/is}}
+    <span class="content-label">Source:</span>
+    {{#if source}}
+      {{titleize source}}
+      {{#is source 'facebook'}}
+      <i class="icon-social-facebook"></i>
+      {{/is}}
+      {{#is source 'instagram'}}
+      <i class="icon-social-instagram"></i>
+      {{/is}}
+      {{#is source 'youtube'}}
+      <i class="icon-social-youtube"></i>
+      {{/is}}
+    {{else}}
+      No Source
+    {{/if}}
   </div>
   <div class="content-type-info">
-    <span class="content-label">Type:</span> {{titleize type}}
-    {{#is type 'video'}}
-    <i class="icon-general-video"></i>
-    {{/is}}
+    <span class="content-label">Type:</span>
+    {{#if type}}
+      {{titleize type}}
+      {{#is type 'video'}}
+      <i class="icon-general-video"></i>
+      {{/is}}
+    {{else}}
+      No Type
+    {{/if}}
   </div>
   <span class="content-label">Caption</span>
   <textarea class="content-caption">{{default caption "(No Caption)"}}</textarea>

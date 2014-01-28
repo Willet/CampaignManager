@@ -50,9 +50,15 @@ define [
       products = App.request "page:products:all", page, layout.extractFilter()
       @setProductListType Views.PageProductGridItem
 
-      layout.on "select-all", ->
+      layout.on "select-all", =>
         products.collect (model) ->
           model.set "selected", true
+        layout.productList.show @getProductListView(products)
+
+      layout.on 'select-none', =>
+        products.collect (model) ->
+          model.set "selected", false
+        layout.productList.show @getProductListView(products)
 
       layout.on "added-product", (productData) ->
         newProduct = new Entities.Product(productData)
@@ -84,12 +90,10 @@ define [
       layout.on "grid-view", =>
         @setProductListType Views.PageProductGridItem
         layout.productList.show @getProductListView(products)
-        layout.loadingArea.show @getProductLoadingView(products)
 
       layout.on "list-view", =>
         @setProductListType Views.PageProductListItem
         layout.productList.show @getProductListView(products)
-        layout.loadingArea.show @getProductLoadingView(products)
 
       layout.on "change:filter", ->
         filter = layout.extractFilter()
@@ -117,7 +121,6 @@ define [
 
         App.request 'page:remove_all_products', page, selected
         layout.productList.show @getProductListView(products)
-        layout.loadingArea.show @getProductLoadingView(products)
 
       layout.on "display:all-product", =>
         products = App.request "page:products:all", page, layout.extractFilter()

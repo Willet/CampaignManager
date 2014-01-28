@@ -19,6 +19,7 @@ define [
       "click .js-grid-view": "grid-view"
       "click .js-list-view": "list-view"
       "click .js-select-all": "select-all"
+      "click .js-select-none": "select-none"
       "change #js-filter-sort-order": "change:filter"
       "change #js-filter-category": "change:filter"
       "click .js-add-selected": "add-selected"
@@ -76,7 +77,7 @@ define [
 
     onRender: (opts) ->
       @importRegion.show new Views.ProductScrapersView()
-      @displayImportProduct()
+      @displayAllProduct()
 
     nextPage: ->
       @trigger("fetch:next-page")
@@ -88,42 +89,11 @@ define [
         @nextPage()
 
     onShow: (opts) ->
-      # TODO: unhard-code this...
-      @$('#search-product').select2(
-        multiple: false
-        allowClear: true
-        placeholder: "Search for a product"
-        tokenSeparators: [',']
-        ajax:
-          # TODO: un-hardcode
-          url: "#{App.API_ROOT}/store/38/product"
-          dataType: 'json'
-          cache: true
-          data: (term, page) ->
-            return {
-              "search-name": term
-            }
-          results: (data, page) ->
-            return {
-              results: data['results']
-            }
-        formatResult: (product) ->
-          "<span>#{product['name']}</span>"
-        formatSelection: (product) ->
-          "<span>#{product['name']}</span>"
-      )
-      @$('#search-product').on "change", (event, element) =>
-        # TODO: move this out of the VIEW
-        App.request("page:add_product", page, product)
-        @trigger "added-product", product
-        @$('#search-product').select2('val', null)
-        @$(@productAddedBySearch.el).fadeIn(200).delay(1500).fadeOut(400)
       @scrollFunction = => @autoLoadNextPage()
       $(window).on("scroll", @scrollFunction)
       false
 
     onClose: ->
-      @$('#search-product').select2("destroy")
       $(window).off("scroll", @scrollFunction)
 
   class Views.PageScrapeItem extends App.Views.ItemView
