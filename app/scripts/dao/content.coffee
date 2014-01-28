@@ -30,7 +30,7 @@ define [
       contents.store_id = store_id
       contents.url = "#{App.API_ROOT}/store/#{store_id}/content"
       contents.setFilter(params)
-      contents.getNextPage()
+      contents.getNextPage(params)
       contents
 
     getPageContent: (store_id, page_id, content_id, params = {}) ->
