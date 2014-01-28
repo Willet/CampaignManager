@@ -17,6 +17,8 @@ define [
       'type': ''
       'status': ''
       'source': ''
+      'is-content': 'true'
+      'order': 'descending'
 
     addFilters: (newFilters={}) ->
       _.extend @filters, newFilters
@@ -44,7 +46,10 @@ define [
       # Called everytime page is loaded
       # Similar to 'initialize' method
       store = App.routeModels.get 'store'
-      contents = App.request 'content:all', store
+      _.each(_.keys(@filters), (key) =>
+          delete @filters[key] if \
+            @filters[key] == null || !/\S/.test(@filters[key]))
+      contents = App.request 'content:all', store, @filters
       App.execute 'when:fetched', contents, =>
         @show @getContentLayout(contents)
 
