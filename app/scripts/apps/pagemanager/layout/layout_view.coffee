@@ -66,10 +66,13 @@ define [
         data = new FormData()
         data.append('file', elem.files[0])
 
+        store_id = @model.get("store-id")
+        page_id = @model.get('id')
+
         # Post file
         # TODO: Can't use proxy; how to avoid hardcoding URL?
         $.ajax(
-            url: 'http://contentgraph-test.elasticbeanstalk.com/graph/store/38/page/97/files/' + filename
+            url: "http://contentgraph-test.elasticbeanstalk.com/graph/store/#{store_id}/page/#{page_id}/files/#{targetField.var}.png"
             type: 'POST'
             data: data
             cache: false
