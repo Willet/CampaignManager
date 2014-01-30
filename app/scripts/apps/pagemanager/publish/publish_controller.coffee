@@ -20,6 +20,11 @@ define [
         req.done (data) ->
           App.navigate('/' + store.get('id') + '/pages/' + page.get('id') + '/preview', { trigger: true })
 
+      layout.on 'page:transfer', () ->
+        req = App.request 'page:transfer', page
+        req.fail (xhr) ->
+          alert(xhr.reason)
+
       App.execute 'when:fetched', [store, page], () =>
         if App.ENVIRONMENT is 'DEV'
           store.set('public-base-url', store.get('public-base-url', '').replace(/(https?:\/\/)/, '$1dev-'))

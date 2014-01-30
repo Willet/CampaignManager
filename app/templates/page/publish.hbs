@@ -11,6 +11,9 @@
             <a class="button" target="_blank" href="{{store.public-base-url}}{{page.url}}">
                 View live page
             </a>
+            {{#isnt url prodUrl}}
+                <button class="publish js-next button">Copy to production</button>
+            {{/isnt}}
         </div>
     </div>
 </div>
