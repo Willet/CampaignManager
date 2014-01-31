@@ -8,19 +8,21 @@ define ['app', '../views', 'backbone', 'backbone.stickit'], (App, Views) ->
       @store = opts.store
 
     events:
-      'click .publish': 'onPublish'
+      'click .publish': 'onBeforeTransfer'
 
     serializeData: ->
       page: @model.toJSON()
       url: @store.get('public-base-url')
-      prodUrl: @store.get('public-base-url').replace(/(dev|test)-/g, '')
+      prodUrl: @store.get('public-base-url').replace(/test-/g, '')
       store: @store.toJSON()
+      successUrl: @successUrl
+      failMsg: @failMsg
 
     isCopyable: ->
       # checks if CM backend could copy a page from test to production
       # if it were to try.
       test_url = @store.get('public-base-url')
-      prod_url = @store.get('public-base-url').replace(/(dev|test)-/g, '')
+      prod_url = @store.get('public-base-url').replace(/test-/g, '')
 
       if prod_url == test_url
         false  # can't copy a page to/from the same destination
@@ -28,7 +30,7 @@ define ['app', '../views', 'backbone', 'backbone.stickit'], (App, Views) ->
         [test_url, prod_url]
 
 
-    onPublish: ->
+    onBeforeTransfer: ->
       # checks if page can be copied from test to production, then fire a
       # call to do so.
       if @isCopyable()
@@ -42,7 +44,12 @@ define ['app', '../views', 'backbone', 'backbone.stickit'], (App, Views) ->
         to \n\n
         #{prod_url}#{@model.get('url')} ?")
 
-        @trigger("page:transfer", @store, @model)
+        req = @trigger("page:transfer", @store, @model)
+
+    onTransfer: (successUrl, failMsg) ->
+      @successUrl = successUrl
+      @failMsg = failMsg
+      @render()
 
     onRender: ->
       @stickit()

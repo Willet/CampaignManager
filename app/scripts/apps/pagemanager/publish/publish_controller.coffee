@@ -22,8 +22,10 @@ define [
 
       layout.on 'page:transfer', () ->
         req = App.request 'page:transfer', page
-        req.fail (xhr) ->
-          alert(xhr.reason)
+        req.always (data) ->
+          layout.onTransfer(
+            "http://#{data.prod_bucket_name}/#{data.test_s3_key}",
+            data.reason)
 
       App.execute 'when:fetched', [store, page], () =>
         if App.ENVIRONMENT is 'DEV'
