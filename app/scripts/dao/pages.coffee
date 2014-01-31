@@ -103,6 +103,15 @@ define [
 
       ops
 
+    transferPage: (page, store, options) ->
+      storeId = page.get('store-id')
+      pageId = page.get('id')
+
+      $.ajax
+        url: "#{App.API_ROOT}/store/#{storeId}/page/#{pageId}/transfer"
+        type: 'POST'
+        dataType: 'json'
+
 
   App.reqres.setHandler "page:all",
     (store, options) ->
@@ -121,6 +130,9 @@ define [
 
   App.reqres.setHandler 'page:publish', (page, options) ->
     API.publishPage page, options
+
+  App.reqres.setHandler 'page:transfer', (page, store) ->
+    API.transferPage page, store
 
   #
   # Page - Content Methods

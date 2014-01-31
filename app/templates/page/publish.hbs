@@ -11,6 +11,17 @@
             <a class="button" target="_blank" href="{{store.public-base-url}}{{page.url}}">
                 View live page
             </a>
+            {{#isnt url prodUrl}}
+                <button class="publish js-next button">Copy to production</button>
+            {{/isnt}}
+        </div>
+        <div class="row">
+            {{#if successUrl}}
+                Page saved to <a target="_blank" href="{{successUrl}}">{{successUrl}}</a>.
+            {{/if}}
+            {{#if failMsg}}
+                Page failed to transfer: {{failMsg}}
+            {{/if}}
         </div>
     </div>
 </div>
