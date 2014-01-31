@@ -232,7 +232,7 @@ define [
           @model.get('tagged-products').remove(productId)
 
         if @autosave
-          @model.save()
+          @model.save({'tagged-products': @model.get('tagged-products').collect((m) -> String(m.get('id')))})
 
     serializeData: ->
       @model.viewJSON()
