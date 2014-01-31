@@ -28,6 +28,19 @@ define [
     save: (attrs, options = {}) ->
       save_defaults = { patch: true }
       options = _.defaults(options, save_defaults)
+
+      # only save changed attributes, unless specified
+      if not attrs
+        attrs = @changed
+
+      # cannot save empty string, so convert to null
+      attrs = _.clone attrs
+      keys = _.keys attrs
+      _.each keys, (key) ->
+        if _.isString(attrs[key])
+          attrs[key] = attrs[key] || null
+
+      # same as usual otherwise
       super(attrs, options)
 
     sync: ->
