@@ -35,7 +35,7 @@ define [
     getPageTile: ->
       # Get the regular content tile if it exists from the list of tile-configs
       tileConfigs = @get('tile-configs')
-      pageTile = tileConfigs.filter((m) -> m.get('template') == 'product')
+      pageTile = tileConfigs.filter((m) -> !m.get('is-content') || m.get('is-content') == 'false')
       pageTile[0]
 
     computed: {
