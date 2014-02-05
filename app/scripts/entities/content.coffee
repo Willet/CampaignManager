@@ -192,6 +192,7 @@ define [
           reset: true
           parse: false
         map: (id, target) ->
+          storeId = @store_id || window.App.routeModels.get('store').id
           if id instanceof Entities.Product
             return id
           if id instanceof Entities.ProductCollection
@@ -201,9 +202,11 @@ define [
               if pid instanceof Entities.Product
                 pid
               else if _.isObject(pid)
-                new Entities.Product(pid)
+                #new Entities.Product(pid)
+                App.request('product:entity', storeId, pid.id)
               else if _.isString(pid)
-                new Entities.Product({id: pid})
+                #new Entities.Product({id: pid})
+                App.request('product:entity', storeId, pid)
               else
                 console.error "UNHANDLED RELATIONSHIP ARRAY MAPPING CASE", pid
             return prod_array
