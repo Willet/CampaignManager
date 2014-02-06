@@ -33,6 +33,15 @@ define [
       if not attrs
         attrs = @changed
 
+        # handle relationships
+        # converting any relationships to their equivalent
+        # full toJSON version
+        if @relations
+          json = @toJSON()
+          for relation in @relations
+            if _.has(attrs, relation.key)
+              attrs[relation.key] = json[relation.key]
+
       # cannot save empty string, so convert to null
       attrs = _.clone attrs
       keys = _.keys attrs
