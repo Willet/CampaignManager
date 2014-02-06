@@ -30,7 +30,7 @@ define [
 
     initialize: ->
       super(arguments)
-      @computedFields = new Backbone.ComputedFields(this);
+      @computedFields = new Backbone.ComputedFields(this)
 
     getPageTile: ->
       # Get the regular content tile if it exists from the list of tile-configs

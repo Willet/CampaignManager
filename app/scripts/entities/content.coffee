@@ -14,23 +14,7 @@ define [
         type: Backbone.Many
         key: 'tagged-products'
         collectionType: 'Entities.ProductCollection'
-        map: (fids, type) ->
-          # see https://github.com/dhruvaray/backbone-associations/issues/79
-          # a pull request I opened up to address how insane this code is
-          # in what should be a simple case
-          collection = type
-          fids = if _.isArray(fids) then fids else [fids]
-          type = if (type instanceof Backbone.Collection) then type.model else type
-          data = _.map fids, (fid) ->
-            if fid instanceof Backbone.Model
-              fid
-            else
-              new Entities.Product({id: fid})
-
-          if collection instanceof Backbone.Collection
-            return data
-          else
-            return new type(data)
+        relatedModel: 'Entities.Product'
       }
     ]
 
@@ -47,7 +31,7 @@ define [
 
     initialize: ->
       super(arguments)
-      @computedFields = new Backbone.ComputedFields(this);
+      @computedFields = new Backbone.ComputedFields(this)
 
     getPageTile: ->
       # Get the regular content tile if it exists from the list of tile-configs
@@ -203,32 +187,37 @@ define [
         type: Backbone.Many
         key: 'tagged-products'
         collectionType: 'Entities.ProductCollection'
-        map: (fids, type) ->
-          storeId = window.App.routeModels.get('store').id
-
-          collection = type
-          fids = if _.isArray(fids) then fids else [fids]
-          type = if (type instanceof Backbone.Collection) then type.model else type
-          data = _.map fids, (fid) ->
-            if fid instanceof Backbone.Model
-              App.request('fetch:product',
-                storeId,
-                fid
-              )
-            else if _.isObject(fid)
-              fid = App.request('product:entity', storeId, fid.id)
-            else
-              fid = App.request('product:entity', storeId, fid)
-
-          unless collection instanceof Backbone.Model
-            if (data.length == 1)
-              data = data[0]
-
-            data = new type(data)
-
-          data
+        relatedModel: 'Entities.Product'
+        options:
+          reset: true
+          parse: false
+        map: (id, target) ->
+          storeId = @store_id || window.App.routeModels.get('store').id
+          if id instanceof Entities.Product
+            return id
+          if id instanceof Entities.ProductCollection
+            return id
+          if _.isArray(id)
+            prod_array = _.map id, (pid) ->
+              if pid instanceof Entities.Product
+                pid
+              else if _.isObject(pid)
+                #new Entities.Product(pid)
+                App.request('product:entity', storeId, pid.id)
+              else if _.isString(pid)
+                #new Entities.Product({id: pid})
+                App.request('product:entity', storeId, pid)
+              else
+                console.error "UNHANDLED RELATIONSHIP ARRAY MAPPING CASE", pid
+            return prod_array
+          console.error "UNHANDLED RELATIONSHIP CASE", arguments
+          null
       }
     ]
+
+    defaults: {
+      'tagged-products': []
+    }
 
   class Entities.ContentPageableCollection extends Base.PageableCollection
 

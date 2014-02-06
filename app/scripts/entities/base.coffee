@@ -73,8 +73,13 @@ define [
       @_fetch = super(arguments...)
 
     parse: (data) ->
-      @metadata = data['meta']
-      return data['results']
+      # only parse it this way if it came from CG; otherwise
+      # it is probably already a collection in some form
+      if data['results']
+        @metadata = data['meta']
+        return data['results']
+      else
+        return data
 
     setFilter: (options, fetch=true) ->
       @queryParams = {}

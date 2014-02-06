@@ -225,14 +225,18 @@ define [
             product = new Entities.Product $.extend(event.added,
               'store-id': @storeId
             )
-          @model.get('tagged-products').add(id: product.get('id'))
+          @model.get('tagged-products').add(product)
 
         else if event.removed
-          productId = event.removed.id
-          @model.get('tagged-products').remove(productId)
+          product = event.removed
+          unless product instanceof Entities.Product
+            product = new Entities.Product $.extend(event.removed,
+              'store-id': @storeId
+            )
+          @model.get('tagged-products').remove(product)
 
         if @autosave
-          @model.save({'tagged-products': @model.get('tagged-products').collect((m) -> String(m.get('id')))})
+          @model.save({'tagged-products': @model.get('tagged-products').collect((m) -> m.id)})
 
     serializeData: ->
       @model.viewJSON()
