@@ -23,7 +23,7 @@ define [
     save: (attrs, options = {}) ->
       # Padding Bear Campaign Only!
       if this.get('name') == 'Paddington Bear'
-        this.set('IRSource', 'http://tng-master.secondfunnel.com/intentrank/')
+        this.set('ir_base_url', 'http://tng-master.secondfunnel.com/intentrank/')
 
       super(attrs, options)
 
