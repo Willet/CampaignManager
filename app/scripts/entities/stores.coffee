@@ -12,6 +12,8 @@ define [
     model: Entities.Store
 
     parse: (data) ->
-      data['results']
+      if data.results.old_id
+        data.results.id = data.results.old_id
+      data.results
 
   Entities
