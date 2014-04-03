@@ -25,14 +25,11 @@ define('app',
             App.API_ROOT = window.location.origin + '/graph/v1';
             App.ENVIRONMENT = 'DEV';
         } else if (window.location.hostname.indexOf('-test') > 0) {  // test bucket
-            App.API_ROOT = 'http://test.secondfunnel.com/graph/v1';
+            App.API_ROOT = 'http://tng-test.secondfunnel.com/graph/v1';
             App.ENVIRONMENT = 'TEST';
         } else {  // assumed production bucket
-            App.API_ROOT = 'http://secondfunnel.com/graph/v1';
+            App.API_ROOT = 'http://tng-master.secondfunnel.com/graph/v1';
             App.ENVIRONMENT = 'PRODUCTION';
-
-            // production db isn't ready.
-            App.API_ROOT = 'http://test.secondfunnel.com/graph/v1';
         }
 
         App.addInitializer(function () {
