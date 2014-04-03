@@ -123,7 +123,7 @@ define [
         json['images'] = @imageFormatsJSON(@get('url'))
       json
 
-    getResizedImage: (url, options={}) ->
+    getResizedImage: (url="", options={}) ->
       # ported from pages.utils.js
       # options: known attributes are "width" and "height"
 
@@ -135,6 +135,7 @@ define [
       # effect: 'trim:0'
       options = _.extend({crop: "fit", quality: 75}, options)
 
+      url = url.replace App.CLOUDINARY_DOMAIN, ""
       $.cloudinary.url(url, options)
 
     imageFormatsJSON: (url) ->
@@ -172,11 +173,10 @@ define [
       }
 
       # compute urls for each size
-      sizedef = _.map(sizedef, (size) =>
-        size.url = @getResizedImage(url, {
-          width: size.width, height: size.height
+      for own size_name, size_wh of sizedef
+        sizedef[size_name].url = @getResizedImage(url, {
+          width: size_wh.width, height: size_wh.height
         })
-        size)
 
       sizedef
 

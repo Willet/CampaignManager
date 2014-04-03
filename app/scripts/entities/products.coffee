@@ -38,7 +38,7 @@ define [
       pageTile = tileConfigs.filter((m) ->
         if not m instanceof Entities.TileConfig
           m = new Entities.TileConfig(m, {parse: true})
-          !m.get('is-content') || m.get('is-content') == 'false'
+        !m.get('is-content') || m.get('is-content') == 'false'
       )
       pageTile[0]
 
