@@ -72,7 +72,7 @@ define [
         # Post file
         # TODO: Can't use proxy; how to avoid hardcoding URL?
         $.ajax(
-            url: "http://contentgraph-test.elasticbeanstalk.com/graph/store/#{store_id}/page/#{page_id}/files/#{targetField.var}.png"
+            url: "#{App.API_ROOT}/imageservice/create/"
             type: 'POST'
             data: data
             cache: false
@@ -84,6 +84,9 @@ define [
               self.$(elem).attr('value', data.url)
               self.$('img[alt="' + self.$(elem).attr('name') + '"]')
                 .attr('src', data.url)
+
+              self.model.set(self.$(elem).attr('name'), data.url)
+              self.model.save()
         )
 
       fileReader.readAsDataURL(elem.files[0])

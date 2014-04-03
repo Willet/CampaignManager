@@ -36,7 +36,11 @@ define [
     getPageTile: ->
       # Get the regular content tile if it exists from the list of tile-configs
       tileConfigs = @get('tile-configs')
-      pageTile = tileConfigs.filter((m) -> m.get('is-content') || m.get('is-content') == 'true')
+      pageTile = tileConfigs.filter((m) ->
+        if not m instanceof Entities.TileConfig
+          m = new Entities.TileConfig(m, {parse: true})
+        m.get('is-content') || m.get('is-content') == 'true'
+      )
       pageTile[0]
 
     computed: {
