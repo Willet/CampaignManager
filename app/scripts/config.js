@@ -23,7 +23,8 @@ require.config({
         underscore: '../bower_components/underscore/underscore',
         foundation: '../bower_components/foundation/js/foundation',
         templates: 'templates',
-        text: '../bower_components/requirejs-text/text'
+        text: '../bower_components/requirejs-text/text',
+        cloudinary: '../bower_components/cloudinary/js/jquery.cloudinary'
     },
     shim: {
         'backbone': {
@@ -82,6 +83,9 @@ require.config({
         'swag': {
             deps: ['handlebars', 'underscore'],
             exports: 'Swag'
+        },
+        'cloudinary': {
+            deps: ['jquery']
         },
         'foundation/foundation': ['jquery'],
         'foundation/foundation.abide': ['jquery', 'foundation/foundation'],

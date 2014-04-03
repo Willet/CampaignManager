@@ -2,8 +2,9 @@ define [
   "app",
   "entities/base",
   "entities",
-  "underscore"
-], (App, Base, Entities, _) ->
+  "underscore",
+  "cloudinary"
+], (App, Base, Entities, _, cloudinary) ->
 
   Entities = Entities || {}
 
@@ -122,49 +123,76 @@ define [
         json['images'] = @imageFormatsJSON(@get('url'))
       json
 
+    getResizedImage: (url, options={}) ->
+      # ported from pages.utils.js
+      # options: known attributes are "width", "height", and "multiplier"
+
+      width = options.width or 240
+      height = options.height or 480
+      multiplier = (options.multiplier or 1.1)
+
+      # Round to the nearest whole hundred pixel dimension;
+      # prevents creating a ridiculous number of images.
+      if width > height
+        height = (height / width) * columnWidth
+        height = Math.ceil((height * multiplier) / 100.0) * 100
+        options.height = height
+      else
+        width = Math.ceil((width * multiplier) / 100.0) * 100
+        options.width = width
+
+      # New feature, undocumenated, trims background space, add :
+      # for tolerance, e.g. trim: 20 (defaults to 10)
+      # effect: 'trim:0'
+      options = _.extend({crop: "fit", quality: 75}, options)
+
+      if url.indexOf("c_fit") is -1
+        url = url.replace(App.CLOUDINARY_DOMAIN, "") # remove absolute uri
+        url = $.cloudinary.url(url, options)
+      url
+
     imageFormatsJSON: (url) ->
-      {
+      sizedef = {
         pico:
           width: 16
           height: 16
-          url: url.replace('master', 'pico')
         icon:
           width: 32
           height: 32
-          url: url.replace('master', 'icon')
         thumb:
           width: 50
           height: 50
-          url: url.replace('master', 'thumb')
         small:
           width: 100
           height: 100
-          url: url.replace('master', 'small')
         compact:
           width: 160
           height: 160
-          url: url.replace('master', 'compact')
         medium:
           width: 240
           height: 240
-          url: url.replace('master', 'medium')
         large:
           width: 480
           height: 480
-          url: url.replace('master', 'large')
         grande:
           width: 600
           height: 600
-          url: url.replace('master', 'grande')
         "1024x1024":
           width: 1024
           height: 1024
-          url: url.replace('master', '1024x1024')
         master:
           width: 2048
           height: 2048
-          url: url
       }
+
+      # compute urls for each size
+      sizedef = _.map(sizedef, (size) =>
+        size.url = @getResizedImage(url, {
+          width: size.width, height: size.height
+        })
+        size)
+
+      sizedef
 
 
   class Entities.ContentCollection extends Base.Collection
