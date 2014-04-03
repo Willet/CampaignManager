@@ -125,31 +125,17 @@ define [
 
     getResizedImage: (url, options={}) ->
       # ported from pages.utils.js
-      # options: known attributes are "width", "height", and "multiplier"
+      # options: known attributes are "width" and "height"
 
-      width = options.width or 240
-      height = options.height or 480
-      multiplier = (options.multiplier or 1.1)
-
-      # Round to the nearest whole hundred pixel dimension;
-      # prevents creating a ridiculous number of images.
-      if width > height
-        height = (height / width) * columnWidth
-        height = Math.ceil((height * multiplier) / 100.0) * 100
-        options.height = height
-      else
-        width = Math.ceil((width * multiplier) / 100.0) * 100
-        options.width = width
+      options.width = options.width or 240
+      options.height = options.height or 480
 
       # New feature, undocumenated, trims background space, add :
       # for tolerance, e.g. trim: 20 (defaults to 10)
       # effect: 'trim:0'
       options = _.extend({crop: "fit", quality: 75}, options)
 
-      if url.indexOf("c_fit") is -1
-        url = url.replace(App.CLOUDINARY_DOMAIN, "") # remove absolute uri
-        url = $.cloudinary.url(url, options)
-      url
+      $.cloudinary.url(url, options)
 
     imageFormatsJSON: (url) ->
       sizedef = {
@@ -204,7 +190,7 @@ define [
     url: (opts) ->
       @store_id = @hasmodel?.get?('store-id') || @store_id
       _.each(opts, (m) => m.set("store-id", @store_id))
-      "#{App.API_ROOT}/store/#{@store_id}/content?results=21"
+      "#{App.API_ROOT}/store/#{@store_id}/content?results=25"
 
     parse: (data) ->
       data['results']
