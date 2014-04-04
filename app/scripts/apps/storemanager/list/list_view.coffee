@@ -20,7 +20,7 @@ define [
 
   class Views.StoreIndexList extends App.Views.ItemView
     template: "store/index_list"
-    
+
     serializeData: () ->
       stores: @model.toJSON()
 
