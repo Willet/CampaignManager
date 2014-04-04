@@ -29,7 +29,8 @@ require([
     // sub apps to load, they attach to the root application
     'apps/main/app',
     'apps/contentmanager/app',
-    'apps/pagemanager/app'
+    'apps/pagemanager/app',
+    'apps/storemanager/app'
 ], function (App, $) {
     'use strict';
     if (window.ENVIRONMENT !== 'test') {

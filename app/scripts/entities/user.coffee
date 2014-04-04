@@ -29,18 +29,17 @@ define ['app', 'entities/base', 'entities/products', 'underscore'], (App, Base, 
           # Should we create a store instance?
           window.App.store = store
 
-          $.getJSON(App.API_ROOT + '/store/?slug=' + that.get('username'))
+          $.getJSON(App.API_ROOT + '/store')
             .done((data) ->
               if data.results.length
-                # store id, e.g. 126
-                store = data.results[0]
-                if (store.old_id)  # prioritize the old_id attribute
-                  navigateUrl = data.results[0].old_id + '/pages'
+                if data.results.length > 1
+                  navigateUrl = that.get('username') + '/stores'
                 else
+                  # store id, e.g. 126
+                  store = data.results[0]
                   navigateUrl = data.results[0].id + '/pages'
               else
-                # Default to store 38 (Gap) for now...
-                navigateUrl = '38/pages'
+                navigateUrl = 'notfound'
 
               App.navigate(navigateUrl, trigger: true)
             )
