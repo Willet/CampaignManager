@@ -20,7 +20,8 @@
     "sinonjs": "~1.7.1",
     "backbone.uniquemodel": "*",
     "backbone-associations": "~0.5.4",
-    "backbone.computedfields": "~0.0.7"
+    "backbone.computedfields": "~0.0.7",
+    "cloudinary": "~1.0.12"
   },
   "authors": [
     "Alex Riedler <alex@riedler.ca>"
