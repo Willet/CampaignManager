@@ -15,6 +15,7 @@ define [
     appRoutes:
       '': 'login'
       'logout': 'logout'
+      ':username': 'storesShow'
       ':store_id': 'storeShow'
       '*default': 'notFound'
 
@@ -32,18 +33,24 @@ define [
           if data.objects.length
             username = data.objects[0].username
             # length 0 if username is not a store slug
-            $.get(App.API_ROOT + '/store/?slug=' + username)
+            $.get(App.API_ROOT + '/store')
               .done (data) ->
-                if data.results.length
+                console.log data
+                if data.results.length > 1
+                  self.storesShow username
+                else if data.results.length
                   self.storeShow data.results[0].id  # store id, e.g. 126
                 else
-                  self.storeShow 38  # defaults to gap
+                  App.layout.show(new NotFound())
           else  # no user info = not logged in
             App.layout.show(new Login())
 
     logout: (opts) ->
       App.request('user:logout').done () ->
           App.navigate('/', trigger: true)
+
+    storesShow: (username) ->
+      App.navigate("/#{username}/stores", trigger: true, replace: true)
 
     storeShow: (store_id) ->
       App.navigate("/#{store_id}/pages", trigger: true, replace: true)

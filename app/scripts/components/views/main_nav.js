@@ -13,6 +13,7 @@ define(['marionette'], function (Marionette) {
                     return self.render();
                 });
             }
+            return self;
         },
         serializeData: function () {
             var json = {};

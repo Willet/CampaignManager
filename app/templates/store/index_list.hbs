@@ -1,0 +1,16 @@
+<table class="large-12">
+  <thead>
+    <th>Id</th>
+    <th>Name</th>
+    <th>Slug</th>
+  </thead>
+  <tbody>
+    {{#each stores}}
+      <tr>
+        <td>{{id}}</td>
+        <td><a href="/{{id}}/pages">{{name}}</a></td>
+        <td>{{slug}}</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
