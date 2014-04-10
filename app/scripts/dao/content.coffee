@@ -109,8 +109,6 @@ define [
         cache: false
         contentType: false
         processData: false
-        success: (data) ->
-          data
       $.ajax options
 
   App.reqres.setHandler "store:content",
