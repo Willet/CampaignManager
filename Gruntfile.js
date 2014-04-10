@@ -396,7 +396,7 @@ module.exports = function (grunt) {
             return grunt.task.run(['build', 'configureProxies', 'connect:dist:keepalive']);
         }
 
-        grunt.task.run([
+        return grunt.task.run([
             'clean:server',
             'compass:server',
             'buildSources',
@@ -405,8 +405,6 @@ module.exports = function (grunt) {
             'connect:livereload',
             'concurrent:server'
         ]);
-
-        return undefined;
     });
 
     grunt.registerTask('test', [
