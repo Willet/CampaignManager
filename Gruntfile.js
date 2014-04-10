@@ -396,7 +396,7 @@ module.exports = function (grunt) {
             return grunt.task.run(['build', 'configureProxies', 'connect:dist:keepalive']);
         }
 
-        grunt.task.run([
+        return grunt.task.run([
             'clean:server',
             'compass:server',
             'buildSources',
@@ -424,7 +424,7 @@ module.exports = function (grunt) {
         'sync:styles',
         'sync:images',
         'sync:dev',
-        'autoprefixer',
+        'autoprefixer'
     ]);
 
     grunt.registerTask('build', [

@@ -7,7 +7,9 @@ define [
   'backbone.projections',
   'components/views/main_layout', 'components/views/main_nav', 'components/views/title_bar',
   'marionette',
-  '../edit_content/edit_controller'
+  '../edit_content/edit_controller',
+  'jquery.fileupload',
+  'jquery.fileupload-images'
 ], (App, ContentManager, Views, ContentViews, EditController, BackboneProjections, MainLayout, MainNav, Marionette) ->
 
   class ContentManager.Controller extends App.Controllers.Base
@@ -87,7 +89,17 @@ define [
       layout.on 'content:unselect-all', => collection.unselectAll()
       layout.on 'fetch:next-page', () =>
         contents.getNextPage()
-        layout.trigger('fetch:next-page:complete')
+        layout.trigger 'fetch:next-page:complete'
+
+      layout.on 'content:upload', (files) =>
+        filters = @filters
+        store = App.routeModels.get 'store'
+        deferred = App.request 'content:upload', files, store, {}
+        # Trigger reload when done uploading
+        deferred.done () ->
+          layout.trigger('grid-view')
+          contents.setFilter(filters)
+        deferred
 
       layout.on 'show', =>
         layout.list.show @getContentList(contents)
@@ -96,7 +108,10 @@ define [
         listControls = @getContentListControls()
 
         listControls.on 'change:filter', (filters) ->
-          layout.trigger('add:filter', filters)
+          layout.trigger 'add:filter', filters
+
+        listControls.on 'content:upload', (files) ->
+          layout.trigger 'content:upload', files
 
         layout.listControls.show listControls
 

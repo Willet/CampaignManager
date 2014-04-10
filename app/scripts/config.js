@@ -24,7 +24,16 @@ require.config({
         foundation: '../bower_components/foundation/js/foundation',
         templates: 'templates',
         text: '../bower_components/requirejs-text/text',
-        cloudinary: '../bower_components/cloudinary/js/jquery.cloudinary'
+        cloudinary: '../bower_components/cloudinary/js/jquery.cloudinary',
+        'load-image': '../bower_components/blueimp-load-image/js/load-image',
+        'load-image-meta': '../bower_components/blueimp-load-image/js/load-image-meta',
+        'load-image-exif': '../bower_components/blueimp-load-image/js/load-image-exif',
+        'load-image-ios': '../bower_components/blueimp-load-image/js/load-image-ios',
+        'canvas-to-blob': '../bower_components/blueimp-canvas-to-blob/js/canvas-to-blob',
+        'jquery.fileupload-process': '../bower_components/blueimp-file-upload/js/jquery.fileupload-process',
+        'jquery.ui.widget': '../bower_components/blueimp-file-upload/js/vendor/jquery.ui.widget',
+        'jquery.fileupload-images': '../bower_components/blueimp-file-upload/js/jquery.fileupload-image',
+        'jquery.fileupload': '../bower_components/blueimp-file-upload/js/jquery.fileupload'
     },
     shim: {
         'backbone': {
@@ -86,6 +95,36 @@ require.config({
         },
         'cloudinary': {
             deps: ['jquery']
+        },
+        'load-image': {
+            deps: ['jquery']
+        },
+        'load-image-meta': {
+            deps: ['jquery']
+        },
+        'load-image-exif': {
+            deps: ['jquery']
+        },
+        'load-image-ios': {
+            deps: ['jquery']
+        },
+        'canvas-to-blob': {
+            deps: ['jquery']
+        },
+        'jquery.ui.widget': {
+            deps: ['jquery'],
+            exports: 'jquery.ui.widget'
+        },
+        'jquery.fileupload': {
+            deps: ['jquery', 'jquery.ui.widget'],
+            exports: 'jquery.fileupload'
+        },
+        'jquery.fileupload-process': {
+            deps: ['jquery', 'jquery.fileupload']
+        },
+        'jquery.fileupload-images': {
+            deps: ['jquery', 'jquery.fileupload', 'load-image', 'load-image-meta',
+                   'load-image-exif', 'load-image-ios', 'canvas-to-blob', 'jquery.fileupload-process']
         },
         'foundation/foundation': ['jquery'],
         'foundation/foundation.abide': ['jquery', 'foundation/foundation'],

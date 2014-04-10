@@ -92,9 +92,32 @@ define [
         success: (json) ->
           content.set(json)
 
+    uploadContent: (files, store_id, params) ->
+      formData = new FormData()
+      if not $.isArray(files)
+        files = [files]
+
+      # Need a url, for now we use the url of the upload page
+      formData.append("url", "#{App.API_ROOT}/#{store_id}/content")
+      $.each files, (i, file) ->
+        formData.append("file-#{i}", file)
+
+      options = $.extend {}, params,
+        method: 'POST'
+        url: "#{App.API_ROOT}/imageservice/store/#{store_id}/upload/create"
+        data: formData
+        cache: false
+        contentType: false
+        processData: false
+      $.ajax options
+
   App.reqres.setHandler "store:content",
     (store, params) ->
       API.getContents store.get('id'), params
+
+  App.reqres.setHandler "content:upload",
+    (files, store, params) ->
+      API.uploadContent files, store.get('id'), params
 
   App.reqres.setHandler "content:get",
     (store, content, params) ->

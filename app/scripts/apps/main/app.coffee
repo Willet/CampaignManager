@@ -35,7 +35,6 @@ define [
             # length 0 if username is not a store slug
             $.get(App.API_ROOT + '/store')
               .done (data) ->
-                console.log data
                 if data.results.length > 1
                   self.storesShow username
                 else if data.results.length
