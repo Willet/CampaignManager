@@ -70,7 +70,6 @@ define [
         page_id = @model.get('id')
 
         # Post file
-        # TODO: Can't use proxy; how to avoid hardcoding URL?
         $.ajax(
             url: "#{App.API_ROOT}/imageservice/create/"
             type: 'POST'

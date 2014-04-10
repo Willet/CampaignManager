@@ -2,7 +2,9 @@ define [
   'app',
   '../app',
   '../views',
-  'entities'
+  'entities',
+  'jquery.fileupload',
+  'jquery.fileupload-images'
 ], (App, ContentManager, Views, Entities) ->
 
   class Views.ListLayout extends App.Views.Layout
@@ -72,8 +74,6 @@ define [
       @current_state = new_state
       @$('#list').removeClass("grid-view").removeClass("list-view").addClass("#{new_state}-view")
 
-    onRender: (opts) ->
-
     onShow: (opts) ->
       @scrollFunction = => @autoLoadNextPage()
       $(window).on("scroll", @scrollFunction)
@@ -101,9 +101,13 @@ define [
       "change #js-filter-content-type": "changeFilter"
       "change #js-filter-content-source": "changeFilter"
       "change #js-filter-sort-order": "changeFilter"
+      "click .js-create-content-upload": "uploadContent"
+      "click .js-create-content-clear": "clearContent"
 
     initialize: (opts) ->
       @current_state = "grid"
+      @files = []
+      @uploading = false
 
     onTagsChange: _.debounce (() ->
       @changeFilter()), 1000
@@ -151,6 +155,48 @@ define [
       @$(".tabs .js-tab-#{new_state}").addClass("active")
       @current_state = new_state
       @trigger('change:state', @current_state)
+
+    onRender: (opts) ->
+      store_id = App.routeModels.get 'store'
+      @createUploader(store_id)
+
+    createUploader: (store_id) ->
+      # Empty the existing uploader previews
+      self = @
+      preview = @$('.content-upload-display')
+      preview.children().remove()
+
+      @uploader = @$('.js-create-content-add')
+        .fileupload
+          autoUpload: false,
+          disableImageResize: true,
+          previewMaxWidth: 200,
+          previewMaxHeight: 200,
+          previewCrop: true
+        .on 'fileuploadadd', (e, data) ->
+          data.context = $('<div/>').appendTo(preview)
+        .on 'fileuploadprocessalways', (e, data) ->
+          index = data.index
+          file = data.files[index]
+          preview
+              .children()
+              .eq(index)
+              .append($(file.preview))
+          self.files.push(file)
+
+    changeUploadingStatus: ->
+      @uploading = !@uploading
+      @$('.js-create-content-add').prop('disabled', !@uploading)
+      @$('.js-create-content-uploading').toggle()
+
+    clearContent: ->
+      @files = []
+      @$('.content-upload-display').children().remove()
+
+    uploadContent: ->
+      files = @files
+      @clearContent()
+      @trigger 'content:upload', files
 
   class Views.ContentPreview extends App.Views.ItemView
 

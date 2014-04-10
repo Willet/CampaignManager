@@ -21,7 +21,8 @@
     "backbone.uniquemodel": "*",
     "backbone-associations": "~0.5.4",
     "backbone.computedfields": "~0.0.7",
-    "cloudinary": "~1.0.12"
+    "cloudinary": "~1.0.12",
+    "blueimp-file-upload": "~9.5.7"
   },
   "authors": [
     "Alex Riedler <alex@riedler.ca>"

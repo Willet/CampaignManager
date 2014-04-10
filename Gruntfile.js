@@ -405,6 +405,8 @@ module.exports = function (grunt) {
             'connect:livereload',
             'concurrent:server'
         ]);
+
+        return undefined;
     });
 
     grunt.registerTask('test', [
@@ -424,7 +426,7 @@ module.exports = function (grunt) {
         'sync:styles',
         'sync:images',
         'sync:dev',
-        'autoprefixer',
+        'autoprefixer'
     ]);
 
     grunt.registerTask('build', [

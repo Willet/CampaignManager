@@ -494,6 +494,49 @@ $selected-color: $body-font-color;
   }
 }
 
+.content-create-actions {
+  position: relative;
+  .create-content {
+    .fileinput-button {
+      margin: 0px;
+      cursor: pointer;
+      position: relative;
+      > input[type="file"] {
+        top: 0;
+        right: 0;
+        bottom: 0;
+        margin: 0;
+        opacity: 0;
+        cursor: pointer;
+        position: absolute;
+        -ms-filter: 'alpha(opacity=0)';
+      }
+    }
+    > .content-upload-display {
+      > div {
+        > img, canvas {
+          padding: 5px;
+          display: inline-block;
+          box-sizing: border-box;
+        }
+      }
+    }
+  }
+  .create-content-uploading {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    position: absolute;
+    visibility: hidden;
+    background-color: rgba(0, 0, 0, 0.5);
+    > .spinner {
+      margin-top: 40px;
+    }
+  }
+}
+
 /* END PAGE CONTENT CREATE */
 
 body {
