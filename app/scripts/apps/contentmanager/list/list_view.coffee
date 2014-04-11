@@ -166,6 +166,7 @@ define [
       preview = @$('.content-upload-display')
       preview.children().remove()
 
+      @$('.create-content-uploading').toggle(false)
       @uploader = @$('.js-create-content-add')
         .fileupload
           autoUpload: false,
@@ -186,8 +187,8 @@ define [
 
     changeUploadingStatus: ->
       @uploading = !@uploading
-      @$('.js-create-content-add').prop('disabled', !@uploading)
-      @$('.js-create-content-uploading').toggle()
+      @$('.js-create-content-add').prop('disabled', @uploading)
+      @$('.create-content-uploading').toggle()
 
     clearContent: ->
       @files = []

@@ -17,6 +17,7 @@ $webicons-url: "../images/webicons/";
 @import "main_layout";
 @import "not_found";
 @import "login";
+@import "loading_bars";
 
 .no-padding {
   padding: 0;
@@ -495,7 +496,6 @@ $selected-color: $body-font-color;
 }
 
 .content-create-actions {
-  position: relative;
   .create-content {
     .fileinput-button {
       margin: 0px;
@@ -525,14 +525,21 @@ $selected-color: $body-font-color;
   .create-content-uploading {
     top: 0;
     left: 0;
+    z-index: 10;
     width: 100%;
     height: 100%;
     text-align: center;
     position: absolute;
-    visibility: hidden;
-    background-color: rgba(0, 0, 0, 0.5);
-    > .spinner {
-      margin-top: 40px;
+    background-color: rgba(249, 249, 249, 0.5);
+    > .loading-bar-simple {
+      top: 25%;
+      left: 40%;
+      font-size: 20px;
+      > .border {
+        top: initial;
+        left: initial;
+        margin-top: 10px;
+      }
     }
   }
 }
