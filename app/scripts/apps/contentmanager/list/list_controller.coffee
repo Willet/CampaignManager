@@ -91,16 +91,6 @@ define [
         contents.getNextPage()
         layout.trigger 'fetch:next-page:complete'
 
-      layout.on 'content:upload', (files) =>
-        filters = @filters
-        store = App.routeModels.get 'store'
-        deferred = App.request 'content:upload', files, store, {}
-        # Trigger reload when done uploading
-        deferred.done () ->
-          layout.trigger('grid-view')
-          contents.setFilter(filters)
-        deferred
-
       layout.on 'show', =>
         layout.list.show @getContentList(contents)
         layout.loading.show @getContentLoadingView(contents)
@@ -112,6 +102,15 @@ define [
 
         listControls.on 'content:upload', (files) ->
           layout.trigger 'content:upload', files
+
+        layout.on 'content:upload', (files) ->
+          store = App.routeModels.get 'store'
+          listControls.changeUploadingStatus()
+          deferred = App.request 'content:upload', files, store, {}
+          # Trigger reload when done uploading
+          deferred.done () ->
+            listControls.changeUploadingStatus()
+            layout.trigger 'reset:filter'
 
         layout.listControls.show listControls
 
