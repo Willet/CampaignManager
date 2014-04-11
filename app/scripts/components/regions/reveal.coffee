@@ -1,4 +1,4 @@
-define ["marionette", "foundation/foundation.reveal"], (Marionette, Reveal) ->
+define ["marionette", "foundation.reveal"], (Marionette, Reveal) ->
   class RevealDialog extends Marionette.Region
 
     onShow: () ->

@@ -248,7 +248,9 @@ module.exports = function (grunt) {
                     preserveLicenseComments: false,
                     useStrict: true,
                     wrap: true,
-                    stubModules: ['text']
+                    wrapShim: true,
+                    stubModules: ['text'],
+                    loglevel: 0
                 }
             }
         },
@@ -363,7 +365,7 @@ module.exports = function (grunt) {
                 'compass:dist'
             ],
             dist: [
-                'coffee',
+                'coffee'
             ]
         },
         bower: {
@@ -434,10 +436,12 @@ module.exports = function (grunt) {
         // setup build config
         'useminPrepare',
         // build everything
+        'compass:server',
         'buildSources',
-        'requirejs',
+        'jshint',
         'compass:dist',
         'sync:dist',
+        'requirejs:dist',
         // save some bytes
         'uglify',
         'concat',

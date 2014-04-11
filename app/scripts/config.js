@@ -21,7 +21,21 @@ require.config({
         sinon: '../bower_components/sinonjs/sinon',
         swag: '../bower_components/swag/lib/swag',
         underscore: '../bower_components/underscore/underscore',
-        foundation: '../bower_components/foundation/js/foundation',
+        foundation: '../bower_components/foundation/js/foundation/foundation',
+        'foundation.alerts': '../bower_components/foundation/js/foundation/foundation.alerts',
+        'foundation.clearing': '../bower_components/foundation/js/foundation/foundation.clearing',
+        'foundation.cookie': '../bower_components/foundation/js/foundation/foundation.cookie',
+        'foundation.dropdown': '../bower_components/foundation/js/foundation/foundation.dropdown',
+        'foundation.forms': '../bower_components/foundation/js/foundation/foundation.forms',
+        'foundation.joyride': '../bower_components/foundation/js/foundation/foundation.joyride',
+        'foundation.megellan': '../bower_components/foundation/js/foundation/foundation.megellan',
+        'foundation.orbit': '../bower_components/foundation/js/foundation/foundation.orbit',
+        'foundation.placeholder': '../bower_components/foundation/js/foundation/foundation.placeholder',
+        'foundation.reveal': '../bower_components/foundation/js/foundation/foundation.topbar',
+        'foundation.section': '../bower_components/foundation/js/foundation/foundation.reveal',
+        'foundation.tooltips': '../bower_components/foundation/js/foundation/foundation.section',
+        'foundation.topbar': '../bower_components/foundation/js/foundation/foundation.tooltips',
+        'foundation.interchange': '../bower_components/foundation/js/foundation/foundation.topbar',
         templates: 'templates',
         text: '../bower_components/requirejs-text/text',
         cloudinary: '../bower_components/cloudinary/js/jquery.cloudinary',
@@ -74,7 +88,7 @@ require.config({
         },
         'marionette': {
             deps: ['backbone'],
-            exports: 'Backbone.Marionette'
+            exports: 'Marionette'
         },
         handlebars: {
             exports: 'Handlebars'
@@ -126,20 +140,51 @@ require.config({
             deps: ['jquery', 'jquery.fileupload', 'load-image', 'load-image-meta',
                    'load-image-exif', 'load-image-ios', 'canvas-to-blob', 'jquery.fileupload-process']
         },
-        'foundation/foundation': ['jquery'],
-        'foundation/foundation.abide': ['jquery', 'foundation/foundation'],
-        'foundation/foundation.alerts': ['jquery', 'foundation/foundation'],
-        'foundation/foundation.clearing': ['jquery', 'foundation/foundation'],
-        'foundation/foundation.cookie': ['jquery', 'foundation/foundation'],
-        'foundation/foundation.forms': ['jquery', 'foundation/foundation'],
-        'foundation/foundation.interchange': ['jquery', 'foundation/foundation'],
-        'foundation/foundation.joyride': ['jquery', 'foundation/foundation'],
-        'foundation/foundation.magellan': ['jquery', 'foundation/foundation'],
-        'foundation/foundation.orbit': ['jquery', 'foundation/foundation'],
-        'foundation/foundation.placeholder': ['jquery', 'foundation/foundation'],
-        'foundation/foundation.reveal': ['jquery', 'foundation/foundation'],
-        'foundation/foundation.section': ['jquery', 'foundation/foundation'],
-        'foundation/foundation.tooltips': ['jquery', 'foundation/foundation'],
-        'foundation/foundation.topbar': ['jquery', 'foundation/foundation']
+        'foundation':{
+            deps: ['jquery'],
+            exports: 'Foundation'
+        },
+        'foundation.alerts': {
+            deps: ['foundation']
+        },
+        'foundation.clearing': {
+            deps: ['foundation']
+        },
+        'foundation.cookie': {
+            deps: ['foundation']
+        },
+        'foundation.dropdown': {
+            deps: ['foundation']
+        },
+        'foundation.forms': {
+            deps: ['foundation']
+        },
+        'foundation.joyride': {
+            deps: ['foundation']
+        },
+        'foundation.magellan': {
+            deps: ['foundation']
+        },
+        'foundation.orbit': {
+            deps: ['foundation']
+        },
+        'foundation.placeholder': {
+            deps: ['foundation']
+        },
+        'foundation.reveal': {
+            deps: ['foundation']
+        },
+        'foundation.section': {
+            deps: ['foundation']
+        },
+        'foundation.tooltips': {
+            deps: ['foundation']
+        },
+        'foundation.topbar': {
+            deps: ['foundation']
+        },
+        'foundation.interchange': {
+            deps: ['jquery', 'foundation']
+        }
     }
 });
