@@ -110,21 +110,32 @@ $selected-color: $body-font-color;
 /* PAGE CONTENT CREATE */
 
 .content-preview, .product-preview {
+  display: table;
   .content, .product {
     float: left;
     height: 480px;
+    display: table-cell;
+    vertical-align: top;
   }
   .content-info, .product-info {
-    position: relative;
     left: 20px;
+    position: relative;
+    display: table-cell;
+    vertical-align: top;
     label {
+      margin: 0;
       font-weight: bold;
       font-size: 16px;
-      margin: 0;
     }
     i {
       font-size: 24px;
       text-shadow: none;
+    }
+    .description {
+      margin-left: 20px;
+      > ul {
+        margin-left: 30px;
+      }
     }
   }
   .content-image, .product-image {
@@ -1145,15 +1156,11 @@ body {
       }
       > select, .select2-container {
           width: 100%;
-          > ul {
-              min-height: 50px;
-              overflow: inherit;
-          }
       }
-      &:nth-of-type(1) {
-        width: 640px;
-        padding-right: 10px;
-      }
+  }
+  .fixed-width {
+    width: 640px;
+    padding-right: 10px;
   }
   &.table {
     width: 100%;
