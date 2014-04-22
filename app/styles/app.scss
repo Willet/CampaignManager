@@ -1103,6 +1103,9 @@ body {
     color: #464646;
     width: 500px;
   }
+  > img {
+      float: left;
+  }
   .tag-label {
     display: block;
     font-weight: 500;
@@ -1119,9 +1122,6 @@ body {
     min-width: 500px;
     max-width: 100%;
   }
-  > img {
-    float: left;
-  }
   .tag-content-buttons {
     position: absolute;
     bottom: 0;
@@ -1130,5 +1130,34 @@ body {
       width: 120px;
       margin-right: 12px;
     }
+  }
+  .cell {
+      float: none;
+      display: table-cell;
+      vertical-align: top;
+      > img {
+          float: none;
+      }
+      > textarea {
+          padding: 0px;
+          min-width: 100%;
+          border-color: #aaa;
+      }
+      > select, .select2-container {
+          width: 100%;
+          > ul {
+              min-height: 50px;
+              overflow: inherit;
+          }
+      }
+      &:nth-of-type(1) {
+        width: 640px;
+        padding-right: 10px;
+      }
+  }
+  &.table {
+    width: 100%;
+    display: table;
+    overflow: hidden;
   }
 }
