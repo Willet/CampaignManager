@@ -33,12 +33,16 @@ define [
       @computedFields = new Backbone.ComputedFields(this)
 
     getPageTile: ->
-      # Get the regular content tile if it exists from the list of tile-configs
+      # Get the regular product tile if it exists from the list of tile-configs
+      try  # hack: filter tile configs by active page
+        pageId = /pages\/(\d+)/g.exec(window.location.hash)[1]
+      catch e
+        pageId = 0
       tileConfigs = @get('tile-configs')
       pageTile = tileConfigs.filter((m) ->
         if not m instanceof Entities.TileConfig
           m = new Entities.TileConfig(m, {parse: true})
-        !m.get('is-content') || m.get('is-content') == 'false'
+        (!m.get('is-content') || m.get('is-content') == 'false') and m.get('page-id') == pageId
       )
       pageTile[0]
 
