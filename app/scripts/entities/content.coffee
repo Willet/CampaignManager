@@ -36,11 +36,15 @@ define [
 
     getPageTile: ->
       # Get the regular content tile if it exists from the list of tile-configs
+      try  # hack: filter tile configs by active page
+        pageId = /pages\/(\d+)/g.exec(window.location.hash)[1]
+      catch e
+        pageId = 0
       tileConfigs = @get('tile-configs')
       pageTile = tileConfigs.filter((m) ->
         if not m instanceof Entities.TileConfig
           m = new Entities.TileConfig(m, {parse: true})
-        m.get('is-content') || m.get('is-content') == 'true'
+        (m.get('is-content') || m.get('is-content') == 'true') and m.get('page-id') == pageId
       )
       pageTile[0]
 
