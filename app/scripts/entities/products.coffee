@@ -40,7 +40,7 @@ define [
         pageId = 0
       tileConfigs = @get('tile-configs')
       pageTile = tileConfigs.filter((m) ->
-        if not m instanceof Entities.TileConfig
+        if not (m instanceof Entities.TileConfig)
           m = new Entities.TileConfig(m, {parse: true})
         (!m.get('is-content') || m.get('is-content') == 'false') and m.get('page-id') == pageId
       )
