@@ -88,7 +88,7 @@ require.config({
         },
         'marionette': {
             deps: ['backbone'],
-            exports: 'Marionette'
+            exports: 'Backbone.Marionette'
         },
         handlebars: {
             exports: 'Handlebars'
