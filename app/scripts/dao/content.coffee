@@ -15,6 +15,15 @@ define [
           data: params
       content
 
+    fetchProductImage: (store_id, content, params = {}) ->
+      content.store_id = store_id
+      content.url = "#{App.API_ROOT}/productimage/#{content.get('id')}"
+      unless content.isFetched # don't fetch multiple times
+        content.fetch
+          reset: true
+          data: params
+      content
+
     getContent: (store, content_id, params = {}) ->
       content = new Entities.Content({id: content_id, 'store-id': store.get('id')})
       content.store_id = store.get('id')
@@ -142,6 +151,10 @@ define [
   App.reqres.setHandler "fetch:content",
     (store_id, content, params) ->
       API.fetchContent store_id, content, params
+
+  App.reqres.setHandler "fetch:productimage",
+    (store_id, content, params) ->
+      API.fetchProductImage store_id, content, params
 
   App.reqres.setHandler "page:content",
     (page, params) ->

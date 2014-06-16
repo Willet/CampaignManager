@@ -17,7 +17,7 @@ define [
         map: (data, type) ->
           unless typeof data is 'object'
             content = new type({id: data})
-            content = App.request('fetch:content', @get('store-id') || @collection?.store_id || window.App.routeModels.get('store').id, content)
+            content = App.request('fetch:productimage', @get('store-id') || @collection?.store_id || window.App.routeModels.get('store').id, content)
           else
             content = data
           content
