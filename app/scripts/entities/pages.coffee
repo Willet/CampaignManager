@@ -21,10 +21,6 @@ define [
       json
 
     save: (attrs, options = {}) ->
-      # Padding Bear Campaign Only!
-      if this.get('name') == 'Paddington Bear'
-        this.set('ir_base_url', 'http://tng-master.secondfunnel.com/intentrank/')
-
       super(attrs, options)
 
   class Entities.PageCollection extends Base.Collection
