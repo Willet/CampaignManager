@@ -27,12 +27,12 @@ define "app", [
     App.API_ROOT = window.location.origin + "/graph/v1"
     App.ENVIRONMENT = "DEV"
   else if window.location.hostname.indexOf("-test") > 0 # test bucket
-    App.API_ROOT = "http://tng-test.secondfunnel.com/graph/v1"
+    App.API_ROOT = "http://stage.secondfunnel.com/graph/v1"
     App.ENVIRONMENT = "TEST"
   else # assumed production bucket
-    App.API_ROOT = "http://tng-master.secondfunnel.com/graph/v1"
+    App.API_ROOT = "http://production.secondfunnel.com/graph/v1"
     App.ENVIRONMENT = "PRODUCTION"
-  
+
   # required for test/master; doesn't break dev
   $.cloudinary.config
     cloud_name: "secondfunnel"
@@ -71,7 +71,7 @@ define "app", [
     App.navigate "",
       trigger: true
 
-  
+
   # because exports is required (otherwise too many cyclic dependencies)
   # may be able to REVERSE the direction, and make everything else export.
   # but it is a fair bit of work at the current point in time
